@@ -1,138 +1,280 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const loader = document.querySelector('.loader');
-  const menuToggle = document.querySelector('.menu-toggle');
-  const spans = menuToggle.querySelectorAll('span');
-  const header = document.querySelector('.header');
-  const textReveal = document.querySelectorAll('.text-reveal span');
-  const textMask = document.querySelector('.text-mask');
-  const serviceCards = document.querySelectorAll('.service-card');
-  const portfolioItems = document.querySelectorAll('.portfolio-item');
+// JS/main.js
 
-  window.addEventListener('load', () => {
-    gsap.to(loader, {
-      opacity: 0,
-      duration: 0.5,
-      onComplete: () => {
-        loader.style.display = 'none';
+function safeGetComputedStyle(property) {
+  const root = document.documentElement;
+  return getComputedStyle(root).getPropertyValue(property).trim();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const elements = {
+    loader: document.querySelector('.loader'),
+    header: document.querySelector('.header'),
+    menuToggle: document.querySelector('.menu-toggle'),
+    menuSpans: document.querySelectorAll('.menu-toggle span'),
+    textReveal: document.querySelectorAll('.text-reveal span'),
+    textMask: document.querySelector('.text-mask'),
+    heroContent: document.querySelector('.hero-content'),
+    serviceCards: document.querySelectorAll('.service-card'),
+    portfolioItems: document.querySelectorAll('.portfolio-item'),
+    webGLCanvas: document.getElementById('webgl-canvas'),
+  };
+
+  const webGLState = {
+    scene: null,
+    camera: null,
+    renderer: null,
+    mesh: null,
+    initialized: false,
+    rafId: null,
+  };
+
+  initLoader();
+  bindEvents();
+  updateHeaderOnScroll();
+
+  function bindEvents() {
+    if (elements.menuToggle) {
+      elements.menuToggle.addEventListener('click', handleMenuToggle);
+    }
+
+    window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+    window.addEventListener('resize', handleWebGLResize);
+  }
+
+  function initLoader() {
+    window.addEventListener('load', () => {
+      // Se não tiver loader ou GSAP, só inicia direto
+      if (!elements.loader || !window.gsap) {
         initAnimations();
         initWebGL();
+        return;
       }
+
+      gsap.to(elements.loader, {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: () => {
+          elements.loader.style.display = 'none';
+          initAnimations();
+          initWebGL();
+        },
+      });
     });
-  });
+  }
+
+  function handleMenuToggle() {
+    if (!elements.menuToggle) return;
+
+    const isOpen = elements.menuToggle.classList.toggle('active');
+    document.body.classList.toggle('menu-open', isOpen);
+
+    if (!elements.menuSpans.length || !window.gsap) return;
+
+    const openColor = safeGetComputedStyle('--accent') || '#ff4d4d';
+    const closedColor = safeGetComputedStyle('--text') || '#f5f5f5';
+
+    gsap.to(elements.menuSpans, {
+      backgroundColor: isOpen ? openColor : closedColor,
+      duration: 0.3,
+    });
+
+    if (isOpen) {
+      if (elements.menuSpans[0]) gsap.to(elements.menuSpans[0], { y: 8, rotate: 45, duration: 0.3 });
+      if (elements.menuSpans[1]) gsap.to(elements.menuSpans[1], { y: -8, rotate: -45, duration: 0.3 });
+    } else {
+      gsap.to(elements.menuSpans, { y: 0, rotate: 0, duration: 0.3 });
+    }
+  }
+
+  function updateHeaderOnScroll() {
+    const scrolled = window.scrollY > 50;
+    if (elements.header) {
+      elements.header.classList.toggle('scrolled', scrolled);
+    }
+  }
 
   function initAnimations() {
-    // Menu
-    menuToggle.addEventListener('click', () => {
-      menuToggle.classList.toggle('active');
-      document.body.classList.toggle('menu-open');
-      const active = menuToggle.classList.contains('active');
-      gsap.to(spans, {
-        backgroundColor: active ? 'var(--accent)' : 'var(--text)',
-        y: 0,
-        rotate: 0,
-        duration: 0.3
-      });
-      if (active) {
-        gsap.to(spans[0], { y: 8, rotate: 45, duration: 0.3 });
-        gsap.to(spans[1], { y: -8, rotate: -45, duration: 0.3 });
-      }
-    });
+    if (!window.gsap) {
+      // Sem GSAP: pelo menos deixa a hero aparecer
+      if (elements.heroContent) elements.heroContent.classList.add('visible');
+      elements.serviceCards.forEach((c) => c.classList.add('visible'));
+      elements.portfolioItems.forEach((p) => p.classList.add('visible'));
+      return;
+    }
 
-    // Reveal de texto
-    gsap.registerPlugin(ScrollTrigger);
-    textReveal.forEach(span => {
-      gsap.to(span, {
+    // Plugins
+    if (window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+
+    // Hero visível (fallback pro CSS que usa .visible)
+    if (elements.heroContent) {
+      elements.heroContent.classList.add('visible');
+    }
+
+    // Texto principal: entra de baixo pra cima
+    if (elements.textReveal.length) {
+      gsap.to(elements.textReveal, {
         y: 0,
+        stagger: 0.1,
         duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: span.parentElement,
-          start: 'top 80%',
-          toggleActions: 'play none none none'
-        }
+        ease: 'power4.out',
+        delay: 0.2,
       });
-    });
+    }
 
     // Máscara de texto
-    gsap.to(textMask, {
-      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-      duration: 1.5,
-      delay: 0.5,
-      ease: 'power3.inOut'
-    });
+    if (elements.textMask) {
+      gsap.to(elements.textMask, {
+        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        duration: 1.5,
+        delay: 0.6,
+        ease: 'power3.inOut',
+      });
+    }
 
-    // Tilt
-    VanillaTilt.init(serviceCards, {
+    // Revelar cards/itens no scroll
+    if (window.ScrollTrigger) {
+      const revealItems = [...elements.serviceCards, ...elements.portfolioItems].filter(Boolean);
+
+      revealItems.forEach((el, index) => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 80%',
+          once: true, // garante que só acontece 1 vez
+          onEnter: () => {
+            el.classList.add('visible');
+            gsap.fromTo(
+              el,
+              { opacity: 0, y: 50 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power2.out',
+                delay: index * 0.05,
+              }
+            );
+          },
+        });
+      });
+    } else {
+      // Sem ScrollTrigger, mostra tudo de boa
+      elements.serviceCards.forEach((c) => c.classList.add('visible'));
+      elements.portfolioItems.forEach((p) => p.classList.add('visible'));
+    }
+
+    initTilt();
+    initPortfolioHover();
+  }
+
+  function initTilt() {
+    if (!window.VanillaTilt || !elements.serviceCards.length) return;
+
+    VanillaTilt.init(elements.serviceCards, {
       max: 15,
       speed: 400,
       glare: true,
-      "max-glare": 0.2
+      'max-glare': 0.2,
     });
+  }
 
-    // Portfólio
-    portfolioItems.forEach(item => {
+  function initPortfolioHover() {
+    if (!elements.portfolioItems.length || !window.gsap) return;
+
+    elements.portfolioItems.forEach((item) => {
+      if (!item) return;
+
       const img = item.querySelector('img');
       const overlay = item.querySelector('.item-overlay');
       const title = item.querySelector('h4');
-      item.addEventListener('mouseenter', () => {
-        gsap.to(img, { scale: 1.1, duration: 0.5 });
-        gsap.to(overlay, { opacity: 1, duration: 0.3 });
-        gsap.to(title, { y: 0, duration: 0.5 });
-      });
-      item.addEventListener('mouseleave', () => {
-        gsap.to(img, { scale: 1, duration: 0.5 });
-        gsap.to(overlay, { opacity: 0, duration: 0.3 });
-        gsap.to(title, { y: 20, duration: 0.5 });
-      });
-    });
 
-    // Scroll do header
-    window.addEventListener('scroll', () => {
-      header.style.backgroundColor = window.scrollY > 50 ? 'rgba(15, 15, 15, 0.9)' : 'transparent';
+      item.addEventListener('mouseenter', () => {
+        if (img) gsap.to(img, { scale: 1.1, duration: 0.5 });
+        if (overlay) gsap.to(overlay, { opacity: 1, duration: 0.3 });
+        if (title) gsap.to(title, { y: 0, duration: 0.5 });
+      });
+
+      item.addEventListener('mouseleave', () => {
+        if (img) gsap.to(img, { scale: 1, duration: 0.5 });
+        if (overlay) gsap.to(overlay, { opacity: 0, duration: 0.3 });
+        if (title) gsap.to(title, { y: 20, duration: 0.5 });
+      });
     });
   }
 
   function initWebGL() {
-    const canvas = document.getElementById('webgl-canvas');
-    if (!canvas) return;
+    if (!elements.webGLCanvas || !window.THREE) return;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    try {
+      const w = elements.webGLCanvas.clientWidth || 1;
+      const h = elements.webGLCanvas.clientHeight || 1;
 
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      webGLState.scene = new THREE.Scene();
+      webGLState.camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-    const directional = new THREE.DirectionalLight(0xffffff, 0.8);
-    directional.position.set(1, 1, 1);
-    scene.add(ambient);
-    scene.add(directional);
+      webGLState.renderer = new THREE.WebGLRenderer({
+        canvas: elements.webGLCanvas,
+        antialias: true,
+        alpha: true,
+      });
 
-    const geometry = new THREE.IcosahedronGeometry(1.5, 2);
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xff4d4d,
-      metalness: 0.7,
-      roughness: 0.2
-    });
+      webGLState.renderer.setSize(w, h);
+      webGLState.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-    camera.position.z = 5;
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(1, 1, 1);
+      webGLState.scene.add(ambientLight, directionalLight);
 
-    function animate() {
-      requestAnimationFrame(animate);
-      mesh.rotation.x += 0.005;
-      mesh.rotation.y += 0.01;
-      renderer.render(scene, camera);
+      const geometry = new THREE.IcosahedronGeometry(1.5, 2);
+
+      // Pega sua cor de accent do CSS, se existir.
+      // Se não der certo, cai no fallback.
+      const accent = safeGetComputedStyle('--accent');
+      const material = new THREE.MeshStandardMaterial({
+        color: accent || 0xff4d4d,
+        metalness: 0.7,
+        roughness: 0.2,
+      });
+
+      webGLState.mesh = new THREE.Mesh(geometry, material);
+      webGLState.scene.add(webGLState.mesh);
+
+      webGLState.camera.position.z = 5;
+      webGLState.initialized = true;
+
+      animateWebGL();
+    } catch (error) {
+      console.error('Erro ao inicializar WebGL:', error);
+      if (elements.webGLCanvas) elements.webGLCanvas.style.display = 'none';
+    }
+  }
+
+  function animateWebGL() {
+    if (!webGLState.initialized) return;
+
+    webGLState.rafId = requestAnimationFrame(animateWebGL);
+
+    if (webGLState.mesh) {
+      webGLState.mesh.rotation.x += 0.005;
+      webGLState.mesh.rotation.y += 0.01;
     }
 
-    animate();
+    if (webGLState.renderer && webGLState.scene && webGLState.camera) {
+      webGLState.renderer.render(webGLState.scene, webGLState.camera);
+    }
+  }
 
-    window.addEventListener('resize', () => {
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    });
+  function handleWebGLResize() {
+    if (!webGLState.initialized || !elements.webGLCanvas) return;
+    if (!webGLState.camera || !webGLState.renderer) return;
+
+    const w = elements.webGLCanvas.clientWidth || 1;
+    const h = elements.webGLCanvas.clientHeight || 1;
+
+    webGLState.camera.aspect = w / h;
+    webGLState.camera.updateProjectionMatrix();
+    webGLState.renderer.setSize(w, h);
   }
 });
