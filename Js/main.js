@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('load', () => {
       // Se não tiver loader ou GSAP, só inicia direto
       if (!elements.loader || !window.gsap) {
+        if (elements.loader) {
+          elements.loader.style.opacity = '0';
+          elements.loader.style.visibility = 'hidden';
+          elements.loader.style.display = 'none';
+        }
         initAnimations();
         initWebGL();
         return;
@@ -97,6 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!window.gsap) {
       // Sem GSAP: pelo menos deixa a hero aparecer
       if (elements.heroContent) elements.heroContent.classList.add('visible');
+      elements.textReveal.forEach((span) => {
+        if (span) span.style.transform = 'translateY(0)';
+      });
+      if (elements.textMask) {
+        elements.textMask.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+      }
       elements.serviceCards.forEach((c) => c.classList.add('visible'));
       elements.portfolioItems.forEach((p) => p.classList.add('visible'));
       return;
@@ -278,3 +289,4 @@ document.addEventListener('DOMContentLoaded', () => {
     webGLState.renderer.setSize(w, h);
   }
 });
+

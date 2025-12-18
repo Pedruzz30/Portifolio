@@ -1,0 +1,172 @@
+/* =========================
+   animations.css — Correnteza Viva
+   Apenas keyframes + animation assignments
+   ========================= */
+
+/* =========================
+   Keyframes
+   ========================= */
+
+@keyframes loading {
+  to { transform: rotate(1turn); }
+}
+
+/* Blob: mais orgânico (micro variação extra no meio) */
+@keyframes blob {
+  0%, 100% { border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%; }
+  25%      { border-radius: 54% 46% 44% 56% / 52% 62% 38% 48%; }
+  55%      { border-radius: 48% 52% 60% 40% / 44% 52% 58% 46%; }
+  80%      { border-radius: 52% 48% 46% 54% / 50% 58% 42% 50%; }
+}
+
+/* HERO: correnteza lenta (camada 1) */
+@keyframes tideFlow {
+  0%   { transform: translate3d(-6%,  2%, 0) scale(1.02); }
+  50%  { transform: translate3d( 6%, -3%, 0) scale(1.07); }
+  100% { transform: translate3d(-6%,  2%, 0) scale(1.02); }
+}
+
+/* HERO: sweep (camada 2) — contínua e bem “água” */
+@keyframes waveSweep {
+  0%   { transform: translateX(-18%) rotate(2.2deg); opacity: 0.20; }
+  50%  { transform: translateX( 18%) rotate(-2.2deg); opacity: 0.58; }
+  100% { transform: translateX(-18%) rotate(2.2deg); opacity: 0.20; }
+}
+
+/* HERO: micro-correnteza (camada 3) — dá “vida” sem gritar */
+@keyframes microDrift {
+  0%   { transform: translate3d(0,0,0); opacity: 0.38; }
+  50%  { transform: translate3d(-1.5%, 1%, 0); opacity: 0.60; }
+  100% { transform: translate3d(0,0,0); opacity: 0.38; }
+}
+
+/* Glow do blob: mais “vivo” e com leve rotação */
+@keyframes seaGlow {
+  0%   { transform: translate3d(0,0,0) scale(1.03) rotate(0deg);   opacity: 0.30; }
+  50%  { transform: translate3d(2.8%, -2.2%, 0) scale(1.10) rotate(3deg); opacity: 0.66; }
+  100% { transform: translate3d(0,0,0) scale(1.03) rotate(0deg);   opacity: 0.30; }
+}
+
+/* Luz na água: “caustics” suave porém perceptível */
+@keyframes waterShimmer {
+  0%   { transform: translate3d( 2%, -1%, 0); filter: blur(.15px); opacity: 0.42; }
+  50%  { transform: translate3d(-4%,  3%, 0); filter: blur(.55px); opacity: 0.78; }
+  100% { transform: translate3d( 2%, -1%, 0); filter: blur(.15px); opacity: 0.42; }
+}
+
+/* Hero content: flutuação + leve “pull” lateral (correnteza) */
+@keyframes floatPulse {
+  0%   { transform: translate3d(0, 10px, 0); }
+  50%  { transform: translate3d(-6px, calc(var(--float-distance) * -1.35), 0); }
+  100% { transform: translate3d(0, 10px, 0); }
+}
+
+/* Botão: onda passando sempre (correnteza) */
+@keyframes seaWave {
+  0%   { transform: translateX(-85%) rotate(12deg); opacity: 0.32; }
+  50%  { transform: translateX( 85%) rotate(12deg); opacity: 0.85; }
+  100% { transform: translateX(-85%) rotate(12deg); opacity: 0.32; }
+}
+
+/* Botão: glow pulsando com micro deslocamento */
+@keyframes seaGlowBtn {
+  0%   { transform: translate3d(0,0,0) scale(1.01); opacity: 0.45; }
+  50%  { transform: translate3d(-2.8%, 1.8%, 0) scale(1.06); opacity: 0.86; }
+  100% { transform: translate3d(0,0,0) scale(1.01); opacity: 0.45; }
+}
+
+/* Cards: brilho deriva em correnteza */
+@keyframes shimmerDrift {
+  0%   { transform: translateX(-70%) scale(1.01); opacity: 0.15; }
+  50%  { transform: translateX( 45%) scale(1.05); opacity: 0.45; }
+  100% { transform: translateX(-70%) scale(1.01); opacity: 0.15; }
+}
+
+/* Portfolio: faixa contínua tipo “onda passando” */
+@keyframes glideWave {
+  0%   { transform: translateX(-110%) rotate(12deg); }
+  100% { transform: translateX( 110%) rotate(12deg); }
+}
+
+/* Mar global: glow (correnteza) */
+@keyframes oceanGlow {
+  0%   { transform: translate3d( 2%, -1%, 0) scale(1.03); opacity: 0.30; }
+  50%  { transform: translate3d(-5%,  3%, 0) scale(1.10); opacity: 0.78; }
+  100% { transform: translate3d( 2%, -1%, 0) scale(1.03); opacity: 0.30; }
+}
+
+/* Mar global: onda passando mais “puxada” */
+@keyframes oceanWave {
+  0%   { transform: translateX(-90%) rotate(12deg); opacity: 0.14; }
+  50%  { transform: translateX( 90%) rotate(12deg); opacity: 0.34; }
+  100% { transform: translateX(-90%) rotate(12deg); opacity: 0.14; }
+}
+
+/* =========================
+   Animation assignments
+   ========================= */
+
+.loader::after { animation: loading 1s ease infinite; }
+
+/* HERO background layers (correnteza) */
+.hero::before { animation: tideFlow calc(var(--wave-slow) * 0.75) ease-in-out infinite; }
+.hero::after  { animation: waveSweep calc(var(--wave-medium) * 0.80) ease-in-out infinite; }
+
+/* Se você tiver um overlay extra (opcional) pode usar este keyframe */
+.hero .hero-current,
+.hero [data-current] {
+  animation: microDrift calc(var(--wave-medium) * 0.9) ease-in-out infinite;
+}
+
+/* Hero content */
+.hero-content {
+  animation: floatPulse calc(var(--wave-medium) * 0.95) ease-in-out infinite;
+  animation-play-state: paused;
+}
+.hero-content.visible { animation-play-state: running; }
+
+/* Blob */
+.hero-image { animation: blob calc(var(--wave-slow) * 1.10) ease-in-out infinite; }
+.hero-image::before { animation: seaGlow calc(var(--wave-medium) * 0.85) ease-in-out infinite; }
+.hero-image::after  { animation: waterShimmer calc(var(--wave-slow) * 0.78) ease-in-out infinite; }
+
+/* Button */
+.btn-hover-effect::before { animation: seaWave 4.6s ease-in-out infinite; }
+.btn-hover-effect::after  { animation: seaGlowBtn 4.2s ease-in-out infinite; }
+
+/* Cards */
+.service-card::after {
+  animation: shimmerDrift calc(var(--wave-medium) * 0.85) ease-in-out infinite;
+}
+
+/* Portfolio */
+.portfolio-item::before {
+  animation: glideWave calc(var(--wave-slow) * 0.65) linear infinite;
+}
+
+/* Global ocean (sempre rodando) */
+body::before { animation: oceanGlow calc(var(--wave-medium) * 0.78) ease-in-out infinite; }
+body::after  { animation: oceanWave calc(var(--wave-slow) * 0.58) linear infinite; }
+
+/* =========================
+   Reduced motion
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+  .loader::after,
+  .hero::before,
+  .hero::after,
+  .hero-content,
+  .hero-image,
+  .hero-image::before,
+  .hero-image::after,
+  .btn-hover-effect::before,
+  .btn-hover-effect::after,
+  .service-card::after,
+  .portfolio-item::before,
+  body::before,
+  body::after {
+    animation: none !important;
+    animation-play-state: paused !important;
+  }
+}
+
