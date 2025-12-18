@@ -1,12 +1,69 @@
-/* Estilos Base */
-:root {
-    --primary: #0f0f0f;
-    --secondary: #1a1a1a;
-    --accent: #ff4d4d;
-    --text: #f5f5f5;
-    --text-secondary: #a1a1a1;
-    --transition-base: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+:root{
+  /* =========================
+     Escala de azuis
+     ========================= */
+  --white-blue:        #f2fbff;
+  --very-light-blue:   #dff5ff;
+  --light-blue:        #bfeaff;
+  --sky-blue:          #8ed8ff;
+  --bright-blue:       #4fbfff;
+  --blue:              #159ee6;
+  --deep-blue:         #0c7fbf;
+  --darker-blue:       #095f92;
+  --navy-blue:         #064465;
+  --midnight-blue:     #032a40;
+
+  /* =========================
+     Escala de brancos e cinzas frios
+     ========================= */
+  --pure-white:        #ffffff;
+  --cool-white:        #f7f8fb;
+  --light-gray:        #eef1f6;
+  --silver-light:      #dfe5ee;
+  --silver:            #c9d2df;
+  --blue-gray-light:   #aeb8c8;
+  --blue-gray:         #8f9bb0;
+  --gray:              #6f7b8e;
+  --dark-gray:         #4d5666;
+  --charcoal:          #2e3440;
+
+  /* =========================
+     Tokens de uso no layout
+     ========================= */
+  --bg:        var(--cool-white);
+  --surface:   var(--pure-white);
+  --surface-2: var(--light-gray);
+
+  --text:        var(--charcoal);
+  --text-muted:  var(--gray);
+
+  --primary:        var(--deep-blue);
+  --primary-hover:  var(--darker-blue);
+  --primary-soft:   var(--very-light-blue);
+
+  --accent: var(--blue-gray-light);
+  --border: color-mix(in srgb, var(--blue-gray-light) 35%, transparent);
+
+  --shadow: 0 18px 45px rgba(3, 42, 64, 0.14);
+  --focus: 0 0 0 4px
+    color-mix(in srgb, var(--bright-blue) 35%, transparent);
+
+  /* =========================
+     Gradientes
+     ========================= */
+  --grad-blue: linear-gradient(
+    135deg,
+    var(--light-blue),
+    var(--deep-blue)
+  );
+
+  --grad-white: linear-gradient(
+    180deg,
+    var(--pure-white),
+    var(--white-blue)
+  );
 }
+
 
 * {
     margin: 0;
