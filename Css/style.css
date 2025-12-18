@@ -80,6 +80,9 @@
   /* ===== Motion ===== */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-base: 220ms var(--ease-out);
+  --wave-slow: 16s;
+  --wave-medium: 11s;
+  --float-distance: 8px;
 }
 
 
@@ -257,17 +260,45 @@ main {
   isolation: isolate;
 }
 
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: -15%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(26px);
+  opacity: 0.36;
+}
+
+.hero::before {
+  background: radial-gradient(90% 70% at 18% 20%, rgba(255, 255, 255, 0.25), transparent 65%),
+    radial-gradient(120% 80% at 70% 65%, color-mix(in srgb, var(--bright-blue) 38%, transparent), transparent 60%);
+  mix-blend-mode: screen;
+  animation: tideFlow var(--wave-slow) ease-in-out infinite;
+}
+
+.hero::after {
+  background: linear-gradient(110deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0)),
+    linear-gradient(95deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%);
+  mix-blend-mode: soft-light;
+  animation: waveSweep var(--wave-medium) ease-in-out infinite;
+}
+
 .hero-content {
   width: 50%;
   z-index: 2;
   transform: translateY(20px);
   opacity: 0;
   transition: transform 1s ease, opacity 1s ease;
+  animation: floatPulse var(--wave-medium) ease-in-out infinite;
+  animation-play-state: paused;
 }
 
 .hero-content.visible {
   transform: translateY(0);
   opacity: 1;
+  animation-play-state: running;
 }
 
 .hero-image{
@@ -276,7 +307,7 @@ main {
   height: 78vh;
   border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
   overflow: hidden;
-  animation: blob 18s ease-in-out infinite;
+  animation: blob 22s ease-in-out infinite;
   box-shadow: 0 22px 60px rgba(3, 42, 64, 0.18);
   isolation: isolate; /* garante camadas certinhas */
 }
@@ -296,7 +327,7 @@ main {
   filter: blur(44px);
   opacity: 0.40;
   z-index: 0;
-  animation: seaGlow 10s ease-in-out infinite;
+   animation: seaGlow var(--wave-medium) ease-in-out infinite;
 }
 
 /* “Luz na água” / ondas suaves (sem textura) */
@@ -318,7 +349,7 @@ main {
 
   mix-blend-mode: soft-light;
   opacity: 0.55;
-  animation: waterShimmer 6.5s ease-in-out infinite;
+  animation: waterShimmer var(--wave-slow) ease-in-out infinite;
 }
 
 
@@ -339,6 +370,18 @@ main {
   }
 }
 
+@keyframes tideFlow{
+  0%{ transform: translate3d(-2%, 0, 0) scale(1); }
+  50%{ transform: translate3d(2%, -1%, 0) scale(1.02); }
+  100%{ transform: translate3d(-2%, 0, 0) scale(1); }
+}
+
+@keyframes waveSweep{
+  0%{ transform: translateX(-8%) rotate(1deg); opacity: 0.28; }
+  50%{ transform: translateX(8%) rotate(-1deg); opacity: 0.44; }
+  100%{ transform: translateX(-8%) rotate(1deg); opacity: 0.28; }
+}
+
 /* Glow “respirando” */
 @keyframes seaGlow{
   0%,100%{ transform: translate3d(0,0,0) scale(1); opacity:0.38; }
@@ -351,6 +394,10 @@ main {
   50%{ transform: translate3d(-2%, 1.5%, 0); filter: blur(0.3px); opacity:0.62; }
 }
 
+@keyframes floatPulse{
+  0%,100%{ transform: translateY(6px); }
+  50%{ transform: translateY(calc(var(--float-distance) * -1)); }
+}
 
 .text-reveal {
   font-size: 5rem;
@@ -488,6 +535,18 @@ main {
   50%{ transform: translate3d(-1.5%, 1%, 0); opacity: .70; }
 }
 
+@keyframes shimmerDrift{
+  0%{ transform: translateX(-40%) scale(1); }
+  50%{ transform: translateX(20%) scale(1.02); }
+  100%{ transform: translateX(-40%) scale(1); }
+}
+
+@keyframes glideWave{
+  0%{ transform: translateX(-80%) rotate(10deg); }
+  50%{ transform: translateX(30%) rotate(10deg); }
+  100%{ transform: translateX(-80%) rotate(10deg); }
+}
+
 /* respeita quem prefere menos movimento */
 @media (prefers-reduced-motion: reduce){
   .btn-hover-effect::before,
@@ -520,6 +579,18 @@ main {
   backdrop-filter: blur(6px);
 }
 
+.service-card::after {
+  content: "";
+  position: absolute;
+  inset: -40% -60%;
+  background: radial-gradient(80% 60% at 20% 30%, rgba(255, 255, 255, 0.14), transparent 60%);
+  opacity: 0;
+  transform: translateX(-40%);
+  mix-blend-mode: soft-light;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  animation: shimmerDrift calc(var(--wave-medium) * 1.1) ease-in-out infinite;
+}
+
 .service-card.visible {
   transform: translateY(0);
   opacity: 1;
@@ -529,6 +600,12 @@ main {
   transform: translateY(-10px) !important;
   box-shadow: var(--shadow-md);
   border-color: var(--border-strong);
+  background: color-mix(in srgb, var(--surface) 65%, var(--very-light-blue) 35%);
+}
+
+.service-card:hover::after {
+  opacity: 1;
+  transform: translateX(25%);
 }
 
 .service-card h3 {
@@ -569,6 +646,19 @@ main {
   border: 1px solid transparent;
   background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad-border) border-box;
   box-shadow: var(--shadow-sm);
+}
+
+.portfolio-item::before {
+  content: "";
+  position: absolute;
+  inset: -50% -30% auto -30%;
+  height: 60%;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+  transform: translateX(-80%) rotate(10deg);
+  opacity: 0.35;
+  filter: blur(2px);
+  pointer-events: none;
+  animation: glideWave calc(var(--wave-slow) * 1.1) linear infinite;
 }
 
 .portfolio-item.visible {
@@ -763,7 +853,7 @@ body::before{
       transparent 62%);
   mix-blend-mode: soft-light;
   opacity: .55;
-  animation: oceanGlow 8s ease-in-out infinite;
+animation: oceanGlow calc(var(--wave-medium) * 0.9) ease-in-out infinite;
 }
 
 /* onda passando */
@@ -776,7 +866,7 @@ body::after{
   transform: translateX(-35%) rotate(10deg);
   opacity: .30;
   filter: blur(.3px);
-  animation: oceanWave 6s linear infinite;
+  animation: oceanWave calc(var(--wave-slow) * 0.85) linear infinite;
 }
 
 @keyframes oceanGlow{
