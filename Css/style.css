@@ -27,53 +27,53 @@
   --dark-gray:         #4d5666;
   --charcoal:          #2e3440;
 
-  :root{
-  /* ===== Base / Superfícies ===== */
-  --bg:        var(--cool-white);
+ /* ===== Base / Superfícies ===== */
+  --bg:        color-mix(in srgb, var(--cool-white) 75%, var(--white-blue) 25%);
   --surface:   var(--pure-white);
-  --surface-2: var(--light-gray);
+  --surface-2: color-mix(in srgb, var(--light-gray) 55%, var(--pure-white) 45%);
+  --surface-soft: color-mix(in srgb, var(--pure-white) 82%, var(--very-light-blue) 18%);
 
   /* ===== Texto ===== */
-  --text:        var(--charcoal);
-  --text-muted:  var(--gray);
+  --text:         var(--charcoal);
+  --text-muted:   var(--gray);
+  --text-subtle:  color-mix(in srgb, var(--gray) 60%, var(--blue-gray) 40%);
 
   /* ===== Marca / Ação ===== */
-  --primary:       var(--deep-blue);
-  --primary-hover: var(--darker-blue);
-  --primary-soft:  color-mix(in srgb, var(--deep-blue) 12%, var(--pure-white)); /* “tinta” bem leve */
+  --primary:        var(--deep-blue);
+  --primary-hover:  color-mix(in srgb, var(--darker-blue) 82%, var(--navy-blue));
+  --primary-soft:   color-mix(in srgb, var(--deep-blue) 14%, var(--pure-white));
 
   /* ===== Temperinho (acento) ===== */
-  --accent:        var(--bright-blue);
-  --accent-soft:   color-mix(in srgb, var(--bright-blue) 14%, var(--pure-white));
-  --accent-strong: color-mix(in srgb, var(--bright-blue) 78%, var(--midnight-blue));
+  --accent:         var(--bright-blue);
+  --accent-soft:    color-mix(in srgb, var(--bright-blue) 14%, var(--pure-white));
+  --accent-strong:  color-mix(in srgb, var(--bright-blue) 78%, var(--midnight-blue));
 
   /* ===== Linhas / Bordas ===== */
-  --border:        color-mix(in srgb, var(--blue-gray-light) 40%, transparent);
-  --border-strong: color-mix(in srgb, var(--blue-gray) 55%, transparent);
+  --border:         color-mix(in srgb, var(--blue-gray-light) 42%, transparent);
+  --border-strong:  color-mix(in srgb, var(--blue-gray) 58%, transparent);
+  --border-glow:    color-mix(in srgb, var(--accent) 28%, transparent);
 
   /* ===== Sombras / Glow ===== */
-  --shadow-sm: 0 8px 22px rgba(3, 42, 64, 0.10);
-  --shadow-md: 0 18px 45px rgba(3, 42, 64, 0.14);
-  --shadow-lg: 0 28px 70px rgba(3, 42, 64, 0.18);
-
-  --glow: 0 0 0 4px color-mix(in srgb, var(--bright-blue) 30%, transparent);
-  --focus: var(--glow);
+  --shadow-sm: 0 8px 24px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+  --shadow-md: 0 16px 42px color-mix(in srgb, var(--midnight-blue) 16%, transparent);
+  --shadow-lg: 0 24px 64px color-mix(in srgb, var(--midnight-blue) 22%, transparent);
+  --focus: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
 
   /* ===== Gradientes (personalidade) ===== */
   --grad-hero: linear-gradient(135deg,
-    color-mix(in srgb, var(--white-blue) 70%, var(--bright-blue) 30%),
+    color-mix(in srgb, var(--white-blue) 68%, var(--bright-blue) 32%),
     color-mix(in srgb, var(--light-blue) 60%, var(--deep-blue) 40%),
     color-mix(in srgb, var(--deep-blue) 55%, var(--midnight-blue) 45%)
   );
 
   --grad-card: linear-gradient(180deg,
-    color-mix(in srgb, var(--pure-white) 92%, var(--light-blue) 8%),
-    color-mix(in srgb, var(--pure-white) 78%, var(--very-light-blue) 22%)
+    color-mix(in srgb, var(--surface) 88%, var(--light-blue) 12%),
+    color-mix(in srgb, var(--surface) 78%, var(--very-light-blue) 22%)
   );
 
   --grad-border: linear-gradient(90deg,
     var(--accent),
-    var(--deep-blue),
+    color-mix(in srgb, var(--accent) 70%, var(--primary) 30%),
     var(--sky-blue)
   );
 
@@ -91,7 +91,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--primary);
+  background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
 }
@@ -106,6 +106,32 @@ button {
   background: none;
 }
 
+/* Links com personalidade sutil */
+.a11y-link,
+a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  background-image: linear-gradient(120deg, color-mix(in srgb, var(--accent) 80%, var(--primary) 20%), var(--accent-strong));
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  transition: color var(--transition-base), background-size var(--transition-base);
+}
+
+.a11y-link:hover,
+a:hover {
+  color: var(--accent-strong);
+  background-size: 100% 2px;
+}
+
+.a11y-link:focus-visible,
+a:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 4px;
+}
+
 .hidden {
   display: none;
 }
@@ -114,7 +140,7 @@ button {
 .loader {
   position: fixed;
   inset: 0;
-  background: var(--primary);
+  background: radial-gradient(circle at 25% 25%, color-mix(in srgb, var(--accent-soft) 55%, transparent), transparent 40%), var(--primary);
   z-index: 9999;
   display: flex;
   justify-content: center;
@@ -126,7 +152,7 @@ button {
   content: "";
   width: 50px;
   height: 50px;
-  border: 5px solid var(--text-secondary);
+  border: 5px solid var(--border);
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: loading 1s ease infinite;
@@ -149,19 +175,19 @@ button {
   justify-content: space-between;
   align-items: center;
   background-color: transparent;
-  transition: background-color 0.5s ease, padding 0.5s ease;
+  transition: background-color 0.5s ease, padding 0.5s ease, box-shadow 0.5s ease;
 }
 
 .header.scrolled {
-  background-color: rgba(15, 15, 15, 0.9);
+  background-color: color-mix(in srgb, var(--midnight-blue) 60%, transparent);
   padding: 1rem 2rem;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-sm);
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text);
+  color: var(--surface);
   transition: color 0.5s ease, transform 0.5s ease;
 }
 
@@ -178,11 +204,17 @@ button {
   gap: 6px;
 }
 
+.menu-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 999px;
+}
+
 .menu-toggle span {
   display: block;
   width: 30px;
   height: 2px;
-  background: var(--text);
+  background: var(--surface);
   transition: transform 0.5s ease, opacity 0.5s ease, background-color 0.3s ease;
 }
 
@@ -220,6 +252,9 @@ main {
   position: relative;
   overflow: hidden;
   gap: 3rem;
+  background: var(--grad-hero);
+  color: var(--pure-white);
+  isolation: isolate;
 }
 
 .hero-content {
@@ -235,18 +270,87 @@ main {
   opacity: 1;
 }
 
-.hero-image {
-  position: absolute;
-  right: 8%;
-  width: 40%;
-  height: 80%;
+.hero-image{
+  position: relative;
+  width: 38%;
+  height: 78vh;
+  border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
+  overflow: hidden;
+  animation: blob 18s ease-in-out infinite;
+  box-shadow: 0 22px 60px rgba(3, 42, 64, 0.18);
+  isolation: isolate; /* garante camadas certinhas */
 }
 
-#webgl-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+/* Aura do mar (glow azul) */
+.hero-image::before{
+  content:"";
+  position:absolute;
+  inset:-10%;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bright-blue) 65%, transparent),
+    color-mix(in srgb, var(--deep-blue) 65%, transparent),
+    color-mix(in srgb, var(--sky-blue) 55%, transparent)
+  );
+  filter: blur(44px);
+  opacity: 0.40;
+  z-index: 0;
+  animation: seaGlow 10s ease-in-out infinite;
 }
+
+/* “Luz na água” / ondas suaves (sem textura) */
+.hero-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius: inherit;
+  z-index: 3;
+  pointer-events: none;
+
+  /* Apenas a luz/ondas */
+  background: radial-gradient(
+    120% 85% at 30% 20%,
+    rgba(255,255,255,0.55),
+    rgba(255,255,255,0.10) 45%,
+    rgba(255,255,255,0) 70%
+  );
+
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  animation: waterShimmer 6.5s ease-in-out infinite;
+}
+
+
+
+/* Garante as camadas corretas */
+.hero-img{ position:absolute; inset:0; z-index:1; }
+
+/* Blob original */
+@keyframes blob{
+  0%,100%{
+    border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
+  }
+  33%{
+    border-radius: 52% 48% 46% 54% / 50% 60% 40% 50%;
+  }
+  66%{
+    border-radius: 48% 52% 58% 42% / 45% 50% 55% 50%;
+  }
+}
+
+/* Glow “respirando” */
+@keyframes seaGlow{
+  0%,100%{ transform: translate3d(0,0,0) scale(1); opacity:0.38; }
+  50%{ transform: translate3d(1.5%, -1%, 0) scale(1.03); opacity:0.48; }
+}
+
+/* Brilho/ondas se mexendo */
+@keyframes waterShimmer{
+  0%,100%{ transform: translate3d(0,0,0); filter: blur(0px); opacity:0.50; }
+  50%{ transform: translate3d(-2%, 1.5%, 0); filter: blur(0.3px); opacity:0.62; }
+}
+
 
 .text-reveal {
   font-size: 5rem;
@@ -264,44 +368,134 @@ main {
 
 .text-mask {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--surface-soft);
   margin-bottom: 3rem;
   clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
   transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.btn-hover-effect {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--text);
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  cursor: pointer;
+.btn-hover-effect{
+  /* base */
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  padding: 1rem 2.1rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  /* cor */
+  color: var(--pure-white);
+  background:
+    radial-gradient(120% 180% at 20% 10%,
+      rgba(255,255,255,.22),
+      rgba(255,255,255,0) 55%),
+    linear-gradient(120deg,
+      var(--primary),
+      color-mix(in srgb, var(--accent) 72%, var(--primary) 28%),
+      var(--primary-hover)
+    );
+
+  /* depth */
+  box-shadow:
+    0 12px 28px rgba(3, 42, 64, 0.18),
+    0 2px 0 rgba(255,255,255,.10) inset;
+
+  transition:
+    transform var(--transition-base),
+    filter var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color 320ms var(--ease-out);
   overflow: hidden;
-  transition: color 0.4s, border-color 0.4s;
+  isolation: isolate; /* camadas certinhas */
 }
 
-.btn-hover-effect::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--accent);
-  z-index: -1;
-  transition: left 0.4s;
+/* “onda” passando por cima (shimmer) */
+.btn-hover-effect::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  z-index: 0;
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,.22) 20%,
+      rgba(255,255,255,.10) 50%,
+      rgba(255,255,255,0) 80%);
+  transform: translateX(-60%) rotate(12deg);
+  opacity: .55;
+  filter: blur(.2px);
+  animation: seaWave 8s ease-in-out infinite;
 }
 
-.btn-hover-effect:hover {
-  color: var(--primary);
-  border-color: var(--accent);
+/* caustics (luz na água) */
+.btn-hover-effect::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(110% 90% at 30% 20%,
+    rgba(255,255,255,.28),
+    rgba(255,255,255,0) 65%);
+  mix-blend-mode: soft-light;
+  opacity: .55;
+  animation: seaGlowBtn 6.5s ease-in-out infinite;
 }
 
-.btn-hover-effect:hover::before {
-  left: 0;
+/* texto/ícone por cima das camadas */
+.btn-hover-effect > *{
+  position: relative;
+  z-index: 1;
 }
+
+/* hover: mais “mar” e mais premium */
+.btn-hover-effect:hover{
+  transform: translateY(-2px);
+  filter: saturate(1.12);
+  border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+  box-shadow:
+    0 18px 45px rgba(3, 42, 64, 0.22),
+    0 0 0 6px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* click: feedback gostoso */
+.btn-hover-effect:active{
+  transform: translateY(0px) scale(0.99);
+  filter: saturate(1.05);
+}
+
+/* foco acessível */
+.btn-hover-effect:focus-visible{
+  outline: none;
+  box-shadow:
+    0 18px 45px rgba(3, 42, 64, 0.22),
+    var(--focus);
+}
+
+/* animações */
+@keyframes seaWave{
+  0%,100%{ transform: translateX(-60%) rotate(12deg); opacity: .45; }
+  50%{ transform: translateX(60%) rotate(12deg); opacity: .70; }
+}
+
+@keyframes seaGlowBtn{
+  0%,100%{ transform: translate3d(0,0,0); opacity: .50; }
+  50%{ transform: translate3d(-1.5%, 1%, 0); opacity: .70; }
+}
+
+/* respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce){
+  .btn-hover-effect::before,
+  .btn-hover-effect::after{
+    animation: none !important;
+  }
+}
+
 
 /* Services */
 .services {
@@ -312,7 +506,7 @@ main {
 }
 
 .service-card {
-  background: var(--secondary);
+  background: var(--grad-card);
   padding: 3rem 2rem;
   border-radius: 10px;
   transition: var(--transition-base);
@@ -320,6 +514,10 @@ main {
   opacity: 0;
   will-change: transform;
   border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(6px);
 }
 
 .service-card.visible {
@@ -329,8 +527,8 @@ main {
 
 .service-card:hover {
   transform: translateY(-10px) !important;
-  box-shadow: var(--shadow);
-  background: #222222;
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
 }
 
 .service-card h3 {
@@ -340,7 +538,7 @@ main {
 }
 
 .service-card p {
-  color: var(--text-secondary);
+  color: var(--text-subtle);
   transition: color 0.3s ease;
 }
 
@@ -368,7 +566,9 @@ main {
   transition: var(--transition-base);
   transform: scale(0.95);
   opacity: 0;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad-border) border-box;
+  box-shadow: var(--shadow-sm);
 }
 
 .portfolio-item.visible {
@@ -378,7 +578,7 @@ main {
 
 .portfolio-item:hover {
   transform: scale(1.02) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-lg);
 }
 
 .portfolio-item img {
@@ -395,7 +595,7 @@ main {
 .item-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  background: linear-gradient(to top, color-mix(in srgb, var(--midnight-blue) 70%, transparent), transparent);
   opacity: 0;
   transition: opacity 0.5s ease;
   display: flex;
@@ -409,7 +609,7 @@ main {
 }
 
 .portfolio-item h4 {
-  color: white;
+  color: var(--pure-white);
   font-size: 1.5rem;
   transform: translateY(20px);
   transition: transform 0.5s ease;
@@ -425,7 +625,7 @@ main {
 /* Contact */
 .contact {
   padding: 0 8% 8rem;
-  background: var(--secondary);
+  background: var(--surface);
 }
 
 .contact form {
@@ -439,8 +639,8 @@ main {
 .contact textarea {
   width: 100%;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--text-secondary);
+  background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+  border: 1px solid var(--border);
   color: var(--text);
   transition: var(--transition-base);
   border-radius: 6px;
@@ -450,9 +650,13 @@ main {
 .contact textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(255, 77, 77, 0.35);
+  box-shadow: var(--focus);
 }
 
+.contact input::placeholder,
+.contact textarea::placeholder {
+  color: var(--text-muted);
+}
 /* Global scroll states */
 [data-scroll] {
   opacity: 0;
@@ -514,7 +718,7 @@ main {
 /* Efeitos Especiais */
 ::selection {
   background: var(--accent);
-  color: white;
+  color: var(--pure-white);
 }
 
 /* Scrollbar Personalizada */
@@ -523,7 +727,7 @@ main {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--secondary);
+  background: var(--surface-2);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -532,6 +736,62 @@ main {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff3333;
+  background: var(--accent-strong);
 }
-    }
+
+/* =========================
+   🌊 MAR GLOBAL — efeito contínuo
+   ========================= */
+body::before,
+body::after{
+  content:"";
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform, opacity;
+}
+
+/* brilho / caustics */
+body::before{
+  background:
+    radial-gradient(120% 90% at 25% 15%,
+      color-mix(in srgb, var(--accent) 22%, transparent),
+      transparent 60%),
+    radial-gradient(110% 80% at 70% 35%,
+      color-mix(in srgb, var(--bright-blue) 16%, transparent),
+      transparent 62%);
+  mix-blend-mode: soft-light;
+  opacity: .55;
+  animation: oceanGlow 8s ease-in-out infinite;
+}
+
+/* onda passando */
+body::after{
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.12) 25%,
+    rgba(255,255,255,.05) 50%,
+    rgba(255,255,255,0) 75%);
+  transform: translateX(-35%) rotate(10deg);
+  opacity: .30;
+  filter: blur(.3px);
+  animation: oceanWave 6s linear infinite;
+}
+
+@keyframes oceanGlow{
+  0%,100%{ transform: translate3d(0,0,0); opacity: .45; }
+  50%{ transform: translate3d(-2%, 1.5%, 0); opacity: .65; }
+}
+
+@keyframes oceanWave{
+  0%{ transform: translateX(-55%) rotate(10deg); }
+  100%{ transform: translateX(55%) rotate(10deg); }
+}
+
+/* garante conteúdo acima do mar */
+body{ position: relative; }
+header, main, footer{
+  position: relative;
+  z-index: 1;
+}
