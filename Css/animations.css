@@ -142,37 +142,36 @@
   100% { transform: translate3d(0, 0, 0); opacity: .14; }
 }
 
-/* =========================
-   FOOTER — Ocean Animations
-   ========================= */
+/* ========================= FOOTER — Ocean Animations ========================= */
 
-/* “Luz da superfície” respirando */
+/* “Luz da superfície” respirando — MAIS visível */
 @keyframes footerSurfaceGlow{
-  0%   { transform: translate3d(0,0,0) scale(1.02); opacity: .55; }
-  50%  { transform: translate3d(2%, -1%, 0) scale(1.08); opacity: .78; }
-  100% { transform: translate3d(0,0,0) scale(1.02); opacity: .55; }
+  0%   { transform: translate3d(0,0,0) scale(1.03); opacity: .62; }
+  50%  { transform: translate3d(3.2%, -2%, 0) scale(1.12); opacity: .92; }
+  100% { transform: translate3d(0,0,0) scale(1.03); opacity: .62; }
 }
 
-/* Caústicas: luz tremendo no fundo */
+/* Caústicas: luz tremendo no fundo — MAIS marcada */
 @keyframes footerCaustics{
-  0%   { transform: translate3d(-1.5%, 1%, 0) scale(1.02); opacity: .16; }
-  50%  { transform: translate3d( 2.2%, -1.6%, 0) scale(1.06); opacity: .28; }
-  100% { transform: translate3d(-1.5%, 1%, 0) scale(1.02); opacity: .16; }
+  0%   { transform: translate3d(-2.2%, 1.8%, 0) scale(1.03); opacity: .22; }
+  50%  { transform: translate3d( 3.4%, -2.4%, 0) scale(1.10); opacity: .42; }
+  100% { transform: translate3d(-2.2%, 1.8%, 0) scale(1.03); opacity: .22; }
 }
 
-/* Sweep profundo: correnteza diagonal */
+/* Sweep profundo: correnteza diagonal — MAIS presente */
 @keyframes footerDeepSweep{
-  0%   { transform: translateX(-22%) rotate(10deg); opacity: .10; }
-  45%  { transform: translateX( 14%) rotate(10deg); opacity: .24; }
-  100% { transform: translateX(-22%) rotate(10deg); opacity: .10; }
+  0%   { transform: translateX(-28%) rotate(10deg); opacity: .14; }
+  45%  { transform: translateX( 20%) rotate(10deg); opacity: .34; }
+  100% { transform: translateX(-28%) rotate(10deg); opacity: .14; }
 }
 
-/* Plâncton: deriva quase imperceptível */
+/* Plâncton: deriva quase imperceptível — MAIS perceptível (ainda discreto) */
 @keyframes footerPlankton{
-  0%   { transform: translate3d(0,0,0); opacity: .10; }
-  50%  { transform: translate3d(-8px, 6px, 0); opacity: .18; }
-  100% { transform: translate3d(0,0,0); opacity: .10; }
+  0%   { transform: translate3d(0,0,0); opacity: .14; }
+  50%  { transform: translate3d(-12px, 9px, 0); opacity: .26; }
+  100% { transform: translate3d(0,0,0); opacity: .14; }
 }
+
 
 /* =========================
    Animation assignments
