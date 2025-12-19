@@ -102,6 +102,78 @@
   100% { transform: translateX(-90%) rotate(12deg); opacity: 0.14; }
 }
 
+/* Badges: pulsar de maré + bolha que sobe */
+@keyframes ripplePulse {
+  0%   { transform: translate3d(0, 1px, 0) scale(0.98); opacity: 0.8; }
+  50%  { transform: translate3d(-2px, -2px, 0) scale(1.02); opacity: 1; }
+  100% { transform: translate3d(0, 1px, 0) scale(0.98); opacity: 0.8; }
+}
+
+@keyframes bubbleRise {
+  0%   { transform: translate3d(0, 0, 0) scale(0.95); opacity: 0.72; }
+  40%  { transform: translate3d(-2px, -3px, 0) scale(1.05); opacity: 1; }
+  100% { transform: translate3d(0, -8px, 0) scale(0.96); opacity: 0.65; }
+}
+
+/* ===== ANIMAÇÕES (mar) ===== */
+@keyframes oceanSurface{
+  0%   { transform: translate3d(0,0,0); opacity: .28; }
+  50%  { transform: translate3d(-8px, 4px, 0); opacity: .40; }
+  100% { transform: translate3d(0,0,0); opacity: .28; }
+}
+
+@keyframes oceanSheen{
+  0%   { transform: translateX(-34%) translateY(7%); opacity: .65; }
+  45%  { transform: translateX(10%) translateY(-2%); opacity: .92; }
+  100% { transform: translateX(-34%) translateY(7%); opacity: .65; }
+}
+
+@keyframes bubbleDrift{
+  0%   { transform: translate3d(0, 0, 0) scale(.92); opacity: .60; }
+  35%  { transform: translate3d(-3px, -4px, 0) scale(1.02); opacity: .95; }
+  70%  { transform: translate3d(2px, -8px, 0) scale(.98); opacity: .78; }
+  100% { transform: translate3d(0, -10px, 0) scale(.92); opacity: .55; }
+}
+
+/* animação da textura (bem suave, sem enjoar) */
+@keyframes deepWaterDrift{
+  0%   { transform: translate3d(0, 0, 0); opacity: .14; }
+  50%  { transform: translate3d(-10px, 6px, 0); opacity: .22; }
+  100% { transform: translate3d(0, 0, 0); opacity: .14; }
+}
+
+/* =========================
+   FOOTER — Ocean Animations
+   ========================= */
+
+/* “Luz da superfície” respirando */
+@keyframes footerSurfaceGlow{
+  0%   { transform: translate3d(0,0,0) scale(1.02); opacity: .55; }
+  50%  { transform: translate3d(2%, -1%, 0) scale(1.08); opacity: .78; }
+  100% { transform: translate3d(0,0,0) scale(1.02); opacity: .55; }
+}
+
+/* Caústicas: luz tremendo no fundo */
+@keyframes footerCaustics{
+  0%   { transform: translate3d(-1.5%, 1%, 0) scale(1.02); opacity: .16; }
+  50%  { transform: translate3d( 2.2%, -1.6%, 0) scale(1.06); opacity: .28; }
+  100% { transform: translate3d(-1.5%, 1%, 0) scale(1.02); opacity: .16; }
+}
+
+/* Sweep profundo: correnteza diagonal */
+@keyframes footerDeepSweep{
+  0%   { transform: translateX(-22%) rotate(10deg); opacity: .10; }
+  45%  { transform: translateX( 14%) rotate(10deg); opacity: .24; }
+  100% { transform: translateX(-22%) rotate(10deg); opacity: .10; }
+}
+
+/* Plâncton: deriva quase imperceptível */
+@keyframes footerPlankton{
+  0%   { transform: translate3d(0,0,0); opacity: .10; }
+  50%  { transform: translate3d(-8px, 6px, 0); opacity: .18; }
+  100% { transform: translate3d(0,0,0); opacity: .10; }
+}
+
 /* =========================
    Animation assignments
    ========================= */
@@ -148,6 +220,27 @@
 body::before { animation: oceanGlow calc(var(--wave-medium) * 0.78) ease-in-out infinite; }
 body::after  { animation: oceanWave calc(var(--wave-slow) * 0.58) linear infinite; }
 
+/* FOOTER (mantém design, só anima) */
+.site-footer::before{
+  animation: footerSurfaceGlow calc(var(--wave-medium) * 1.05) ease-in-out infinite;
+}
+
+.site-footer::after{
+  animation: deepWaterDrift calc(var(--wave-slow) * 0.70) ease-in-out infinite;
+}
+
+.footer-inner::before{
+  animation: footerCaustics calc(var(--wave-medium) * 0.95) ease-in-out infinite;
+}
+
+.footer-inner::after{
+  animation: footerDeepSweep calc(var(--wave-slow) * 0.62) ease-in-out infinite;
+}
+
+.footer-bottom::before{
+  animation: footerPlankton calc(var(--wave-slow) * 0.85) ease-in-out infinite;
+}
+
 /* =========================
    Reduced motion
    ========================= */
@@ -163,6 +256,8 @@ body::after  { animation: oceanWave calc(var(--wave-slow) * 0.58) linear infinit
   .btn-hover-effect::after,
   .service-card::after,
   .portfolio-item::before,
+  .badge::before,
+  .badge::after,
   body::before,
   body::after {
     animation: none !important;

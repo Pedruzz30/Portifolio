@@ -288,5 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
     webGLState.camera.updateProjectionMatrix();
     webGLState.renderer.setSize(w, h);
   }
+
+  // Footer year
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
 });
 
