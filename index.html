@@ -30,7 +30,8 @@
           <span>seguros</span>
           <span>e escaláveis</span>
         </h1>
-        <p class="text-mask">Desenvolvimento back-end em Java, com foco em desempenho, organização e soluções que funcionam no mundo real.</p>
+        <p class="text-mask">Sou estudante de Engenharia de Software, focado em back-end com Java. 
+        Estou construindo projetos na prática, aprendendo boas práticas e evoluindo um pouco todo dia.</p>
         <button class="btn-hover-effect">Conhecer meu trabalho</button>
       </div>
       <div class="hero-visual" aria-hidden="true">
@@ -49,7 +50,7 @@
       </p>
         <ul class="skills-badges" role="list">
         <li class="badge badge-main">Java</li>
-        <li class="badge badge-main">Python</li>
+        <li class="badge">Python</li>
         <li class="badge">HTML</li>
         <li class="badge">CSS</li>
         <li class="badge">JavaScript</li>
@@ -57,35 +58,87 @@
       </ul>
     </section>
 
-    <section class="services" aria-labelledby="services-title">
-      <h2 id="services-title" class="section-title">Serviços</h2>
-      <div class="service-card">
-        <h3>Design 3D</h3>
-        <p>Experiências imersivas com WebGL</p>
-      </div>
-      <div class="service-card">
-        <h3>Animações</h3>
-        <p>Micro-interações e transições fluidas</p>
-      </div>
-      <div class="service-card">
-        <h3>Performance</h3>
-        <p>Otimização para máxima fluidez</p>
+   <section class="learning" aria-labelledby="learning-title">
+      <h2 id="learning-title" class="section-title">No que estou focando agora</h2>
+
+      <div class="learning-grid">
+        <article class="learning-card">
+          <h3>Back-end com Java</h3>
+          <p>POO, coleções, boas práticas e construção de projetos no dia a dia.</p>
+        </article>
+
+        <article class="learning-card">
+          <h3>APIs e Banco de Dados</h3>
+          <p>Modelagem, SQL e integração entre aplicação e dados.</p>
+        </article>
+
+        <article class="learning-card">
+          <h3>Fundamentos sólidos</h3>
+          <p>Algoritmos, lógica e organização do código pra crescer com consistência.</p>
+        </article>
       </div>
     </section>
 
     <section class="portfolio" aria-labelledby="portfolio-title">
       <h2 id="portfolio-title" class="section-title">Portfólio</h2>
+
       <article class="portfolio-item">
-        <div class="item-overlay"></div>
-        <img src="https://source.unsplash.com/random/800x600?design" alt="Projeto 1" loading="lazy" />
-        <h4>Projeto Inovador</h4>
+        <a class="portfolio-link" href="https://pedruzz30.github.io/Luciano_Portifolio/" target="_blank" rel="noopener noreferrer"
+          aria-label="Abrir projeto: Luciano Portfólio (abre em nova aba)">
+          <div class="item-overlay" aria-hidden="true"></div>
+
+          <!-- Depois você pode trocar por uma thumbnail real do projeto -->
+          <div class="portfolio-thumb" aria-hidden="true"></div>
+
+          <div class="portfolio-meta">
+            <h4>Luciano Portfólio</h4>
+            <p>Landing premium com vibe marítima, animações suaves e foco em estética + acessibilidade.</p>
+            <ul class="portfolio-tags" role="list">
+              <li class="tag">HTML</li>
+              <li class="tag">CSS</li>
+              <li class="tag">JS</li>
+            </ul>
+          </div>
+        </a>
       </article>
+
       <article class="portfolio-item">
-        <div class="item-overlay"></div>
-        <img src="https://source.unsplash.com/random/800x600?tech" alt="Projeto 2" loading="lazy" />
-        <h4>Solução Tecnológica</h4>
+        <a class="portfolio-link" href="https://pedruzz30.github.io/LucasNutri/" target="_blank" rel="noopener noreferrer"
+          aria-label="Abrir projeto: Lucas Nutri (abre em nova aba)">
+          <div class="item-overlay" aria-hidden="true"></div>
+          <div class="portfolio-thumb" aria-hidden="true"></div>
+
+          <div class="portfolio-meta">
+            <h4>Lucas Nutri</h4>
+            <p>Site moderno e profissional para nutricionista, com foco em conversão e conteúdo claro.</p>
+            <ul class="portfolio-tags" role="list">
+              <li class="tag">UI</li>
+              <li class="tag">Responsivo</li>
+              <li class="tag">Performance</li>
+            </ul>
+          </div>
+        </a>
+      </article>
+
+      <article class="portfolio-item">
+        <a class="portfolio-link" href="https://pedruzz30.github.io/cardapio-oliva/" target="_blank" rel="noopener noreferrer"
+          aria-label="Abrir projeto: Cardápio Oliva (abre em nova aba)">
+          <div class="item-overlay" aria-hidden="true"></div>
+          <div class="portfolio-thumb" aria-hidden="true"></div>
+
+          <div class="portfolio-meta">
+            <h4>Cardápio Oliva</h4>
+            <p>Cardápio online leve e direto, pensado pra celular e com navegação rápida.</p>
+            <ul class="portfolio-tags" role="list">
+              <li class="tag">Mobile-first</li>
+              <li class="tag">UX</li>
+              <li class="tag">Deploy</li>
+            </ul>
+          </div>
+        </a>
       </article>
     </section>
+
 
     <section class="contact" aria-labelledby="contact-title">
       <h2 id="contact-title" class="section-title">Contato</h2>
@@ -107,7 +160,7 @@
       <div class="footer-brand">
         <h2 id="footer-title" class="footer-title">Pedro Henrique</h2>
         <p class="footer-tagline">
-          Estudante de Engenharia de Software • Back-end em Java • Vibe de mar, código sólido.
+          Engenharia de Software (em formação) • Java no back-end • Evolução constante.
         </p>
 
         <div class="footer-cta">
@@ -121,7 +174,6 @@
         <ul class="footer-list" role="list">
           <li><a href="#hero-title">Início</a></li>
           <li><a href="#skills-title">Skills</a></li>
-          <li><a href="#services-title">Serviços</a></li>
           <li><a href="#portfolio-title">Portfólio</a></li>
           <li><a href="#contact-title">Contato</a></li>
         </ul>
@@ -142,7 +194,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>© <span id="year"></span> Pedro Henrique. Feito com calma, café e mar.</p>
+      <p>© <span id="year"></span> Pedro Henrique. Feito com calma, música e mar.</p>
       <a class="back-to-top" href="#hero-title">Voltar ao topo ↑</a>
     </div>
   </footer>
