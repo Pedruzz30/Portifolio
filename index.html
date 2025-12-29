@@ -32,7 +32,12 @@
         </h1>
         <p class="text-mask">Sou estudante de Engenharia de Software, focado em back-end com Java. 
         Estou construindo projetos na prática, aprendendo boas práticas e evoluindo um pouco todo dia.</p>
-        <button class="btn-hover-effect">Conhecer meu trabalho</button>
+       <button class="button button--liquid">
+        <span class="liquid" aria-hidden="true"></span>
+        <span class="btn-txt">Click Me</span>
+      </button>
+
+
       </div>
       <div class="hero-visual" aria-hidden="true">
         <div class="hero-image">
@@ -41,118 +46,224 @@
       </div>
     </section>
 
-    <section class="skills" aria-labelledby="skills-title">
-      <h2 id="skills-title">Tecnologias que estou construindo minha base</h2>
+    <section class="skills2" aria-labelledby="skills2-title">
+  <div class="skills2-shell">
+    <header class="skills2-header">
+      <p class="skills2-eyebrow">STACK EM EVOLUÇÃO</p>
 
-      <p class="skills-intro">
-        Sou estudante de Engenharia de Software, focado em back-end, 
-        aprendendo na prática e evoluindo um pouco todo dia.
-      </p>
-        <ul class="skills-badges" role="list">
-        <li class="badge badge-main">Java</li>
-        <li class="badge">Python</li>
-        <li class="badge">HTML</li>
-        <li class="badge">CSS</li>
-        <li class="badge">JavaScript</li>
-        <li class="badge">SQL</li>
-      </ul>
-    </section>
-
-   <section class="learning" aria-labelledby="learning-title">
-      <h2 id="learning-title" class="section-title">No que estou focando agora</h2>
-
-      <div class="learning-grid">
-        <article class="learning-card">
-          <h3>Back-end com Java</h3>
-          <p>POO, coleções, boas práticas e construção de projetos no dia a dia.</p>
-        </article>
-
-        <article class="learning-card">
-          <h3>APIs e Banco de Dados</h3>
-          <p>Modelagem, SQL e integração entre aplicação e dados.</p>
-        </article>
-
-        <article class="learning-card">
-          <h3>Fundamentos sólidos</h3>
-          <p>Algoritmos, lógica e organização do código pra crescer com consistência.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="portfolio" aria-labelledby="portfolio-title">
-      <h2 id="portfolio-title" class="section-title">Portfólio</h2>
-
-      <article class="portfolio-item">
-        <a class="portfolio-link" href="https://pedruzz30.github.io/Luciano_Portifolio/" target="_blank" rel="noopener noreferrer"
-          aria-label="Abrir projeto: Luciano Portfólio (abre em nova aba)">
-          <div class="item-overlay" aria-hidden="true"></div>
-
-          <!-- Depois você pode trocar por uma thumbnail real do projeto -->
-          <div class="portfolio-thumb" aria-hidden="true"></div>
-
-          <div class="portfolio-meta">
-            <h4>Luciano Portfólio</h4>
-            <p>Landing premium com vibe marítima, animações suaves e foco em estética + acessibilidade.</p>
-            <ul class="portfolio-tags" role="list">
-              <li class="tag">HTML</li>
-              <li class="tag">CSS</li>
-              <li class="tag">JS</li>
-            </ul>
-          </div>
-        </a>
-      </article>
-
-      <article class="portfolio-item">
-        <a class="portfolio-link" href="https://pedruzz30.github.io/LucasNutri/" target="_blank" rel="noopener noreferrer"
-          aria-label="Abrir projeto: Lucas Nutri (abre em nova aba)">
-          <div class="item-overlay" aria-hidden="true"></div>
-          <div class="portfolio-thumb" aria-hidden="true"></div>
-
-          <div class="portfolio-meta">
-            <h4>Lucas Nutri</h4>
-            <p>Site moderno e profissional para nutricionista, com foco em conversão e conteúdo claro.</p>
-            <ul class="portfolio-tags" role="list">
-              <li class="tag">UI</li>
-              <li class="tag">Responsivo</li>
-              <li class="tag">Performance</li>
-            </ul>
-          </div>
-        </a>
-      </article>
-
-      <article class="portfolio-item">
-        <a class="portfolio-link" href="https://pedruzz30.github.io/cardapio-oliva/" target="_blank" rel="noopener noreferrer"
-          aria-label="Abrir projeto: Cardápio Oliva (abre em nova aba)">
-          <div class="item-overlay" aria-hidden="true"></div>
-          <div class="portfolio-thumb" aria-hidden="true"></div>
-
-          <div class="portfolio-meta">
-            <h4>Cardápio Oliva</h4>
-            <p>Cardápio online leve e direto, pensado pra celular e com navegação rápida.</p>
-            <ul class="portfolio-tags" role="list">
-              <li class="tag">Mobile-first</li>
-              <li class="tag">UX</li>
-              <li class="tag">Deploy</li>
-            </ul>
-          </div>
-        </a>
-      </article>
-    </section>
-
-
-    <section class="contact" aria-labelledby="contact-title">
-      <h2 id="contact-title" class="section-title">Contato</h2>
-      <form name="contato" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="contato" />
-        <p class="hidden">
-          <label>Não preencha este campo se for humano: <input name="bot-field" /></label>
+      <div class="skills2-heading">
+        <h2 id="skills2-title">Base técnica em construção</h2>
+        <p class="skills2-subtitle">
+          Engenharia de Software com foco em back-end. Eu organizo meus estudos como produto:
+          fundamentos, prática e entrega contínua — com calma, consistência e qualidade.
         </p>
-        <input type="text" name="nome" placeholder="Seu nome" required />
-        <input type="email" name="email" placeholder="Seu email" required />
-        <textarea name="mensagem" placeholder="Sua mensagem" rows="5" required></textarea>
-        <button type="submit" class="btn-hover-effect">Enviar</button>
-      </form>
-    </section>
+      </div>
+    </header>
+
+    <div class="skills2-layout">
+      <!-- Trilhas -->
+      <article class="skills2-card skills2-card--tracks" aria-label="Trilhas de aprendizado">
+        <div class="skills2-cardTop">
+          <h3 class="skills2-cardTitle">Trilhas</h3>
+          <p class="skills2-cardHint">O que estou fortalecendo agora</p>
+        </div>
+
+        <ol class="skills2-tracks" role="list">
+          <li class="skills2-track">
+            <div class="skills2-dot" aria-hidden="true"></div>
+            <div class="skills2-trackBody">
+              <strong>Java sólido</strong>
+              <p>POO, coleções, exceptions, organização de pacotes e testes básicos.</p>
+            </div>
+            <div class="skills2-trackMeta" aria-label="Nível atual">
+              <span class="skills2-level">Base</span>
+            </div>
+          </li>
+
+          <li class="skills2-track">
+            <div class="skills2-dot" aria-hidden="true"></div>
+            <div class="skills2-trackBody">
+              <strong>Web & APIs</strong>
+              <p>HTTP, rotas, validação, boas práticas e persistência com SQL.</p>
+            </div>
+            <div class="skills2-trackMeta" aria-label="Nível atual">
+              <span class="skills2-level">Em evolução</span>
+            </div>
+          </li>
+
+          <li class="skills2-track">
+            <div class="skills2-dot" aria-hidden="true"></div>
+            <div class="skills2-trackBody">
+              <strong>Front-end enxuto</strong>
+              <p>HTML sem bagunça, CSS responsivo e JS leve pra interface fluida.</p>
+            </div>
+            <div class="skills2-trackMeta" aria-label="Nível atual">
+              <span class="skills2-level">Aplicando</span>
+            </div>
+          </li>
+        </ol>
+
+        <div class="skills2-actions">
+          <a class="skills2-btn" href="#portfolio-title">Ver projetos</a>
+          <span class="skills2-pill" aria-label="Cadência">Evolução diária</span>
+        </div>
+      </article>
+
+      <!-- Stack -->
+      <aside class="skills2-card skills2-card--stack" aria-label="Ferramentas atuais">
+        <div class="skills2-cardTop">
+          <h3 class="skills2-cardTitle">Ferramentas</h3>
+          <p class="skills2-cardHint">Stack atual (foco em base e consistência)</p>
+        </div>
+
+        <ul class="skills2-chips" role="list">
+          <li><span class="skills2-chip skills2-chip--main">Java</span></li>
+          <li><span class="skills2-chip">SQL</span></li>
+          <li><span class="skills2-chip">Python</span></li>
+          <li><span class="skills2-chip">HTML</span></li>
+          <li><span class="skills2-chip">CSS</span></li>
+          <li><span class="skills2-chip">JavaScript</span></li>
+        </ul>
+
+        <div class="skills2-mini">
+          <div class="skills2-miniRow">
+            <p class="skills2-miniLabel">Foco</p>
+            <p class="skills2-miniValue">Back-end + boas práticas</p>
+          </div>
+          <div class="skills2-miniRow">
+            <p class="skills2-miniLabel">Padrão</p>
+            <p class="skills2-miniValue">Acessibilidade + performance</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Métricas -->
+    <div class="skills2-metrics" role="list">
+      <article class="skills2-metric" role="listitem">
+        <p class="skills2-mLabel">RITMO</p>
+        <p class="skills2-mStrong">Estudo + commits frequentes</p>
+        <p class="skills2-mText">Ciclo curto, aprendizado rápido, ajuste constante.</p>
+      </article>
+
+      <article class="skills2-metric" role="listitem">
+        <p class="skills2-mLabel">ENTREGA</p>
+        <p class="skills2-mStrong">Projetos autorais publicados</p>
+        <p class="skills2-mText">O que eu estudo vira coisa real no ar.</p>
+      </article>
+
+      <article class="skills2-metric" role="listitem">
+        <p class="skills2-mLabel">QUALIDADE</p>
+        <p class="skills2-mStrong">Código limpo e previsível</p>
+        <p class="skills2-mText">Organização, nomes bons e manutenção frequente.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+    <section class="portfolio2" aria-labelledby="portfolio-title">
+  <div class="section-shell">
+    <div class="section-header">
+      <p class="section-eyebrow">Portfólio</p>
+      <div class="section-heading">
+      </div>
+    </div>
+
+    <div class="portfolio2-grid">
+      <!-- 1 -->
+      <article class="p2-card">
+        <div class="p2-top">
+          <h3 class="p2-title">Luciano Portfólio</h3>
+          <p class="p2-type">Landing / Portfólio premium</p>
+        </div>
+
+        <p class="p2-desc">
+          Página institucional com estética marítima, animações suaves e foco em acessibilidade e leitura confortável.
+        </p>
+
+        <ul class="p2-feats" role="list">
+          <li>Seções bem definidas (hero, serviços, sobre e contato)</li>
+          <li>Detalhes de UX: respiro, hierarquia e microinterações</li>
+          <li>Base pronta pra evoluir com novas páginas e conteúdos</li>
+        </ul>
+
+        <div class="p2-bottom">
+          <ul class="p2-tags" role="list" aria-label="Tecnologias">
+            <li class="p2-tag">HTML</li>
+            <li class="p2-tag">CSS</li>
+            <li class="p2-tag">JavaScript</li>
+          </ul>
+
+          <a class="p2-link" href="https://pedruzz30.github.io/Luciano_Portifolio/" target="_blank" rel="noopener noreferrer">
+            Abrir projeto
+          </a>
+        </div>
+      </article>
+
+      <!-- 2 -->
+      <article class="p2-card">
+        <div class="p2-top">
+          <h3 class="p2-title">Lucas Nutri</h3>
+          <p class="p2-type">Site profissional / Conversão</p>
+        </div>
+
+        <p class="p2-desc">
+          Site para nutricionista com foco em clareza, confiança e conversão. Conteúdo direto, escaneável e responsivo.
+        </p>
+
+        <ul class="p2-feats" role="list">
+          <li>Apresenta serviços, diferenciais e CTA bem posicionados</li>
+          <li>Estrutura pensada pra guiar o usuário até o contato</li>
+          <li>Layout leve, rápido e consistente no mobile</li>
+        </ul>
+
+        <div class="p2-bottom">
+          <ul class="p2-tags" role="list" aria-label="Tecnologias">
+            <li class="p2-tag">UI</li>
+            <li class="p2-tag">Responsivo</li>
+            <li class="p2-tag">Performance</li>
+          </ul>
+
+          <a class="p2-link" href="https://pedruzz30.github.io/LucasNutri/" target="_blank" rel="noopener noreferrer">
+            Abrir projeto
+          </a>
+        </div>
+      </article>
+
+      <!-- 3 -->
+      <article class="p2-card">
+        <div class="p2-top">
+          <h3 class="p2-title">Cardápio Oliva</h3>
+          <p class="p2-type">Cardápio online / Mobile-first</p>
+        </div>
+
+        <p class="p2-desc">
+          Cardápio leve e rápido pra celular, com navegação direta e foco em reduzir cliques até o pedido.
+        </p>
+
+        <ul class="p2-feats" role="list">
+          <li>Navegação simples e leitura rápida em tela pequena</li>
+          <li>Organização por seções e itens bem destacados</li>
+          <li>Projeto pensado pra publicar e atualizar fácil</li>
+        </ul>
+
+        <div class="p2-bottom">
+          <ul class="p2-tags" role="list" aria-label="Tecnologias">
+            <li class="p2-tag">Mobile-first</li>
+            <li class="p2-tag">UX</li>
+            <li class="p2-tag">Acessibilidade</li>
+          </ul>
+
+          <a class="p2-link" href="https://pedruzz30.github.io/cardapio-oliva/" target="_blank" rel="noopener noreferrer">
+            Abrir projeto
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
   </main>
 
   <footer class="site-footer" aria-labelledby="footer-title">
