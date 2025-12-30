@@ -1,0 +1,117 @@
+/* =========================
+   RESET / BASE
+   ========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* =========================
+   LINKS / A11Y
+   ========================= */
+a,
+.a11y-link {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  background-image: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--accent) 80%, var(--primary) 20%),
+    var(--accent-strong)
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  transition: color var(--transition-base), background-size var(--transition-base);
+}
+
+a:hover,
+.a11y-link:hover {
+  color: var(--accent-strong);
+  background-size: 100% 2px;
+}
+
+a:focus-visible,
+.a11y-link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 4px;
+}
+
+/* =========================
+   SPECIAL EFFECTS
+   ========================= */
+::selection {
+  background: var(--accent);
+  color: var(--pure-white);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--surface-2); }
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent-strong); }
+
+/* =========================
+   MAR GLOBAL — efeito contínuo
+   ========================= */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform, opacity;
+}
+
+body::before {
+  background:
+    radial-gradient(120% 90% at 25% 15%,
+      color-mix(in srgb, var(--accent) 22%, transparent),
+      transparent 60%),
+    radial-gradient(110% 80% at 70% 35%,
+      color-mix(in srgb, var(--bright-blue) 16%, transparent),
+      transparent 62%);
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  animation: oceanGlow calc(var(--wave-medium) * 0.78) ease-in-out infinite;
+}
+
+body::after {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.12) 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 75%
+  );
+  transform: translateX(-35%) rotate(10deg);
+  opacity: 0.3;
+  filter: blur(0.3px);
+  animation: oceanWave calc(var(--wave-slow) * 0.58) linear infinite;
+}
+
+header,
+main,
+footer {
+  position: relative;
+  z-index: 1;
+}

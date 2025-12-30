@@ -1,10 +1,28 @@
-/* =========================
-   animations.css — Correnteza Viva
-   Apenas keyframes + animation assignments
-   ========================= */
+@keyframes btnPulse{
+  0%{ transform: scale(0.9); opacity:0.5; }
+  50%{ transform: scale(1.05); opacity:0.7; }
+  100%{ transform: scale(0.9); opacity:0.5; }
+}
+
+@keyframes spin{
+  to { transform: rotate(360deg); }
+}
+
+@keyframes oceanSurface{
+  0%   { transform: translate3d(0,0,0); opacity: .28; }
+  50%  { transform: translate3d(-8px, 4px, 0); opacity: .40; }
+  100% { transform: translate3d(0,0,0); opacity: .28; }
+}
+
+@keyframes causticsDrift{
+  0%   { transform: translate3d(-10px, 6px, 0); }
+  50%  { transform: translate3d(10px,-6px,0); }
+  100% { transform: translate3d(-10px, 6px, 0); }
+}
 
 /* =========================
-   Keyframes
+   animations.css — Correnteza Viva
+   Apenas keyframes
    ========================= */
 
 @keyframes loading {
@@ -32,7 +50,6 @@
   50%  { transform: translateX( 18%) rotate(-2.2deg); opacity: 0.85; }
   100% { transform: translateX(-18%) rotate(2.2deg); opacity: 0.35; }
 }
-
 
 /* HERO: micro-correnteza (camada 3) — dá “vida” sem gritar */
 @keyframes microDrift {
@@ -181,98 +198,5 @@
 @keyframes causticsDrift{
   0%, 100% { transform: translate3d(-10px, 6px, 0); }
   50%      { transform: translate3d(10px,-6px,0); }
-}
-
-/* =========================
-   Animation assignments
-   ========================= */
-
-.loader::after { animation: loading 1s ease infinite; }
-
-/* HERO background layers (correnteza) */
-.hero::before { animation: tideFlow calc(var(--wave-slow) * 0.75) ease-in-out infinite; }
-.hero::after  { animation: waveSweep calc(var(--wave-medium) * 0.80) ease-in-out infinite; }
-
-/* Se você tiver um overlay extra (opcional) pode usar este keyframe */
-.hero .hero-current,
-.hero [data-current] {
-  animation: microDrift calc(var(--wave-medium) * 0.9) ease-in-out infinite;
-}
-
-/* Hero content */
-.hero-content {
-  animation: floatPulse calc(var(--wave-medium) * 0.95) ease-in-out infinite;
-  animation-play-state: paused;
-}
-.hero-content.visible { animation-play-state: running; }
-
-/* Blob */
-.hero-image {animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;}
-.hero-image::before {animation: seaGlow calc(var(--wave-medium) * 1.05) cubic-bezier(.37, 0, .63, 1) infinite;}
-.hero-image::after {animation: waterShimmer calc(var(--wave-slow) * 0.95) linear infinite;}
-.hero-image::before{animation: seaGlow calc(var(--wave-medium) * 1.05) cubic-bezier(.37,0,.63,1) infinite alternate;}
-.hero-image::after{animation: waterShimmer calc(var(--wave-slow) * 0.95) linear infinite alternate;}
-
-/* Button */
-.btn-hover-effect::before { animation: seaWave 4.6s ease-in-out infinite; }
-.btn-hover-effect::after  { animation: seaGlowBtn 4.2s ease-in-out infinite; }
-
-/* Cards */
-.service-card::after {
-  animation: shimmerDrift calc(var(--wave-medium) * 0.85) ease-in-out infinite;
-}
-
-/* Portfolio */
-.portfolio-item::before {
-  animation: glideWave calc(var(--wave-slow) * 0.65) linear infinite;
-}
-
-/* Global ocean (sempre rodando) */
-body::before { animation: oceanGlow calc(var(--wave-medium) * 0.78) ease-in-out infinite; }
-body::after  { animation: oceanWave calc(var(--wave-slow) * 0.58) linear infinite; }
-
-/* FOOTER (mantém design, só anima) */
-.site-footer::before{
-  animation: footerSurfaceGlow calc(var(--wave-medium) * 1.05) ease-in-out infinite;
-}
-
-.site-footer::after{
-  animation: deepWaterDrift calc(var(--wave-slow) * 0.70) ease-in-out infinite;
-}
-
-.footer-inner::before{
-  animation: footerCaustics calc(var(--wave-medium) * 0.95) ease-in-out infinite;
-}
-
-.footer-inner::after{
-  animation: footerDeepSweep calc(var(--wave-slow) * 0.62) ease-in-out infinite;
-}
-
-.footer-bottom::before{
-  animation: footerPlankton calc(var(--wave-slow) * 0.85) ease-in-out infinite;
-}
-
-/* =========================
-   Reduced motion
-   ========================= */
-@media (prefers-reduced-motion: reduce) {
-  .loader::after,
-  .hero::before,
-  .hero::after,
-  .hero-content,
-  .hero-image,
-  .hero-image::before,
-  .hero-image::after,
-  .btn-hover-effect::before,
-  .btn-hover-effect::after,
-  .service-card::after,
-  .portfolio-item::before,
-  .badge::before,
-  .badge::after,
-  body::before,
-  body::after {
-    animation: none !important;
-    animation-play-state: paused !important;
-  }
 }
 

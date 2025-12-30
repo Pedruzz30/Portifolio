@@ -1,0 +1,94 @@
+:root {
+  /* =========================
+     Escala de azuis
+     ========================= */
+  --white-blue: #f2fbff;
+  --very-light-blue: #dff5ff;
+  --light-blue: #bfeaff;
+  --sky-blue: #8ed8ff;
+  --bright-blue: #4fbfff;
+  --blue: #159ee6;
+  --deep-blue: #0c7fbf;
+  --darker-blue: #095f92;
+  --navy-blue: #064465;
+  --midnight-blue: #032a40;
+
+  /* =========================
+     Escala de brancos e cinzas frios
+     ========================= */
+  --pure-white: #ffffff;
+  --cool-white: #f7f8fb;
+  --light-gray: #eef1f6;
+  --silver-light: #dfe5ee;
+  --silver: #c9d2df;
+  --blue-gray-light: #aeb8c8;
+  --blue-gray: #8f9bb0;
+  --gray: #6f7b8e;
+  --dark-gray: #4d5666;
+  --charcoal: #2e3440;
+
+  /* ===== Base / Superfícies ===== */
+  --bg: color-mix(in srgb, var(--cool-white) 75%, var(--white-blue) 25%);
+  --surface: var(--pure-white);
+  --surface-2: color-mix(in srgb, var(--light-gray) 55%, var(--pure-white) 45%);
+  --surface-soft: color-mix(in srgb, var(--pure-white) 82%, var(--very-light-blue) 18%);
+
+  /* ===== Texto ===== */
+  --text: var(--charcoal);
+  --text-muted: var(--gray);
+  --text-subtle: color-mix(in srgb, var(--gray) 60%, var(--blue-gray) 40%);
+
+  /* ===== Marca / Ação ===== */
+  --primary: var(--deep-blue);
+  --primary-hover: color-mix(in srgb, var(--darker-blue) 82%, var(--navy-blue));
+  --primary-soft: color-mix(in srgb, var(--deep-blue) 14%, var(--pure-white));
+
+  /* ===== Temperinho (acento) ===== */
+  --accent: var(--bright-blue);
+  --violet: #9c8bff;
+  --magenta: #ff7ac3;
+  --mint: #2de2e6;
+  --accent-soft: color-mix(in srgb, var(--bright-blue) 14%, var(--pure-white));
+  --accent-strong: color-mix(in srgb, var(--bright-blue) 78%, var(--midnight-blue));
+  --gradient-pop: linear-gradient(120deg, var(--violet), var(--magenta), var(--mint));
+  --glass: color-mix(in srgb, var(--surface) 80%, var(--very-light-blue) 20%);
+
+  /* ===== Linhas / Bordas ===== */
+  --border: color-mix(in srgb, var(--blue-gray-light) 42%, transparent);
+  --border-strong: color-mix(in srgb, var(--blue-gray) 58%, transparent);
+  --border-glow: color-mix(in srgb, var(--accent) 28%, transparent);
+
+  /* ===== Sombras / Glow ===== */
+  --shadow-sm: 0 8px 24px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+  --shadow-md: 0 16px 42px color-mix(in srgb, var(--midnight-blue) 16%, transparent);
+  --shadow-lg: 0 24px 64px color-mix(in srgb, var(--midnight-blue) 22%, transparent);
+  --focus: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
+
+  /* ===== Gradientes (personalidade) ===== */
+  --grad-hero: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--white-blue) 68%, var(--bright-blue) 32%),
+    color-mix(in srgb, var(--light-blue) 60%, var(--deep-blue) 40%),
+    color-mix(in srgb, var(--deep-blue) 55%, var(--midnight-blue) 45%)
+  );
+
+  --grad-card: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface) 88%, var(--light-blue) 12%),
+    color-mix(in srgb, var(--surface) 78%, var(--very-light-blue) 22%)
+  );
+
+  --grad-border: linear-gradient(
+    90deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 70%, var(--primary) 30%),
+    var(--sky-blue)
+  );
+
+  /* ===== Motion ===== */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 220ms var(--ease-out);
+  --wave-slow: 16s;
+  --wave-medium: 11s;
+  --float-distance: 8px;
+}
