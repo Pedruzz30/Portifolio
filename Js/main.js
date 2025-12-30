@@ -1,11 +1,11 @@
-import { safeGetComputedStyle } from "./utils/dom.js";
-import { setupMenu } from "./ui/menu.js";
-import { setupScrollUI } from "./ui/scroll.js";
-import { setupRipple } from "./ui/ripple.js";
+import { finalizeLoader, safeGetComputedStyle } from "./utils/dom.js";
+import { setupMenu } from "./Ui/menu.js";
+import { setupScrollUI } from "./Ui/scroll.js";
+import { setupRipple } from "./Ui/ripple.js";
 import { initAnimations } from "./effects/animations.js";
 import { initWebGL, handleWebGLResize } from "./effects/webgl.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+function bootstrap() {
   const elements = {
     loader: document.querySelector(".loader"),
     header: document.querySelector(".header"),
@@ -22,12 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
     webGLCanvas: document.getElementById("webgl-canvas"),
     rippleButtons: document.querySelectorAll(".btn--ripple"),
     scrollButtons: document.querySelectorAll("[data-scroll]"),
+    year: document.getElementById("year"),
   };
 
   const getCssVar = (property) => safeGetComputedStyle(property);
 
+  const safelyInit = (fn, args, onError = null) => {
+    try {
+      fn(args);
+    } catch (error) {
+      if (onError) {
+        onError(error);
+      } else {
+        console.warn("Inicialização ignorada:", error);
+      }
+    }
+  };
+
   const startAnimations = () =>
-    initAnimations({
+    safelyInit(initAnimations, {
       heroContent: elements.heroContent,
       textReveal: elements.textReveal,
       textMask: elements.textMask,
@@ -36,53 +49,89 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   const startWebGL = () =>
-    initWebGL({
-      webGLCanvas: elements.webGLCanvas,
+    safelyInit(
+      initWebGL,
+      {
+        webGLCanvas: elements.webGLCanvas,
+        getCssVar,
+      },
+      (error) => console.error("Falha ao iniciar WebGL:", error)
+    );
+
+  const runVisualsWithLoader = () => {
+    try {
+      startAnimations();
+      startWebGL();
+    } finally {
+      finalizeLoader(elements.loader);
+    }
+  };
+
+  try {
+    setupMenu({
+      menuToggle: elements.menuToggle,
+      menuSpans: elements.menuSpans,
+      navOverlay: elements.navOverlay,
+      navLinks: elements.navLinks,
       getCssVar,
     });
-
-  function initLoader() {
-    window.addEventListener("load", () => {
-      if (!elements.loader || !window.gsap) {
-        if (elements.loader) {
-          elements.loader.style.opacity = "0";
-          elements.loader.style.visibility = "hidden";
-          elements.loader.style.display = "none";
-        }
-        startAnimations();
-        startWebGL();
-        return;
-      }
-
-      gsap.to(elements.loader, {
-        opacity: 0,
-        duration: 0.5,
-        onComplete: () => {
-          elements.loader.style.display = "none";
-          startAnimations();
-          startWebGL();
-        },
-      });
-    });
+  } catch (error) {
+    console.error("Falha ao iniciar menu:", error);
   }
 
-  initLoader();
-  setupMenu({
-    menuToggle: elements.menuToggle,
-    menuSpans: elements.menuSpans,
-    navOverlay: elements.navOverlay,
-    navLinks: elements.navLinks,
-    getCssVar,
-  });
-  setupScrollUI({
-    header: elements.header,
-    scrollProgress: elements.scrollProgress,
-    scrollButtons: elements.scrollButtons,
-  });
-  setupRipple({ rippleButtons: elements.rippleButtons });
+  try {
+    setupScrollUI({
+      header: elements.header,
+      scrollProgress: elements.scrollProgress,
+      scrollButtons: elements.scrollButtons,
+    });
+  } catch (error) {
+    console.error("Falha ao iniciar scroll UI:", error);
+  }
 
-  const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  try {
+    setupRipple({ rippleButtons: elements.rippleButtons });
+  } catch (error) {
+    console.warn("Ripple desabilitado:", error);
+  }
 
-  window.addEventListener("resize", handleWebGLResize);
-});
+  if (elements.year) {
+    elements.year.textContent = new Date().getFullYear();
+  }
+
+  const hideLoader = () => finalizeLoader(elements.loader);
+
+  if (document.readyState === "complete") {
+    runVisualsWithLoader();
+  } else {
+    window.addEventListener("load", runVisualsWithLoader, { once: true });
+  }
+
+  setTimeout(hideLoader, 2500);
+
+  window.addEventListener("resize", () => {
+    try {
+      handleWebGLResize();
+    } catch (error) {
+      console.warn("Resize WebGL ignorado:", error);
+    }
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      bootstrap();
+    } catch (error) {
+      console.error("Falha crítica na inicialização:", error);
+      finalizeLoader(document.querySelector(".loader"));
+    }
+  });
+} else {
+  try {
+    bootstrap();
+  } catch (error) {
+    console.error("Falha crítica na inicialização:", error);
+    finalizeLoader(document.querySelector(".loader"));
+  }
+}

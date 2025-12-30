@@ -1,48 +1,55 @@
 export function setupScrollUI({ header, scrollProgress, scrollButtons }) {
-  const updateHeaderOnScroll = () => {
-    const scrolled = window.scrollY > 50;
-    if (header) {
-      header.classList.toggle('scrolled', scrolled);
+  try {
+    const updateHeaderOnScroll = () => {
+      const scrolled = window.scrollY > 50;
+      if (header) {
+        header.classList.toggle("scrolled", scrolled);
+      }
+    };
+
+    const updateScrollProgress = () => {
+      if (!scrollProgress) return;
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      scrollProgress.style.width = `${progress}%`;
+    };
+
+    const handleScrollTo = (event) => {
+      const targetSelector = event.currentTarget.getAttribute("data-scroll");
+      if (!targetSelector) return;
+
+      const target = document.querySelector(targetSelector);
+      if (!target) return;
+
+      target.scrollIntoView({ behavior: "smooth" });
+    };
+
+    if (scrollButtons && scrollButtons.length) {
+      scrollButtons.forEach((button) => {
+        if (!button) return;
+        button.addEventListener("click", handleScrollTo);
+      });
     }
-  };
 
-  const updateScrollProgress = () => {
-    if (!scrollProgress) return;
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    scrollProgress.style.width = `${progress}%`;
-  };
+    window.addEventListener(
+      "scroll",
+      () => {
+        updateHeaderOnScroll();
+        updateScrollProgress();
+      },
+      { passive: true }
+    );
 
-  const handleScrollTo = (event) => {
-    const targetSelector = event.currentTarget.getAttribute('data-scroll');
-    if (!targetSelector) return;
+    window.addEventListener("resize", updateScrollProgress);
 
-    const target = document.querySelector(targetSelector);
-    if (!target) return;
+    updateHeaderOnScroll();
+    updateScrollProgress();
 
-    target.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  if (scrollButtons && scrollButtons.length) {
-    scrollButtons.forEach((button) => {
-      button.addEventListener('click', handleScrollTo);
-    });
+    return { updateHeaderOnScroll, updateScrollProgress };
+  } catch (error) {
+    console.error("Scroll UI ignorado:", error);
+    return null;
   }
-
-  window.addEventListener(
-    'scroll',
-    () => {
-      updateHeaderOnScroll();
-      updateScrollProgress();
-    },
-    { passive: true }
-  );
-
-  window.addEventListener('resize', updateScrollProgress);
-
-  updateHeaderOnScroll();
-  updateScrollProgress();
-
-  return { updateHeaderOnScroll, updateScrollProgress };
 }

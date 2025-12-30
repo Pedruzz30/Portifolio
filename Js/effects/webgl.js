@@ -27,10 +27,10 @@ function animateWebGL() {
 export function initWebGL({ webGLCanvas, getCssVar }) {
   if (!webGLCanvas || !window.THREE) return;
 
-  webGLState.canvas = webGLCanvas;
-  webGLState.getCssVar = getCssVar;
-
   try {
+    webGLState.canvas = webGLCanvas;
+    webGLState.getCssVar = getCssVar;
+
     const w = webGLCanvas.clientWidth || 1;
     const h = webGLCanvas.clientHeight || 1;
 
@@ -53,7 +53,7 @@ export function initWebGL({ webGLCanvas, getCssVar }) {
 
     const geometry = new THREE.IcosahedronGeometry(1.5, 2);
 
-    const accent = getCssVar ? getCssVar('--accent') : null;
+    const accent = getCssVar ? getCssVar("--accent") : null;
     const material = new THREE.MeshStandardMaterial({
       color: accent || 0xff4d4d,
       metalness: 0.7,
@@ -66,21 +66,25 @@ export function initWebGL({ webGLCanvas, getCssVar }) {
     webGLState.camera.position.z = 5;
     webGLState.initialized = true;
 
-    animateWebGL();
+     animateWebGL();
   } catch (error) {
-    console.error('Erro ao inicializar WebGL:', error);
-    if (webGLCanvas) webGLCanvas.style.display = 'none';
+    console.error("Erro ao inicializar WebGL:", error);
+    if (webGLCanvas) webGLCanvas.style.display = "none";
   }
 }
 
 export function handleWebGLResize() {
-  if (!webGLState.initialized || !webGLState.canvas) return;
-  if (!webGLState.camera || !webGLState.renderer) return;
+  try {
+    if (!webGLState.initialized || !webGLState.canvas) return;
+    if (!webGLState.camera || !webGLState.renderer) return;
 
-  const w = webGLState.canvas.clientWidth || 1;
-  const h = webGLState.canvas.clientHeight || 1;
+    const w = webGLState.canvas.clientWidth || 1;
+    const h = webGLState.canvas.clientHeight || 1;
 
-  webGLState.camera.aspect = w / h;
-  webGLState.camera.updateProjectionMatrix();
-  webGLState.renderer.setSize(w, h);
+    webGLState.camera.aspect = w / h;
+    webGLState.camera.updateProjectionMatrix();
+    webGLState.renderer.setSize(w, h);
+  } catch (error) {
+    console.warn("Resize do WebGL ignorado:", error);
+  }
 }

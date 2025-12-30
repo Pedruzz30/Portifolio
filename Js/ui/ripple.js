@@ -10,38 +10,44 @@ export function setupRipple({ rippleButtons }) {
       if (!rect.width || !rect.height) return;
 
       const isKeyboard =
-        typeof event.clientX !== 'number' ||
-        typeof event.clientY !== 'number' ||
+        event.type === "keydown" ||
+        typeof event.clientX !== "number" ||
+        typeof event.clientY !== "number" ||
         (event.clientX === 0 && event.clientY === 0);
 
-      const x = isKeyboard
-        ? rect.width / 2
-        : event.clientX - rect.left;
+      const x = isKeyboard ? rect.width / 2 : event.clientX - rect.left;
+      const y = isKeyboard ? rect.height / 2 : event.clientY - rect.top;
 
-      const y = isKeyboard
-        ? rect.height / 2
-        : event.clientY - rect.top;
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return;
 
-      if (Number.isNaN(x) || Number.isNaN(y)) return;
+      button.style.setProperty("--ripple-x", `${x}px`);
+      button.style.setProperty("--ripple-y", `${y}px`);
 
-      button.style.setProperty('--ripple-x', `${x}px`);
-      button.style.setProperty('--ripple-y', `${y}px`);
-
-      button.classList.remove('is-rippling');
-      void button.offsetWidth; // force reflow
-      button.classList.add('is-rippling');
+      button.classList.remove("is-rippling");
+      void button.offsetWidth;
+      button.classList.add("is-rippling");
 
       setTimeout(() => {
-        button.classList.remove('is-rippling');
+        try {
+          button.classList.remove("is-rippling");
+        } catch (cleanupError) {
+          console.warn("Ripple cleanup ignorado:", cleanupError);
+        }
       }, 500);
     } catch (err) {
-      // ripple nunca pode derrubar o site
-      console.warn('Ripple ignorado:', err);
+      console.warn("Ripple ignorado:", err);
     }
+  };
+
+  const handleKeydown = (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    triggerRipple(event);
   };
 
   rippleButtons.forEach((button) => {
     if (!button) return;
-    button.addEventListener('click', triggerRipple);
+    button.addEventListener("click", triggerRipple);
+    button.addEventListener("keydown", handleKeydown);
   });
 }
