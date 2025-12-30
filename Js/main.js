@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const elements = {
     loader: document.querySelector('.loader'),
     header: document.querySelector('.header'),
+    navOverlay: document.querySelector('.nav-overlay'),
+    navLinks: document.querySelectorAll('.nav__link'),
+    scrollProgress: document.querySelector('.scroll-progress__bar'),
     menuToggle: document.querySelector('.menu-toggle'),
     menuSpans: document.querySelectorAll('.menu-toggle span'),
     textReveal: document.querySelectorAll('.text-reveal span'),
@@ -30,13 +33,24 @@ document.addEventListener('DOMContentLoaded', () => {
     rafId: null,
   };
 
-  initLoader();
+   initLoader();
   bindEvents();
   updateHeaderOnScroll();
+  updateScrollProgress();
 
   function bindEvents() {
     if (elements.menuToggle) {
       elements.menuToggle.addEventListener('click', handleMenuToggle);
+    }
+
+    if (elements.navOverlay) {
+      elements.navOverlay.addEventListener('click', closeMenu);
+    }
+
+    if (elements.navLinks.length) {
+      elements.navLinks.forEach((link) => {
+        link.addEventListener('click', handleNavLink);
+      });
     }
 
     if (elements.rippleButtons.length) {
@@ -51,7 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+     window.addEventListener('scroll', () => {
+      updateHeaderOnScroll();
+      updateScrollProgress();
+    }, { passive: true });
     window.addEventListener('resize', handleWebGLResize);
   }
 
@@ -106,6 +123,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function closeMenu() {
+    if (!elements.menuToggle || !elements.menuToggle.classList.contains('active')) return;
+    elements.menuToggle.classList.remove('active');
+    document.body.classList.remove('menu-open');
+    elements.menuToggle.setAttribute('aria-expanded', 'false');
+    if (elements.menuSpans.length && window.gsap) {
+      gsap.to(elements.menuSpans, { backgroundColor: safeGetComputedStyle('--text') || '#f5f5f5', y: 0, rotate: 0, duration: 0.3 });
+    }
+  }
+
+  function handleNavLink(event) {
+    const href = event.currentTarget.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    event.preventDefault();
+    const target = document.querySelector(href);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    closeMenu();
+  }
+
   function handleRipple(event) {
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
@@ -137,6 +173,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.header) {
       elements.header.classList.toggle('scrolled', scrolled);
     }
+  }
+
+  function updateScrollProgress() {
+    if (!elements.scrollProgress) return;
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    elements.scrollProgress.style.width = `${progress}%`;
   }
 
   function initAnimations() {
@@ -335,4 +379,3 @@ const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 });
-
