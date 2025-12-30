@@ -149,13 +149,6 @@
   animation: microDrift calc(var(--wave-medium) * 0.9) ease-in-out infinite;
 }
 
-.hero-canvas{
-  position: absolute;
-  inset: -8%;
-  z-index: 0;
-  filter: drop-shadow(0 22px 40px rgba(0,0,0,0.2));
-}
-
 .hero-orbs{
   position: absolute;
   inset: 0;

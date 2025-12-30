@@ -1,6 +1,29 @@
 export function setupRipple({ rippleButtons }) {
   if (!rippleButtons || !rippleButtons.length) return;
 
+  const timers = new WeakMap(); // timeout por botão
+
+  const startRipple = (button, x, y) => {
+    button.style.setProperty("--ripple-x", `${x}px`);
+    button.style.setProperty("--ripple-y", `${y}px`);
+
+    // reset da animação
+    button.classList.remove("is-rippling");
+    void button.offsetWidth;
+    button.classList.add("is-rippling");
+
+    // limpa timeout anterior, se existir
+    const prev = timers.get(button);
+    if (prev) clearTimeout(prev);
+
+    const t = setTimeout(() => {
+      button.classList.remove("is-rippling");
+      timers.delete(button);
+    }, 500);
+
+    timers.set(button, t);
+  };
+
   const triggerRipple = (event) => {
     try {
       const button = event.currentTarget;
@@ -20,34 +43,32 @@ export function setupRipple({ rippleButtons }) {
 
       if (!Number.isFinite(x) || !Number.isFinite(y)) return;
 
-      button.style.setProperty("--ripple-x", `${x}px`);
-      button.style.setProperty("--ripple-y", `${y}px`);
-
-      button.classList.remove("is-rippling");
-      void button.offsetWidth;
-      button.classList.add("is-rippling");
-
-      setTimeout(() => {
-        try {
-          button.classList.remove("is-rippling");
-        } catch (cleanupError) {
-          console.warn("Ripple cleanup ignorado:", cleanupError);
-        }
-      }, 500);
+      startRipple(button, x, y);
     } catch (err) {
       console.warn("Ripple ignorado:", err);
     }
   };
 
   const handleKeydown = (event) => {
+    // Enter e Space
     if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
+
+    // evita ripple duplicado (keydown + click) em elementos que já disparam click no teclado
+    const tag = event.currentTarget?.tagName;
+    const isNativeButton = tag === "BUTTON";
+
+    if (!isNativeButton) event.preventDefault();
+
     triggerRipple(event);
   };
 
   rippleButtons.forEach((button) => {
     if (!button) return;
-    button.addEventListener("click", triggerRipple);
+
+    // pointerdown é mais “instantâneo”
+    button.addEventListener("pointerdown", triggerRipple, { passive: true });
     button.addEventListener("keydown", handleKeydown);
   });
+
+  // opcional: cleanup se você quiser retornar destroy também
 }

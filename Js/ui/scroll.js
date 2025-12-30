@@ -1,23 +1,36 @@
 export function setupScrollUI({ header, scrollProgress, scrollButtons }) {
   try {
+    let rafId = null;
+
     const updateHeaderOnScroll = () => {
-      const scrolled = window.scrollY > 50;
-      if (header) {
-        header.classList.toggle("scrolled", scrolled);
-      }
+      if (!header) return;
+      header.classList.toggle("scrolled", window.scrollY > 50);
     };
 
     const updateScrollProgress = () => {
       if (!scrollProgress) return;
+
       const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
       scrollProgress.style.width = `${progress}%`;
     };
 
+    const scheduleUpdate = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        updateHeaderOnScroll();
+        updateScrollProgress();
+      });
+    };
+
     const handleScrollTo = (event) => {
-      const targetSelector = event.currentTarget.getAttribute("data-scroll");
+      const btn = event.currentTarget;
+      if (!btn) return;
+
+      const targetSelector = btn.getAttribute("data-scroll");
       if (!targetSelector) return;
 
       const target = document.querySelector(targetSelector);
@@ -33,21 +46,30 @@ export function setupScrollUI({ header, scrollProgress, scrollButtons }) {
       });
     }
 
-    window.addEventListener(
-      "scroll",
-      () => {
-        updateHeaderOnScroll();
-        updateScrollProgress();
-      },
-      { passive: true }
-    );
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
 
-    window.addEventListener("resize", updateScrollProgress);
-
+    // primeira “pintada” na UI
     updateHeaderOnScroll();
     updateScrollProgress();
 
-    return { updateHeaderOnScroll, updateScrollProgress };
+    // retorno com cleanup (muito útil)
+    const destroy = () => {
+      if (scrollButtons && scrollButtons.length) {
+        scrollButtons.forEach((button) => {
+          if (!button) return;
+          button.removeEventListener("click", handleScrollTo);
+        });
+      }
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    };
+
+    return { updateHeaderOnScroll, updateScrollProgress, destroy };
   } catch (error) {
     console.error("Scroll UI ignorado:", error);
     return null;

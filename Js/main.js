@@ -3,135 +3,189 @@ import { setupMenu } from "./Ui/menu.js";
 import { setupScrollUI } from "./Ui/scroll.js";
 import { setupRipple } from "./Ui/ripple.js";
 import { initAnimations } from "./effects/animations.js";
-import { initWebGL, handleWebGLResize } from "./effects/webgl.js";
 
 function bootstrap() {
+  // abort controller para matar TODOS listeners de uma vez
+  const controller = new AbortController();
+  const { signal } = controller;
+
   const elements = {
     loader: document.querySelector(".loader"),
     header: document.querySelector(".header"),
     navOverlay: document.querySelector(".nav-overlay"),
-    navLinks: document.querySelectorAll(".nav__link"),
+    navLinks: Array.from(document.querySelectorAll(".nav__link")),
     scrollProgress: document.querySelector(".scroll-progress__bar"),
     menuToggle: document.querySelector(".menu-toggle"),
-    menuSpans: document.querySelectorAll(".menu-toggle span"),
-    textReveal: document.querySelectorAll(".text-reveal span"),
+    menuSpans: Array.from(document.querySelectorAll(".menu-toggle span")),
+    textReveal: Array.from(document.querySelectorAll(".text-reveal span")),
     textMask: document.querySelector(".text-mask"),
     heroContent: document.querySelector(".hero-content"),
-    serviceCards: document.querySelectorAll(".service-card"),
-    portfolioItems: document.querySelectorAll(".portfolio-item"),
-    webGLCanvas: document.getElementById("webgl-canvas"),
-    rippleButtons: document.querySelectorAll(".btn--ripple"),
-    scrollButtons: document.querySelectorAll("[data-scroll]"),
+    serviceCards: Array.from(document.querySelectorAll(".service-card")),
+    portfolioItems: Array.from(document.querySelectorAll(".portfolio-item")),
+    rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
+    scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
   };
 
-  const getCssVar = (property) => safeGetComputedStyle(property);
+  // reduz motion centralizado (p/ usar em módulos se quiser)
+  const prefersReducedMotion =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // helper de css var
+  const getCssVar = (property, fallback = "") =>
+    safeGetComputedStyle(property) || fallback;
+
+  // lista de cleanups (caso módulos retornem destroy)
+  const cleanups = [];
 
   const safelyInit = (fn, args, onError = null) => {
     try {
-      fn(args);
-    } catch (error) {
-      if (onError) {
-        onError(error);
-      } else {
-        console.warn("Inicialização ignorada:", error);
+      const handle = fn(args);
+      if (handle && typeof handle.destroy === "function") {
+        cleanups.push(handle.destroy);
       }
+      return handle;
+    } catch (error) {
+      if (onError) onError(error);
+      else console.warn("Inicialização ignorada:", error);
+      return null;
     }
   };
 
-  const startAnimations = () =>
-    safelyInit(initAnimations, {
-      heroContent: elements.heroContent,
-      textReveal: elements.textReveal,
-      textMask: elements.textMask,
-      serviceCards: elements.serviceCards,
-      portfolioItems: elements.portfolioItems,
-    });
+  // loader finalize only once
+  let loaderFinalized = false;
+  let loaderFallbackTimeoutId = null;
 
-  const startWebGL = () =>
-    safelyInit(
-      initWebGL,
-      {
-        webGLCanvas: elements.webGLCanvas,
-        getCssVar,
-      },
-      (error) => console.error("Falha ao iniciar WebGL:", error)
-    );
+  const finalizeOnce = () => {
+    if (loaderFinalized) return;
+    loaderFinalized = true;
 
-  const runVisualsWithLoader = () => {
+    if (loaderFallbackTimeoutId) {
+      clearTimeout(loaderFallbackTimeoutId);
+      loaderFallbackTimeoutId = null;
+    }
+
     try {
-      startAnimations();
-      startWebGL();
-    } finally {
       finalizeLoader(elements.loader);
+    } catch (e) {
+      console.warn("finalizeLoader falhou (ignorado):", e);
     }
   };
 
-  try {
-    setupMenu({
+  // visuals run only once
+  let visualsStarted = false;
+  const runVisualsOnce = () => {
+    if (visualsStarted) return;
+    visualsStarted = true;
+
+    try {
+      safelyInit(initAnimations, {
+        heroContent: elements.heroContent,
+        textReveal: elements.textReveal,
+        textMask: elements.textMask,
+        serviceCards: elements.serviceCards,
+        portfolioItems: elements.portfolioItems,
+        prefersReducedMotion,
+      });
+    } finally {
+      finalizeOnce();
+    }
+  };
+
+  // MENU
+  safelyInit(
+    setupMenu,
+    {
       menuToggle: elements.menuToggle,
       menuSpans: elements.menuSpans,
       navOverlay: elements.navOverlay,
       navLinks: elements.navLinks,
       getCssVar,
-    });
-  } catch (error) {
-    console.error("Falha ao iniciar menu:", error);
-  }
+      prefersReducedMotion,
+    },
+    (error) => console.error("Falha ao iniciar menu:", error)
+  );
 
-  try {
-    setupScrollUI({
+  // SCROLL UI
+  safelyInit(
+    setupScrollUI,
+    {
       header: elements.header,
       scrollProgress: elements.scrollProgress,
       scrollButtons: elements.scrollButtons,
-    });
-  } catch (error) {
-    console.error("Falha ao iniciar scroll UI:", error);
-  }
+      prefersReducedMotion,
+    },
+    (error) => console.error("Falha ao iniciar scroll UI:", error)
+  );
 
-  try {
-    setupRipple({ rippleButtons: elements.rippleButtons });
-  } catch (error) {
-    console.warn("Ripple desabilitado:", error);
-  }
+  // RIPPLE
+  safelyInit(
+    setupRipple,
+    { rippleButtons: elements.rippleButtons, prefersReducedMotion },
+    (error) => console.warn("Ripple desabilitado:", error)
+  );
 
+  // YEAR
   if (elements.year) {
-    elements.year.textContent = new Date().getFullYear();
+    elements.year.textContent = String(new Date().getFullYear());
   }
 
-  const hideLoader = () => finalizeLoader(elements.loader);
+  // loader fallback (caso load nunca chegue / algo trave)
+  loaderFallbackTimeoutId = window.setTimeout(finalizeOnce, 2500);
 
+  // start visuals: se já carregou, roda; senão no load (once)
   if (document.readyState === "complete") {
-    runVisualsWithLoader();
+    runVisualsOnce();
   } else {
-    window.addEventListener("load", runVisualsWithLoader, { once: true });
+    window.addEventListener("load", runVisualsOnce, { once: true, signal });
   }
 
-  setTimeout(hideLoader, 2500);
+  // Cleanup automático ao sair da página (evita leaks)
+  window.addEventListener(
+    "pagehide",
+    () => {
+      try {
+        controller.abort();
+      } catch {}
 
-  window.addEventListener("resize", () => {
-    try {
-      handleWebGLResize();
-    } catch (error) {
-      console.warn("Resize WebGL ignorado:", error);
-    }
-  });
+      for (const destroy of cleanups) {
+        try {
+          destroy();
+        } catch (e) {
+          console.warn("Cleanup ignorado:", e);
+        }
+      }
+
+      finalizeOnce();
+    },
+    { once: true }
+  );
+
+  return {
+    destroy: () => {
+      controller.abort();
+      for (const destroy of cleanups) destroy();
+      finalizeOnce();
+    },
+  };
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    try {
-      bootstrap();
-    } catch (error) {
-      console.error("Falha crítica na inicialização:", error);
-      finalizeLoader(document.querySelector(".loader"));
-    }
-  });
-} else {
+// bootstrap seguro
+const start = () => {
   try {
     bootstrap();
   } catch (error) {
     console.error("Falha crítica na inicialização:", error);
-    finalizeLoader(document.querySelector(".loader"));
+    try {
+      finalizeLoader(document.querySelector(".loader"));
+    } catch {}
   }
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", start, { once: true });
+} else {
+  start();
 }
+
