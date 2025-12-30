@@ -1,15 +1,26 @@
 import { safeGetComputedStyle } from "../utils/dom.js";
 
-export function setupMenu({ menuToggle, menuSpans, navOverlay, navLinks, getCssVar }) {
+export function setupMenu({
+  header,
+  menuToggle,
+  menuSpans,
+  navOverlay,
+  navLinks,
+  getCssVar,
+  prefersReducedMotion,
+}) {
   if (!menuToggle) return;
 
   try {
     const spans = menuSpans || [];
     const overlay = navOverlay || null;
     const links = navLinks || [];
+    const root = document.documentElement;
 
-    const prefersReducedMotion =
-      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotion =
+      typeof prefersReducedMotion === "boolean"
+        ? prefersReducedMotion
+        : window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     const getColor = (varName, fallback) =>
       (getCssVar && getCssVar(varName)) || safeGetComputedStyle(varName) || fallback;
@@ -17,13 +28,32 @@ export function setupMenu({ menuToggle, menuSpans, navOverlay, navLinks, getCssV
     const openColor = () => getColor("--accent", "#ff4d4d");
     const closedColor = () => getColor("--text", "#f5f5f5");
 
+    const getScrollOffset = () => {
+      const fromCss = parseFloat(getComputedStyle(root).getPropertyValue("--header-offset"));
+      if (Number.isFinite(fromCss)) return fromCss;
+      return header?.getBoundingClientRect().height || 0;
+    };
+
+    const scrollWithOffset = (target) => {
+      if (!target) return;
+
+      const offset = getScrollOffset();
+      const targetTop = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: Math.max(targetTop, 0),
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
+    };
+
+
     const setA11yState = (isOpen) => {
       menuToggle.setAttribute("aria-expanded", String(isOpen));
       if (overlay) overlay.setAttribute("aria-hidden", String(!isOpen));
     };
 
     const animateBurger = (isOpen) => {
-      if (!spans.length || !window.gsap || prefersReducedMotion) return;
+      if (!spans.length || !window.gsap || reduceMotion) return;
 
       gsap.killTweensOf(spans);
       gsap.to(spans, {
@@ -66,9 +96,9 @@ export function setupMenu({ menuToggle, menuSpans, navOverlay, navLinks, getCssV
       const href = event.currentTarget.getAttribute("href");
       if (!href || !href.startsWith("#")) return;
 
-      event.preventDefault();
+     event.preventDefault();
       const target = document.querySelector(href);
-      if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
+      if (target) scrollWithOffset(target);
       closeMenu();
     };
 

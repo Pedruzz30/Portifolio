@@ -1,6 +1,35 @@
-export function setupScrollUI({ header, scrollProgress, scrollButtons }) {
+export function setupScrollUI({ header, scrollProgress, scrollButtons, prefersReducedMotion }) {
   try {
     let rafId = null;
+    const root = document.documentElement;
+    const reduceMotion =
+      typeof prefersReducedMotion === "boolean"
+        ? prefersReducedMotion
+        : window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    const getHeaderOffset = () => {
+      const fromCss = parseFloat(getComputedStyle(root).getPropertyValue("--header-offset"));
+      if (Number.isFinite(fromCss)) return fromCss;
+      return header?.getBoundingClientRect().height || 0;
+    };
+
+    const updateHeaderOffset = () => {
+      if (!header) return;
+      const height = header.getBoundingClientRect().height || header.offsetHeight || 0;
+      const offsetValue = Math.round(height + 12);
+      root.style.setProperty("--header-offset", `${offsetValue}px`);
+    };
+
+    const scrollWithOffset = (target) => {
+      if (!target) return;
+      const offset = getHeaderOffset();
+      const targetTop = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: Math.max(targetTop, 0),
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
+    };
 
     const updateHeaderOnScroll = () => {
       if (!header) return;
@@ -21,6 +50,7 @@ export function setupScrollUI({ header, scrollProgress, scrollButtons }) {
       if (rafId) return;
       rafId = window.requestAnimationFrame(() => {
         rafId = null;
+        updateHeaderOffset();
         updateHeaderOnScroll();
         updateScrollProgress();
       });
@@ -36,7 +66,7 @@ export function setupScrollUI({ header, scrollProgress, scrollButtons }) {
       const target = document.querySelector(targetSelector);
       if (!target) return;
 
-      target.scrollIntoView({ behavior: "smooth" });
+      scrollWithOffset(target);
     };
 
     if (scrollButtons && scrollButtons.length) {
@@ -50,10 +80,11 @@ export function setupScrollUI({ header, scrollProgress, scrollButtons }) {
     window.addEventListener("resize", scheduleUpdate);
 
     // primeira “pintada” na UI
+    updateHeaderOffset();
     updateHeaderOnScroll();
     updateScrollProgress();
 
-    // retorno com cleanup (muito útil)
+    // retorno com cleanup  
     const destroy = () => {
       if (scrollButtons && scrollButtons.length) {
         scrollButtons.forEach((button) => {

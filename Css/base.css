@@ -115,3 +115,7 @@ footer {
   position: relative;
   z-index: 1;
 }
+
+:where([id]) {
+  scroll-margin-top: calc(var(--header-offset) + 12px);
+}
