@@ -15,7 +15,7 @@
 
   <header class="header">
     <div class="logo" aria-label="Logo">Pedro Henrique</div>
-    <button class="menu-toggle" aria-label="Abrir menu">
+   <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
     </button>
@@ -32,12 +32,15 @@
         </h1>
         <p class="text-mask">Sou estudante de Engenharia de Software, focado em back-end com Java. 
         Estou construindo projetos na prática, aprendendo boas práticas e evoluindo um pouco todo dia.</p>
-       <button class="button button--liquid">
-        <span class="liquid" aria-hidden="true"></span>
-        <span class="btn-txt">Click Me</span>
-      </button>
-
-
+        <div class="hero-actions">
+          <a class="btn btn--primary btn--pill btn--glow btn--ripple" href="#portfolio-title">
+            <span class="btn__label">Ver projetos</span>
+            <span class="btn__pulse" aria-hidden="true"></span>
+          </a>
+          <button class="btn btn--ghost btn--pill btn--ripple" type="button" data-scroll="#contact-title">
+            <span class="btn__label">Falar comigo</span>
+          </button>
+        </div>
       </div>
       <div class="hero-visual" aria-hidden="true">
         <div class="hero-image">
@@ -104,7 +107,9 @@
         </ol>
 
         <div class="skills2-actions">
-          <a class="skills2-btn" href="#portfolio-title">Ver projetos</a>
+          <a class="btn btn--soft btn--pill btn--ripple" href="#portfolio-title">
+            <span class="btn__label">Ver projetos</span>
+          </a>
           <span class="skills2-pill" aria-label="Cadência">Evolução diária</span>
         </div>
       </article>
@@ -275,8 +280,12 @@
         </p>
 
         <div class="footer-cta">
-          <a class="footer-btn" href="#contact-title">Falar comigo</a>
-          <a class="footer-link" href="#portfolio-title">Ver projetos</a>
+          <a class="btn btn--primary btn--pill btn--ripple" href="#contact-title">
+            <span class="btn__label">Falar comigo</span>
+          </a>
+          <a class="btn btn--ghost btn--pill btn--ripple" href="#portfolio-title">
+            <span class="btn__label">Ver projetos</span>
+          </a>
         </div>
       </div>
 
@@ -306,7 +315,9 @@
 
     <div class="footer-bottom">
       <p>© <span id="year"></span> Pedro Henrique. Feito com calma, música e mar.</p>
-      <a class="back-to-top" href="#hero-title">Voltar ao topo ↑</a>
+      <a class="btn btn--icon btn--ghost btn--ripple" href="#hero-title" aria-label="Voltar ao topo" title="Voltar ao topo">
+        ↑
+      </a>
     </div>
   </footer>
 

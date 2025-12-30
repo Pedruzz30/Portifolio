@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     serviceCards: document.querySelectorAll('.service-card'),
     portfolioItems: document.querySelectorAll('.portfolio-item'),
     webGLCanvas: document.getElementById('webgl-canvas'),
+    rippleButtons: document.querySelectorAll('.btn--ripple'),
+    scrollButtons: document.querySelectorAll('[data-scroll]'),
   };
 
   const webGLState = {
@@ -35,6 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function bindEvents() {
     if (elements.menuToggle) {
       elements.menuToggle.addEventListener('click', handleMenuToggle);
+    }
+
+    if (elements.rippleButtons.length) {
+      elements.rippleButtons.forEach((button) => {
+        button.addEventListener('click', handleRipple);
+      });
+    }
+
+    if (elements.scrollButtons.length) {
+      elements.scrollButtons.forEach((button) => {
+        button.addEventListener('click', handleScrollTo);
+      });
     }
 
     window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
@@ -72,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isOpen = elements.menuToggle.classList.toggle('active');
     document.body.classList.toggle('menu-open', isOpen);
+    elements.menuToggle.setAttribute('aria-expanded', String(isOpen));
 
     if (!elements.menuSpans.length || !window.gsap) return;
 
@@ -89,6 +104,32 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       gsap.to(elements.menuSpans, { y: 0, rotate: 0, duration: 0.3 });
     }
+  }
+
+  function handleRipple(event) {
+    const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const isKeyboard = event.clientX === 0 && event.clientY === 0;
+    const x = isKeyboard ? rect.width / 2 : event.clientX - rect.left;
+    const y = isKeyboard ? rect.height / 2 : event.clientY - rect.top;
+
+    button.style.setProperty('--ripple-x', `${x}px`);
+    button.style.setProperty('--ripple-y', `${y}px`);
+
+    button.classList.add('is-rippling');
+    setTimeout(() => {
+      button.classList.remove('is-rippling');
+    }, 420);
+  }
+
+  function handleScrollTo(event) {
+    const targetSelector = event.currentTarget.getAttribute('data-scroll');
+    if (!targetSelector) return;
+
+    const target = document.querySelector(targetSelector);
+    if (!target) return;
+
+    target.scrollIntoView({ behavior: 'smooth' });
   }
 
   function updateHeaderOnScroll() {

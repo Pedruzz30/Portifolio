@@ -110,11 +110,6 @@ img {
   display: block;
 }
 
-button {
-  border: none;
-  background: none;
-}
-
 .hidden { display: none; }
 
 /* =========================
@@ -221,6 +216,9 @@ a:focus-visible,
   display: inline-flex;
   flex-direction: column;
   gap: 6px;
+  border: none;
+  background: none;
+  padding: 0;
 }
 
 .menu-toggle:focus-visible {
@@ -503,173 +501,182 @@ main {
   transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.button--liquid{
-  --bg: #05070c;
-  --water: #1f7fd6;
-  --water2:#3fb7ff;
-  --foam: rgba(255,255,255,.22);
-
-  width: min(240px, 92vw);
-  padding: 18px 28px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.14);
-
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)) , var(--bg);
-  color:#fff;
+/* =========================
+   BOTÕES — sistema unificado
+   ========================= */
+.btn{
+  --btn-primary: linear-gradient(135deg,
+    color-mix(in srgb, var(--deep-blue) 90%, #000),
+    color-mix(in srgb, var(--bright-blue) 72%, var(--deep-blue) 28%));
+  --btn-soft: color-mix(in srgb, var(--surface, #fff) 78%, var(--very-light-blue) 22%);
+  --btn-ghost: color-mix(in srgb, var(--pure-white) 15%, transparent);
+  --btn-border: color-mix(in srgb, var(--accent) 30%, transparent);
+  --btn-shadow: 0 14px 35px color-mix(in srgb, var(--deep-blue) 22%, transparent);
 
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  padding: 0.85rem 1.3rem;
+  min-height: 48px;
+  border-radius: 0.9rem;
+  border: 1px solid transparent;
+  background: var(--btn-ghost);
+  color: var(--pure-white);
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-  cursor: pointer;
-  user-select:none;
-
-  box-shadow:
-    0 16px 46px rgba(0,0,0,.55),
-    0 1px 0 rgba(255,255,255,.10) inset;
-
   transition:
-    transform .28s cubic-bezier(.2,.8,.2,1),
-    box-shadow .28s cubic-bezier(.2,.8,.2,1),
-    border-color .28s cubic-bezier(.2,.8,.2,1),
-    filter .28s cubic-bezier(.2,.8,.2,1);
+    transform 180ms var(--ease-out),
+    box-shadow 220ms var(--ease-out),
+    filter 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    background 180ms var(--ease-out);
 }
 
-/* texto */
-.button--liquid .btn-txt{
-  position: relative;
-  z-index: 5;
-  font: 700 16px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-}
+.btn--pill{ border-radius: 999px; }
+.btn__label{ position: relative; z-index: 2; }
 
-/* BASE da água */
-.button--liquid .liquid{
-  position:absolute;
-  left:0;
-  bottom:-18px;
-  width:100%;
-  height: 92px;
-  z-index: 1;
-
-  background: linear-gradient(180deg, var(--water2), var(--water));
-  box-shadow:
-    inset 0 -18px 34px rgba(0,0,0,.22),
-    inset 0 18px 34px rgba(255,255,255,.06);
-
-  transform: translateY(14px);
-  transition: transform .55s cubic-bezier(.2,.8,.2,1);
-}
-
-/* CAÚSTICAS (luz de piscina se mexendo) */
-.button--liquid .liquid::before{
-  content:"";
-  position:absolute;
-  inset:-60% -40%;
-  z-index: 2;
-
-  background:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,.18), transparent 55%),
-    radial-gradient(circle at 60% 20%, rgba(255,255,255,.14), transparent 55%),
-    radial-gradient(circle at 35% 70%, rgba(255,255,255,.10), transparent 60%),
-    radial-gradient(circle at 80% 75%, rgba(255,255,255,.12), transparent 60%);
-  opacity: .55;
-  filter: blur(1px);
-
-  animation: causticsMove 4.2s ease-in-out infinite;
-}
-
-/* SUPERFÍCIE (ondas horizontais) */
-.button--liquid .liquid::after{
-  content:"";
-  position:absolute;
-  left:-30%;
-  top:-44px;
-  width:160%;
-  height:110px;
-  z-index: 3;
-
-  /* a superfície é uma “faixa” com ondas, não um blob gigante */
-  background:
-    radial-gradient(60px 26px at 10% 60%, rgba(0,0,0,.88) 60%, transparent 61%),
-    radial-gradient(70px 30px at 28% 45%, rgba(0,0,0,.88) 60%, transparent 61%),
-    radial-gradient(60px 26px at 46% 65%, rgba(0,0,0,.88) 60%, transparent 61%),
-    radial-gradient(74px 32px at 64% 45%, rgba(0,0,0,.88) 60%, transparent 61%),
-    radial-gradient(62px 26px at 82% 62%, rgba(0,0,0,.88) 60%, transparent 61%);
-
-  opacity: .98;
-  filter: blur(.2px);
-
-  animation: waveSlide 2.8s linear infinite;
-}
-
-/* uma película de brilho por cima do botão (vidro molhado) */
-.button--liquid::after{
+.btn::before{
   content:"";
   position:absolute;
   inset:0;
-  z-index: 4;
-  border-radius: inherit;
-  pointer-events:none;
-
-  background:
-    radial-gradient(120% 90% at 30% 20%, rgba(255,255,255,.22), rgba(255,255,255,0) 65%),
-    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%);
-  mix-blend-mode: soft-light;
-  opacity:.7;
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.15), transparent 38%),
+              radial-gradient(circle at 80% 0%, rgba(255,255,255,0.20), transparent 40%);
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out);
+  z-index:1;
 }
 
-/* Hover: a maré sobe + mais glow */
-.button--liquid:hover{
-  transform: translateY(-2px);
-  border-color: rgba(63,183,255,.55);
-  filter: saturate(1.08);
+.btn--primary{
+  background: var(--btn-primary);
+  border-color: var(--btn-border);
+  box-shadow: var(--btn-shadow);
+}
+
+.btn--soft{
+  background: var(--btn-soft);
+  color: var(--navy-blue);
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+}
+
+.btn--ghost{
+  background: var(--btn-ghost);
+  color: var(--surface);
+  border-color: color-mix(in srgb, var(--pure-white) 18%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
+}
+
+.btn--icon{
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.btn--glow{
   box-shadow:
-    0 22px 62px rgba(0,0,0,.6),
-    0 0 28px rgba(63,183,255,.22),
-    0 1px 0 rgba(255,255,255,.12) inset;
-}
-.button--liquid:hover .liquid{
-  transform: translateY(-8px);
+    0 22px 62px color-mix(in srgb, var(--bright-blue) 18%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
-/* Active: pressionou e a água “responde” */
-.button--liquid:active{
-  transform: translateY(0) scale(.985);
-}
-.button--liquid:active .liquid{
-  transform: translateY(-3px);
+.btn:hover{
+  transform: translateY(-2px);
+  filter: saturate(1.05);
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--deep-blue) 28%, transparent);
 }
 
-/* foco certinho */
-.button--liquid:focus-visible{
+.btn:focus-visible{
   outline: none;
   box-shadow:
-    0 22px 62px rgba(0,0,0,.6),
-    0 0 0 4px rgba(63,183,255,.26),
-    0 0 0 9px rgba(63,183,255,.12);
+    0 0 0 3px color-mix(in srgb, var(--sky-blue) 55%, transparent),
+    0 16px 44px color-mix(in srgb, var(--midnight-blue) 18%, transparent);
 }
 
-/* ======= ANIMAÇÕES ======= */
-
-/* ondas andando pro lado (efeito fluído) */
-@keyframes waveSlide{
-  from{ transform: translateX(0); }
-  to{ transform: translateX(22%); }
+.btn:active{
+  transform: translateY(0);
 }
 
-/* caústicas “respirando” e mudando posição */
-@keyframes causticsMove{
-  0%   { transform: translate(-2%, 2%) scale(1.02); opacity:.50; }
-  50%  { transform: translate(3%, -2%) scale(1.06); opacity:.62; }
-  100% { transform: translate(-2%, 2%) scale(1.02); opacity:.50; }
+.btn:hover::before{
+  opacity: 0.65;
 }
 
-/* reduz movimento se precisar */
+.btn--soft:hover{
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+}
+
+.btn--ghost:hover{
+  background: color-mix(in srgb, var(--pure-white) 18%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 12px 26px rgba(0,0,0,0.16);
+}
+
+.btn--ripple{
+  --ripple-x: 50%;
+  --ripple-y: 50%;
+}
+
+.btn--ripple::after{
+  content:"";
+  position:absolute;
+  left: var(--ripple-x);
+  top: var(--ripple-y);
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%) scale(0);
+  background: color-mix(in srgb, var(--pure-white) 80%, var(--accent) 20%);
+  border-radius: 50%;
+  opacity: 0.4;
+  z-index: 0;
+  pointer-events: none;
+  transition: transform 420ms ease, opacity 420ms ease;
+}
+
+.btn--ripple.is-rippling::after{
+  transform: translate(-50%, -50%) scale(12);
+  opacity: 0;
+}
+
+.btn__pulse{
+  position:absolute;
+  inset: -40%;
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%);
+  z-index:0;
+  opacity:0.55;
+  filter: blur(18px);
+  pointer-events:none;
+  animation: btnPulse 4s ease-in-out infinite;
+}
+
+.hero-actions{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@keyframes btnPulse{
+  0%{ transform: scale(0.9); opacity:0.5; }
+  50%{ transform: scale(1.05); opacity:0.7; }
+  100%{ transform: scale(0.9); opacity:0.5; }
+}
+
 @media (prefers-reduced-motion: reduce){
-  .button--liquid, .button--liquid .liquid{ transition: none; }
-  .button--liquid .liquid::before,
-  .button--liquid .liquid::after{ animation: none; }
+  .btn,
+  .btn::before,
+  .btn--ripple::after,
+  .btn__pulse{
+    transition: none;
+    animation: none;
+  }
+  .btn:hover{ transform: none; }
 }
 
 /* =========================
@@ -918,40 +925,6 @@ main {
   z-index: 1;
 }
 
-.skills2-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 46px;
-  padding: 0.7rem 1.15rem;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 750;
-  letter-spacing: 0.01em;
-
-  color: #fff;
-  background: linear-gradient(135deg,
-    color-mix(in srgb, var(--deep-blue) 90%, #000),
-    color-mix(in srgb, var(--bright-blue) 72%, var(--deep-blue) 28%));
-
-  box-shadow: 0 14px 35px color-mix(in srgb, var(--deep-blue) 22%, transparent);
-  border: 1px solid color-mix(in srgb, var(--bright-blue) 30%, transparent);
-
-  transition: transform .2s ease, box-shadow .22s ease, filter .22s ease;
-}
-
-.skills2-btn:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 18px 42px color-mix(in srgb, var(--deep-blue) 28%, transparent);
-  filter: saturate(1.05);
-}
-
-.skills2-btn:focus-visible{
-  outline: 3px solid color-mix(in srgb, var(--sky-blue) 55%, transparent);
-  outline-offset: 3px;
-}
-
 .skills2-pill{
   display: inline-flex;
   align-items: center;
@@ -1111,11 +1084,9 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce){
-  .skills2-btn,
   .skills2-chip{
     transition: none;
   }
-  .skills2-btn:hover,
   .skills2-chip:hover{
     transform: none;
   }
@@ -1703,42 +1674,6 @@ footer {
   flex-wrap: wrap;
 }
 
-.footer-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: .7rem 1.08rem;
-  border-radius: 999px;
-  font-weight: 650;
-  color: rgba(255,255,255,0.92);
-  border: 1px solid rgba(110,214,255,0.22);
-  background:
-    radial-gradient(120% 140% at 15% 15%,
-      rgba(255,255,255,0.14),
-      rgba(255,255,255,0.06) 55%,
-      rgba(0,0,0,0) 72%),
-    linear-gradient(145deg,
-      rgba(255,255,255,0.08),
-      rgba(0,0,0,0.12));
-  box-shadow:
-    0 18px 56px rgba(0, 190, 255, 0.10),
-    inset 0 1px 0 rgba(255,255,255,0.16);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  transition: transform .22s ease, box-shadow .25s ease, border-color .25s ease;
-  position: relative;
-  z-index: 1;
-}
-
-.footer-btn:hover{
-  transform: translateY(-2px);
-  border-color: rgba(110,214,255,0.35);
-  box-shadow:
-    0 22px 70px rgba(0, 190, 255, 0.16),
-    inset 0 1px 0 rgba(255,255,255,0.18);
-}
-
 .footer-link{
   font-weight: 650;
   opacity: .92;
@@ -1758,28 +1693,6 @@ footer {
   z-index: 1;
 }
 
-.back-to-top{
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .55rem .95rem;
-  border-radius: 999px;
-  color: rgba(255,255,255,0.88);
-  border: 1px solid rgba(110,214,255,0.18);
-  background: rgba(255,255,255,0.06);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  transition: transform .2s ease, border-color .25s ease, box-shadow .25s ease;
-  position: relative;
-  z-index: 1;
-}
-
-.back-to-top:hover{
-  transform: translateY(-2px);
-  border-color: rgba(110,214,255,0.30);
-  box-shadow: 0 16px 40px rgba(0,190,255,0.10);
-}
-
 @media (prefers-reduced-motion: reduce){
   .site-footer::before,
   .site-footer::after,
@@ -1790,6 +1703,8 @@ footer {
   .footer-btn, .back-to-top, .site-footer a{ transition: none; }
   .footer-btn:hover, .back-to-top:hover, .site-footer a:hover{ transform: none; }
 }
+
+.site-footer a{ transition: none; }
 
 /* =========================
    KEYFRAMES (faltavam)
