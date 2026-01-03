@@ -52,36 +52,38 @@ function initPortfolioHover(items) {
 
   const cleanups = [];
 
-  cards.forEach((item) => {
-    const img = item.querySelector("img");
-    const overlay = item.querySelector(".item-overlay");
-    const title = item.querySelector("h4");
+  cards.forEach((card) => {
+    const glow = card.querySelector(".p2-glow");
+    const lines = card.querySelector(".p2-lines");
+    const score = card.querySelector(".p2-score");
+    const meta = card.querySelectorAll(".p2-pill");
 
-    gsap.set([img, overlay, title].filter(Boolean), { clearProps: "all" });
-    if (overlay) gsap.set(overlay, { opacity: 0 });
-    if (title) gsap.set(title, { y: 20 });
+    const targets = [glow, lines, score, ...meta].filter(Boolean);
+    gsap.set(targets, { clearProps: "all" });
 
     const tl = gsap.timeline({ paused: true, defaults: { overwrite: "auto" } });
 
-    if (img) tl.to(img, { scale: 1.1, duration: 0.45, ease: "power2.out" }, 0);
-    if (overlay) tl.to(overlay, { opacity: 1, duration: 0.25 }, 0);
-    if (title) tl.to(title, { y: 0, duration: 0.45, ease: "power2.out" }, 0);
+    if (glow) tl.to(glow, { filter: "blur(14px)", opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
+    if (lines) tl.to(lines, { opacity: 0.8, duration: 0.35, ease: "power2.out" }, 0);
+    if (score) tl.to(score, { y: -4, duration: 0.35, ease: "power2.out" }, 0);
+    if (meta.length) tl.to(meta, { y: -2, duration: 0.35, stagger: 0.04, ease: "power2.out" }, 0);
 
     const enter = () => tl.play();
     const leave = () => tl.reverse();
 
-    item.addEventListener("pointerenter", enter);
-    item.addEventListener("pointerleave", leave);
+    card.addEventListener("pointerenter", enter);
+    card.addEventListener("pointerleave", leave);
 
     cleanups.push(() => {
-      item.removeEventListener("pointerenter", enter);
-      item.removeEventListener("pointerleave", leave);
+      card.removeEventListener("pointerenter", enter);
+      card.removeEventListener("pointerleave", leave);
       tl.kill();
     });
   });
 
   return () => cleanups.forEach((fn) => fn());
 }
+
 /* =========================
    MAIN ANIMATIONS — ULTIMATE
 ========================= */

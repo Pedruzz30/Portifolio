@@ -21,7 +21,7 @@ function bootstrap() {
     textMask: document.querySelector(".text-mask"),
     heroContent: document.querySelector(".hero-content"),
     serviceCards: Array.from(document.querySelectorAll(".service-card")),
-    portfolioItems: Array.from(document.querySelectorAll(".portfolio-item")),
+    portfolioItems: Array.from(document.querySelectorAll(".p2-card")),
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
