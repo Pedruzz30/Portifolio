@@ -65,6 +65,7 @@
           <span class="hero-chip">Back-end Java</span>
           <span class="hero-chip">APIs</span>
           <span class="hero-chip">MongoDB</span>
+          <span class="hero-chip">Spring Boot</span>
         </div>
         <div class="hero-actions">
           <a class="btn btn--primary btn--pill btn--glow btn--ripple" href="#portfolio-title">
@@ -95,7 +96,7 @@
       <div class="hero-visual" aria-hidden="true">
         <div class="hero-image">
           <img src="assets/minhaFoto.jpeg" alt="" class="hero-img" />
-        </div>
+         </div>
         <div class="hero-orbs">
           <span class="orb orb--primary"></span>
           <span class="orb orb--accent"></span>
@@ -120,7 +121,10 @@
     <section class="skills2" aria-labelledby="skills2-title" data-section>
       <div class="skills2-shell">
         <header class="skills2-header">
-          <p class="skills2-eyebrow">STACK EM EVOLUÇÃO</p>
+          <p class="skills2-eyebrow">
+            <span class="skills2-spark" aria-hidden="true"></span>
+            STACK EM EVOLUÇÃO
+          </p>
 
           <div class="skills2-heading">
             <h2 id="skills2-title">Base técnica em construção</h2>
@@ -129,6 +133,12 @@
               fundamentos, prática e entrega contínua — com calma, consistência e qualidade.
             </p>
           </div>
+
+          <div class="skills2-badges" role="list">
+            <span class="skills2-badge skills2-badge--accent" role="listitem">UX/UI com microinterações</span>
+            <span class="skills2-badge" role="listitem">Cores vivas com contraste seguro</span>
+            <span class="skills2-badge skills2-badge--ghost" role="listitem">Feedback visual em cada ação</span>
+          </div>
         </header>
 
         <div class="skills2-layout">
@@ -136,39 +146,79 @@
             <div class="skills2-cardTop">
               <h3 class="skills2-cardTitle">Trilhas</h3>
               <p class="skills2-cardHint">O que estou fortalecendo agora</p>
+              <div class="skills2-cardRibbon" aria-hidden="true">
+                <span class="skills2-ribbonDot"></span>
+                <span>Estudando diariamente e sempre me atualizando</span>
+              </div>
             </div>
 
             <ol class="skills2-tracks" role="list">
-              <li class="skills2-track">
+              <li class="skills2-track" style="--tone: var(--bright-blue)">
                 <div class="skills2-dot" aria-hidden="true"></div>
                 <div class="skills2-trackBody">
-                  <strong>Java sólido</strong>
-                  <p>POO, coleções, exceptions, organização de pacotes e testes básicos.</p>
+                  <div class="skills2-trackHead">
+                    <strong>Java sólido</strong>
+                    <span class="skills2-level">Base</span>
+                  </div>
+                  <p>POO, coleções, exceptions, pacotes limpos e testes que evitam regressões.</p>
+                  <div class="skills2-trackTags" aria-label="Itens de foco">
+                    <span class="skills2-trackTag">Coleções</span>
+                    <span class="skills2-trackTag">Refatoração</span>
+                    <span class="skills2-trackTag skills2-trackTag--accent">JUnit</span>
+                  </div>
+                  <div class="skills2-progress" aria-hidden="true">
+                    <span class="skills2-progressFill" data-progress="0.62" style="--progress: 0.62"></span>
+                  </div>
                 </div>
                 <div class="skills2-trackMeta" aria-label="Nível atual">
-                  <span class="skills2-level">Base</span>
+                  <span class="skills2-metaLabel">Cadência</span>
+                  <span class="skills2-metaValue">Diária</span>
                 </div>
               </li>
 
-              <li class="skills2-track">
+              <li class="skills2-track" style="--tone: var(--violet)">
                 <div class="skills2-dot" aria-hidden="true"></div>
                 <div class="skills2-trackBody">
-                  <strong>Web & APIs</strong>
-                  <p>HTTP, rotas, validação, boas práticas e persistência com SQL.</p>
+                  <div class="skills2-trackHead">
+                    <strong>Web & APIs</strong>
+                    <span class="skills2-level">Em evolução</span>
+                  </div>
+                  <p>HTTP, rotas, contratos claros, validação e persistência com SQL sem surpresas.</p>
+                  <div class="skills2-trackTags" aria-label="Itens de foco">
+                    <span class="skills2-trackTag skills2-trackTag--accent">REST seguro</span>
+                    <span class="skills2-trackTag">Paginação</span>
+                    <span class="skills2-trackTag">Autenticação</span>
+                  </div>
+                  <div class="skills2-progress" aria-hidden="true">
+                    <span class="skills2-progressFill" data-progress="0.54" style="--progress: 0.54"></span>
+                  </div>
                 </div>
                 <div class="skills2-trackMeta" aria-label="Nível atual">
-                  <span class="skills2-level">Em evolução</span>
+                  <span class="skills2-metaLabel">Entrega</span>
+                  <span class="skills2-metaValue">Semanal</span>
                 </div>
               </li>
 
-              <li class="skills2-track">
+              <li class="skills2-track" style="--tone: var(--mint)">
                 <div class="skills2-dot" aria-hidden="true"></div>
                 <div class="skills2-trackBody">
-                  <strong>Front-end enxuto</strong>
-                  <p>HTML sem bagunça, CSS responsivo e JS leve pra interface fluida.</p>
+                  <div class="skills2-trackHead">
+                    <strong>Front-end enxuto</strong>
+                    <span class="skills2-level">Aplicando</span>
+                  </div>
+                  <p>HTML sem bagunça, CSS responsivo e JS leve para microinterações úteis.</p>
+                  <div class="skills2-trackTags" aria-label="Itens de foco">
+                    <span class="skills2-trackTag">Layout fluido</span>
+                    <span class="skills2-trackTag skills2-trackTag--accent">Acessibilidade</span>
+                    <span class="skills2-trackTag">Perf</span>
+                  </div>
+                  <div class="skills2-progress" aria-hidden="true">
+                    <span class="skills2-progressFill" data-progress="0.68" style="--progress: 0.68"></span>
+                  </div>
                 </div>
                 <div class="skills2-trackMeta" aria-label="Nível atual">
-                  <span class="skills2-level">Aplicando</span>
+                  <span class="skills2-metaLabel">UX</span>
+                  <span class="skills2-metaValue">Alterando</span>
                 </div>
               </li>
             </ol>
@@ -178,6 +228,7 @@
                 <span class="btn__label">Ver projetos</span>
               </a>
               <span class="skills2-pill" aria-label="Cadência">Evolução diária</span>
+              <span class="skills2-pill skills2-pill--glow" aria-label="Ajustes visuais">Animações conscientes</span>
             </div>
           </article>
 
@@ -187,16 +238,57 @@
               <p class="skills2-cardHint">Stack atual (foco em base e consistência)</p>
             </div>
 
-            <ul class="skills2-chips" role="list">
-              <li><span class="skills2-chip skills2-chip--main">Java</span></li>
-              <li><span class="skills2-chip">SQL</span></li>
-              <li><span class="skills2-chip">Python</span></li>
-              <li><span class="skills2-chip">HTML</span></li>
-              <li><span class="skills2-chip">CSS</span></li>
-              <li><span class="skills2-chip">JavaScript</span></li>
-            </ul>
+            <div class="skills2-stackGrid">
+              <div class="skills2-stackCol">
+                <ul class="skills2-chips" role="list">
+                  <li><span class="skills2-chip skills2-chip--main">Java</span></li>
+                  <li><span class="skills2-chip">Spring Boot</span></li>
+                  <li><span class="skills2-chip">MongoDB</span></li>
+                  <li><span class="skills2-chip">SQL</span></li>
+                  <li><span class="skills2-chip">Python</span></li>
+                  <li><span class="skills2-chip">HTML</span></li>
+                  <li><span class="skills2-chip">CSS</span></li>
+                  <li><span class="skills2-chip">JavaScript</span></li>
+                </ul>
 
-            <div class="skills2-mini">
+                <div class="skills2-legend">
+                  <span class="skills2-legendDot skills2-legendDot--primary" aria-hidden="true"></span>
+                  <p>Core do momento: Java + Spring + SQL</p>
+                </div>
+              </div>
+
+              <div class="skills2-stackCol skills2-stackCol--meters">
+                <div class="skills2-meter">
+                  <div class="skills2-meterHead">
+                    <p class="skills2-meterLabel">Back-end</p>
+                    <span class="skills2-meterValue">Foco</span>
+                  </div>
+                  <div class="skills2-meterBar" aria-hidden="true">
+                    <span class="skills2-meterFill" data-progress="0.78" style="--progress: 0.78"></span>
+                  </div>
+                </div>
+                <div class="skills2-meter">
+                  <div class="skills2-meterHead">
+                    <p class="skills2-meterLabel">UX/UI</p>
+                    <span class="skills2-meterValue">Refino</span>
+                  </div>
+                  <div class="skills2-meterBar" aria-hidden="true">
+                    <span class="skills2-meterFill" data-progress="0.64" style="--progress: 0.64"></span>
+                  </div>
+                </div>
+                <div class="skills2-meter">
+                  <div class="skills2-meterHead">
+                    <p class="skills2-meterLabel">Entrega</p>
+                    <span class="skills2-meterValue">Ship rápido</span>
+                  </div>
+                  <div class="skills2-meterBar" aria-hidden="true">
+                    <span class="skills2-meterFill" data-progress="0.72" style="--progress: 0.72"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="skills2-mini skills2-mini--grid">
               <div class="skills2-miniRow">
                 <p class="skills2-miniLabel">Foco</p>
                 <p class="skills2-miniValue">Back-end + boas práticas</p>
@@ -204,6 +296,14 @@
               <div class="skills2-miniRow">
                 <p class="skills2-miniLabel">Padrão</p>
                 <p class="skills2-miniValue">Acessibilidade + performance</p>
+              </div>
+              <div class="skills2-miniRow">
+                <p class="skills2-miniLabel">Ferramental</p>
+                <p class="skills2-miniValue">VS Code, GitHub, Postman</p>
+              </div>
+              <div class="skills2-miniRow">
+                <p class="skills2-miniLabel">Rotina</p>
+                <p class="skills2-miniValue">Planejo, executo, reviso</p>
               </div>
             </div>
           </aside>
@@ -444,4 +544,3 @@
   <script type="module" src="Js/main.js"></script>
 </body>
 </html>
-

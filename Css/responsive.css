@@ -11,6 +11,8 @@
   .skills2-metrics{ grid-template-columns: 1fr; }
   .skills2-track{ grid-template-columns: 14px 1fr; }
   .skills2-trackMeta{ display: none; }
+  .skills2-badges{ flex-direction: column; align-items: flex-start; }
+  .skills2-mini--grid{ grid-template-columns: 1fr; }
 }
 
 @media (max-width: 980px){
@@ -109,6 +111,15 @@
   }
   .skills2-chip:hover{
     transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .skills2-card::after,
+  .skills2-dot,
+  .skills2-spark,
+  .skills2-ribbonDot{
+    animation: none !important;
   }
 }
 

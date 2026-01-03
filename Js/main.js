@@ -25,6 +25,11 @@ function bootstrap() {
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
+    skillsCards: Array.from(document.querySelectorAll(".skills2-card")),
+    skillsMetrics: Array.from(document.querySelectorAll(".skills2-metric")),
+    skillsBadges: Array.from(document.querySelectorAll(".skills2-badge")),
+    skillsTrackBars: Array.from(document.querySelectorAll(".skills2-progressFill")),
+    skillsMeters: Array.from(document.querySelectorAll(".skills2-meterFill")),
   };
 
   // reduz motion centralizado (p/ usar em módulos se quiser)
@@ -86,6 +91,11 @@ function bootstrap() {
         textMask: elements.textMask,
         serviceCards: elements.serviceCards,
         portfolioItems: elements.portfolioItems,
+        skillsCards: elements.skillsCards,
+        skillsMetrics: elements.skillsMetrics,
+        skillsBadges: elements.skillsBadges,
+        skillsTrackBars: elements.skillsTrackBars,
+        skillsMeters: elements.skillsMeters,
         prefersReducedMotion,
       });
     } finally {

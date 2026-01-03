@@ -302,14 +302,14 @@
 
   /* fundo bem mais suave e elegante */
   background:
-    radial-gradient(110% 85% at 20% 12%,
-      rgba(255,255,255,0.70),
-      rgba(255,255,255,0) 55%),
+    radial-gradient(120% 90% at 16% 10%,
+      rgba(255,255,255,0.82),
+      rgba(255,255,255,0) 52%),
     radial-gradient(90% 70% at 85% 35%,
       color-mix(in srgb, var(--very-light-blue) 40%, transparent),
       transparent 60%),
     linear-gradient(180deg,
-      color-mix(in srgb, var(--very-light-blue) 26%, transparent),
+      color-mix(in srgb, var(--very-light-blue) 32%, transparent),
       color-mix(in srgb, var(--deep-blue) 12%, transparent));
 }
 
@@ -328,10 +328,10 @@
   transform: rotate(-7deg);
   background:
     radial-gradient(70% 55% at 30% 30%,
-      color-mix(in srgb, var(--sky-blue) 34%, transparent),
+      color-mix(in srgb, var(--sky-blue) 38%, transparent),
       transparent 70%),
     radial-gradient(60% 50% at 70% 35%,
-      color-mix(in srgb, var(--light-blue) 45%, transparent),
+      color-mix(in srgb, var(--light-blue) 55%, transparent),
       transparent 72%);
 }
 
@@ -339,10 +339,10 @@
   transform: rotate(10deg);
   background:
     radial-gradient(70% 60% at 60% 60%,
-      color-mix(in srgb, var(--accent) 22%, transparent),
+      color-mix(in srgb, var(--accent) 34%, transparent),
       transparent 72%),
     radial-gradient(60% 55% at 25% 70%,
-      color-mix(in srgb, var(--bright-blue) 22%, transparent),
+      color-mix(in srgb, var(--bright-blue) 28%, transparent),
       transparent 75%);
 }
 
@@ -379,6 +379,15 @@
   backdrop-filter: blur(10px);
 }
 
+.skills2-spark{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent-soft) 45%, transparent);
+  animation: haloPulse 3.8s ease-in-out infinite;
+}
+
 .skills2-heading h2{
   margin: 0;
   font-size: clamp(1.55rem, 2.6vw, 2.2rem);
@@ -391,6 +400,47 @@
   max-width: 68ch;
   line-height: 1.65;
   color: var(--text-subtle, #64748b);
+}
+
+.skills2-badges{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.skills2-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface, #fff) 80%, var(--very-light-blue) 20%);
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  color: color-mix(in srgb, var(--midnight-blue) 76%, #000);
+  font-weight: 700;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
+}
+
+.skills2-badge::before{
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-soft) 45%, transparent);
+}
+
+.skills2-badge--accent{
+  background: linear-gradient(125deg,
+    color-mix(in srgb, var(--bright-blue) 18%, #fff),
+    color-mix(in srgb, var(--very-light-blue) 82%, #fff));
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.skills2-badge--ghost{
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  border-style: dashed;
 }
 
 /* Layout principal */
@@ -406,6 +456,8 @@
   position: relative;
   border-radius: 1.35rem;
   padding: clamp(1.15rem, 2.2vw, 1.55rem);
+  overflow: hidden;
+  isolation: isolate;
 
   background:
     radial-gradient(120% 120% at 15% 0%,
@@ -421,6 +473,7 @@
     0 18px 55px color-mix(in srgb, var(--midnight-blue) 14%, transparent),
     inset 0 1px 0 rgba(255,255,255,0.70);
   backdrop-filter: blur(14px);
+  transition: transform 260ms var(--ease-out), box-shadow 260ms var(--ease-out), border-color 260ms var(--ease-out);
 }
 
 .skills2-card::before{
@@ -439,6 +492,29 @@
       rgba(255,255,255,0.03) 24px,
       rgba(255,255,255,0.03) 40px
     );
+}
+
+.skills2-card::after{
+  content:"";
+  position:absolute;
+  inset:-30% -20%;
+  background: radial-gradient(50% 45% at 50% 50%,
+    color-mix(in srgb, var(--accent) 22%, transparent),
+    transparent 65%);
+  opacity: .45;
+  filter: blur(38px);
+  z-index: 0;
+  transform: translate3d(0,0,0);
+  pointer-events: none;
+  animation: oceanGlow var(--wave-medium) ease-in-out infinite;
+}
+
+.skills2-card:hover{
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent) 26%, transparent);
+  box-shadow:
+    0 22px 60px color-mix(in srgb, var(--midnight-blue) 16%, transparent),
+    inset 0 1px 0 rgba(255,255,255,0.78);
 }
 
 .skills2-cardTop{
@@ -460,6 +536,28 @@
   margin: 0;
   color: var(--text-muted, #6f7b8e);
   line-height: 1.5;
+}
+
+.skills2-cardRibbon{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-soft) 80%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--accent) 28%, transparent);
+  color: color-mix(in srgb, var(--midnight-blue) 76%, #000);
+  font-weight: 700;
+  width: fit-content;
+}
+
+.skills2-ribbonDot{
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #fff, var(--accent));
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-soft) 40%, transparent);
+  animation: bubbleDrift 4s ease-in-out infinite;
 }
 
 /* Trilhas */
@@ -484,7 +582,17 @@
   border-radius: 1rem;
 
   border: 1px solid color-mix(in srgb, var(--border, rgba(0,0,0,.12)) 75%, transparent);
-  background: color-mix(in srgb, var(--surface-soft, rgba(255,255,255,0.65)) 80%, transparent);
+  background: color-mix(in srgb, var(--surface-soft, rgba(255,255,255,0.65)) 84%, transparent);
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--midnight-blue) 8%, transparent);
+  transition: transform 220ms var(--ease-out), border-color 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+}
+
+.skills2-track:hover{
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow:
+    0 20px 46px color-mix(in srgb, var(--midnight-blue) 16%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .skills2-dot{
@@ -493,8 +601,19 @@
   border-radius: 50%;
   margin-top: 0.25rem;
 
-  background: color-mix(in srgb, var(--accent) 70%, var(--primary) 30%);
-  box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-soft) 50%, transparent);
+  background: radial-gradient(circle at 30% 30%,
+    #fff,
+    color-mix(in srgb, var(--tone, var(--accent)) 65%, var(--primary) 35%));
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--tone, var(--accent)) 50%, transparent);
+  animation: pulseGlow 3.4s ease-in-out infinite;
+}
+
+.skills2-trackHead{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .skills2-trackBody strong{
@@ -510,9 +629,85 @@
   color: var(--text-subtle, #64748b);
 }
 
+.skills2-trackTags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.55rem 0 0;
+}
+
+.skills2-trackTag{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--surface, #fff) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tone, var(--accent)) 22%, transparent);
+  color: color-mix(in srgb, var(--midnight-blue) 78%, #000);
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.skills2-trackTag::before{
+  content:"";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tone, var(--accent));
+}
+
+.skills2-trackTag--accent{
+  background: linear-gradient(125deg,
+    color-mix(in srgb, var(--tone, var(--accent)) 16%, #fff),
+    color-mix(in srgb, var(--very-light-blue) 84%, #fff));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--tone, var(--accent)) 22%, transparent);
+}
+
+.skills2-progress{
+  position: relative;
+  margin-top: 0.75rem;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-soft) 70%, transparent);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--tone, var(--accent)) 24%, transparent);
+}
+
+.skills2-progressFill{
+  position: absolute;
+  inset: 0;
+  width: calc(var(--progress, 0) * 100%);
+  border-radius: inherit;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--tone, var(--accent)) 72%, var(--primary) 18%),
+    color-mix(in srgb, var(--very-light-blue) 85%, #fff));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--tone, var(--accent)) 32%, transparent),
+    0 12px 28px color-mix(in srgb, var(--tone, var(--accent)) 28%, transparent);
+  transform-origin: left center;
+}
+
 .skills2-trackMeta{
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 0.35rem;
+  min-width: 96px;
+}
+
+.skills2-metaLabel{
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted, #6f7b8e);
+}
+
+.skills2-metaValue{
+  font-weight: 820;
+  color: var(--midnight-blue);
+  letter-spacing: -0.01em;
 }
 
 .skills2-level{
@@ -523,6 +718,10 @@
   color: color-mix(in srgb, var(--midnight-blue) 75%, #000);
   background: color-mix(in srgb, var(--very-light-blue) 55%, rgba(255,255,255,0.35));
   border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.skills2-level + .skills2-metaLabel{
+  margin-top: auto;
 }
 
 /* Ações */
@@ -559,6 +758,14 @@
   box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-soft) 45%, transparent);
 }
 
+.skills2-pill--glow{
+  border-color: color-mix(in srgb, var(--violet) 24%, transparent);
+  background: linear-gradient(125deg,
+    color-mix(in srgb, var(--violet) 16%, #fff),
+    color-mix(in srgb, var(--very-light-blue) 80%, #fff));
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--violet) 16%, transparent);
+}
+
 /* Chips */
 .skills2-chips{
   margin: 0;
@@ -570,6 +777,23 @@
   gap: 0.65rem;
   position: relative;
   z-index: 1;
+}
+
+.skills2-stackGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.skills2-stackCol{
+  display: grid;
+  gap: 0.75rem;
+}
+
+.skills2-stackCol--meters{
+  gap: 0.65rem;
 }
 
 .skills2-chip{
@@ -609,6 +833,83 @@
   outline-offset: 3px;
 }
 
+.skills2-legend{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--surface) 78%, var(--very-light-blue) 22%);
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--midnight-blue);
+  font-weight: 760;
+  width: fit-content;
+}
+
+.skills2-legendDot{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--primary));
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-soft) 40%, transparent);
+}
+
+.skills2-legendDot--primary{
+  background: radial-gradient(circle at 30% 30%, #fff, color-mix(in srgb, var(--primary) 70%, var(--accent) 30%));
+}
+
+.skills2-meter{
+  display: grid;
+  gap: 0.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.skills2-meterHead{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.skills2-meterLabel{
+  margin: 0;
+  font-weight: 800;
+  color: var(--midnight-blue);
+  letter-spacing: -0.01em;
+}
+
+.skills2-meterValue{
+  font-size: 0.9rem;
+  color: var(--text-muted, #6f7b8e);
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+}
+
+.skills2-meterBar{
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-soft) 70%, transparent);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.skills2-meterFill{
+  position: absolute;
+  inset: 0;
+  width: calc(var(--progress, 0) * 100%);
+  border-radius: inherit;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--primary) 68%, var(--accent) 32%),
+    color-mix(in srgb, var(--very-light-blue) 92%, #fff));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 14px 32px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
+  transform-origin: left center;
+}
+
 /* Mini infos */
 .skills2-mini{
   margin-top: 1rem;
@@ -618,6 +919,11 @@
   gap: 0.7rem;
   position: relative;
   z-index: 1;
+}
+
+.skills2-mini--grid{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 0.9rem;
 }
 
 .skills2-miniRow{
@@ -645,38 +951,6 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(0.85rem, 2vw, 1.15rem);
-}
-
-.skills2-metric{
-  border-radius: 1.25rem;
-  padding: 1.05rem 1.1rem;
-
-  background: color-mix(in srgb, var(--surface, #fff) 76%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 12%, var(--border, rgba(0,0,0,.12)));
-  box-shadow: 0 14px 40px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
-  backdrop-filter: blur(12px);
-}
-
-.skills2-mLabel{
-  margin: 0 0 0.4rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--text-muted, #6f7b8e);
-}
-
-.skills2-mStrong{
-  margin: 0 0 0.25rem;
-  font-weight: 850;
-  color: var(--midnight-blue);
-  letter-spacing: -0.01em;
-}
-
-.skills2-mText{
-  margin: 0;
-  color: var(--text-subtle, #64748b);
-  line-height: 1.55;
-}
 
 /* =========================
    PORTFOLIO v2 — sem thumbs, mais explicação
@@ -1169,4 +1443,5 @@
   color: rgba(255,255,255,0.72);
   position: relative;
   z-index: 1;
-}
+} 
+  }
