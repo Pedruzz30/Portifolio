@@ -84,6 +84,14 @@
     padding: clamp(3rem, 8vw, 5rem) 0 6rem;
   }
 
+   .contact-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .contact-channels{
+    grid-template-columns: 1fr;
+  }
+
   /* FIX: era .portfolio (não é grid) */
   .portfolio-grid {
     grid-template-columns: 1fr;
