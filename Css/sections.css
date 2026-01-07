@@ -59,21 +59,6 @@
   animation-play-state: running;
 }
 
-.hero-kicker{
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.55rem 0.9rem;
-  border-radius: 999px;
-  font-weight: 750;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--pure-white) 92%, var(--very-light-blue));
-  background: color-mix(in srgb, var(--accent) 22%, rgba(255,255,255,0.18));
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  box-shadow: 0 14px 36px color-mix(in srgb, var(--midnight-blue) 18%, transparent);
-}
-
 .hero-visual {
   position: relative;
   width: 38%;
@@ -358,34 +343,6 @@
   display: grid;
   gap: 0.55rem;
   margin-bottom: clamp(1.3rem, 2.6vw, 2.1rem);
-}
-
-.skills2-eyebrow{
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  width: fit-content;
-
-  font-size: 0.82rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-
-  color: color-mix(in srgb, var(--midnight-blue) 60%, var(--text-muted, #6f7b8e));
-  padding: 0.55rem 0.9rem;
-  border-radius: 999px;
-
-  border: 1px solid color-mix(in srgb, var(--border, rgba(0,0,0,.12)) 70%, transparent);
-  background: color-mix(in srgb, var(--surface, #ffffff) 75%, transparent);
-  backdrop-filter: blur(10px);
-}
-
-.skills2-spark{
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
-  box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent-soft) 45%, transparent);
-  animation: haloPulse 3.8s ease-in-out infinite;
 }
 
 .skills2-heading h2{
@@ -858,6 +815,63 @@
   background: radial-gradient(circle at 30% 30%, #fff, color-mix(in srgb, var(--primary) 70%, var(--accent) 30%));
 }
 
+.skills2-tools{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.65rem;
+}
+
+.skills2-tool{
+  --tone: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface, #fff) 80%, var(--very-light-blue) 20%);
+  border: 1px solid color-mix(in srgb, var(--tone) 20%, transparent);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
+  transition: transform 180ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.skills2-tool:hover{
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--tone) 30%, transparent);
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+}
+
+.skills2-toolIcon{
+  width: 46px;
+  height: 46px;
+  padding: 8px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--tone) 18%, rgba(255,255,255,0.85));
+  box-shadow: 0 10px 18px color-mix(in srgb, var(--tone) 18%, transparent);
+}
+
+.skills2-toolIcon img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.skills2-toolBody{
+  display: grid;
+  gap: 0.2rem;
+}
+
+.skills2-toolLabel{
+  font-weight: 800;
+  color: color-mix(in srgb, var(--midnight-blue) 90%, #000);
+}
+
+.skills2-toolMeta{
+  font-size: 0.9rem;
+  color: var(--text-subtle, #64748b);
+}
+
 .skills2-meter{
   display: grid;
   gap: 0.25rem;
@@ -1273,111 +1287,113 @@
 .p2-linkIcon{ display: inline-flex; transform: translateY(-1px); }
 
 /* =========================
-   CONTACT
+   CONTACT : REDE SOCIAIS
    ========================= */
-.contact {
-  padding: clamp(4rem, 8vw, 6.5rem) 0 8rem;
+
+
+.contact-channels{
+  margin-top: clamp(1.2rem, 2.6vw, 1.8rem);
+  padding: clamp(1.1rem, 2.2vw, 1.5rem);
+  border-radius: 1.3rem;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
   background:
-    radial-gradient(900px 420px at 80% 0%,
-      color-mix(in srgb, var(--primary) 12%, transparent),
-      transparent 60%),
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--surface) 70%, var(--surface-soft) 30%),
-      var(--surface));
+    radial-gradient(90% 70% at 15% 20%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%),
+    color-mix(in srgb, var(--surface, #fff) 78%, var(--surface-soft, #f3f6fb) 22%);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(320px, 2fr);
+  gap: clamp(1rem, 2vw, 1.4rem);
 }
 
-.contact-grid{
+.contact-channels__intro{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: clamp(1.1rem, 2vw, 1.6rem);
-  align-items: start;
-}
-
-.contact-card{
-  display: grid;
-  gap: 0.8rem;
+  gap: 0.25rem;
+  align-content: start;
   color: var(--midnight-blue);
-  padding: clamp(1.2rem, 2.4vw, 1.75rem);
-  border-radius: 1.2rem;
-  background: var(--glass);
-  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(12px);
 }
 
-.contact-card h3{
+.contact-channels__eyebrow{
   margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.contact-channels__title{
+  margin: 0;
+  font-weight: 820;
   font-size: 1.2rem;
   letter-spacing: -0.01em;
 }
 
-.contact-card p{
+.contact-channels__text{
   margin: 0;
   color: var(--text-subtle);
-  line-height: 1.6;
+  line-height: 1.55;
 }
 
-.contact-list{
-  list-style: none;
-  padding: 0;
-  margin: 0.4rem 0 0;
+.contact-channels__list{
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.65rem;
 }
 
-.contact-list li{
-  display: flex;
-  gap: 0.6rem;
-  align-items: baseline;
-  color: var(--text);
-}
-
-.contact-list span{
-  font-weight: 700;
-  color: var(--midnight-blue);
-}
-
-.contact-actions{
+.contact-chip{
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-}
-
-.contact-card--form form { display: grid; gap: 1rem; }
-
-.field{
-  display: grid;
-  gap: 0.3rem;
-  font-weight: 700;
+  gap: 0.7rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 1rem;
+  text-decoration: none;
+  background: color-mix(in srgb, var(--surface, #fff) 85%, var(--very-light-blue) 15%);
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
   color: var(--midnight-blue);
+  transition: transform .18s ease, box-shadow .22s ease, border-color .22s ease;
 }
 
-.contact-card input,
-.contact-card textarea {
+.contact-chip:hover{
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 24%, transparent);
+  box-shadow: 0 14px 26px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+}
+
+.contact-chip:focus-visible{
+  outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  outline-offset: 3px;
+}
+
+.contact-chip__icon{
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent-soft) 50%, white 50%);
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+}
+
+.contact-chip__icon img{
   width: 100%;
-  padding: 1rem;
-  background: color-mix(in srgb, var(--surface-2) 88%, transparent);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 10px;
-  transition:
-    border-color var(--transition-base),
-    box-shadow var(--transition-base),
-    background var(--transition-base),
-    color var(--transition-base);
+  height: 100%;
+  object-fit: contain;
 }
 
-.contact-card input:focus,
-.contact-card textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: var(--focus);
+.contact-chip__body{
+  display: grid;
+  gap: 0.15rem;
 }
 
-.contact-card input::placeholder,
-.contact-card textarea::placeholder {
+.contact-chip__body strong{
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.contact-chip__body small{
   color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 /* =========================
