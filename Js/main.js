@@ -152,7 +152,10 @@ function bootstrap() {
   }
 
   // loader fallback (caso load nunca chegue / algo trave)
-  loaderFallbackTimeoutId = window.setTimeout(finalizeOnce, 2500);
+  loaderFallbackTimeoutId = window.setTimeout(() => {
+    console.warn("Loader finalizado por fallback após timeout.");
+    finalizeOnce();
+  }, 3500);
 
   // start visuals: se já carregou, roda; senão no load (once)
   if (document.readyState === "complete") {
