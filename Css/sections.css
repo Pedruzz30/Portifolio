@@ -167,37 +167,81 @@
 }
 
 .hero-panel{
-  padding: 0.9rem 1.05rem;
+  padding: 1rem 1.1rem;
   border-radius: 1rem;
-  background: color-mix(in srgb, var(--pure-white) 14%, rgba(255,255,255,0.12));
-  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
-  backdrop-filter: blur(12px);
+  background: color-mix(
+    in srgb,
+    var(--pure-white) 10%,
+    rgba(255,255,255,0.08)
+  );
+  border: 1px solid color-mix(
+    in srgb,
+    var(--accent) 22%,
+    var(--border)
+  );
+  backdrop-filter: blur(14px) saturate(1.1);
   box-shadow: var(--shadow-sm);
 }
 
+/* Gradiente de borda real (não quebra o border-radius) */
 .hero-panel--border{
-  border-image: var(--gradient-pop) 1;
+  position: relative;
 }
 
+.hero-panel--border::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--gradient-pop);
+  pointer-events: none;
+
+  /* WebKit (Chrome/Safari) */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+
+  /* Standard (Firefox e afins) */
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+
 .hero-panel__eyebrow{
-  margin: 0 0 .35rem;
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  margin: 0 0 .4rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--surface-soft) 92%, rgba(255,255,255,0.82));
+  font-weight: 600;
+  color: color-mix(
+    in srgb,
+    var(--surface-soft) 88%,
+    rgba(255,255,255,0.7)
+  );
 }
 
 .hero-panel__title{
-  margin: 0 0 .25rem;
-  font-size: 1rem;
+  margin: 0 0 .3rem;
+  font-size: 1.05rem;
   font-weight: 800;
+  line-height: 1.2;
 }
 
 .hero-panel__text{
   margin: 0;
-  color: color-mix(in srgb, var(--surface-soft) 90%, rgba(255,255,255,0.76));
-  line-height: 1.5;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: color-mix(
+    in srgb,
+    var(--surface-soft) 85%,
+    rgba(255,255,255,0.65)
+  );
 }
+
 
 .text-reveal {
   font-size: 5rem;
