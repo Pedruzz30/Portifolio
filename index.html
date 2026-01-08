@@ -24,7 +24,7 @@
       <nav class="nav" aria-label="Navegação principal">
         <ul class="nav__list" role="list">
           <li><a class="nav__link" data-nav href="#hero-title">Início</a></li>
-          <li><a class="nav__link" data-nav href="#skills2-title">Stack</a></li>
+          <li><a class="nav__link" data-nav href="#skills2-title">Roadmap</a></li>
           <li><a class="nav__link" data-nav href="#portfolio-title">Portfólio</a></li>
           <li><a class="nav__link" data-nav href="#contact-title">Contato</a></li>
         </ul>
@@ -122,263 +122,196 @@
       </div>
     </section>
 
-     <section class="skills2" aria-labelledby="skills2-title" data-section>
-      <div class="skills2-shell">
-        <header class="skills2-header">
-          <div class="skills2-heading">
-            <h2 id="skills2-title">STACK JAVA EM EVOLUÇÃO</h2>
-            <p class="skills2-subtitle">
-              Estou focando em aprender Java e seus frameworks com profundidade. Minha rotina prioriza
-              fundamentos sólidos, APIs com Spring Boot e persistência bem estruturada — tudo com
-              estudo diário, projetos reais e melhoria contínua.
+     <section class="stack-roadmap" aria-labelledby="skills2-title" data-section>
+      <div class="stack-roadmap__shell">
+        <header class="stack-roadmap__header">
+          <div class="stack-roadmap__heading">
+            <p class="stack-roadmap__eyebrow">Java Roadmap</p>
+            <h2 id="skills2-title">Roadmap de Estudos em Java</h2>
+            <p class="stack-roadmap__subtitle">
+              Sou estudante e estou evoluindo etapa por etapa, mantendo o foco em fundamentos sólidos,
+              back-end com Spring e prática constante com projetos reais.
             </p>
           </div>
 
-          <div class="skills2-badges" role="list">
-            <span class="skills2-badge skills2-badge--accent" role="listitem">Java + Spring na rotina</span>
-            <span class="skills2-badge" role="listitem">Aprendizado guiado por projetos</span>
-            <span class="skills2-badge skills2-badge--ghost" role="listitem">Qualidade, testes e clareza</span>
+          <div class="stack-roadmap__progress" aria-label="Progresso do roadmap">
+            <div class="stack-roadmap__progress-top">
+              <div>
+                <p class="stack-roadmap__progress-label">Progresso atual</p>
+                <p class="stack-roadmap__progress-value" data-roadmap-value>0%</p>
+              </div>
+              <p class="stack-roadmap__progress-caption" data-roadmap-caption>0 de 5 etapas em andamento</p>
+            </div>
+            <div class="stack-roadmap__progress-bar" role="presentation">
+              <span class="stack-roadmap__progress-fill" aria-hidden="true"></span>
+            </div>
+            <div class="stack-roadmap__progress-steps" role="list">
+              <span class="stack-roadmap__progress-step" role="listitem">Agora</span>
+              <span class="stack-roadmap__progress-step" role="listitem">Em progresso</span>
+              <span class="stack-roadmap__progress-step" role="listitem">Próximo</span>
+              <span class="stack-roadmap__progress-step" role="listitem">Futuro</span>
+              <span class="stack-roadmap__progress-step" role="listitem">Projetos</span>
+            </div>
           </div>
         </header>
 
-        <div class="skills2-layout">
-          <article class="skills2-card skills2-card--tracks" aria-label="Trilhas de aprendizado">
-            <div class="skills2-cardTop">
-              <h3 class="skills2-cardTitle">Trilhas</h3>
-              <p class="skills2-cardHint">Minha curva de aprendizado focada em Java</p>
-              <div class="skills2-cardRibbon" aria-hidden="true">
-                <span class="skills2-ribbonDot"></span>
-                <span>Estudando todos os dias e registrando evolução</span>
+        <div class="stack-roadmap__timeline" aria-label="Etapas do roadmap">
+          <article class="stack-roadmap__step" data-status="now">
+            <div class="stack-roadmap__card">
+              <div class="stack-roadmap__card-head">
+                <span class="stack-roadmap__badge stack-roadmap__badge--now">Agora</span>
+                <p class="stack-roadmap__step-title">Onde estou agora</p>
+                <p class="stack-roadmap__step-desc">Base sólida em Java, rotina diária e foco em clareza de código.</p>
               </div>
-            </div>
-
-            <ol class="skills2-tracks" role="list">
-              <li class="skills2-track" style="--tone: var(--java-orange)">
-                <div class="skills2-dot" aria-hidden="true"></div>
-                <div class="skills2-trackBody">
-                  <div class="skills2-trackHead">
-                    <strong>Fundamentos Java</strong>
-                    <span class="skills2-level">Base</span>
-                  </div>
-                  <p>POO, coleções, exceções, boas práticas e testes unitários para código previsível.</p>
-                  <div class="skills2-trackTags" aria-label="Itens de foco">
-                    <span class="skills2-trackTag">POO</span>
-                    <span class="skills2-trackTag">Coleções</span>
-                    <span class="skills2-trackTag skills2-trackTag--accent">JUnit 5</span>
-                  </div>
-                  <div class="skills2-progress" aria-hidden="true">
-                    <span class="skills2-progressFill" data-progress="0.66" style="--progress: 0.66"></span>
-                  </div>
-                </div>
-                <div class="skills2-trackMeta" aria-label="Nível atual">
-                  <span class="skills2-metaLabel">Cadência</span>
-                  <span class="skills2-metaValue">Diária</span>
-                </div>
-              </li>
-
-              <li class="skills2-track" style="--tone: var(--bright-blue)">
-                <div class="skills2-dot" aria-hidden="true"></div>
-                <div class="skills2-trackBody">
-                  <div class="skills2-trackHead">
-                    <strong>Spring Boot & APIs</strong>
-                    <span class="skills2-level">Em evolução</span>
-                  </div>
-                  <p>Construção de APIs REST, camadas bem separadas e segurança básica aplicada.</p>
-                  <div class="skills2-trackTags" aria-label="Itens de foco">
-                    <span class="skills2-trackTag skills2-trackTag--accent">Spring Web</span>
-                    <span class="skills2-trackTag">Spring Security</span>
-                    <span class="skills2-trackTag">Validação</span>
-                  </div>
-                  <div class="skills2-progress" aria-hidden="true">
-                    <span class="skills2-progressFill" data-progress="0.58" style="--progress: 0.58"></span>
+              <details class="stack-roadmap__details" open>
+                <summary class="stack-roadmap__summary">
+                  <span class="stack-roadmap__summary-label">Ver tópicos essenciais</span>
+                  <span class="stack-roadmap__summary-icon" aria-hidden="true"></span>
+                </summary>
+                <div class="stack-roadmap__content">
+                  <div class="stack-roadmap__content-inner">
+                    <ul class="stack-roadmap__list" role="list">
+                      <li>Fundamentos: sintaxe, OOP, Collections, Exceptions.</li>
+                      <li>Java moderno: Generics, Streams, Lambdas, Date/Time, IO/NIO.</li>
+                      <li>Boas práticas: Clean Code + princípios SOLID.</li>
+                      <li>Ferramentas diárias: Git/GitHub, IntelliJ e debug básico.</li>
+                    </ul>
+                    <div class="stack-roadmap__projects">
+                      <p class="stack-roadmap__projects-title">Projetos sugeridos</p>
+                      <ul class="stack-roadmap__projects-list" role="list">
+                        <li>CLI de organização de estudos com Collections e arquivos.</li>
+                        <li>Cadastro simples em console com validações e testes unitários.</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-                <div class="skills2-trackMeta" aria-label="Nível atual">
-                  <span class="skills2-metaLabel">Entrega</span>
-                  <span class="skills2-metaValue">Semanal</span>
-                </div>
-              </li>
-
-              <li class="skills2-track" style="--tone: var(--java-ember)">
-                <div class="skills2-dot" aria-hidden="true"></div>
-                <div class="skills2-trackBody">
-                  <div class="skills2-trackHead">
-                    <strong>Persistência & Dados</strong>
-                    <span class="skills2-level">Aplicando</span>
-                  </div>
-                  <p>Banco relacional com SQL, ORM bem configurado e consultas com performance.</p>
-                  <div class="skills2-trackTags" aria-label="Itens de foco">
-                    <span class="skills2-trackTag">SQL</span>
-                    <span class="skills2-trackTag skills2-trackTag--accent">Spring Data JPA</span>
-                    <span class="skills2-trackTag">Hibernate</span>
-                  </div>
-                  <div class="skills2-progress" aria-hidden="true">
-                    <span class="skills2-progressFill" data-progress="0.62" style="--progress: 0.62"></span>
-                  </div>
-                </div>
-                <div class="skills2-trackMeta" aria-label="Nível atual">
-                  <span class="skills2-metaLabel">Banco</span>
-                  <span class="skills2-metaValue">Prática</span>
-                </div>
-              </li>
-            </ol>
-
-            <div class="skills2-actions">
-              <a class="btn btn--soft btn--pill btn--ripple" href="#portfolio-title">
-                <span class="btn__label">Ver projetos</span>
-              </a>
-              <span class="skills2-pill" aria-label="Cadência">Evolução diária</span>
-              <span class="skills2-pill skills2-pill--glow" aria-label="Rotina">Roadmap Java bem definido</span>
+              </details>
             </div>
           </article>
 
-          <aside class="skills2-card skills2-card--stack" aria-label="Ferramentas atuais">
-            <div class="skills2-cardTop">
-              <h3 class="skills2-cardTitle">Stack Java</h3>
-              <p class="skills2-cardHint">Frameworks e ferramentas que estou aprofundando</p>
+          <article class="stack-roadmap__step" data-status="progress">
+            <div class="stack-roadmap__card">
+              <div class="stack-roadmap__card-head">
+                <span class="stack-roadmap__badge stack-roadmap__badge--progress">Em progresso</span>
+                <p class="stack-roadmap__step-title">Próximos passos</p>
+                <p class="stack-roadmap__step-desc">Aplicar o core do Spring Boot com APIs REST bem organizadas.</p>
+              </div>
+              <details class="stack-roadmap__details">
+                <summary class="stack-roadmap__summary">
+                  <span class="stack-roadmap__summary-label">Detalhar etapa</span>
+                  <span class="stack-roadmap__summary-icon" aria-hidden="true"></span>
+                </summary>
+                <div class="stack-roadmap__content">
+                  <div class="stack-roadmap__content-inner">
+                    <ul class="stack-roadmap__list" role="list">
+                      <li>HTTP/REST, JSON e Spring Boot (core) com Spring Web.</li>
+                      <li>Validation, organização por camadas e DTOs.</li>
+                      <li>Builds com Maven/Gradle e logs introdutórios.</li>
+                      <li>Testes: JUnit + Mockito em serviços simples.</li>
+                    </ul>
+                    <div class="stack-roadmap__projects">
+                      <p class="stack-roadmap__projects-title">Projetos sugeridos</p>
+                      <ul class="stack-roadmap__projects-list" role="list">
+                        <li>API de cadastro de clientes com validação e documentação simples.</li>
+                        <li>API de hábitos com CRUD, filtros e logs básicos.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </details>
             </div>
-
-            <div class="skills2-stackGrid">
-              <div class="skills2-stackCol">
-                <ul class="skills2-chips" role="list">
-                  <li><span class="skills2-chip skills2-chip--main">Java</span></li>
-                  <li><span class="skills2-chip">Spring Boot</span></li>
-                  <li><span class="skills2-chip">Spring Web</span></li>
-                  <li><span class="skills2-chip">Spring Data JPA</span></li>
-                  <li><span class="skills2-chip">Spring Security</span></li>
-                  <li><span class="skills2-chip">Hibernate</span></li>
-                  <li><span class="skills2-chip">SQL</span></li>
-                  <li><span class="skills2-chip">JUnit</span></li>
-                  <li><span class="skills2-chip">Maven + Gradle</span></li>
-                </ul>
-
-               <div class="skills2-legend">
-                  <span class="skills2-legendDot skills2-legendDot--primary" aria-hidden="true"></span>
-                  <p>Core do momento: Java + Spring + SQL</p>
-                </div>
-
-                <div class="skills2-tools" role="list" aria-label="Stack visual em uso">
-                  <div class="skills2-tool" style="--tone: var(--java-orange)" role="listitem">
-                    <span class="skills2-toolIcon">
-                      <img src="assets/SVG-Linguagens/JAVA-SVG.png" alt="Java" loading="lazy">
-                    </span>
-                    <div class="skills2-toolBody">
-                      <span class="skills2-toolLabel">Java</span>
-                      <span class="skills2-toolMeta">Linguagem base da stack</span>
-                    </div>
-                  </div>
-
-                  <div class="skills2-tool" style="--tone: var(--bright-blue)" role="listitem">
-                    <span class="skills2-toolIcon">
-                      <img src="assets/SVG-Linguagens/JAVA-SVG.png" alt="Spring Boot" loading="lazy">
-                    </span>
-                    <div class="skills2-toolBody">
-                      <span class="skills2-toolLabel">Spring Boot</span>
-                      <span class="skills2-toolMeta">APIs, camadas e organização</span>
-                    </div>
-                  </div>
-
-                  <div class="skills2-tool" style="--tone: var(--java-ember)" role="listitem">
-                    <span class="skills2-toolIcon">
-                      <img src="assets/SVG-Linguagens/SQL-SVG.png" alt="SQL" loading="lazy">
-                    </span>
-                    <div class="skills2-toolBody">
-                      <span class="skills2-toolLabel">SQL</span>
-                      <span class="skills2-toolMeta">Modelagem e performance</span>
-                    </div>
-                  </div>
-
-                  <div class="skills2-tool" style="--tone: var(--violet)" role="listitem">
-                    <span class="skills2-toolIcon">
-                      <img src="assets/SVG-Linguagens/intellij-SVG.png" alt="IntelliJ IDEA" loading="lazy">
-                    </span>
-                    <div class="skills2-toolBody">
-                      <span class="skills2-toolLabel">IntelliJ IDEA</span>
-                      <span class="skills2-toolMeta">IDE para produtividade e debug</span>
-                    </div>
-                  </div>
-
-                  <div class="skills2-tool" style="--tone: var(--primary)" role="listitem">
-                    <span class="skills2-toolIcon">
-                      <img src="assets/SVG-Linguagens/Vs-code-SVG.png" alt="VS Code" loading="lazy">
-                    </span>
-                    <div class="skills2-toolBody">
-                      <span class="skills2-toolLabel">VS Code</span>
-                      <span class="skills2-toolMeta">Documentação e apoio rápido</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="skills2-stackCol skills2-stackCol--meters">
-                <div class="skills2-meter">
-                  <div class="skills2-meterHead">
-                    <p class="skills2-meterLabel">Java + Spring</p>
-                    <span class="skills2-meterValue">Prioridade</span>
-                  </div>
-                  <div class="skills2-meterBar" aria-hidden="true">
-                    <span class="skills2-meterFill" data-progress="0.82" style="--progress: 0.82"></span>
-                  </div>
-                </div>
-                <div class="skills2-meter">
-                  <div class="skills2-meterHead">
-                    <p class="skills2-meterLabel">Banco de dados</p>
-                    <span class="skills2-meterValue">Consolidação</span>
-                  </div>
-                  <div class="skills2-meterBar" aria-hidden="true">
-                    <span class="skills2-meterFill" data-progress="0.68" style="--progress: 0.68"></span>
-                  </div>
-                </div>
-                <div class="skills2-meter">
-                  <div class="skills2-meterHead">
-                    <p class="skills2-meterLabel">Testes</p>
-                    <span class="skills2-meterValue">Prática</span>
-                  </div>
-                  <div class="skills2-meterBar" aria-hidden="true">
-                    <span class="skills2-meterFill" data-progress="0.61" style="--progress: 0.61"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="skills2-mini skills2-mini--grid">
-              <div class="skills2-miniRow">
-                <p class="skills2-miniLabel">Foco</p>
-                <p class="skills2-miniValue">Java + Spring Boot + SQL</p>
-              </div>
-              <div class="skills2-miniRow">
-                <p class="skills2-miniLabel">Padrão</p>
-                <p class="skills2-miniValue">Clean Code + SOLID + testes</p>
-              </div>
-              <div class="skills2-miniRow">
-                <p class="skills2-miniLabel">Ferramental</p>
-                <p class="skills2-miniValue">IntelliJ, Git, Postman</p>
-              </div>
-              <div class="skills2-miniRow">
-                <p class="skills2-miniLabel">Rotina</p>
-                <p class="skills2-miniValue">Estudo, aplico, documento</p>
-              </div>
-            </div>
-          </aside>
-        </div>
-
-        <div class="skills2-metrics" role="list">
-          <article class="skills2-metric" role="listitem">
-            <p class="skills2-mLabel">RITMO</p>
-            <p class="skills2-mStrong">Aprendizado diário em Java</p>
-            <p class="skills2-mText">Revisões frequentes, exercícios práticos e anotação do progresso.</p>
           </article>
 
-          <article class="skills2-metric" role="listitem">
-            <p class="skills2-mLabel">ENTREGA</p>
-            <p class="skills2-mStrong">APIs completas com Spring</p>
-            <p class="skills2-mText">Do estudo à aplicação real: endpoints e serviços bem definidos.</p>
+          <article class="stack-roadmap__step" data-status="next">
+            <div class="stack-roadmap__card">
+              <div class="stack-roadmap__card-head">
+                <span class="stack-roadmap__badge stack-roadmap__badge--next">Próximo</span>
+                <p class="stack-roadmap__step-title">Caminho intermediário</p>
+                <p class="stack-roadmap__step-desc">Persistência profissional, bancos relacionais e mais testes.</p>
+              </div>
+              <details class="stack-roadmap__details">
+                <summary class="stack-roadmap__summary">
+                  <span class="stack-roadmap__summary-label">Detalhar etapa</span>
+                  <span class="stack-roadmap__summary-icon" aria-hidden="true"></span>
+                </summary>
+                <div class="stack-roadmap__content">
+                  <div class="stack-roadmap__content-inner">
+                    <ul class="stack-roadmap__list" role="list">
+                      <li>Spring Data JPA, Hibernate e mapeamentos essenciais.</li>
+                      <li>SQL (MySQL/Postgres), modelagem básica e consultas claras.</li>
+                      <li>Migrations com Flyway/Liquibase e logs mais consistentes.</li>
+                      <li>Testes de integração básicos com banco local.</li>
+                    </ul>
+                    <div class="stack-roadmap__projects">
+                      <p class="stack-roadmap__projects-title">Projetos sugeridos</p>
+                      <ul class="stack-roadmap__projects-list" role="list">
+                        <li>API de pedidos com relacionamentos e migrations.</li>
+                        <li>Relatório paginado com filtros e ordenação.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </div>
           </article>
 
-          <article class="skills2-metric" role="listitem">
-            <p class="skills2-mLabel">QUALIDADE</p>
-            <p class="skills2-mStrong">Testes + organização</p>
-            <p class="skills2-mText">Camadas claras, padrões consistentes e manutenção tranquila.</p>
+          <article class="stack-roadmap__step" data-status="future">
+            <div class="stack-roadmap__card">
+              <div class="stack-roadmap__card-head">
+                <span class="stack-roadmap__badge stack-roadmap__badge--future">Futuro</span>
+                <p class="stack-roadmap__step-title">Avançado</p>
+                <p class="stack-roadmap__step-desc">Segurança, deploy e infraestrutura básica para produção.</p>
+              </div>
+              <details class="stack-roadmap__details">
+                <summary class="stack-roadmap__summary">
+                  <span class="stack-roadmap__summary-label">Detalhar etapa</span>
+                  <span class="stack-roadmap__summary-icon" aria-hidden="true"></span>
+                </summary>
+                <div class="stack-roadmap__content">
+                  <div class="stack-roadmap__content-inner">
+                    <ul class="stack-roadmap__list" role="list">
+                      <li>Spring Security + JWT para autenticação e autorização.</li>
+                      <li>Docker básico e deploy simples (Render/Railway/Fly.io).</li>
+                      <li>CI básico com GitHub Actions.</li>
+                      <li>Extras depois: mensageria com RabbitMQ/Kafka.</li>
+                    </ul>
+                    <div class="stack-roadmap__projects">
+                      <p class="stack-roadmap__projects-title">Projetos sugeridos</p>
+                      <ul class="stack-roadmap__projects-list" role="list">
+                        <li>API com login JWT e refresh token simples.</li>
+                        <li>Deploy automatizado com pipeline básico.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </article>
+
+          <article class="stack-roadmap__step" data-status="future">
+            <div class="stack-roadmap__card">
+              <div class="stack-roadmap__card-head">
+                <span class="stack-roadmap__badge stack-roadmap__badge--future">Futuro</span>
+                <p class="stack-roadmap__step-title">Projetos sugeridos por etapa</p>
+                <p class="stack-roadmap__step-desc">Ideias curtas para aplicar cada fase sem forçar nível.</p>
+              </div>
+              <details class="stack-roadmap__details">
+                <summary class="stack-roadmap__summary">
+                  <span class="stack-roadmap__summary-label">Ver sugestões</span>
+                  <span class="stack-roadmap__summary-icon" aria-hidden="true"></span>
+                </summary>
+                <div class="stack-roadmap__content">
+                  <div class="stack-roadmap__content-inner">
+                    <ul class="stack-roadmap__projects-stage" role="list">
+                      <li><strong>Agora:</strong> gerenciador de estudos com Collections e IO.</li>
+                      <li><strong>Curto prazo:</strong> API REST de tarefas com validação.</li>
+                      <li><strong>Intermediário:</strong> catálogo com JPA + migrations.</li>
+                      <li><strong>Avançado:</strong> API segura com JWT + deploy.</li>
+                    </ul>
+                  </div>
+                </div>
+              </details>
+            </div>
           </article>
         </div>
       </div>

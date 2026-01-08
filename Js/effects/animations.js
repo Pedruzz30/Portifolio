@@ -93,45 +93,18 @@ export function initAnimations({
   textMask,
   serviceCards = [],
   portfolioItems = [],
-  skillsCards = [],
-  skillsMetrics = [],
-  skillsBadges = [],
-  skillsTrackBars = [],
-  skillsMeters = [],
 }) {
   const revealText = textReveal.filter(Boolean);
   const services = serviceCards.filter(Boolean);
   const portfolio = portfolioItems.filter(Boolean);
-  const skillCards = skillsCards.filter(Boolean);
-  const skillMetrics = skillsMetrics.filter(Boolean);
-  const skillBadges = skillsBadges.filter(Boolean);
-  const trackBars = skillsTrackBars.filter(Boolean);
-  const meterBars = skillsMeters.filter(Boolean);
-  const progressBars = [...trackBars, ...meterBars];
 
   const cleanups = [];
-
-  const clampProgress = (value) => {
-    const numeric = Number.parseFloat(value);
-    if (Number.isNaN(numeric)) return 0;
-    return Math.min(1, Math.max(0, numeric));
-  };
-
-  const fillProgressInstant = (bars) => {
-    bars.forEach((bar) => {
-      const target = clampProgress(bar.dataset.progress);
-      bar.style.width = `${target * 100}%`;
-    });
-  };
 
   const showEverything = () => {
     heroContent?.classList.add("visible");
     revealText.forEach((el) => (el.style.transform = "translateY(0)"));
     services.forEach((el) => el.classList.add("visible"));
     portfolio.forEach((el) => el.classList.add("visible"));
-    skillCards.forEach((el) => (el.style.opacity = "1"));
-    skillMetrics.forEach((el) => (el.style.opacity = "1"));
-    skillBadges.forEach((el) => (el.style.opacity = "1"));
     if (textMask) {
       textMask.style.clipPath = "polygon(0 0,100% 0,100% 100%,0 100%)";
     }
@@ -194,51 +167,6 @@ export function initAnimations({
         });
       },
     });
-
-     const skillReveals = [...skillCards, ...skillMetrics, ...skillBadges];
-
-    if (skillReveals.length) {
-      gsap.set(skillReveals, { opacity: 0, y: 30 });
-
-      ScrollTrigger.batch(skillReveals, {
-        start: "top 82%",
-        once: true,
-        onEnter: (batch) => {
-          gsap.to(batch, {
-            opacity: 1,
-            y: 0,
-            stagger: 0.08,
-            duration: 0.7,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        },
-      });
-    }
-
-    const animateBars = (bars) => {
-      if (!bars.length) return;
-
-      gsap.set(bars, { width: 0 });
-
-      ScrollTrigger.batch(bars, {
-        start: "top 88%",
-        once: true,
-        onEnter: (batch) => {
-          batch.forEach((bar) => {
-            const target = clampProgress(bar.dataset.progress);
-            gsap.to(bar, {
-              width: `${target * 100}%`,
-              duration: 0.9,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          });
-        },
-      });
-    };
-
-    animateBars(progressBars);
 
     try {
       ScrollTrigger.refresh();

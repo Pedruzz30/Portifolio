@@ -15,6 +15,47 @@
   .skills2-mini--grid{ grid-template-columns: 1fr; }
 }
 
+@media (min-width: 980px){
+  .stack-roadmap__header{
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: end;
+  }
+
+  .stack-roadmap__timeline{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 3vw, 2.6rem);
+  }
+
+  .stack-roadmap__timeline::before{
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .stack-roadmap__step{
+    padding-left: 0;
+  }
+
+  .stack-roadmap__step:nth-child(odd){
+    grid-column: 1;
+    padding-right: 2.2rem;
+  }
+
+  .stack-roadmap__step:nth-child(even){
+    grid-column: 2;
+    padding-left: 2.2rem;
+  }
+
+  .stack-roadmap__step::before{
+    left: auto;
+    right: -9px;
+  }
+
+  .stack-roadmap__step:nth-child(even)::before{
+    left: -9px;
+    right: auto;
+  }
+}
+
 @media (max-width: 980px){
   .portfolio2-grid{ grid-template-columns: 1fr; }
 }

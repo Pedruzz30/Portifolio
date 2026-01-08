@@ -3,6 +3,7 @@ import { setupMenu } from "./Ui/menu.js";
 import { setupScrollUI } from "./Ui/scroll.js";
 import { setupRipple } from "./Ui/ripple.js";
 import { initAnimations } from "./effects/animations.js";
+import { setupRoadmap } from "./Ui/roadmap.js";
 
 function bootstrap() {
   // abort controller para matar TODOS listeners de uma vez
@@ -25,11 +26,12 @@ function bootstrap() {
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
-    skillsCards: Array.from(document.querySelectorAll(".skills2-card")),
-    skillsMetrics: Array.from(document.querySelectorAll(".skills2-metric")),
-    skillsBadges: Array.from(document.querySelectorAll(".skills2-badge")),
-    skillsTrackBars: Array.from(document.querySelectorAll(".skills2-progressFill")),
-    skillsMeters: Array.from(document.querySelectorAll(".skills2-meterFill")),
+     roadmapSection: document.querySelector(".stack-roadmap"),
+    roadmapSteps: Array.from(document.querySelectorAll(".stack-roadmap__step")),
+    roadmapProgressFill: document.querySelector(".stack-roadmap__progress-fill"),
+    roadmapProgressValue: document.querySelector("[data-roadmap-value]"),
+    roadmapProgressCaption: document.querySelector("[data-roadmap-caption]"),
+    roadmapProgressSteps: Array.from(document.querySelectorAll(".stack-roadmap__progress-step")),
   };
 
   // reduz motion centralizado (p/ usar em módulos se quiser)
@@ -91,12 +93,6 @@ function bootstrap() {
         textMask: elements.textMask,
         serviceCards: elements.serviceCards,
         portfolioItems: elements.portfolioItems,
-        skillsCards: elements.skillsCards,
-        skillsMetrics: elements.skillsMetrics,
-        skillsBadges: elements.skillsBadges,
-        skillsTrackBars: elements.skillsTrackBars,
-        skillsMeters: elements.skillsMeters,
-        prefersReducedMotion,
       });
     } finally {
       finalizeOnce();
@@ -134,6 +130,20 @@ function bootstrap() {
     setupRipple,
     { rippleButtons: elements.rippleButtons, prefersReducedMotion },
     (error) => console.warn("Ripple desabilitado:", error)
+  );
+
+   safelyInit(
+    setupRoadmap,
+    {
+      section: elements.roadmapSection,
+      steps: elements.roadmapSteps,
+      progressFill: elements.roadmapProgressFill,
+      progressValue: elements.roadmapProgressValue,
+      progressCaption: elements.roadmapProgressCaption,
+      progressSteps: elements.roadmapProgressSteps,
+      prefersReducedMotion,
+    },
+    (error) => console.warn("Roadmap desabilitado:", error)
   );
 
   // YEAR
