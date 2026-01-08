@@ -1,9 +1,9 @@
 import { finalizeLoader, safeGetComputedStyle } from "./utils/dom.js";
-import { setupMenu } from "./Ui/menu.js";
-import { setupScrollUI } from "./Ui/scroll.js";
-import { setupRipple } from "./Ui/ripple.js";
+import { setupMenu } from "./ui/menu.js";
+import { setupScrollUI } from "./ui/scroll.js";
+import { setupRipple } from "./ui/ripple.js";
 import { initAnimations } from "./effects/animations.js";
-import { setupRoadmap } from "./Ui/roadmap.js";
+import { setupRoadmap } from "./ui/roadmap.js";
 
 function bootstrap() {
   // abort controller para matar TODOS listeners de uma vez
