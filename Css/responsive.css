@@ -54,6 +54,16 @@
     left: -9px;
     right: auto;
   }
+
+  .stack-roadmap__step::after{
+    left: auto;
+    right: -22px;
+  }
+
+  .stack-roadmap__step:nth-child(even)::after{
+    left: -22px;
+    right: auto;
+  }
 }
 
 @media (max-width: 980px){
