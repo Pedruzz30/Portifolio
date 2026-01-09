@@ -1,9 +1,9 @@
 import { finalizeLoader, safeGetComputedStyle } from "./utils/dom.js";
-import { setupMenu } from "./ui/menu.js";
-import { setupScrollUI } from "./ui/scroll.js";
-import { setupRipple } from "./ui/ripple.js";
+import { setupMenu } from "./components/menu.js";
+import { setupScrollUI } from "./components/scroll.js";
+import { setupRipple } from "./components/ripple.js";
 import { initAnimations } from "./effects/animations.js";
-import { setupRoadmap } from "./ui/roadmap.js";
+import { setupRoadmap } from "./components/roadmap.js";
 
 function bootstrap() {
   // abort controller para matar TODOS listeners de uma vez
@@ -103,6 +103,7 @@ function bootstrap() {
   safelyInit(
     setupMenu,
     {
+      header: elements.header,
       menuToggle: elements.menuToggle,
       menuSpans: elements.menuSpans,
       navOverlay: elements.navOverlay,
@@ -121,6 +122,7 @@ function bootstrap() {
       scrollProgress: elements.scrollProgress,
       scrollButtons: elements.scrollButtons,
       prefersReducedMotion,
+      navLinks: elements.navLinks,
     },
     (error) => console.error("Falha ao iniciar scroll UI:", error)
   );

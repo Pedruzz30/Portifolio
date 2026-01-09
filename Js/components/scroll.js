@@ -3,6 +3,7 @@ export function setupScrollUI({
   scrollProgress,      // esperado: elemento ".scroll-progress__bar"
   scrollButtons,
   prefersReducedMotion,
+  navLinks,
 }) {
   try {
     let rafId = null;
@@ -12,6 +13,8 @@ export function setupScrollUI({
     let lastHeaderOffset = null;
     let lastScrolled = null;
     let lastProgress = null;
+    let activeLink = null;
+    let sectionObserver = null;
 
     const reduceMotion =
       typeof prefersReducedMotion === "boolean"
@@ -35,6 +38,7 @@ export function setupScrollUI({
       lastHeaderOffset = offsetValue;
 
       root.style.setProperty("--header-offset", `${offsetValue}px`);
+      refreshSectionObserver();
     };
 
     const scrollWithOffset = (target) => {
@@ -77,6 +81,61 @@ export function setupScrollUI({
       // garante que o scaleX cresça da esquerda pra direita
       scrollProgress.style.transformOrigin = "left";
       scrollProgress.style.transform = `scaleX(${quantized})`;
+    };
+
+    const setActiveLink = (link) => {
+      if (!link || link === activeLink) return;
+
+      if (activeLink) {
+        activeLink.removeAttribute("aria-current");
+      }
+
+      link.setAttribute("aria-current", "page");
+      activeLink = link;
+    };
+
+    const getNavTargets = () => {
+      if (!navLinks || !navLinks.length) return [];
+
+      return navLinks
+        .map((link) => {
+          if (!link) return null;
+          const href = link.getAttribute("href");
+          if (!href || !href.startsWith("#")) return null;
+          const target = document.querySelector(href);
+          if (!target) return null;
+          return { link, target };
+        })
+        .filter(Boolean);
+    };
+
+    const refreshSectionObserver = () => {
+      if (!("IntersectionObserver" in window)) return;
+
+      const targets = getNavTargets();
+      if (!targets.length) return;
+
+      if (sectionObserver) {
+        sectionObserver.disconnect();
+        sectionObserver = null;
+      }
+
+      const offset = getHeaderOffset();
+      sectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const matched = targets.find((item) => item.target === entry.target);
+            if (matched) setActiveLink(matched.link);
+          });
+        },
+        {
+          rootMargin: `-${Math.round(offset)}px 0px -55% 0px`,
+          threshold: 0.1,
+        }
+      );
+
+      targets.forEach((item) => sectionObserver.observe(item.target));
     };
 
     const scheduleUpdate = () => {
@@ -122,6 +181,7 @@ export function setupScrollUI({
     updateHeaderOffset();
     updateHeaderOnScroll();
     updateScrollProgress();
+    refreshSectionObserver();
 
     const destroy = () => {
       if (scrollButtons && scrollButtons.length) {
@@ -137,6 +197,11 @@ export function setupScrollUI({
       if (resizeObserver) {
         resizeObserver.disconnect();
         resizeObserver = null;
+      }
+
+      if (sectionObserver) {
+        sectionObserver.disconnect();
+        sectionObserver = null;
       }
 
       if (rafId) {

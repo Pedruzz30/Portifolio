@@ -47,10 +47,12 @@ export function setupMenu({
     };
 
 
-    const setA11yState = (isOpen) => {
+   const setA11yState = (isOpen) => {
       menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
       if (overlay) overlay.setAttribute("aria-hidden", String(!isOpen));
     };
+
 
     const animateBurger = (isOpen) => {
       if (!spans.length || !window.gsap || reduceMotion) return;
