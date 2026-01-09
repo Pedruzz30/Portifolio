@@ -1,5 +1,14 @@
-export function setupRipple({ rippleButtons }) {
+export function setupRipple({ rippleButtons, prefersReducedMotion }) {
   if (!rippleButtons || !rippleButtons.length) return;
+
+  const reduceMotion =
+    typeof prefersReducedMotion === "boolean"
+      ? prefersReducedMotion
+      : window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+  if (reduceMotion) {
+    return { destroy: () => {} };
+  }
 
   const timers = new WeakMap(); // timeout por botão
 
@@ -70,5 +79,17 @@ export function setupRipple({ rippleButtons }) {
     button.addEventListener("keydown", handleKeydown);
   });
 
-  // opcional: cleanup se você quiser retornar destroy também
+   return {
+    destroy: () => {
+      rippleButtons.forEach((button) => {
+        if (!button) return;
+        button.removeEventListener("pointerdown", triggerRipple);
+        button.removeEventListener("keydown", handleKeydown);
+        const prev = timers.get(button);
+        if (prev) clearTimeout(prev);
+        timers.delete(button);
+      });
+    },
+  };
 }
+

@@ -11,18 +11,38 @@ function initLazyTilt(cards) {
     return () => {};
   }
 
-  const observer = new IntersectionObserver(
+  const idleHandles = new WeakMap();
+
+  const scheduleTilt = (el) => {
+    if (el.vanillaTilt) return;
+    const init = () => {
+      idleHandles.delete(el);
+      if (el.vanillaTilt) return;
+      window.VanillaTilt.init(el, {
+        max: 15,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2,
+      });
+    };
+
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(init, { timeout: 350 });
+      idleHandles.set(el, { type: "idle", id });
+    } else {
+      const id = window.setTimeout(init, 0);
+      idleHandles.set(el, { type: "timeout", id });
+    }
+  };
+
+    const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const el = entry.target;
 
         if (entry.isIntersecting && !el.vanillaTilt) {
-          window.VanillaTilt.init(el, {
-            max: 15,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.2,
-          });
+          scheduleTilt(el);
+          observer.unobserve(el);
         }
       });
     },
@@ -33,6 +53,16 @@ function initLazyTilt(cards) {
 
   return () => {
     observer.disconnect();
+    items.forEach((card) => {
+      const handle = idleHandles.get(card);
+      if (!handle) return;
+      if (handle.type === "idle" && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(handle.id);
+      } else {
+        clearTimeout(handle.id);
+      }
+      idleHandles.delete(card);
+    });
     items.forEach((card) => {
       try {
         card.vanillaTilt?.destroy();
@@ -108,7 +138,9 @@ export function initAnimations({
     if (textMask) {
       textMask.style.clipPath = "polygon(0 0,100% 0,100% 100%,0 100%)";
     }
-    fillProgressInstant(progressBars);
+    if (typeof window.fillProgressInstant === "function") {
+      window.fillProgressInstant();
+    }
   };
 
   if (prefersReducedMotion || !window.gsap) {
@@ -123,34 +155,44 @@ export function initAnimations({
   /* HERO */
   heroContent?.classList.add("visible");
 
-  /* TEXT REVEAL */
+  
+  /* TEXT REVEAL + MASK */
+  const introTimeline = gsap.timeline({
+    defaults: { overwrite: "auto", force3D: true },
+  });
+
   if (revealText.length) {
-    const tween = gsap.to(revealText, {
-      y: 0,
-      stagger: 0.07,
-      duration: 0.9,
-      ease: "power4.out",
-      delay: 0.15,
-    });
-    cleanups.push(() => tween.kill());
+    introTimeline.to(
+      revealText,
+      {
+        y: 0,
+        stagger: 0.07,
+        duration: 0.9,
+        ease: "power4.out",
+      },
+      0.15
+    );
   }
 
-  /* MASK */
   if (textMask) {
-    const tween = gsap.to(textMask, {
-      clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)",
-      duration: 1.2,
-      delay: 0.4,
-      ease: "power3.inOut",
-    });
-    cleanups.push(() => tween.kill());
+    introTimeline.to(
+      textMask,
+      {
+        clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)",
+        duration: 1.1,
+        ease: "power3.inOut",
+      },
+      0.3
+    );
   }
+
+  cleanups.push(() => introTimeline.kill());
 
   /* SCROLL REVEAL — BATCH */
   if (window.ScrollTrigger) {
     const items = [...services, ...portfolio];
 
-    gsap.set(items, { opacity: 0, y: 40 });
+    gsap.set(items, { opacity: 0, y: 40, force3D: true, willChange: "transform, opacity" });
 
     ScrollTrigger.batch(items, {
       start: "top 82%",
@@ -164,6 +206,7 @@ export function initAnimations({
           duration: 0.7,
           ease: "power2.out",
           overwrite: "auto",
+          onComplete: () => gsap.set(batch, { clearProps: "willChange" }),
         });
       },
     });
