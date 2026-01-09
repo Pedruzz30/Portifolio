@@ -29,27 +29,99 @@
 }
 
 /* =========================
-   HEADER
+   HEADER (Premium Glass)
    ========================= */
-.header {
+
+.header{
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
-  padding: 1.35rem 2.2rem;
-  z-index: 10;
-  background: color-mix(in srgb, var(--midnight-blue) 40%, transparent);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
-  transition: background-color 0.5s ease, padding 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+
+  z-index: 50;
+  padding: 1.2rem 2.2rem;
+
+  /* glass mais limpo + profundidade */
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--midnight-blue) 52%, transparent),
+      color-mix(in srgb, var(--midnight-blue) 38%, transparent)
+    );
+  backdrop-filter: blur(14px) saturate(1.15);
+
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  box-shadow: 0 10px 34px color-mix(in srgb, var(--midnight-blue) 25%, transparent);
+
+  transition:
+    background 420ms var(--ease-out, ease),
+    padding 420ms var(--ease-out, ease),
+    box-shadow 420ms var(--ease-out, ease),
+    border-color 420ms var(--ease-out, ease);
+  isolation: isolate;
+}
+
+/* glow sutil no topo (deixa mais “premium”) */
+.header::before{
+  content:"";
+  position:absolute;
+  inset: 0 0 auto 0;
+  height: 90px;
+  background:
+    radial-gradient(60% 90% at 20% 15%,
+      color-mix(in srgb, var(--accent) 20%, transparent),
+      transparent 70%),
+    radial-gradient(55% 90% at 80% 15%,
+      color-mix(in srgb, var(--bright-blue) 16%, transparent),
+      transparent 70%);
+  opacity: .45;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* estado “scrolled” (quando rola a página) */
+.header.scrolled{
+  padding: 0.85rem 2.2rem;
+
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--midnight-blue) 68%, transparent),
+      color-mix(in srgb, var(--midnight-blue) 50%, transparent)
+    );
+
+  border-bottom-color: color-mix(in srgb, var(--accent) 22%, var(--border));
+  box-shadow:
+    0 14px 44px color-mix(in srgb, var(--midnight-blue) 35%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent) inset;
 }
 
 .header-shell{
   max-width: 1180px;
   margin: 0 auto;
+
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 1rem;
   align-items: center;
+
+  /* evita “tremida” visual */
+  min-height: 52px;
+}
+
+/* mobile: padding mais esperto */
+@media (max-width: 720px){
+  .header{
+    padding: 1rem 1.15rem;
+  }
+  .header.scrolled{
+    padding: 0.75rem 1.15rem;
+  }
+}
+
+/* acessibilidade: reduz motion */
+@media (prefers-reduced-motion: reduce){
+  .header{
+    transition: none;
+  }
 }
 
 .header.scrolled {
