@@ -24,6 +24,7 @@
   .stack-roadmap__timeline{
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: clamp(1.5rem, 3vw, 2.6rem);
+     --rail-x: 50%;
   }
 
   .stack-roadmap__timeline::before{
@@ -37,32 +38,24 @@
 
   .stack-roadmap__step:nth-child(odd){
     grid-column: 1;
-    padding-right: 2.2rem;
+    padding-right: calc(var(--connector-length) + 1.4rem);
   }
 
   .stack-roadmap__step:nth-child(even){
     grid-column: 2;
-    padding-left: 2.2rem;
+    padding-left: calc(var(--connector-length) + 1.4rem);
   }
 
   .stack-roadmap__step::before{
-    left: auto;
-    right: -9px;
+    left: var(--rail-x);
   }
 
-  .stack-roadmap__step:nth-child(even)::before{
-    left: -9px;
-    right: auto;
+ .stack-roadmap__step::after{
+    left: calc(var(--rail-x) + (var(--node-size) / 2));
   }
 
-  .stack-roadmap__step::after{
-    left: auto;
-    right: -22px;
-  }
-
-  .stack-roadmap__step:nth-child(even)::after{
-    left: -22px;
-    right: auto;
+  .stack-roadmap__step:nth-child(odd)::after{
+    left: calc(var(--rail-x) - (var(--node-size) / 2) - var(--connector-length));
   }
 }
 

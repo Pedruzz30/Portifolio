@@ -2149,9 +2149,14 @@
 }
 
 .stack-roadmap__timeline{
+  --rail-x: 1.45rem;
+  --node-size: 18px;
+  --node-top: 1.3rem;
+  --connector-length: 1.35rem;
   display: grid;
   gap: clamp(1.1rem, 2vw, 1.6rem);
   position: relative;
+  isolation: isolate;
 }
 
 .stack-roadmap__timeline::before{
@@ -2159,17 +2164,21 @@
   position:absolute;
   top: 0;
   bottom: 0;
-  left: 18px;
+  left: var(--rail-x);
   width: 2px;
+  transform: translateX(-50%);
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--accent) 70%, transparent),
-    color-mix(in srgb, var(--primary) 60%, transparent),
-    transparent);
+    color-mix(in srgb, var(--primary) 55%, transparent),
+    color-mix(in srgb, var(--accent) 30%, transparent));
 }
 
 .stack-roadmap__step{
   position: relative;
-  padding-left: 2.8rem;
+  padding-left: calc(var(--rail-x) + var(--connector-length) + 1rem);
+  --node-color: color-mix(in srgb, var(--accent) 70%, var(--primary));
+  --node-glow: color-mix(in srgb, var(--accent) 30%, transparent);
+  --connector-color: color-mix(in srgb, var(--accent) 55%, var(--border));
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
@@ -2183,28 +2192,76 @@
 .stack-roadmap__step::before{
   content:"";
   position:absolute;
-  top: 1.35rem;
-  left: 9px;
-  width: 18px;
-  height: 18px;
+  top: var(--node-top);
+  left: var(--rail-x);
+  width: var(--node-size);
+  height: var(--node-size);
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--primary));
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 25%, transparent);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 35%,
+      color-mix(in srgb, var(--node-color) 85%, #fff 15%),
+      var(--node-color) 70%);
+  border: 1px solid color-mix(in srgb, var(--node-color) 60%, var(--border));
+  box-shadow: 0 0 0 6px var(--node-glow), 0 0 16px color-mix(in srgb, var(--node-color) 35%, transparent);
+  transition: box-shadow 240ms var(--ease-out), filter 240ms var(--ease-out);
 }
 
 .stack-roadmap__step::after{
-  content:"";
+  content:none;
   position: absolute;
-  top: 0.6rem;
-  left: -2px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-      color-mix(in srgb, var(--accent) 35%, transparent),
-      transparent 70%);
-  opacity: 0.45;
+  top: var(--node-top);
+  left: calc(var(--rail-x) + (var(--node-size) / 2));
+  width: var(--connector-length);
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg,
+      var(--connector-color),
+      color-mix(in srgb, var(--connector-color) 30%, transparent));
+  opacity: 0.8;
   pointer-events: none;
+  transition: opacity 240ms var(--ease-out), filter 240ms var(--ease-out);
+}
+
+.stack-roadmap__step[data-status="now"]{
+  --node-color: color-mix(in srgb, var(--accent) 70%, var(--primary));
+  --node-glow: color-mix(in srgb, var(--accent) 40%, transparent);
+  --connector-color: color-mix(in srgb, var(--accent) 75%, var(--primary));
+}
+
+.stack-roadmap__step[data-status="progress"]{
+  --node-color: color-mix(in srgb, var(--primary) 65%, var(--accent));
+  --node-glow: color-mix(in srgb, var(--primary) 35%, transparent);
+  --connector-color: color-mix(in srgb, var(--primary) 65%, var(--accent));
+}
+
+.stack-roadmap__step[data-status="next"]{
+  --node-color: color-mix(in srgb, var(--primary) 50%, var(--border));
+  --node-glow: color-mix(in srgb, var(--primary) 25%, transparent);
+  --connector-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+}
+
+.stack-roadmap__step[data-status="future"]{
+  --node-color: color-mix(in srgb, var(--border) 70%, var(--text-subtle));
+  --node-glow: color-mix(in srgb, var(--border) 35%, transparent);
+  --connector-color: color-mix(in srgb, var(--border) 75%, var(--text-subtle));
+}
+
+.stack-roadmap__step:hover::before,
+.stack-roadmap__step:focus-within::before{
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--node-color) 30%, transparent),
+    0 0 20px color-mix(in srgb, var(--node-color) 45%, transparent);
+}
+
+.stack-roadmap__step:hover::after,
+.stack-roadmap__step:focus-within::after{
+  opacity: 1;
+  filter: brightness(1.05);
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .stack-roadmap__step[data-status="now"]::before{
+    animation: pulseGlow 3.4s ease-in-out infinite;
+  }
 }
 
 .stack-roadmap__card{
