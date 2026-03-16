@@ -309,7 +309,7 @@
 }
 
 .stack-roadmap__step::after{
-  content:none;
+  content:"";
   position: absolute;
   top: var(--node-top);
   left: calc(var(--rail-x) + (var(--node-size) / 2));
@@ -560,6 +560,84 @@
 
 .stack-roadmap__projects-stage strong{
   color: var(--midnight-blue);
+}
+
+/* --- Card meta row (badge + duration) --- */
+.stack-roadmap__card-meta{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* --- Duration pill --- */
+.stack-roadmap__step-duration{
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+  background: color-mix(in srgb, var(--surface-soft) 80%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+}
+
+/* --- Tech tags --- */
+.stack-roadmap__tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.8rem;
+}
+
+.stack-roadmap__tag{
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--very-light-blue) 55%, var(--surface) 45%);
+  color: color-mix(in srgb, var(--accent) 80%, var(--midnight-blue));
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  letter-spacing: 0.03em;
+}
+
+.stack-roadmap__step[data-status="future"] .stack-roadmap__tag{
+  background: color-mix(in srgb, var(--surface-soft) 70%, transparent);
+  color: var(--text-subtle);
+  border-color: color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+/* --- Progress last updated --- */
+.stack-roadmap__progress-updated{
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stack-roadmap__progress-updated::before{
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+  flex-shrink: 0;
+}
+
+/* --- Animated border for active "now" card --- */
+@keyframes cardPulse{
+  0%,100%{ border-color: color-mix(in srgb, var(--accent) 16%, var(--border)); }
+  50%    { border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: var(--shadow-md), 0 0 18px color-mix(in srgb, var(--accent) 18%, transparent); }
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .stack-roadmap__step[data-status="now"] .stack-roadmap__card{
+    animation: cardPulse 4s ease-in-out infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce){
