@@ -2,7 +2,13 @@
 @import "./base.css";
 @import "./layout.css";
 @import "./components.css";
-@import "./sections.css";
+@import "./darkmode.css";
+@import "./hero.css";
+@import "./skills.css";
+@import "./roadmap.css";
+@import "./contact.css";
+@import "./footer.css";
+@import "./portfolio.css";
 @import "./utilities.css";
 @import "./animations.css";
 @import "./responsive.css";

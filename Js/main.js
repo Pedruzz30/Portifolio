@@ -4,6 +4,7 @@ import { setupScrollUI } from "./components/scroll.js";
 import { setupRipple } from "./components/ripple.js";
 import { initAnimations } from "./effects/animations.js";
 import { setupRoadmap } from "./components/roadmap.js";
+import { setupTheme } from "./components/theme.js";
 
 function bootstrap() {
   // abort controller para matar TODOS listeners de uma vez
@@ -26,7 +27,8 @@ function bootstrap() {
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
-     roadmapSection: document.querySelector(".stack-roadmap"),
+    themeToggle: document.querySelector(".theme-toggle"),
+    roadmapSection: document.querySelector(".stack-roadmap"),
     roadmapSteps: Array.from(document.querySelectorAll(".stack-roadmap__step")),
     roadmapProgressFill: document.querySelector(".stack-roadmap__progress-fill"),
     roadmapProgressValue: document.querySelector("[data-roadmap-value]"),
@@ -148,6 +150,13 @@ function bootstrap() {
     (error) => console.warn("Roadmap desabilitado:", error)
   );
 
+  // THEME TOGGLE
+  safelyInit(
+    setupTheme,
+    { toggleBtn: elements.themeToggle },
+    (error) => console.warn("Theme toggle desabilitado:", error)
+  );
+
   // YEAR
   if (elements.year) {
     elements.year.textContent = String(new Date().getFullYear());
@@ -157,7 +166,7 @@ function bootstrap() {
   loaderFallbackTimeoutId = window.setTimeout(() => {
     console.warn("Loader finalizado por fallback após timeout.");
     finalizeOnce();
-  }, 3500);
+  }, 1500);
 
   // start visuals: se já carregou, roda; senão no load (once)
   if (document.readyState === "complete") {
@@ -213,4 +222,3 @@ if (document.readyState === "loading") {
 } else {
   start();
 }
-

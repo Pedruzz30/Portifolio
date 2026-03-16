@@ -206,3 +206,38 @@
     animation-play-state: paused !important;
   }
 }
+/* =========================
+   Telas muito pequenas (360px)
+   ========================= */
+@media (max-width: 400px) {
+  .text-reveal { font-size: 2.4rem; }
+  .hero { padding: 120px 5% 60px; }
+  .hero-badges { flex-wrap: wrap; gap: 0.4rem; }
+  .hero-chip { font-size: 0.72rem; padding: 0.28em 0.7em; }
+  .hero-stats { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat { padding: 0.75rem; }
+  .stat__value { font-size: 1.3rem; }
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .contact-form__row { grid-template-columns: 1fr; }
+}
+
+/* =========================
+   Telas grandes (1440px+)
+   ========================= */
+@media (min-width: 1440px) {
+  .hero { padding: 140px 10% 100px; }
+  .portfolio-grid { grid-template-columns: repeat(3, 1fr); }
+  .stack-roadmap__shell { max-width: 1400px; }
+  .contact-shell { max-width: 1200px; }
+  .footer-inner { max-width: 1400px; }
+}
+
+/* =========================
+   Telas extra grandes (1920px+)
+   ========================= */
+@media (min-width: 1920px) {
+  :root { font-size: 18px; }
+  .section-shell,
+  .portfolio-shell,
+  .contact-shell { max-width: 1500px; }
+}

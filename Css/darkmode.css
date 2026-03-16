@@ -1,0 +1,95 @@
+/* =========================
+   DARK MODE
+   ========================= */
+
+[data-theme="dark"] {
+  --bg: color-mix(in srgb, var(--midnight-blue) 88%, var(--navy-blue) 12%);
+  --surface: color-mix(in srgb, var(--navy-blue) 72%, var(--midnight-blue) 28%);
+  --surface-2: color-mix(in srgb, var(--darker-blue) 60%, var(--navy-blue) 40%);
+  --surface-soft: color-mix(in srgb, var(--navy-blue) 80%, var(--darker-blue) 20%);
+
+  --text: var(--white-blue);
+  --text-muted: var(--light-blue);
+  --text-subtle: color-mix(in srgb, var(--sky-blue) 70%, var(--light-blue) 30%);
+
+  --primary: var(--bright-blue);
+  --primary-hover: color-mix(in srgb, var(--sky-blue) 82%, var(--bright-blue));
+  --primary-soft: color-mix(in srgb, var(--bright-blue) 18%, var(--navy-blue));
+
+  --accent: var(--sky-blue);
+  --accent-soft: color-mix(in srgb, var(--sky-blue) 16%, var(--navy-blue));
+  --accent-strong: color-mix(in srgb, var(--bright-blue) 85%, var(--white-blue));
+
+  --border: color-mix(in srgb, var(--blue-gray) 35%, transparent);
+  --border-strong: color-mix(in srgb, var(--sky-blue) 50%, transparent);
+  --border-glow: color-mix(in srgb, var(--bright-blue) 40%, transparent);
+
+  --shadow-sm: 0 8px 24px color-mix(in srgb, #000 25%, transparent);
+  --shadow-md: 0 16px 42px color-mix(in srgb, #000 35%, transparent);
+  --shadow-lg: 0 24px 64px color-mix(in srgb, #000 45%, transparent);
+
+  --glass: color-mix(in srgb, var(--navy-blue) 75%, rgba(255,255,255,0.04));
+
+  --grad-card: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--navy-blue) 82%, var(--darker-blue) 18%),
+    color-mix(in srgb, var(--midnight-blue) 75%, var(--navy-blue) 25%)
+  );
+}
+
+/* Transição suave ao trocar tema */
+html {
+  transition: background-color 320ms var(--ease-out), color 320ms var(--ease-out);
+}
+
+/* Botão de toggle */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--transition-base), border-color var(--transition-base),
+    color var(--transition-base), transform var(--transition-base);
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--accent-soft);
+  border-color: var(--border-glow);
+  color: var(--accent);
+  transform: rotate(20deg) scale(1.08);
+}
+
+.theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.theme-toggle .icon-moon {
+  fill: currentColor;
+}
+
+.theme-toggle .icon-sun {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* Ícone sol (dark mode ativo = mostrar sol) */
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
