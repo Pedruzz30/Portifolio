@@ -48,6 +48,17 @@
   gap: clamp(1.25rem, 3vw, 2rem);
 }
 
+/* Glow overlay animado via GSAP no hover */
+.project-card__glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  border-radius: inherit;
+  z-index: 0;
+}
+
 /* Card de projeto */
 .project-card {
   background: var(--grad-card);
@@ -78,6 +89,14 @@
 
 .project-card:hover::before {
   opacity: 1;
+}
+
+/* Conteúdo do card acima do glow */
+.project-card__head,
+.project-card__body,
+.project-card__footer {
+  position: relative;
+  z-index: 1;
 }
 
 /* Header do card */

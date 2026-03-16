@@ -23,7 +23,7 @@ function bootstrap() {
     textMask: document.querySelector(".text-mask"),
     heroContent: document.querySelector(".hero-content"),
     serviceCards: Array.from(document.querySelectorAll(".project-card")),
-    portfolioItems: [],
+    portfolioItems: Array.from(document.querySelectorAll(".project-card")),
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),

@@ -98,12 +98,17 @@
   animation: seaGlow calc(var(--wave-medium) * 1.05) cubic-bezier(.37,0,.63,1) infinite alternate;
 }
 
-/* FIX: agora tem background (antes tava vazio) */
 .hero-image::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 45%,
+    transparent 75%
+  );
   z-index: 3;
   pointer-events: none;
   mix-blend-mode: soft-light;

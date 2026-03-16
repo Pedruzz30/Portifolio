@@ -83,18 +83,16 @@ function initPortfolioHover(items) {
   const cleanups = [];
 
   cards.forEach((card) => {
-    const glow = card.querySelector(".p2-glow");
-    const lines = card.querySelector(".p2-lines");
-    const score = card.querySelector(".p2-score");
-    const meta = card.querySelectorAll(".p2-pill");
+    const glow = card.querySelector(".project-card__glow");
+    const score = card.querySelector(".project-card__status");
+    const meta = card.querySelectorAll(".project-tag");
 
-    const targets = [glow, lines, score, ...meta].filter(Boolean);
+    const targets = [glow, score, ...meta].filter(Boolean);
     gsap.set(targets, { clearProps: "all" });
 
     const tl = gsap.timeline({ paused: true, defaults: { overwrite: "auto" } });
 
-    if (glow) tl.to(glow, { filter: "blur(14px)", opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
-    if (lines) tl.to(lines, { opacity: 0.8, duration: 0.35, ease: "power2.out" }, 0);
+    if (glow) tl.to(glow, { opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
     if (score) tl.to(score, { y: -4, duration: 0.35, ease: "power2.out" }, 0);
     if (meta.length) tl.to(meta, { y: -2, duration: 0.35, stagger: 0.04, ease: "power2.out" }, 0);
 

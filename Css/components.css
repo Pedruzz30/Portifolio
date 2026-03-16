@@ -124,12 +124,6 @@
   }
 }
 
-.header.scrolled {
-  background-color: color-mix(in srgb, var(--midnight-blue) 75%, rgba(0,0,0,0.35));
-  padding: 0.9rem 2rem;
-  box-shadow: var(--shadow-sm);
-  border-color: color-mix(in srgb, var(--border-strong) 60%, transparent);
-}
 
 .logo {
   font-size: 1.5rem;
