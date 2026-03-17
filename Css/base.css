@@ -94,10 +94,10 @@ body::after {
     rgba(255, 255, 255, 0.05) 50%,
     rgba(255, 255, 255, 0) 75%
   );
-  transform: translateX(-35%) rotate(10deg);
   opacity: 0.3;
   filter: blur(0.3px);
-  animation: oceanWave calc(var(--wave-slow) * 0.58) linear infinite;
+  /* fluxo unidirecional — corrente global */
+  animation: oceanWaveFlow calc(var(--wave-slow) * 0.90) linear infinite;
 }
 
 header,

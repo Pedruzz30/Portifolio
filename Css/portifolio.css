@@ -4,6 +4,33 @@
 .portfolio {
   padding: clamp(4rem, 8vw, 7rem) 0;
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Luz cáustica — brilho subaquático no fundo da seção */
+.portfolio::before {
+  content: "";
+  position: absolute;
+  inset: -30% -20%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(80% 60% at 30% 40%,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      transparent 70%),
+    radial-gradient(60% 50% at 70% 60%,
+      color-mix(in srgb, var(--bright-blue) 7%, transparent),
+      transparent 65%);
+  mix-blend-mode: soft-light;
+  filter: blur(22px);
+  animation: portfolioCaustic calc(var(--wave-slow) * 1.05) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.portfolio-shell {
+  position: relative;
+  z-index: 1;
 }
 
 .portfolio-shell {

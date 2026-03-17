@@ -38,7 +38,8 @@
     linear-gradient(110deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0)),
     linear-gradient(95deg, color-mix(in srgb, var(--accent) 28%, transparent), transparent 55%);
   mix-blend-mode: overlay;
-  animation: waveSweep calc(var(--wave-medium) * 0.80) ease-in-out infinite;
+  /* fluxo unidirecional — corrente, não pêndulo */
+  animation: waveSweepFlow calc(var(--wave-medium) * 1.10) linear infinite;
 }
 
 .hero-content {
@@ -157,9 +158,25 @@
   mix-blend-mode: screen;
 }
 
-.orb--primary{ background: var(--accent); transform: translate(-40%, -40%); }
-.orb--accent{ background: var(--violet); transform: translate(35%, 28%); }
-.orb--soft{ background: var(--mint); transform: translate(-20%, 42%); opacity: 0.28; }
+/* Orbs animados — camadas de profundidade distintas */
+.orb--primary{
+  background: var(--accent);
+  animation: orbFloat1 14s cubic-bezier(.37,0,.63,1) infinite;
+  will-change: transform;
+}
+.orb--accent{
+  background: var(--violet);
+  animation: orbFloat2 19s cubic-bezier(.37,0,.63,1) infinite;
+  animation-delay: -7s;
+  will-change: transform;
+}
+.orb--soft{
+  background: var(--mint);
+  opacity: 0.28;
+  animation: orbFloat3 24s cubic-bezier(.37,0,.63,1) infinite;
+  animation-delay: -12s;
+  will-change: transform;
+}
 
 .floating-panels{
   position: absolute;
@@ -169,6 +186,38 @@
   gap: 0.8rem;
   width: min(360px, 42vw);
   z-index: 3;
+}
+
+/* Flutuação independente — objetos em suspensão na coluna d'água */
+.hero-panel:nth-child(1) {
+  animation: panelDrift1 10s ease-in-out infinite;
+}
+.hero-panel:nth-child(2) {
+  animation: panelDrift2 13s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+/* Container de bolhas */
+.hero-bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-bubble {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.85),
+    rgba(79, 191, 255, 0.25)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  animation: heroBubbleRise linear infinite;
+  will-change: transform, opacity;
 }
 
 .hero-panel{
