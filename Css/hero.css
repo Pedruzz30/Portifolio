@@ -94,7 +94,7 @@
     color-mix(in srgb, var(--sky-blue) 55%, transparent)
   );
   filter: blur(44px);
-  opacity: 0.4;
+  opacity: 0;
   z-index: 0;
   animation: seaGlow calc(var(--wave-medium) * 1.05) cubic-bezier(.37,0,.63,1) infinite alternate;
 }
@@ -395,7 +395,7 @@
     color-mix(in srgb, var(--magenta) 40%, transparent),
     color-mix(in srgb, var(--mint) 45%, transparent)
   );
-  opacity: 0.35;
+  opacity: 0;
 }
 
 /* =========================
