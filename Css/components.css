@@ -18,13 +18,32 @@
   pointer-events: none;
 }
 
-.loader::after {
-  content: "";
-  width: 50px;
-  height: 50px;
-  border: 5px solid var(--border);
-  border-top-color: var(--accent);
+/* Loader com identidade visual (PH) */
+.loader-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-brand {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--pure-white);
+  letter-spacing: -0.04em;
+  user-select: none;
+  opacity: 0.92;
+  margin: 0;
+  z-index: 1;
+}
+
+.loader-ring {
+  position: absolute;
+  inset: -18px;
   border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--accent);
+  border-right-color: color-mix(in srgb, var(--accent) 40%, transparent);
   animation: loading 1s ease infinite;
 }
 

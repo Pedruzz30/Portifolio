@@ -264,6 +264,107 @@
   align-self: flex-start;
 }
 
+/* ── Validação visual de campos ── */
+.contact-form__input:valid:not(:placeholder-shown) {
+  border-color: color-mix(in srgb, #2de2a8 55%, transparent);
+}
+
+.contact-form__input:invalid:not(:placeholder-shown) {
+  border-color: color-mix(in srgb, #ff6b7a 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #ff6b7a 14%, transparent);
+}
+
+/* ── Character counter ── */
+.contact-form__field--textarea {
+  position: relative;
+}
+
+.contact-form__counter {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.75rem;
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+  pointer-events: none;
+  transition: color 180ms ease;
+}
+
+.contact-form__counter.is-near-limit {
+  color: #e07b00;
+}
+
+.contact-form__counter.is-at-limit {
+  color: #e03030;
+  font-weight: 700;
+}
+
+/* ── Loading state no botão ── */
+.contact-form__submit.is-loading {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.contact-form__submit.is-loading .btn__label::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: loading 0.7s linear infinite;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+/* ── Feedback toast (sucesso / erro) ── */
+.contact-form__feedback {
+  display: none;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: feedbackSlideIn 320ms var(--ease-out);
+}
+
+@keyframes feedbackSlideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.contact-form__feedback--success {
+  background: color-mix(in srgb, #2de2a8 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, #2de2a8 35%, transparent);
+  color: #1a9e7a;
+}
+
+.contact-form__feedback--error {
+  background: color-mix(in srgb, #ff6b7a 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, #ff6b7a 30%, transparent);
+  color: #c0384a;
+}
+
+.contact-form.show-success .contact-form__feedback--success,
+.contact-form.show-error   .contact-form__feedback--error {
+  display: flex;
+}
+
+.contact-form__feedback-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ── Título da seção ── */
+.contact-header h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 860;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--text);
+}
+
 @media (max-width: 600px) {
   .contact-form__row {
     grid-template-columns: 1fr;

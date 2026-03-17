@@ -69,71 +69,23 @@
   place-items: center;
   isolation: isolate;
   z-index: 2;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .hero-image {
-  position: relative;
   width: 100%;
   height: 100%;
-  border-radius: var(--blob-radius);
-  overflow: hidden;
-  box-shadow: 0 22px 60px rgba(3, 42, 64, 0.18);
-  isolation: isolate;
-  animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
-  will-change: transform, border-radius;
-  transform: translate3d(0,0,0);
-  backface-visibility: hidden;
 }
 
 .hero-img {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  z-index: 1;
 }
 
-.hero .hero-current,
-.hero [data-current] {
-  animation: microDrift calc(var(--wave-medium) * 0.9) ease-in-out infinite;
-}
-
-.hero-orbs{
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.orb{
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  filter: blur(22px);
-  opacity: 0.35;
-  mix-blend-mode: screen;
-}
-
-/* Orbs animados — camadas de profundidade distintas */
-.orb--primary{
-  background: var(--accent);
-  animation: orbFloat1 14s cubic-bezier(.37,0,.63,1) infinite;
-}
-.orb--accent{
-  background: var(--violet);
-  animation: orbFloat2 19s cubic-bezier(.37,0,.63,1) infinite;
-  animation-delay: -7s;
-}
-.orb--soft{
-  background: var(--mint);
-  opacity: 0.28;
-  animation: orbFloat3 24s cubic-bezier(.37,0,.63,1) infinite;
-  animation-delay: -12s;
-}
 
 .floating-panels{
   position: absolute;
@@ -340,25 +292,24 @@
   display: grid;
   place-items: center;
   isolation: isolate;
-}
-
-.hero-image-ring {
-  position: absolute;
-  inset: -4px;
   border-radius: var(--blob-radius);
+  clip-path: inset(0% round var(--blob-radius));
+  animation:
+    blob    calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
+    blobClip calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
+  will-change: transform, border-radius, clip-path;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+  padding: 4px;
   background: conic-gradient(
-    from 0deg,
+    from 135deg,
     var(--violet),
     var(--magenta),
     var(--mint),
     var(--accent),
     var(--violet)
   );
-  animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
-  z-index: 0;
-  opacity: 0.88;
-  filter: blur(1.5px);
-  will-change: transform, border-radius;
+  box-shadow: 0 22px 60px rgba(3, 42, 64, 0.18);
 }
 
 /* =========================
@@ -407,5 +358,57 @@
     opacity: 0.6;
     transform: scale(0.78);
     box-shadow: 0 0 3px var(--mint);
+  }
+}
+
+/* =========================
+   SCROLL INDICATOR
+   ========================= */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  z-index: 5;
+  cursor: pointer;
+  text-decoration: none;
+  animation: scrollIndicatorBounce 2.4s ease-in-out infinite;
+}
+
+.scroll-indicator__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.scroll-indicator__arrow {
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  transform: rotate(45deg);
+  display: block;
+}
+
+.scroll-indicator__arrow + .scroll-indicator__arrow {
+  margin-top: -6px;
+  opacity: 0.35;
+}
+
+@keyframes scrollIndicatorBounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(-50%) translateY(7px);
+    opacity: 1;
   }
 }

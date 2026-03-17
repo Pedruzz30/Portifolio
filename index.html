@@ -9,28 +9,64 @@
   <meta name="author" content="Pedro Henrique">
   <meta name="keywords" content="Java, Spring Boot, Back-end, API REST, MongoDB, JPA, Hibernate, Desenvolvedor, Portfólio">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230c7fbf'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Inter,sans-serif' font-weight='900' font-size='16' fill='white'>PH</text></svg>">
+  <link rel="apple-touch-icon" href="./assets/minhaFoto.jpeg">
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pedro Henrique | Desenvolvedor Back-end Java">
   <meta property="og:description" content="Estudante de Engenharia de Software. Construindo sistemas seguros e escaláveis com Java e Spring Boot.">
-  <meta property="og:image" content="./assets/minhaFoto.jpeg">
+  <meta property="og:image" content="https://pedruzz30.github.io/Portifolio/assets/minhaFoto.jpeg">
+  <meta property="og:url" content="https://pedruzz30.github.io/Portifolio/">
+  <meta property="og:locale" content="pt_BR">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pedro Henrique | Desenvolvedor Back-end Java">
   <meta name="twitter:description" content="Construindo sistemas seguros e escaláveis com Java, Spring Boot e APIs REST.">
+  <meta name="twitter:image" content="https://pedruzz30.github.io/Portifolio/assets/minhaFoto.jpeg">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Pedro Henrique",
+    "jobTitle": "Desenvolvedor Back-end Java",
+    "description": "Estudante de Engenharia de Software focado em back-end Java, Spring Boot, APIs REST e MongoDB.",
+    "url": "https://pedruzz30.github.io/Portifolio/",
+    "image": "https://pedruzz30.github.io/Portifolio/assets/minhaFoto.jpeg",
+    "sameAs": [
+      "https://github.com/Pedruzz30",
+      "https://www.linkedin.com/in/pedro-henrique-1a883634a"
+    ],
+    "knowsAbout": ["Java", "Spring Boot", "REST API", "MongoDB", "JPA", "Hibernate", "Git"]
+  }
+  </script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    h1, h2, h3, .logo, .footer-title {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+    }
+  </style>
 
   <!-- CSS PRINCIPAL (único) -->
   <link rel="stylesheet" href="./Css/main.css">
 </head>
 
 <body>
-  <div class="loader" aria-hidden="true"></div>
+  <div class="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <p class="loader-brand">PH</p>
+      <div class="loader-ring"></div>
+    </div>
+  </div>
 
   <header class="header">
     <div class="header-shell">
@@ -38,13 +74,14 @@
       <nav class="nav" aria-label="Navegação principal">
         <ul class="nav__list" role="list">
           <li><a class="nav__link" data-nav href="#hero-title">Início</a></li>
+          <li><a class="nav__link" data-nav href="#about-title">Sobre</a></li>
           <li><a class="nav__link" data-nav href="#skills2-title">Roadmap</a></li>
           <li><a class="nav__link" data-nav href="#portfolio-title">Portfólio</a></li>
           <li><a class="nav__link" data-nav href="#contact-title">Contato</a></li>
         </ul>
         <div class="nav__pill" aria-hidden="true">
           <span class="pill-dot"></span>
-          UX/UI refinado • animações suaves
+          Disponível para vagas • Java Dev
         </div>
       </nav>
       <div class="header-actions">
@@ -105,24 +142,23 @@
 
         <div class="hero-stats" role="list">
           <article class="stat" role="listitem">
-            <p class="stat__value">+30</p>
-            <p class="stat__label">dias seguidos de código</p>
-          </article>
-          <article class="stat" role="listitem">
-            <p class="stat__value">Java</p>
-            <p class="stat__label">foco principal de estudo</p>
+            <p class="stat__value">2024</p>
+            <p class="stat__label">início da jornada</p>
           </article>
           <article class="stat" role="listitem">
             <p class="stat__value">4+</p>
             <p class="stat__label">projetos no GitHub</p>
+          </article>
+          <article class="stat" role="listitem">
+            <p class="stat__value">Java</p>
+            <p class="stat__label">linguagem principal</p>
           </article>
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="hero-image-wrap">
-          <div class="hero-image-ring" aria-hidden="true"></div>
-          <div class="hero-image">
+<div class="hero-image">
             <img
             src="./assets/minhaFoto.jpeg"
             alt="Pedro Henrique, desenvolvedor back-end Java"
@@ -130,7 +166,7 @@
             width="480"
             height="600"
             fetchpriority="high"
-            decoding="async"
+            decoding="sync"
           />
           </div>
         </div>
@@ -138,24 +174,140 @@
           <span class="hero-badge__dot" aria-hidden="true"></span>
           <span>Disponível para oportunidades</span>
         </div>
-        <div class="hero-orbs" aria-hidden="true">
-          <span class="orb orb--primary"></span>
-          <span class="orb orb--accent"></span>
-          <span class="orb orb--soft"></span>
-        </div>
       </div>
 
       <div class="floating-panels" aria-label="Highlights">
         <article class="hero-panel">
-          <p class="hero-panel__eyebrow">Design system</p>
-          <h3 class="hero-panel__title">Cores vibrantes, leitura tranquila</h3>
-          <p class="hero-panel__text">Escalas de azul, toques de violeta e neon para guiar atenção sem perder acessibilidade.</p>
+          <p class="hero-panel__eyebrow">Back-end Java</p>
+          <h3 class="hero-panel__title">APIs REST com Spring Boot</h3>
+          <p class="hero-panel__text">Criando endpoints seguros, organizados por camadas, com validação e tratamento de erros.</p>
         </article>
         <article class="hero-panel hero-panel--border">
-          <p class="hero-panel__eyebrow">Experiência</p>
-          <h3 class="hero-panel__title">Animações conscientes</h3>
-          <p class="hero-panel__text">Microinterações com ondas suaves, estados de foco visíveis e respostas rápidas ao toque.</p>
+          <p class="hero-panel__eyebrow">Boas práticas</p>
+          <h3 class="hero-panel__title">SOLID + Clean Code</h3>
+          <p class="hero-panel__text">Código legível, testável e organizado — princípios de engenharia aplicados em cada projeto.</p>
         </article>
+      </div>
+      <a class="scroll-indicator" href="#about-title" aria-label="Rolar para baixo">
+        <span class="scroll-indicator__label">Explore</span>
+        <span class="scroll-indicator__arrow"></span>
+        <span class="scroll-indicator__arrow"></span>
+      </a>
+    </section>
+
+    <!-- Wave divider: hero → about -->
+    <div class="section-wave" aria-hidden="true" style="background: linear-gradient(to bottom, var(--midnight-blue), transparent); margin-bottom: 0;">
+      <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:56px;">
+        <path d="M0,0 C360,56 1080,0 1440,40 L1440,0 Z" fill="var(--midnight-blue)"/>
+        <path d="M0,0 C480,48 960,8 1440,32 L1440,0 Z" fill="var(--midnight-blue)" opacity="0.5"/>
+      </svg>
+    </div>
+
+    <!-- ==================== SOBRE MIM ==================== -->
+    <section class="about" aria-labelledby="about-title" data-section>
+      <div class="about-shell">
+        <header class="about-header">
+          <p class="section-eyebrow">Sobre mim</p>
+          <h2 id="about-title">Desenvolvedor em formação, comprometido com o código</h2>
+        </header>
+
+        <div class="about-grid">
+          <!-- Lado texto -->
+          <div class="about-text">
+            <p class="about-desc">
+              Sou <strong>Pedro Henrique</strong>, estudante de Engenharia de Software com foco intenso em
+              desenvolvimento back-end. Comecei minha jornada em 2024 e desde então venho construindo uma
+              base sólida em POO, Spring Boot, APIs REST, JPA/Hibernate e MongoDB.
+            </p>
+            <p class="about-desc">
+              Acredito que bom código vai além de "funcionar" — precisa ser limpo, testável e fácil de manter.
+              Por isso aplico <strong>princípios SOLID e Clean Code</strong> em cada projeto, sempre com
+              atenção à arquitetura e legibilidade.
+            </p>
+            <p class="about-desc">
+              Sou movido pela vontade de resolver problemas reais com soluções elegantes.
+              Estudo todos os dias e busco uma oportunidade de <strong>Java Júnior</strong> para
+              crescer em um time técnico de verdade.
+            </p>
+
+            <ul class="about-values" aria-label="Valores profissionais">
+              <li class="about-value-item">Código limpo, legível e documentado</li>
+              <li class="about-value-item">Foco em APIs REST escaláveis e seguras</li>
+              <li class="about-value-item">Aprendizado contínuo e consistente</li>
+              <li class="about-value-item">Comprometimento com prazos e qualidade</li>
+            </ul>
+
+            <div class="about-actions">
+              <a class="btn btn--primary btn--pill btn--ripple" href="https://github.com/Pedruzz30" target="_blank" rel="noopener">
+                <span class="btn__label">Ver GitHub</span>
+              </a>
+              <a class="btn btn--soft btn--pill btn--ripple" href="#contact-title">
+                <span class="btn__label">Falar comigo</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Lado habilidades + educação -->
+          <div class="about-skills-side">
+            <div>
+              <p class="about-skills__label">Tecnologias que trabalho</p>
+              <div class="tech-grid" role="list">
+                <div class="tech-item" role="listitem">
+                  <img src="./assets/SVG-Linguagens/JAVA-SVG.png" alt="" aria-hidden="true">
+                  <span>Java</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <span class="tech-item__icon-text tech-item__icon-text--spring" aria-hidden="true">SB</span>
+                  <span>Spring Boot</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <span class="tech-item__icon-text tech-item__icon-text--mongo" aria-hidden="true">MDB</span>
+                  <span>MongoDB</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <span class="tech-item__icon-text tech-item__icon-text--jpa" aria-hidden="true">JPA</span>
+                  <span>JPA/Hibernate</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <img src="./assets/SVG-Linguagens/SQL-SVG.png" alt="" aria-hidden="true">
+                  <span>SQL</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <span class="tech-item__icon-text tech-item__icon-text--git" aria-hidden="true">GIT</span>
+                  <span>Git/GitHub</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <span class="tech-item__icon-text tech-item__icon-text--junit" aria-hidden="true">JU</span>
+                  <span>JUnit/Mockito</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <img src="./assets/SVG-Linguagens/Python-SVG.png" alt="" aria-hidden="true">
+                  <span>Python</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <img src="./assets/SVG-Linguagens/intellij-SVG.png" alt="" aria-hidden="true">
+                  <span>IntelliJ</span>
+                </div>
+                <div class="tech-item" role="listitem">
+                  <span class="tech-item__icon-text tech-item__icon-text--docker" aria-hidden="true">DCK</span>
+                  <span>Docker</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Educação -->
+            <div class="about-edu">
+              <div class="edu-card">
+                <div class="edu-card__icon" aria-hidden="true">🎓</div>
+                <div class="edu-card__body">
+                  <p class="edu-card__degree">Engenharia de Software</p>
+                  <p class="edu-card__institution">Formação em andamento</p>
+                  <span class="edu-card__badge">Cursando desde 2024</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -189,7 +341,7 @@
              <span class="stack-roadmap__progress-step" role="listitem">Segurança</span>
              <span class="stack-roadmap__progress-step" role="listitem">Arquitetura</span>
            </div>
-           <p class="stack-roadmap__progress-updated">Atualizado em março de 2025</p>
+           <p class="stack-roadmap__progress-updated">Atualizado em março de 2026</p>
         </div>
 
          <div class="stack-roadmap__highlights" aria-label="Destaques do roadmap">
@@ -548,27 +700,40 @@
     <section class="contact" aria-labelledby="contact-title" data-section>
       <div class="contact-shell">
         <header class="contact-header">
-          <h2 id="contact-title">Redes sociais</h2>
+          <p class="contact-eyebrow">Vamos conversar</p>
+          <h2 id="contact-title">Entre em contato</h2>
           <p class="contact-subtitle">
-            Escolha a rede que combina com você e fale comigo direto por mensagem.
+            Preencha o formulário ou escolha a rede que combina com você e fale comigo direto.
           </p>
         </header>
 
-        <!-- Formulário de contato direto -->
-        <form class="contact-form" action="mailto:pedrohhenriquepimenta224@gmail.com" method="POST" enctype="text/plain" aria-label="Formulário de contato">
+        <!-- Formulário de contato -->
+        <form class="contact-form" id="contact-form" novalidate aria-label="Formulário de contato">
+          <!-- Feedback: sucesso -->
+          <div class="contact-form__feedback contact-form__feedback--success" role="alert" aria-live="polite">
+            <span class="contact-form__feedback-icon" aria-hidden="true">✓</span>
+            Mensagem enviada! Retorno em até 24h.
+          </div>
+          <!-- Feedback: erro -->
+          <div class="contact-form__feedback contact-form__feedback--error" role="alert" aria-live="polite">
+            <span class="contact-form__feedback-icon" aria-hidden="true">✕</span>
+            Erro ao enviar. Tente pelo e-mail direto.
+          </div>
+
           <div class="contact-form__row">
             <div class="contact-form__field">
               <label class="contact-form__label" for="contact-name">Nome</label>
-              <input class="contact-form__input" type="text" id="contact-name" name="nome" placeholder="Seu nome" required autocomplete="name">
+              <input class="contact-form__input" type="text" id="contact-name" name="nome" placeholder="Seu nome" required autocomplete="name" minlength="2">
             </div>
             <div class="contact-form__field">
               <label class="contact-form__label" for="contact-email">Email</label>
               <input class="contact-form__input" type="email" id="contact-email" name="email" placeholder="seu@email.com" required autocomplete="email">
             </div>
           </div>
-          <div class="contact-form__field">
+          <div class="contact-form__field contact-form__field--textarea">
             <label class="contact-form__label" for="contact-message">Mensagem</label>
-            <textarea class="contact-form__input contact-form__textarea" id="contact-message" name="mensagem" placeholder="Olá Pedro, quero falar sobre..." rows="4" required></textarea>
+            <textarea class="contact-form__input contact-form__textarea" id="contact-message" name="mensagem" placeholder="Olá Pedro, quero falar sobre..." rows="4" required maxlength="500"></textarea>
+            <span class="contact-form__counter" aria-live="polite">0 / 500</span>
           </div>
           <button class="btn btn--primary btn--pill btn--ripple contact-form__submit" type="submit">
             <span class="btn__label">Enviar mensagem</span>
@@ -584,6 +749,16 @@
             </p>
           </div>
           <div class="contact-channels__list" role="list">
+            <a class="contact-chip" href="https://github.com/Pedruzz30" target="_blank" rel="noopener" role="listitem">
+              <span class="contact-chip__icon" style="background: color-mix(in srgb, #1a1a2e 14%, white);">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="#1a1a2e"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.68.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </span>
+              <span class="contact-chip__body">
+                <strong>GitHub</strong>
+                <small>Veja meus projetos</small>
+              </span>
+            </a>
+
             <a class="contact-chip" href="mailto:pedrohhenriquepimenta224@gmail.com" role="listitem">
               <span class="contact-chip__icon">
                 <img src="./assets/SVG/SVG-email.png" alt="Email" loading="lazy">
@@ -600,7 +775,7 @@
               </span>
               <span class="contact-chip__body">
                 <strong>LinkedIn</strong>
-                <small>Conexões e credibilidade</small>
+                <small>Conexões e networking</small>
               </span>
             </a>
 
@@ -614,21 +789,14 @@
               </span>
             </a>
 
-            <a class="contact-chip" href="https://www.instagram.com/pedruzz.24" target="_blank" rel="noopener" role="listitem">
-              <span class="contact-chip__icon">
-                <img src="./assets/SVG/SVG-instagram.png" alt="Instagram" loading="lazy">
-              </span>
-              <span class="contact-chip__body">
-                <strong>Instagram</strong>
-                <small>Bastidores e novidades</small>
-              </span>
-            </a>
-
           </div>
         </div>
       </div>
     </section>
   </main>
+
+  <!-- FAB: Voltar ao topo -->
+  <button class="fab-top" id="fab-top" aria-label="Voltar ao topo" title="Voltar ao topo">↑</button>
 
   <footer class="site-footer" aria-labelledby="footer-title">
     <div class="footer-inner">
@@ -652,6 +820,7 @@
         <h3 class="footer-heading">Navegação</h3>
         <ul class="footer-list" role="list">
           <li><a href="#hero-title">Início</a></li>
+          <li><a href="#about-title">Sobre mim</a></li>
           <li><a href="#skills2-title">Roadmap</a></li>
           <li><a href="#portfolio-title">Portfólio</a></li>
           <li><a href="#contact-title">Contato</a></li>

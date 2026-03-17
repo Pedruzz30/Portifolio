@@ -1,9 +1,11 @@
 @import "./tokens.css";
 @import "./base.css";
 @import "./layout.css";
+@import "./sections.css";
 @import "./components.css";
 @import "./darkmode.css";
 @import "./hero.css";
+@import "./about.css";
 @import "./skills.css";
 @import "./roadmap.css";
 @import "./contact.css";

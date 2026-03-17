@@ -38,6 +38,15 @@
   80%      { border-radius: 52% 48% 46% 54% / 50% 58% 42% 50%; }
 }
 
+/* Blob clip — mesmos valores do blob, para clip-path: inset()
+   Roda no compositor GPU sem antialiasing contra fundo branco */
+@keyframes blobClip {
+  0%, 100% { clip-path: inset(0% round 46% 54% 52% 48% / 55% 48% 52% 45%); }
+  25%      { clip-path: inset(0% round 54% 46% 44% 56% / 52% 62% 38% 48%); }
+  55%      { clip-path: inset(0% round 48% 52% 60% 40% / 44% 52% 58% 46%); }
+  80%      { clip-path: inset(0% round 52% 48% 46% 54% / 50% 58% 42% 50%); }
+}
+
 /* HERO: correnteza lenta (camada 1) */
 @keyframes tideFlow {
   0%   { transform: translate3d(-6%,  2%, 0) scale(1.02); }
@@ -135,12 +144,6 @@
 }
 
 /* ===== ANIMAÇÕES (mar) ===== */
-@keyframes oceanSurface{
-  0%   { transform: translate3d(0,0,0); opacity: .28; }
-  50%  { transform: translate3d(-8px, 4px, 0); opacity: .40; }
-  100% { transform: translate3d(0,0,0); opacity: .28; }
-}
-
 @keyframes oceanSheen{
   0%   { transform: translateX(-34%) translateY(7%); opacity: .65; }
   45%  { transform: translateX(10%) translateY(-2%); opacity: .92; }
@@ -201,31 +204,6 @@
   50%      { transform: translate3d(10px,-6px,0); }
 }
 
-/* =========================
-   ORB FLOAT — 3 ritmos independentes
-   ========================= */
-@keyframes orbFloat1 {
-  0%   { transform: translate(-40%, -40%) scale(1.00); }
-  25%  { transform: translate(-46%, -44%) scale(1.08); }
-  55%  { transform: translate(-36%, -48%) scale(0.94); }
-  80%  { transform: translate(-43%, -37%) scale(1.04); }
-  100% { transform: translate(-40%, -40%) scale(1.00); }
-}
-
-@keyframes orbFloat2 {
-  0%   { transform: translate(35%, 28%) scale(1.00); }
-  30%  { transform: translate(40%, 32%) scale(1.10); }
-  65%  { transform: translate(28%, 22%) scale(0.92); }
-  85%  { transform: translate(38%, 30%) scale(1.05); }
-  100% { transform: translate(35%, 28%) scale(1.00); }
-}
-
-@keyframes orbFloat3 {
-  0%   { transform: translate(-20%, 42%) scale(1.00); }
-  40%  { transform: translate(-26%, 36%) scale(1.12); }
-  70%  { transform: translate(-15%, 46%) scale(0.90); }
-  100% { transform: translate(-20%, 42%) scale(1.00); }
-}
 
 /* =========================
    WAVE SWEEP — fluxo unidirecional (não pêndulo)
@@ -263,7 +241,7 @@
   100% { transform: translate3d(0, 0px, 0); }
 }
 
-@keyframs floatDrift {
+@keyframes floatDrift {
  0%   { transform: translateX(-50%) translate3d(0, 0px, 0); }
   40%  { transform: translateX(-50%) translate3d(4px, -8px, 0); }
   75%  { transform: translateX(-50%) translate3d(-2px, -3px, 0); }

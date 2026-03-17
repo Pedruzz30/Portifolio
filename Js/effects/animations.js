@@ -122,11 +122,11 @@ function initHeroParallax(hero) {
   const panels  = hero.querySelector(".floating-panels");
   const visual  = hero.querySelector(".hero-visual");
 
-  if (!orbs) return () => {};
+  if (!visual) return () => {};
 
   // quickTo cria uma função de animação contínua sem criar novas tweens a cada frame
-  const orbsX   = gsap.quickTo(orbs,   "x", { duration: 0.9, ease: "power1.out" });
-  const orbsY   = gsap.quickTo(orbs,   "y", { duration: 0.9, ease: "power1.out" });
+  const orbsX   = orbs ? gsap.quickTo(orbs,   "x", { duration: 0.9, ease: "power1.out" }) : null;
+  const orbsY   = orbs ? gsap.quickTo(orbs,   "y", { duration: 0.9, ease: "power1.out" }) : null;
   const panelsX = panels ? gsap.quickTo(panels, "x", { duration: 1.4, ease: "power1.out" }) : null;
   const panelsY = panels ? gsap.quickTo(panels, "y", { duration: 1.4, ease: "power1.out" }) : null;
   const visualX = visual ? gsap.quickTo(visual, "x", { duration: 1.1, ease: "power1.out" }) : null;
@@ -137,9 +137,8 @@ function initHeroParallax(hero) {
     const x = (e.clientX - rect.left) / rect.width  - 0.5;  // -0.5 → +0.5
     const y = (e.clientY - rect.top)  / rect.height - 0.5;
 
-    // Orbs: camada mais profunda — movimento maior
-    orbsX(x * 32);
-    orbsY(y * 18);
+    orbsX?.(x * 32);
+    orbsY?.(y * 18);
 
     // Visual: velocidade intermediária
     visualX?.(x * 18);
@@ -151,7 +150,7 @@ function initHeroParallax(hero) {
   };
 
   const onLeave = () => {
-    orbsX(0);   orbsY(0);
+    orbsX?.(0);   orbsY?.(0);
     visualX?.(0); visualY?.(0);
     panelsX?.(0); panelsY?.(0);
   };
