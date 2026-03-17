@@ -82,36 +82,18 @@
   animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
 }
 
-.hero-image::before {
-  content: "";
-  position: absolute;
-  inset: -10%;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--bright-blue) 65%, transparent),
-    color-mix(in srgb, var(--deep-blue) 65%, transparent),
-    color-mix(in srgb, var(--sky-blue) 55%, transparent)
-  );
-  filter: blur(44px);
-  opacity: 0;
-  z-index: 0;
-  animation: seaGlow calc(var(--wave-medium) * 1.05) cubic-bezier(.37,0,.63,1) infinite alternate;
-}
-
-
 .hero-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   z-index: 1;
 }
 
-.hero-image,
-.hero-image::before {
-  will-change: transform, opacity, filter;
+.hero-image {
+  will-change: transform, border-radius;
   transform: translate3d(0,0,0);
   backface-visibility: hidden;
 }
@@ -378,24 +360,11 @@
     var(--accent),
     var(--violet)
   );
-  animation:
-    ringRotate 9s linear infinite,
-    blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
+  animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
   z-index: 0;
   opacity: 0.88;
   filter: blur(1.5px);
   will-change: transform, border-radius;
-}
-
-/* Enhanced glow — acento mais colorido agora que o anel existe */
-.hero-image::before {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--violet) 50%, transparent),
-    color-mix(in srgb, var(--magenta) 40%, transparent),
-    color-mix(in srgb, var(--mint) 45%, transparent)
-  );
-  opacity: 0;
 }
 
 /* =========================
