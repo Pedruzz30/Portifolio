@@ -99,24 +99,6 @@
   animation: seaGlow calc(var(--wave-medium) * 1.05) cubic-bezier(.37,0,.63,1) infinite alternate;
 }
 
-.hero-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.22) 45%,
-    transparent 75%
-  );
-  z-index: 3;
-  pointer-events: none;
-  mix-blend-mode: soft-light;
-  opacity: 0.55;
-  filter: blur(.35px);
-  animation: waterShimmer calc(var(--wave-slow) * 0.95) linear infinite alternate;
-}
 
 .hero-img {
   position: absolute;
@@ -128,8 +110,7 @@
 }
 
 .hero-image,
-.hero-image::before,
-.hero-image::after {
+.hero-image::before {
   will-change: transform, opacity, filter;
   transform: translate3d(0,0,0);
   backface-visibility: hidden;
@@ -371,4 +352,97 @@
 .stat__label{
   margin: 0.2rem 0 0;
   color: color-mix(in srgb, var(--surface-soft) 90%, rgba(255,255,255,0.76));
+}
+
+/* =========================
+   HERO IMAGE WRAP & RING
+   ========================= */
+.hero-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+.hero-image-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
+  background: conic-gradient(
+    from 0deg,
+    var(--violet),
+    var(--magenta),
+    var(--mint),
+    var(--accent),
+    var(--violet)
+  );
+  animation:
+    ringRotate 9s linear infinite,
+    blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
+  z-index: 0;
+  opacity: 0.88;
+  filter: blur(1.5px);
+  will-change: transform, border-radius;
+}
+
+/* Enhanced glow — acento mais colorido agora que o anel existe */
+.hero-image::before {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--violet) 50%, transparent),
+    color-mix(in srgb, var(--magenta) 40%, transparent),
+    color-mix(in srgb, var(--mint) 45%, transparent)
+  );
+  opacity: 0.35;
+}
+
+/* =========================
+   HERO BADGE — disponibilidade
+   ========================= */
+.hero-badge {
+  position: absolute;
+  bottom: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1rem;
+  border-radius: 2rem;
+  background: color-mix(in srgb, var(--pure-white) 12%, rgba(255,255,255,0.07));
+  border: 1px solid color-mix(in srgb, var(--mint) 45%, transparent);
+  backdrop-filter: blur(16px) saturate(1.2);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  color: var(--pure-white);
+  white-space: nowrap;
+  z-index: 5;
+  animation: panelDrift2 13s ease-in-out infinite;
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--mint) 18%, transparent);
+}
+
+.hero-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 6px var(--mint), 0 0 12px color-mix(in srgb, var(--mint) 60%, transparent);
+  animation: badgePulse 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 6px var(--mint), 0 0 12px color-mix(in srgb, var(--mint) 60%, transparent);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.78);
+    box-shadow: 0 0 3px var(--mint);
+  }
 }

@@ -292,3 +292,11 @@
   55%  { filter: blur(1px); }
   100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
 }
+
+/* =========================
+   HERO IMAGE RING — rotação do anel gradiente
+   ========================= */
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
