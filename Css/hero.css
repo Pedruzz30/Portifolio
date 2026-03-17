@@ -64,7 +64,7 @@
   position: relative;
   width: 38%;
   min-width: 320px;
-  height: 65vh;
+  height: clamp(340px, 65vh, 680px);
   display: grid;
   place-items: center;
   isolation: isolate;
@@ -75,11 +75,14 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
+  border-radius: var(--blob-radius);
   overflow: hidden;
   box-shadow: 0 22px 60px rgba(3, 42, 64, 0.18);
   isolation: isolate;
   animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
+  will-change: transform, border-radius;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
 }
 
 .hero-img {
@@ -90,12 +93,6 @@
   object-fit: cover;
   object-position: center top;
   z-index: 1;
-}
-
-.hero-image {
-  will-change: transform, border-radius;
-  transform: translate3d(0,0,0);
-  backface-visibility: hidden;
 }
 
 .hero .hero-current,
@@ -125,20 +122,17 @@
 .orb--primary{
   background: var(--accent);
   animation: orbFloat1 14s cubic-bezier(.37,0,.63,1) infinite;
-  will-change: transform;
 }
 .orb--accent{
   background: var(--violet);
   animation: orbFloat2 19s cubic-bezier(.37,0,.63,1) infinite;
   animation-delay: -7s;
-  will-change: transform;
 }
 .orb--soft{
   background: var(--mint);
   opacity: 0.28;
   animation: orbFloat3 24s cubic-bezier(.37,0,.63,1) infinite;
   animation-delay: -12s;
-  will-change: transform;
 }
 
 .floating-panels{
@@ -351,7 +345,7 @@
 .hero-image-ring {
   position: absolute;
   inset: -4px;
-  border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
+  border-radius: var(--blob-radius);
   background: conic-gradient(
     from 0deg,
     var(--violet),
@@ -389,7 +383,7 @@
   color: var(--pure-white);
   white-space: nowrap;
   z-index: 5;
-  animation: panelDrift2 13s ease-in-out infinite;
+  animation: floatDrift 13s ease-in-out infinite;
   box-shadow: 0 4px 18px color-mix(in srgb, var(--mint) 18%, transparent);
 }
 
