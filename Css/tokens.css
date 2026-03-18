@@ -35,8 +35,9 @@
 
   /* ===== Texto ===== */
   --text: var(--charcoal);
-  --text-muted: var(--gray);
-  --text-subtle: color-mix(in srgb, var(--gray) 60%, var(--blue-gray) 40%);
+  /* --gray (#6f7b8e) falha WCAG AA em fundos claros (~4.0:1); usa --dark-gray para ≥4.5:1 */
+  --text-muted: var(--dark-gray);
+  --text-subtle: color-mix(in srgb, var(--dark-gray) 70%, var(--blue-gray) 30%);
 
   /* ===== Marca / Ação ===== */
   --primary: var(--deep-blue);
@@ -87,6 +88,15 @@
 
 /* ===== Navegação ===== */
   --header-offset: 96px;
+
+  /* ===== Hierarquia de z-index ===== */
+  --z-base: 0;
+  --z-raised: 1;
+  --z-content: 2;
+  --z-overlay: 9;
+  --z-header: 50;
+  --z-nav-mobile: 10;
+  --z-loader: 9999;
 
   /* ===== Shapes ===== */
   --blob-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;

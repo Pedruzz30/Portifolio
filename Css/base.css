@@ -13,6 +13,9 @@ body {
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
+  /* Evita vazamento de texto longo (URLs, termos técnicos) */
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 img {
@@ -58,6 +61,20 @@ a:focus-visible,
 ::selection {
   background: var(--accent);
   color: var(--pure-white);
+}
+
+/* =========================
+   SELEÇÃO INTENCIONAL
+   Elementos decorativos não devem ser selecionáveis acidentalmente
+   ========================= */
+.hero-bubbles,
+.hero-orbs,
+.scroll-indicator,
+.loader-brand,
+.section-wave,
+.hero::before,
+.hero::after {
+  user-select: none;
 }
 
 /* =========================

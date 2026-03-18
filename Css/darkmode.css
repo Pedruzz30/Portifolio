@@ -37,9 +37,19 @@
   );
 }
 
-/* Transição suave ao trocar tema */
+/* Transição suave ao trocar tema — restrita às propriedades de cor para
+   evitar que todas as propriedades do documento transicionem simultaneamente */
 html {
-  transition: background-color 320ms var(--ease-out), color 320ms var(--ease-out);
+  transition:
+    background-color 320ms var(--ease-out),
+    color 320ms var(--ease-out);
+}
+
+/* Garante que elementos com border não transicionem de forma estranha */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition: none;
+  }
 }
 
 /* Botão de toggle */

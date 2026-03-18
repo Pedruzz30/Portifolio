@@ -248,3 +248,71 @@
   .portfolio-shell,
   .contact-shell { max-width: 1500px; }
 }
+
+/* =========================
+   IMPRESSÃO
+   ========================= */
+@media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 12pt;
+  }
+
+  /* Oculta elementos de navegação e interação */
+  .header,
+  .nav,
+  .loader,
+  .scroll-indicator,
+  .hero-bubbles,
+  .floating-panels,
+  .scroll-progress,
+  .menu-toggle,
+  .theme-toggle,
+  .hero-badge,
+  .section-wave,
+  .btn--ripple::after {
+    display: none !important;
+  }
+
+  /* Hero simplificado para impressão */
+  .hero {
+    min-height: auto;
+    padding: 2rem;
+    background: #e8f4ff !important;
+    color: #000 !important;
+  }
+
+  .hero-visual {
+    width: 200px;
+    height: 250px;
+  }
+
+  /* Links com URL visível */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555;
+  }
+
+  /* Garante que seções não quebrem no meio */
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h2, h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+}

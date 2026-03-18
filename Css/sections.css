@@ -98,7 +98,6 @@
   animation: seaGlow calc(var(--wave-medium) * 1.05) cubic-bezier(.37,0,.63,1) infinite alternate;
 }
 
-/* FIX: agora tem background (antes tava vazio) */
 .hero-image::after {
   content: "";
   position: absolute;
@@ -106,6 +105,12 @@
   border-radius: inherit;
   z-index: 3;
   pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    transparent 48%,
+    rgba(190, 225, 255, 0.18) 100%
+  );
   mix-blend-mode: soft-light;
   opacity: 0.55;
   filter: blur(.35px);
@@ -118,13 +123,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 60%;
   z-index: 1;
 }
 
-.hero-image,
+/* Pseudo-elementos usam GPU mas sem will-change excessivo */
 .hero-image::before,
 .hero-image::after {
-  will-change: transform, opacity, filter;
   transform: translate3d(0,0,0);
   backface-visibility: hidden;
 }

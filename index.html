@@ -56,12 +56,15 @@
     }
   </style>
 
+  <!-- Preload da imagem principal do hero (above-the-fold) -->
+  <link rel="preload" as="image" href="./assets/minhaFoto.jpeg" fetchpriority="high">
+
   <!-- CSS PRINCIPAL (único) -->
   <link rel="stylesheet" href="./Css/main.css">
 </head>
 
 <body>
-  <div class="loader" aria-hidden="true">
+  <div class="loader" role="status" aria-label="Carregando página">
     <div class="loader-inner">
       <p class="loader-brand">PH</p>
       <div class="loader-ring"></div>
@@ -166,7 +169,7 @@
             width="480"
             height="600"
             fetchpriority="high"
-            decoding="sync"
+            decoding="async"
           />
           </div>
         </div>
@@ -253,7 +256,7 @@
               <p class="about-skills__label">Tecnologias que trabalho</p>
               <div class="tech-grid" role="list">
                 <div class="tech-item" role="listitem">
-                  <img src="./assets/SVG-Linguagens/JAVA-SVG.png" alt="" aria-hidden="true">
+                  <img src="./assets/SVG-Linguagens/JAVA-SVG.png" alt="" aria-hidden="true" loading="lazy">
                   <span>Java</span>
                 </div>
                 <div class="tech-item" role="listitem">
@@ -269,7 +272,7 @@
                   <span>JPA/Hibernate</span>
                 </div>
                 <div class="tech-item" role="listitem">
-                  <img src="./assets/SVG-Linguagens/SQL-SVG.png" alt="" aria-hidden="true">
+                  <img src="./assets/SVG-Linguagens/SQL-SVG.png" alt="" aria-hidden="true" loading="lazy">
                   <span>SQL</span>
                 </div>
                 <div class="tech-item" role="listitem">
@@ -281,11 +284,11 @@
                   <span>JUnit/Mockito</span>
                 </div>
                 <div class="tech-item" role="listitem">
-                  <img src="./assets/SVG-Linguagens/Python-SVG.png" alt="" aria-hidden="true">
+                  <img src="./assets/SVG-Linguagens/Python-SVG.png" alt="" aria-hidden="true" loading="lazy">
                   <span>Python</span>
                 </div>
                 <div class="tech-item" role="listitem">
-                  <img src="./assets/SVG-Linguagens/intellij-SVG.png" alt="" aria-hidden="true">
+                  <img src="./assets/SVG-Linguagens/intellij-SVG.png" alt="" aria-hidden="true" loading="lazy">
                   <span>IntelliJ</span>
                 </div>
                 <div class="tech-item" role="listitem">

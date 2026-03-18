@@ -79,14 +79,8 @@
   overflow: visible;
   border-radius: 0;
   animation: none;
-}
-
-.hero-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 60%;
+  /* Fallback exibido quando minhaFoto.jpeg falha ao carregar */
+  background: var(--primary-soft);
 }
 
 
@@ -243,7 +237,7 @@
   gap: 0.4rem;
   padding: 0.55rem 0.85rem;
   border-radius: 0.9rem;
-  font-weight: 760;
+  font-weight: 700;
   color: var(--navy-blue);
   background: var(--surface);
   border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
@@ -276,7 +270,7 @@
 .stat__value{
   margin: 0;
   font-size: 1.5rem;
-  font-weight: 850;
+  font-weight: 800;
   letter-spacing: -0.02em;
 }
 
@@ -297,10 +291,9 @@
   isolation: isolate;
   border-radius: var(--blob-radius);
   clip-path: inset(0% round var(--blob-radius));
-  animation:
-    blob    calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
-    blobClip calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
-  will-change: transform, border-radius, clip-path;
+  /* usa apenas blobClip para animar a forma — blob (border-radius) é redundante */
+  animation: blobClip calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
+  will-change: clip-path;
   transform: translate3d(0,0,0);
   backface-visibility: hidden;
   padding: 4px;
