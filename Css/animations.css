@@ -47,6 +47,24 @@
   80%      { clip-path: inset(0% round 52% 48% 46% 54% / 50% 58% 42% 50%); }
 }
 
+/* Glow bioluminescente do wrap — respira com o ritmo do oceano */
+@keyframes wrapGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--mint)       20%, transparent),
+      0 0 32px   color-mix(in srgb, var(--accent)     22%, transparent),
+      0 0 72px   color-mix(in srgb, var(--deep-blue)  18%, transparent),
+      0 24px 64px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--mint)       44%, transparent),
+      0 0 52px   color-mix(in srgb, var(--accent)     40%, transparent),
+      0 0 108px  color-mix(in srgb, var(--deep-blue)  28%, transparent),
+      0 24px 64px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
+  }
+}
+
 /* HERO: correnteza lenta (camada 1) */
 @keyframes tideFlow {
   0%   { transform: translate3d(-6%,  2%, 0) scale(1.02); }
