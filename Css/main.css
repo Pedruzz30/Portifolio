@@ -1,3 +1,31 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  main.css — Orquestrador de Estilos
+ *
+ *  Este arquivo apenas importa todos os módulos CSS em ordem.
+ *  A ORDEM IMPORTA: tokens devem vir antes de tudo,
+ *  animations deve vir por último (pode sobrescrever).
+ *
+ *  Estrutura:
+ *   tokens.css    → variáveis CSS (cores, tamanhos, durations)
+ *   base.css      → reset, links, efeito oceano global
+ *   layout.css    → estrutura de seção (shells, grids)
+ *   sections.css  → hero (duplicado de hero.css, manter por compatibilidade)
+ *   components.css → loader, header, nav, botões, scroll progress
+ *   darkmode.css  → override de tokens para data-theme="dark"
+ *   hero.css      → seção hero detalhada (foto, panels, badge)
+ *   about.css     → seção sobre mim
+ *   skills.css    → seção de habilidades
+ *   roadmap.css   → timeline de aprendizado
+ *   contact.css   → formulário e canais de contato
+ *   footer.css    → rodapé "fundo do oceano"
+ *   portifolio.css → cards de projetos
+ *   utilities.css → classes utilitárias (.hidden, [data-scroll])
+ *   animations.css → @keyframes (sem regras de estilo)
+ *   responsive.css → media queries (deve sobrescrever tudo)
+ * ═══════════════════════════════════════════════════════════
+ */
+
 @import "./tokens.css";
 @import "./base.css";
 @import "./layout.css";

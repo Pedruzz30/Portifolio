@@ -1,35 +1,54 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  darkmode.css — O Oceano à Meia-noite
+ *  Sobrescreve os tokens de cores quando data-theme="dark"
+ *  está no <html>. O restante do CSS usa variáveis, então
+ *  basta trocar os tokens aqui — tudo se adapta sozinho.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
    DARK MODE
+   Estratégia: apenas redefine as variáveis semânticas
+   (--bg, --surface, --text, etc.) sem duplicar regras de CSS.
+   Os azuis profundos viram fundos; os claros viram texto.
    ========================= */
-
 [data-theme="dark"] {
+  /* Fundos: do midnight-blue (fundo) ao navy-blue (cards) */
   --bg: color-mix(in srgb, var(--midnight-blue) 88%, var(--navy-blue) 12%);
   --surface: color-mix(in srgb, var(--navy-blue) 72%, var(--midnight-blue) 28%);
   --surface-2: color-mix(in srgb, var(--darker-blue) 60%, var(--navy-blue) 40%);
   --surface-soft: color-mix(in srgb, var(--navy-blue) 80%, var(--darker-blue) 20%);
 
+  /* Texto: os azuis claros viram cor de letra */
   --text: var(--white-blue);
   --text-muted: var(--light-blue);
   --text-subtle: color-mix(in srgb, var(--sky-blue) 70%, var(--light-blue) 30%);
 
+  /* Marca: o sky-blue vira primário — mais luminoso no fundo escuro */
   --primary: var(--bright-blue);
   --primary-hover: color-mix(in srgb, var(--sky-blue) 82%, var(--bright-blue));
   --primary-soft: color-mix(in srgb, var(--bright-blue) 18%, var(--navy-blue));
 
+  /* Accent: sky-blue (mais suave que bright-blue em fundo escuro) */
   --accent: var(--sky-blue);
   --accent-soft: color-mix(in srgb, var(--sky-blue) 16%, var(--navy-blue));
   --accent-strong: color-mix(in srgb, var(--bright-blue) 85%, var(--white-blue));
 
+  /* Bordas: mais visíveis no fundo escuro */
   --border: color-mix(in srgb, var(--blue-gray) 35%, transparent);
   --border-strong: color-mix(in srgb, var(--sky-blue) 50%, transparent);
   --border-glow: color-mix(in srgb, var(--bright-blue) 40%, transparent);
 
+  /* Sombras: mais opacas (preto puro em vez de azul-marinho) */
   --shadow-sm: 0 8px 24px color-mix(in srgb, #000 25%, transparent);
   --shadow-md: 0 16px 42px color-mix(in srgb, #000 35%, transparent);
   --shadow-lg: 0 24px 64px color-mix(in srgb, #000 45%, transparent);
 
+  /* Glass: fundo vítreo com base no navy-blue */
   --glass: color-mix(in srgb, var(--navy-blue) 75%, rgba(255,255,255,0.04));
 
+  /* Gradiente de card: tons escuros de azul */
   --grad-card: linear-gradient(
     180deg,
     color-mix(in srgb, var(--navy-blue) 82%, var(--darker-blue) 18%),
@@ -38,21 +57,26 @@
 }
 
 /* Transição suave ao trocar tema — restrita às propriedades de cor para
-   evitar que todas as propriedades do documento transicionem simultaneamente */
+   evitar que TODAS as propriedades do documento transicionem ao mesmo tempo
+   (o que causaria lentidão visível). */
 html {
   transition:
     background-color 320ms var(--ease-out),
     color 320ms var(--ease-out);
 }
 
-/* Garante que elementos com border não transicionem de forma estranha */
+/* Usuários que pedem menos movimento: troca de tema é instantânea */
 @media (prefers-reduced-motion: reduce) {
   html {
     transition: none;
   }
 }
 
-/* Botão de toggle */
+/* =========================
+   BOTÃO DE TOGGLE — Sol/Lua
+   Pequeno botão circular no header para alternar o tema.
+   O ícone muda: 🌙 (modo claro) ↔ ☀️ (modo escuro)
+   ========================= */
 .theme-toggle {
   display: flex;
   align-items: center;
@@ -69,6 +93,7 @@ html {
   flex-shrink: 0;
 }
 
+/* Hover: fundo levemente colorido + rotação divertida */
 .theme-toggle:hover {
   background: var(--accent-soft);
   border-color: var(--border-glow);
@@ -84,7 +109,7 @@ html {
 .theme-toggle svg {
   width: 16px;
   height: 16px;
-  pointer-events: none;
+  pointer-events: none; /* evita que o clique "passe" para o SVG */
 }
 
 .theme-toggle .icon-moon {
@@ -97,7 +122,9 @@ html {
   stroke-width: 2;
 }
 
-/* Ícone sol (dark mode ativo = mostrar sol) */
+/* Lógica de visibilidade dos ícones:
+   Modo claro → mostra lua (para convidar ao modo escuro)
+   Modo escuro → mostra sol (para convidar ao modo claro) */
 .theme-toggle .icon-sun { display: none; }
 .theme-toggle .icon-moon { display: block; }
 

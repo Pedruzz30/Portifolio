@@ -1,3 +1,21 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  roadmap.css — Stack Roadmap (Jornada de Aprendizado Java)
+ *
+ *  Linha do tempo vertical com:
+ *  - Rail central: linha gradiente em ::before do .timeline
+ *  - Nodes: pontos circulares com glow colorido por status
+ *  - Connectors: linhas horizontais do node até o card
+ *  - Cards: glassmorphism com efeito de hover + abertura via <details>
+ *
+ *  Estados do node (data-status):
+ *   "now"      → accent + glow pulsante (animation: pulseGlow)
+ *   "progress" → primary azul
+ *   "next"     → primary mais apagado
+ *   "future"   → border/cinza — ainda distante
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
    STACK ROADMAP — Java
    ========================= */
@@ -250,6 +268,8 @@
   color: var(--text-muted);
 }
 
+/* Grid da timeline. Em mobile: 1 coluna com rail à esquerda.
+   Em desktop (>=980px via responsive.css): 2 colunas, rail no centro. */
 .stack-roadmap__timeline{
   --rail-x: 1.45rem;
   --node-size: 18px;
@@ -261,6 +281,8 @@
   isolation: isolate;
 }
 
+/* Rail vertical: linha de 2px com gradiente (accent → primary → apagado)
+   posicionada em --rail-x da borda esquerda do grid. */
 .stack-roadmap__timeline::before{
   content:"";
   position:absolute;
@@ -291,6 +313,8 @@
   transform: translateY(0);
 }
 
+/* Node circular: posicionado no rail com transform: translate(-50%, -50%)
+   para centralizar. --node-color e --node-glow variam por data-status. */
 .stack-roadmap__step::before{
   content:"";
   position:absolute;
@@ -308,6 +332,8 @@
   transition: box-shadow 240ms var(--ease-out), filter 240ms var(--ease-out);
 }
 
+/* Connector: linha horizontal de 2px do node até o card,
+   com gradiente que desaparece na direção do card. */
 .stack-roadmap__step::after{
   content:"";
   position: absolute;
@@ -522,6 +548,9 @@
   transform: scaleY(0);
 }
 
+/* Animação de abertura do <details> via grid-template-rows: 0fr → 1fr.
+   Técnica mais performática que height: 0 → auto (não força reflow).
+   O filho .content-inner tem overflow:hidden para que 0fr o oculte. */
 .stack-roadmap__content{
   display: grid;
   grid-template-rows: 0fr;

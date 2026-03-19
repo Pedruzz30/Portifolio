@@ -1,3 +1,12 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  about.css — Seção "Sobre Mim"
+ *  Grid de 2 colunas: texto à esquerda, stack de tecnologias à direita.
+ *  Inclui: grade de tecnologias, card de educação, FAB "voltar ao topo"
+ *  e divider de onda SVG entre seções.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
    SOBRE MIM — About Section
    ========================= */
@@ -49,7 +58,7 @@
   align-items: start;
 }
 
-/* ── Lado texto ── */
+/* ── Lado esquerdo: texto descritivo + valores + ações ── */
 .about-text {
   display: flex;
   flex-direction: column;
@@ -116,7 +125,8 @@
   color: var(--text-muted);
 }
 
-/* Grid de tecnologias */
+/* Grid de tecnologias: auto-fill garante que se adapte ao espaço disponível.
+   Cada item tem ícone + label; fallback via .tech-item__icon-text para ícones sem SVG. */
 .tech-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
@@ -180,7 +190,7 @@
   line-height: 1.2;
 }
 
-/* ── Card de educação ── */
+/* ── Card de educação: exibe curso, instituição e badge de status ── */
 .about-edu {
   margin-top: 0.5rem;
 }
@@ -247,7 +257,8 @@
   margin-top: 0.15rem;
 }
 
-/* ── Wave divider entre seções ── */
+/* ── Wave divider: SVG inline de onda que separa visualmente duas seções.
+   margin-bottom: -1px corrige o gap de 1px entre o SVG e a seção seguinte. ── */
 .section-wave {
   display: block;
   width: 100%;
@@ -261,7 +272,9 @@
   width: 100%;
 }
 
-/* ── FAB Voltar ao Topo ── */
+/* ── FAB Voltar ao Topo: botão fixo no canto inferior direito.
+   Começa invisível (opacity:0, pointer-events:none) e ganha .is-visible
+   após 400px de scroll (via main.js). ── */
 .fab-top {
   position: fixed;
   bottom: 2rem;

@@ -1,3 +1,22 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  responsive.css — Adaptações por Breakpoint
+ *
+ *  Breakpoints usados (mobile-first descendente):
+ *   1920px+ → telas extra grandes: fonte base 18px
+ *   1440px+ → telas grandes: hero mais espaçoso, grid 3 colunas
+ *   1024px  → tablet landscape: header em 2 linhas
+ *    980px  → tablet: skills/roadmap colapsa para 1 coluna
+ *    860px  → footer colapsa para 1 coluna
+ *    768px  → mobile: hero empilha, nav vira menu flutuante
+ *    600px  → formulário: row colapsa para 1 coluna
+ *    400px  → mobile pequeno: hero mais compacto, fonts menores
+ *
+ *  prefers-reduced-motion: desativa TODAS as animações
+ *  print: remove decorações, exibe URLs em links
+ * ═══════════════════════════════════════════════════════════
+ */
+
 @media (max-width: 1024px) {
   .header-shell{ grid-template-columns: auto auto; grid-template-areas: "logo actions" "nav nav"; }
   .nav{ grid-area: nav; justify-content: flex-start; }

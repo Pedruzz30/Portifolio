@@ -1,5 +1,16 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  components.css — Componentes Reutilizáveis
+ *  Loader, Header (glass), Nav, Botões, Scroll Progress.
+ *  Cada componente é self-contained e não depende de seção específica.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
-   LOADER
+   LOADER — Tela de carregamento inicial
+   Cobre toda a viewport com position:fixed até finalizeLoader() ser chamado.
+   O anel giratório (.loader-ring) usa @keyframes loading.
+   O JS em dom.js faz a transição opacity:0 → display:none.
    ========================= */
 .loader {
   position: fixed;
@@ -48,7 +59,10 @@
 }
 
 /* =========================
-   HEADER (Premium Glass)
+   HEADER (Glass Premium)
+   position:fixed + backdrop-filter: blur cria o efeito "vidro fosco".
+   Ao scrollar, .scrolled reduz o padding e aumenta a opacidade do fundo.
+   O glow sutil em ::before dá profundidade extra no topo.
    ========================= */
 
 .header{
@@ -295,6 +309,10 @@
 
 /* =========================
    SCROLL PROGRESS (HUD) — FLUÍDO
+   Barra na base do header que cresce de 0% a 100% conforme o scroll.
+   .scroll-progress__bar usa scaleX(0→1) com transform-origin:left
+   (mais performático que width:0→100% — fica no compositor GPU).
+   O shimmer ::after simula a "onda passando" pela barra.
    ========================= */
 
 .scroll-progress{
@@ -444,6 +462,14 @@
 
 /* =========================
    BOTÕES — sistema unificado
+   Variantes via modificadores BEM:
+   .btn--primary → gradiente azul profundo (ação principal)
+   .btn--soft    → fundo claro com borda sutil (ação secundária)
+   .btn--ghost   → transparente com borda (sobre fundos coloridos)
+   .btn--icon    → quadrado 44x44px (apenas ícone)
+   .btn--ripple  → adiciona o efeito onda ao clicar (ver ripple.js)
+   .btn--pill    → border-radius arredondado total
+   .btn__pulse   → halo de glow pulsante atrás do botão
    ========================= */
 .btn{
   --btn-primary: linear-gradient(135deg,

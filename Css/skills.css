@@ -1,3 +1,17 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  skills.css — Habilidades (Skills v2)
+ *
+ *  Paleta especial: além dos azuis do site, esta seção usa
+ *  tons de laranja Java (--java-orange, --java-ember, etc.)
+ *  para referenciar a linguagem principal de estudo.
+ *
+ *  Layout: 2 colunas (1.15fr / 0.85fr) com cards glassmorphism.
+ *  Card esquerdo: trilhas de conhecimento com barra de progresso.
+ *  Card direito: stack de ferramentas + métricas.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
    SKILLS v2 — clean + mar premium
    ========================= */
@@ -131,7 +145,8 @@
   border-style: dashed;
 }
 
-/* Layout principal */
+/* Layout principal: 2 colunas em desktop, colapsa para 1 em mobile
+   via media query em responsive.css (max-width: 980px). */
 .skills2-layout{
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -139,7 +154,9 @@
   align-items: start;
 }
 
-/* Cards base */
+/* Card base: glassmorphism com backdrop-filter.
+   ::before = textura diagonal de listras finas (profundidade)
+   ::after  = glow radial animado (oceanGlow) */
 .skills2-card{
   position: relative;
   border-radius: 1.35rem;
@@ -264,7 +281,9 @@
   animation: bubbleDrift 4s ease-in-out infinite;
 }
 
-/* Trilhas */
+/* Trilhas de conhecimento: cada trilha é um item de lista com
+   ícone de ponto colorido, texto descritivo, tags e barra de progresso.
+   --tone define a cor temática de cada trilha individualmente. */
 .skills2-tracks{
   margin: 0;
   padding: 0;
@@ -407,6 +426,8 @@
   border: 1px solid color-mix(in srgb, var(--tone, var(--accent)) 24%, transparent);
 }
 
+/* Barra preenchida: width é definida via --progress (0..1) pelo HTML.
+   Ex: style="--progress: 0.75" = 75% preenchido. */
 .skills2-progressFill{
   position: absolute;
   inset: 0;
@@ -499,7 +520,8 @@
   box-shadow: 0 12px 30px color-mix(in srgb, var(--violet) 16%, transparent);
 }
 
-/* Chips */
+/* Chips: pílulas de tecnologias usadas.
+   .skills2-chip--main destaca as tecnologias primárias com gradiente azul. */
 .skills2-chips{
   margin: 0;
   padding: 0;
@@ -708,7 +730,8 @@
   transform-origin: left center;
 }
 
-/* Mini infos */
+/* Mini infos: grid de dados rápidos (ex: "Linguagem principal: Java").
+   .skills2-mini--grid = 2 colunas para ocupar o espaço eficientemente. */
 .skills2-mini{
   margin-top: 1rem;
   padding-top: 1rem;
@@ -743,7 +766,8 @@
   font-weight: 750;
 }
 
-/* Métricas embaixo */
+/* Métricas: cards de destaque numérico (ex: "3+ projetos").
+   3 colunas em desktop — grid mais compacto do que os cards principais. */
 .skills2-metrics{
   margin-top: clamp(1.1rem, 2.2vw, 1.6rem);
   display: grid;

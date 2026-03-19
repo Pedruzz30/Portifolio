@@ -1,3 +1,14 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  main.js — Ponto de Entrada do Portfólio
+ *
+ *  Padrão usado: bootstrap() centralizado com AbortController.
+ *  Todas as funcionalidades são inicializadas aqui e recebem
+ *  um { signal } compartilhado — ao abortar, TODOS os listeners
+ *  são removidos de uma vez, sem precisar rastrear cada um.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 import { finalizeLoader, safeGetComputedStyle } from "./utils/dom.js";
 import { setupMenu } from "./components/menu.js";
 import { setupScrollUI } from "./components/scroll.js";
@@ -7,10 +18,13 @@ import { setupRoadmap } from "./components/roadmap.js";
 import { setupTheme } from "./components/theme.js";
 
 function bootstrap() {
-  // abort controller para matar TODOS listeners de uma vez
+  // AbortController centralizado: controller.abort() cancela TODOS os
+  // addEventListener que usam { signal } — uma linha mata tudo. Sem leaks.
   const controller = new AbortController();
   const { signal } = controller;
 
+  // Referências a todos os elementos do DOM que serão usados.
+  // Centralizar aqui evita querySelector espalhados pelo código.
   const elements = {
     loader: document.querySelector(".loader"),
     header: document.querySelector(".header"),
@@ -36,18 +50,22 @@ function bootstrap() {
     roadmapProgressSteps: Array.from(document.querySelectorAll(".stack-roadmap__progress-step")),
   };
 
-  // reduz motion centralizado (p/ usar em módulos se quiser)
+  // Detecta preferência de acessibilidade uma única vez.
+  // Passado para cada módulo para que desativem animações quando necessário.
   const prefersReducedMotion =
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // helper de css var
+  // Helper para ler CSS custom properties (ex: --wave-slow) do :root
   const getCssVar = (property, fallback = "") =>
     safeGetComputedStyle(property) || fallback;
 
-  // lista de cleanups (caso módulos retornem destroy)
+  // Módulos que retornam { destroy } são registrados aqui.
+  // Na saída da página, todos são destruídos em ordem.
   const cleanups = [];
 
+  // Wrapper seguro de inicialização: captura erros de módulos individuais
+  // sem travar toda a aplicação. Se um módulo retornar { destroy }, registra.
   const safelyInit = (fn, args, onError = null) => {
     try {
       const handle = fn(args);
@@ -62,7 +80,8 @@ function bootstrap() {
     }
   };
 
-  // loader finalize only once
+  // Flags para garantir que o loader e os visuais rodem apenas UMA vez,
+  // independente de quantos eventos (load, DOMContentLoaded) disparem.
   let loaderFinalized = false;
   let loaderFallbackTimeoutId = null;
 
@@ -70,6 +89,7 @@ function bootstrap() {
     if (loaderFinalized) return;
     loaderFinalized = true;
 
+    // Cancela o timeout de fallback se o load aconteceu normalmente
     if (loaderFallbackTimeoutId) {
       clearTimeout(loaderFallbackTimeoutId);
       loaderFallbackTimeoutId = null;
@@ -82,13 +102,14 @@ function bootstrap() {
     }
   };
 
-  // visuals run only once
   let visualsStarted = false;
   const runVisualsOnce = () => {
     if (visualsStarted) return;
     visualsStarted = true;
 
     try {
+      // initAnimations cuida de: reveal do hero, parallax do mouse,
+      // bubbles, tilt dos cards e animações de scroll.
       safelyInit(initAnimations, {
         heroContent: elements.heroContent,
         textReveal: elements.textReveal,
@@ -97,11 +118,12 @@ function bootstrap() {
         portfolioItems: elements.portfolioItems,
       });
     } finally {
-      finalizeOnce();
+      finalizeOnce(); // loader some após os visuais iniciarem
     }
   };
 
-  // MENU
+  // ─── MENU ────────────────────────────────────────────────
+  // Hamburger + navegação mobile + fechar ao clicar no overlay
   safelyInit(
     setupMenu,
     {
@@ -116,7 +138,8 @@ function bootstrap() {
     (error) => console.error("Falha ao iniciar menu:", error)
   );
 
-  // SCROLL UI
+  // ─── SCROLL UI ───────────────────────────────────────────
+  // Barra de progresso + header comprimido no scroll + active link
   safelyInit(
     setupScrollUI,
     {
@@ -129,13 +152,16 @@ function bootstrap() {
     (error) => console.error("Falha ao iniciar scroll UI:", error)
   );
 
-  // RIPPLE
+  // ─── RIPPLE ──────────────────────────────────────────────
+  // Efeito de onda ao clicar nos botões .btn--ripple
   safelyInit(
     setupRipple,
     { rippleButtons: elements.rippleButtons, prefersReducedMotion },
     (error) => console.warn("Ripple desabilitado:", error)
   );
 
+  // ─── ROADMAP ─────────────────────────────────────────────
+  // Calcula o progresso ponderado e anima os steps ao entrar em view
    safelyInit(
     setupRoadmap,
     {
@@ -150,19 +176,22 @@ function bootstrap() {
     (error) => console.warn("Roadmap desabilitado:", error)
   );
 
-  // THEME TOGGLE
+  // ─── THEME TOGGLE ────────────────────────────────────────
+  // Alternância claro/escuro com persistência em localStorage
   safelyInit(
     setupTheme,
     { toggleBtn: elements.themeToggle },
     (error) => console.warn("Theme toggle desabilitado:", error)
   );
 
-  // YEAR
+  // ─── ANO DINÂMICO ────────────────────────────────────────
+  // Atualiza o copyright no footer automaticamente todo ano
   if (elements.year) {
     elements.year.textContent = String(new Date().getFullYear());
   }
 
-  // FAB — Voltar ao topo
+  // ─── FAB — Voltar ao topo ────────────────────────────────
+  // Aparece após 400px de scroll; some ao chegar no topo
   const fabTop = document.getElementById("fab-top");
   if (fabTop) {
     const toggleFab = () => {
@@ -176,45 +205,47 @@ function bootstrap() {
     fabTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, { signal });
-    toggleFab();
+    toggleFab(); // executa na inicialização para estado correto caso a página carregue scrollada
   }
 
-  // FORMULÁRIO DE CONTATO — feedback + character counter
+  // ─── FORMULÁRIO DE CONTATO ───────────────────────────────
+  // Contador de caracteres + submissão via mailto + feedback visual
   const contactForm = document.getElementById("contact-form");
   if (contactForm) {
     const textarea  = contactForm.querySelector("#contact-message");
     const counter   = contactForm.querySelector(".contact-form__counter");
     const submitBtn = contactForm.querySelector(".contact-form__submit");
     const label     = submitBtn?.querySelector(".btn__label");
-    const MAX       = 500;
+    const MAX       = 500; // limite de caracteres da mensagem
 
-    // Character counter
+    // Atualiza o contador ao digitar e muda cor ao se aproximar do limite
     if (textarea && counter) {
       const updateCounter = () => {
         const len = textarea.value.length;
         counter.textContent = `${len} / ${MAX}`;
-        counter.classList.toggle("is-near-limit", len >= MAX * 0.8 && len < MAX);
-        counter.classList.toggle("is-at-limit", len >= MAX);
+        counter.classList.toggle("is-near-limit", len >= MAX * 0.8 && len < MAX); // amarelo acima de 80%
+        counter.classList.toggle("is-at-limit", len >= MAX);                      // vermelho ao atingir 100%
       };
       textarea.addEventListener("input", updateCounter, { signal });
-      updateCounter();
+      updateCounter(); // estado inicial
     }
 
-    // Form submission — abre client de email com fallback elegante
+    // Submissão: 800ms de feedback visual → abre cliente de email
+    // Não usa fetch/API — abre o mailto diretamente no cliente do usuário
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // remove feedback anterior
+      // Limpa mensagens de feedback anteriores
       contactForm.classList.remove("show-success", "show-error");
 
       if (!contactForm.checkValidity()) {
-        contactForm.reportValidity();
+        contactForm.reportValidity(); // mostra validação nativa do browser
         return;
       }
 
       const originalLabel = label ? label.textContent : "Enviar mensagem";
 
-      // loading state
+      // Estado de loading: desabilita botão e mostra "Enviando…"
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.classList.add("is-loading");
@@ -222,13 +253,14 @@ function bootstrap() {
       }
 
       try {
-        // Aguarda 800ms para dar feedback visual, então abre o mailto
+        // Pausa artificial para dar feedback visual ao usuário
         await new Promise((r) => setTimeout(r, 800));
 
         const nome     = contactForm.querySelector("#contact-name")?.value || "";
         const email    = contactForm.querySelector("#contact-email")?.value || "";
         const mensagem = textarea?.value || "";
 
+        // Constrói a URL mailto com os dados do formulário
         const subject  = encodeURIComponent(`Contato do portfólio — ${nome}`);
         const body     = encodeURIComponent(
           `Nome: ${nome}\nEmail: ${email}\n\nMensagem:\n${mensagem}`
@@ -243,31 +275,39 @@ function bootstrap() {
       } catch {
         contactForm.classList.add("show-error");
       } finally {
+        // Restaura o botão independente de sucesso ou erro
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.classList.remove("is-loading");
           if (label) label.textContent = originalLabel;
         }
-        // esconde feedback após 5s
+        // Feedback some após 5 segundos
         setTimeout(() => contactForm.classList.remove("show-success", "show-error"), 5000);
       }
     }, { signal });
   }
 
-  // loader fallback (caso load nunca chegue / algo trave)
+  // ─── LOADER FALLBACK ─────────────────────────────────────
+  // Se o evento "load" nunca disparar (scripts externos lentos, etc.),
+  // remove o loader após 1.5s de qualquer jeito.
   loaderFallbackTimeoutId = window.setTimeout(() => {
     console.warn("Loader finalizado por fallback após timeout.");
     finalizeOnce();
   }, 1500);
 
-  // start visuals: se já carregou, roda; senão no load (once)
+  // Inicia os visuais após o DOM estar pronto:
+  // - Se já carregou: roda imediatamente
+  // - Se não: aguarda o evento "load" (imagens, fontes, etc.)
   if (document.readyState === "complete") {
     runVisualsOnce();
   } else {
     window.addEventListener("load", runVisualsOnce, { once: true, signal });
   }
 
-  // Cleanup automático ao sair da página (evita leaks)
+  // ─── CLEANUP AO SAIR DA PÁGINA ───────────────────────────
+  // pagehide dispara antes do browser navegar para outra página.
+  // Cancela o AbortController (remove todos os listeners) e
+  // chama destroy() em cada módulo que registrou um.
   window.addEventListener(
     "pagehide",
     () => {
@@ -297,7 +337,9 @@ function bootstrap() {
   };
 }
 
-// bootstrap seguro
+// ─── INICIALIZAÇÃO SEGURA ────────────────────────────────────
+// Tenta iniciar o app; em caso de erro crítico, pelo menos remove o loader
+// para o usuário não ficar preso na tela de loading.
 const start = () => {
   try {
     bootstrap();
@@ -309,6 +351,9 @@ const start = () => {
   }
 };
 
+// Espera o DOMContentLoaded se o HTML ainda não foi parseado,
+// caso contrário roda imediatamente (script com defer já garante isso,
+// mas esta verificação torna o código robusto em qualquer cenário).
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", start, { once: true });
 } else {

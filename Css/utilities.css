@@ -1,7 +1,23 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  utilities.css — Classes de Utilidade
+ *  Helpers minimalistas usados pelo JavaScript para controlar
+ *  visibilidade e animações de entrada por scroll.
+ * ═══════════════════════════════════════════════════════════
+ */
+
+/* Oculta elementos sem ocupar espaço no layout (usado para
+   elementos que o JS controla, como o loader e modais). */
 .hidden { display: none; }
 
 /* =========================
    GLOBAL SCROLL STATE
+   Elementos com [data-scroll] começam invisíveis e
+   ganham opacity: 1 quando o JS adiciona data-scroll="in"
+   (normalmente via IntersectionObserver).
+
+   A transição de 0.8s em opacity + transform dá a sensação
+   de "surfacing" — como objetos subindo da profundidade.
    ========================= */
 [data-scroll] {
   opacity: 0;

@@ -1,5 +1,15 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  base.css — Fundação do Oceano
+ *  Reset global, tipografia de links e o efeito de "mar vivo"
+ *  que anima sutilmente o fundo de todas as páginas.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
    RESET / BASE
+   Remove margens/paddings padrão do navegador e garante
+   que padding e border entrem no cálculo de width/height.
    ========================= */
 * {
   margin: 0;
@@ -20,11 +30,14 @@ body {
 
 img {
   max-width: 100%;
-  display: block;
+  display: block; /* remove o espaço fantasma abaixo de imagens inline */
 }
 
 /* =========================
    LINKS / A11Y
+   Links sem underline fixo — o sublinhado "nasce" no hover
+   usando background-size: 0% → 100% (técnica mais performática que
+   border-bottom animado, pois roda no compositor GPU).
    ========================= */
 a,
 .a11y-link {
@@ -37,17 +50,19 @@ a,
     var(--accent-strong)
   );
   background-repeat: no-repeat;
-  background-size: 0% 2px;
-  background-position: 0 100%;
+  background-size: 0% 2px;    /* começa invisível */
+  background-position: 0 100%; /* fica na base do texto */
   transition: color var(--transition-base), background-size var(--transition-base);
 }
 
 a:hover,
 .a11y-link:hover {
   color: var(--accent-strong);
-  background-size: 100% 2px;
+  background-size: 100% 2px;  /* cresce até cobrir todo o texto */
 }
 
+/* Outline acessível via teclado — substitui o outline padrão do browser
+   por um box-shadow azul que respeita o border-radius do elemento */
 a:focus-visible,
 .a11y-link:focus-visible {
   outline: none;
@@ -57,6 +72,7 @@ a:focus-visible,
 
 /* =========================
    SPECIAL EFFECTS
+   Cor de seleção de texto alinhada ao tema do site.
    ========================= */
 ::selection {
   background: var(--accent);
@@ -65,7 +81,8 @@ a:focus-visible,
 
 /* =========================
    SELEÇÃO INTENCIONAL
-   Elementos decorativos não devem ser selecionáveis acidentalmente
+   Elementos puramente decorativos não devem ser selecionáveis
+   pelo usuário — evita highlight acidental ao clicar.
    ========================= */
 .hero-bubbles,
 .hero-orbs,
@@ -79,15 +96,24 @@ a:focus-visible,
 
 /* =========================
    MAR GLOBAL — efeito contínuo
+   Duas camadas pseudo-element no <body> criam o "oceano vivo"
+   que permeia todo o site, sutilmente animado.
+
+   ::before — glow radial (reflexo de luz na água)
+     mix-blend-mode: soft-light → integra com qualquer cor de seção
+
+   ::after — onda de brilho varrendo da esquerda p/ direita
+     animation: oceanWaveFlow → fluxo unidirecional (corrente, não pêndulo)
+     opacity baixa para que não distraia do conteúdo
    ========================= */
 body::before,
 body::after {
   content: "";
-  position: fixed;
-  inset: -20%;
+  position: fixed;   /* fixed: segue o scroll, "colado" à viewport */
+  inset: -20%;       /* maior que a tela para cobrir bordas ao animar */
   pointer-events: none;
-  z-index: 0;
-  will-change: transform, opacity;
+  z-index: 0;        /* atrás de todo o conteúdo */
+  will-change: transform, opacity; /* otimiza para GPU */
 }
 
 body::before {
@@ -113,10 +139,12 @@ body::after {
   );
   opacity: 0.3;
   filter: blur(0.3px);
-  /* fluxo unidirecional — corrente global */
+  /* fluxo unidirecional — corrente global, não pendulum */
   animation: oceanWaveFlow calc(var(--wave-slow) * 0.90) linear infinite;
 }
 
+/* Header, main e footer sobem acima do mar global (z-index: 1)
+   para garantir que o conteúdo fique visível sobre os pseudo-elements. */
 header,
 main,
 footer {
@@ -124,6 +152,8 @@ footer {
   z-index: 1;
 }
 
+/* Qualquer elemento com ID recebe um scroll-margin-top automático,
+   compensando a altura do header fixo ao navegar via âncoras (#secao). */
 :where([id]) {
   scroll-margin-top: calc(var(--header-offset) + 12px);
 }

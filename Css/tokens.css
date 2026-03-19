@@ -1,23 +1,35 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  tokens.css — O Oceano em Variáveis
+ *  Toda a personalidade visual do portfólio vive aqui.
+ *  Altere estes tokens e toda a UI se transforma.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 :root {
   /* =========================
      Escala de azuis
+     Da superfície clara ao fundo profundo —
+     como mergulhar cada vez mais fundo no oceano.
      ========================= */
-  --white-blue: #f2fbff;
-  --very-light-blue: #dff5ff;
-  --light-blue: #bfeaff;
-  --sky-blue: #8ed8ff;
-  --bright-blue: #4fbfff;
-  --blue: #159ee6;
-  --deep-blue: #0c7fbf;
-  --darker-blue: #095f92;
-  --navy-blue: #064465;
-  --midnight-blue: #032a40;
+  --white-blue: #f2fbff;      /* quase branco, como a espuma */
+  --very-light-blue: #dff5ff; /* água rasa e límpida */
+  --light-blue: #bfeaff;      /* azul de piscina */
+  --sky-blue: #8ed8ff;        /* céu refletido na água */
+  --bright-blue: #4fbfff;     /* brilho solar na superfície */
+  --blue: #159ee6;             /* azul vibrante e vivo */
+  --deep-blue: #0c7fbf;       /* cor primária — profundidade real */
+  --darker-blue: #095f92;     /* fundo escuro, com luz ainda visível */
+  --navy-blue: #064465;       /* quase abismo */
+  --midnight-blue: #032a40;   /* o fundo do oceano */
 
   /* =========================
      Escala de brancos e cinzas frios
+     Usados em superfícies, textos e bordas —
+     o que não é oceano, é névoa sobre o mar.
      ========================= */
   --pure-white: #ffffff;
-  --cool-white: #f7f8fb;
+  --cool-white: #f7f8fb;         /* branco levemente azulado */
   --light-gray: #eef1f6;
   --silver-light: #dfe5ee;
   --silver: #c9d2df;
@@ -25,47 +37,61 @@
   --blue-gray: #8f9bb0;
   --gray: #6f7b8e;
   --dark-gray: #4d5666;
-  --charcoal: #2e3440;
+  --charcoal: #2e3440;           /* texto principal: máximo contraste */
 
-  /* ===== Base / Superfícies ===== */
+  /* ===== Base / Superfícies =====
+     Backgrounds da página: levemente azulados para não parecer papel.
+     color-mix() mistura variáveis de design sem valores hardcoded. */
   --bg: color-mix(in srgb, var(--cool-white) 75%, var(--white-blue) 25%);
   --surface: var(--pure-white);
   --surface-2: color-mix(in srgb, var(--light-gray) 55%, var(--pure-white) 45%);
   --surface-soft: color-mix(in srgb, var(--pure-white) 82%, var(--very-light-blue) 18%);
 
-  /* ===== Texto ===== */
+  /* ===== Texto =====
+     --text-muted usa --dark-gray (~4.5:1 contraste) e NÃO --gray (~4.0:1),
+     que falha WCAG AA em fundos claros. Acessibilidade em primeiro lugar. */
   --text: var(--charcoal);
-  /* --gray (#6f7b8e) falha WCAG AA em fundos claros (~4.0:1); usa --dark-gray para ≥4.5:1 */
   --text-muted: var(--dark-gray);
   --text-subtle: color-mix(in srgb, var(--dark-gray) 70%, var(--blue-gray) 30%);
 
-  /* ===== Marca / Ação ===== */
+  /* ===== Marca / Ação =====
+     --primary é a cor de ação principal — botões, links, destaques.
+     --primary-soft é o fundo suave nos estados hover/focus. */
   --primary: var(--deep-blue);
   --primary-hover: color-mix(in srgb, var(--darker-blue) 82%, var(--navy-blue));
   --primary-soft: color-mix(in srgb, var(--deep-blue) 14%, var(--pure-white));
 
-  /* ===== Temperinho (acento) ===== */
+  /* ===== Temperinho (acento) =====
+     --accent é o brilho bioluminescente — usado em glows, badges e destaques.
+     --gradient-pop é o gradiente vibrante viola→magenta→mint (usado em bordas especiais). */
   --accent: var(--bright-blue);
   --violet: #9c8bff;
   --magenta: #ff7ac3;
-  --mint: #2de2e6;
+  --mint: #2de2e6;              /* cor do "disponível para trabalho" */
   --accent-soft: color-mix(in srgb, var(--bright-blue) 14%, var(--pure-white));
   --accent-strong: color-mix(in srgb, var(--bright-blue) 78%, var(--midnight-blue));
   --gradient-pop: linear-gradient(120deg, var(--violet), var(--magenta), var(--mint));
   --glass: color-mix(in srgb, var(--surface) 80%, var(--very-light-blue) 20%);
 
-  /* ===== Linhas / Bordas ===== */
+  /* ===== Linhas / Bordas =====
+     Bordas semi-transparentes para não "poluir" o design.
+     --border-glow é usado quando o elemento está em foco/destaque. */
   --border: color-mix(in srgb, var(--blue-gray-light) 42%, transparent);
   --border-strong: color-mix(in srgb, var(--blue-gray) 58%, transparent);
   --border-glow: color-mix(in srgb, var(--accent) 28%, transparent);
 
-  /* ===== Sombras / Glow ===== */
+  /* ===== Sombras / Glow =====
+     Três tamanhos de sombra (sm → md → lg) para hierarquia visual.
+     --focus é o outline de teclado acessível — azul brilhante, bem visível. */
   --shadow-sm: 0 8px 24px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
   --shadow-md: 0 16px 42px color-mix(in srgb, var(--midnight-blue) 16%, transparent);
   --shadow-lg: 0 24px 64px color-mix(in srgb, var(--midnight-blue) 22%, transparent);
   --focus: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
 
-  /* ===== Gradientes (personalidade) ===== */
+  /* ===== Gradientes (personalidade) =====
+     --grad-hero: fundo do hero — vai do branco-azulado ao azul profundo (135deg).
+     --grad-card: fundo de cards — levemente azulado, dá sensação de vidro.
+     --grad-border: borda animável em hover — vai do accent ao sky-blue. */
   --grad-hero: linear-gradient(
     135deg,
     color-mix(in srgb, var(--white-blue) 68%, var(--bright-blue) 32%),
@@ -86,10 +112,14 @@
     var(--sky-blue)
   );
 
-/* ===== Navegação ===== */
+/* ===== Navegação =====
+   Offset do header fixo — usado em scroll-margin-top para que
+   ancoras (#secao) não fiquem escondidas atrás do header. */
   --header-offset: 96px;
 
-  /* ===== Hierarquia de z-index ===== */
+  /* ===== Hierarquia de z-index =====
+     Camadas nomeadas: nunca mais guerre com números mágicos!
+     base → raised → content → overlay → header → loader (topo de tudo) */
   --z-base: 0;
   --z-raised: 1;
   --z-content: 2;
@@ -98,10 +128,15 @@
   --z-nav-mobile: 10;
   --z-loader: 9999;
 
-  /* ===== Shapes ===== */
+  /* ===== Shapes =====
+     Border-radius "blob" — forma orgânica que imita uma criatura marinha.
+     Os valores são animados pelo keyframe `blob` em animations.css. */
   --blob-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
 
-  /* ===== Motion ===== */
+  /* ===== Motion =====
+     Durações centralizadas para animações coerentes em todo o site.
+     --wave-slow (16s) e --wave-medium (11s) são as "marés" do design.
+     --float-distance é a distância máxima que elementos flutuam. */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-base: 220ms var(--ease-out);
   --wave-slow: 16s;

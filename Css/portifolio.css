@@ -1,3 +1,11 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  portifolio.css — Projetos
+ *  Cards de projeto com hover animado via GSAP (.project-card__glow)
+ *  e brilho cáustico subaquático no fundo da seção.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
    PORTFOLIO / PROJETOS
    ========================= */
@@ -8,7 +16,9 @@
   overflow: hidden;
 }
 
-/* Luz cáustica — brilho subaquático no fundo da seção */
+/* Luz cáustica — brilho subaquático no fundo da seção.
+   mix-blend-mode: soft-light integra com qualquer cor de fundo.
+   animation: portfolioCaustic (animations.css) cria o movimento orgânico. */
 .portfolio::before {
   content: "";
   position: absolute;
@@ -68,14 +78,16 @@
   line-height: 1.65;
 }
 
-/* Grid de cards */
+/* Grid responsivo: 1 coluna em mobile, até 3 em telas grandes.
+   auto-fill + minmax: adiciona colunas automaticamente sem media query. */
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: clamp(1.25rem, 3vw, 2rem);
 }
 
-/* Glow overlay animado via GSAP no hover */
+/* Glow overlay: começa com opacity:0 e vai para 1 via GSAP no hover
+   (ver animations.js → initPortfolioHover). z-index:0 fica atrás do conteúdo. */
 .project-card__glow {
   position: absolute;
   inset: -20px;

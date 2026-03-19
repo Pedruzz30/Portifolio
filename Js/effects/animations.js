@@ -1,28 +1,56 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  effects/animations.js — Correnteza Visual
+ *
+ *  Orquestra todos os efeitos visuais dinâmicos do portfólio:
+ *  - Reveal de texto do hero (GSAP + clip-path)
+ *  - Scroll reveal de cards ("surfacing from depth")
+ *  - Mouse parallax do hero (camadas em profundidade)
+ *  - Scroll parallax do hero (elementos na viewport)
+ *  - Bolhas ascendentes (geradas dinamicamente)
+ *  - VanillaTilt lazy (só ativa quando o card entra na tela)
+ *  - Hover nos cards de portfolio (GSAP timeline)
+ * ═══════════════════════════════════════════════════════════
+ */
+
+// Detecta suporte a hover real (tablets não têm hover, não precisam de tilt)
 const canHover = window.matchMedia("(hover: hover)").matches;
+
+// Detecta preferência de acessibilidade uma única vez no módulo
 const prefersReducedMotion =
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* =========================
    VANILLA TILT — LAZY INIT
+   Inicializa o efeito 3D tilt nos cards apenas quando entram
+   no viewport (IntersectionObserver + requestIdleCallback).
+   Isso evita que o GSAP pesado inicialize em elementos fora de tela.
 ========================= */
 function initLazyTilt(cards) {
   const items = cards.filter(Boolean);
+  // Sem VanillaTilt, sem itens, ou com preferência de sem-movimento: no-op
   if (!window.VanillaTilt || !items.length || prefersReducedMotion) {
     return () => {};
   }
 
+  // WeakMap: armazena os handles de rAF/idle por elemento sem risco de leak
   const idleHandles = new WeakMap();
 
+  /**
+   * Agenda a inicialização do tilt para quando o browser estiver ocioso.
+   * requestIdleCallback > setTimeout para não travar frames de animação.
+   */
   const scheduleTilt = (el) => {
-    if (el.vanillaTilt) return;
+    if (el.vanillaTilt) return; // já inicializado
+
     const init = () => {
       idleHandles.delete(el);
-      if (el.vanillaTilt) return;
+      if (el.vanillaTilt) return; // checagem dupla (rAF pode chegar depois)
       window.VanillaTilt.init(el, {
-        max: 8,
-        speed: 600,
+        max: 8,           // máximo 8° de rotação
+        speed: 600,       // velocidade de retorno (ms)
         glare: true,
-        "max-glare": 0.12,
+        "max-glare": 0.12, // brilho sutil, não distrativo
       });
     };
 
@@ -30,18 +58,19 @@ function initLazyTilt(cards) {
       const id = window.requestIdleCallback(init, { timeout: 350 });
       idleHandles.set(el, { type: "idle", id });
     } else {
-      const id = window.setTimeout(init, 0);
+      const id = window.setTimeout(init, 0); // fallback para browsers sem rIC
       idleHandles.set(el, { type: "timeout", id });
     }
   };
 
+  // Observa cada card: quando 25% aparece na tela, agenda o tilt
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const el = entry.target;
         if (entry.isIntersecting && !el.vanillaTilt) {
           scheduleTilt(el);
-          observer.unobserve(el);
+          observer.unobserve(el); // para de observar — o tilt vai ser init apenas uma vez
         }
       });
     },
@@ -50,6 +79,7 @@ function initLazyTilt(cards) {
 
   items.forEach((card) => observer.observe(card));
 
+  // Cleanup: cancela observações e timers, destrói instâncias de tilt
   return () => {
     observer.disconnect();
     items.forEach((card) => {
@@ -72,9 +102,12 @@ function initLazyTilt(cards) {
 
 /* =========================
    PORTFOLIO HOVER — ELITE
+   Anima o glow, badge de status e tags ao passar o mouse
+   usando GSAP timeline (play/reverse), mais suave que CSS puro.
 ========================= */
 function initPortfolioHover(items) {
   const cards = items.filter(Boolean);
+  // Só em dispositivos com hover real + GSAP disponível
   if (!cards.length || !window.gsap || !canHover || prefersReducedMotion) {
     return () => {};
   }
@@ -82,18 +115,20 @@ function initPortfolioHover(items) {
   const cleanups = [];
 
   cards.forEach((card) => {
-    const glow = card.querySelector(".project-card__glow");
-    const score = card.querySelector(".project-card__status");
-    const meta = card.querySelectorAll(".project-tag");
+    // Seleciona os elementos animados dentro do card
+    const glow  = card.querySelector(".project-card__glow");   // halo de luz
+    const score = card.querySelector(".project-card__status"); // badge de status
+    const meta  = card.querySelectorAll(".project-tag");       // tecnologias usadas
 
     const targets = [glow, score, ...meta].filter(Boolean);
-    gsap.set(targets, { clearProps: "all" });
+    gsap.set(targets, { clearProps: "all" }); // reset inicial
 
+    // Timeline pausada: play() no enter, reverse() no leave
     const tl = gsap.timeline({ paused: true, defaults: { overwrite: "auto" } });
 
-    if (glow) tl.to(glow, { opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
-    if (score) tl.to(score, { y: -4, duration: 0.35, ease: "power2.out" }, 0);
-    if (meta.length) tl.to(meta, { y: -2, duration: 0.35, stagger: 0.04, ease: "power2.out" }, 0);
+    if (glow)       tl.to(glow,   { opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
+    if (score)      tl.to(score,  { y: -4,       duration: 0.35, ease: "power2.out" }, 0);
+    if (meta.length) tl.to(meta,  { y: -2, stagger: 0.04, duration: 0.35, ease: "power2.out" }, 0);
 
     const enter = () => tl.play();
     const leave = () => tl.reverse();
@@ -104,7 +139,7 @@ function initPortfolioHover(items) {
     cleanups.push(() => {
       card.removeEventListener("pointerenter", enter);
       card.removeEventListener("pointerleave", leave);
-      tl.kill();
+      tl.kill(); // libera memória da timeline
     });
   });
 
@@ -113,20 +148,26 @@ function initPortfolioHover(items) {
 
 /* =========================
    HERO MOUSE PARALLAX
-   Camadas em profundidades distintas respondem ao cursor
+   Camadas em profundidades distintas respondem ao cursor.
+   gsap.quickTo() cria funções de animação contínua — mais
+   performático que criar novas tweens a cada mousemove.
+
+   Profundidade das camadas (por deslocamento):
+   orbs (32px) > visual (18px) > panels (10px)
+   Camada mais distante = maior deslocamento.
 ========================= */
 function initHeroParallax(hero) {
   if (!hero || prefersReducedMotion || !canHover || !window.gsap) return () => {};
 
-  const orbs    = hero.querySelector(".hero-orbs");
-  const panels  = hero.querySelector(".floating-panels");
-  const visual  = hero.querySelector(".hero-visual");
+  const orbs   = hero.querySelector(".hero-orbs");
+  const panels = hero.querySelector(".floating-panels");
+  const visual = hero.querySelector(".hero-visual");
 
   if (!visual) return () => {};
 
   // quickTo cria uma função de animação contínua sem criar novas tweens a cada frame
-  const orbsX   = orbs ? gsap.quickTo(orbs,   "x", { duration: 0.9, ease: "power1.out" }) : null;
-  const orbsY   = orbs ? gsap.quickTo(orbs,   "y", { duration: 0.9, ease: "power1.out" }) : null;
+  const orbsX   = orbs   ? gsap.quickTo(orbs,   "x", { duration: 0.9, ease: "power1.out" }) : null;
+  const orbsY   = orbs   ? gsap.quickTo(orbs,   "y", { duration: 0.9, ease: "power1.out" }) : null;
   const panelsX = panels ? gsap.quickTo(panels, "x", { duration: 1.4, ease: "power1.out" }) : null;
   const panelsY = panels ? gsap.quickTo(panels, "y", { duration: 1.4, ease: "power1.out" }) : null;
   const visualX = visual ? gsap.quickTo(visual, "x", { duration: 1.1, ease: "power1.out" }) : null;
@@ -134,21 +175,22 @@ function initHeroParallax(hero) {
 
   const onMove = (e) => {
     const rect = hero.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width  - 0.5;  // -0.5 → +0.5
-    const y = (e.clientY - rect.top)  / rect.height - 0.5;
+    // Normaliza o cursor para -0.5 → +0.5 relativo ao centro do hero
+    const x = (e.clientX - rect.left)  / rect.width  - 0.5;
+    const y = (e.clientY - rect.top)   / rect.height - 0.5;
 
-    orbsX?.(x * 32);
+    orbsX?.(x * 32);  // orbs: camada mais "distante", maior movimento
     orbsY?.(y * 18);
 
-    // Visual: velocidade intermediária
-    visualX?.(x * 18);
+    visualX?.(x * 18); // visual: camada intermediária
     visualY?.(y * 10);
 
-    // Panels: camada "mais próxima" do viewer — movimento menor (parallax inverso)
+    // Panels: camada "mais próxima" — movimento menor (parallax inverso)
     panelsX?.(x * 10);
     panelsY?.(y * 6);
   };
 
+  // Ao sair: todos voltam para a posição original (0, 0)
   const onLeave = () => {
     orbsX?.(0);   orbsY?.(0);
     visualX?.(0); visualY?.(0);
@@ -167,7 +209,12 @@ function initHeroParallax(hero) {
 
 /* =========================
    SCROLL PARALLAX — Hero
-   Camadas deslizam a velocidades distintas conforme o scroll
+   Camadas deslizam a velocidades distintas conforme o usuário rola.
+   ScrollTrigger + scrub cria o efeito de "profundidade" no scroll.
+
+   visual:  yPercent: +18  (sobe mais rápido — "mais distante")
+   panels:  yPercent: -14  (desce um pouco — "mais próximo")
+   content: yPercent: +10  (intermediário)
 ========================= */
 function initHeroScrollParallax(hero) {
   if (!hero || prefersReducedMotion || !window.gsap || !window.ScrollTrigger) return () => {};
@@ -180,13 +227,13 @@ function initHeroScrollParallax(hero) {
 
   if (visual) {
     const tl = gsap.to(visual, {
-      yPercent: 18,
-      ease: "none",
+      yPercent: 18,   // move 18% da própria altura para cima ao scrollar
+      ease: "none",   // linear — o ScrollTrigger controla o timing via scrub
       scrollTrigger: {
         trigger: hero,
         start: "top top",
         end: "bottom top",
-        scrub: 0.8,
+        scrub: 0.8,   // delay de 0.8s para suavizar (quanto maior, mais "borrachudo")
       },
     });
     tls.push(tl);
@@ -194,7 +241,7 @@ function initHeroScrollParallax(hero) {
 
   if (panels) {
     const tl = gsap.to(panels, {
-      yPercent: -14,
+      yPercent: -14,  // painéis descem ligeiramente (efeito parallax inverso)
       ease: "none",
       scrollTrigger: {
         trigger: hero,
@@ -220,18 +267,23 @@ function initHeroScrollParallax(hero) {
     tls.push(tl);
   }
 
+  // scrollTrigger.kill() limpa observers e tweens do ScrollTrigger
   return () => tls.forEach((t) => t.scrollTrigger?.kill());
 }
 
 /* =========================
-   HERO BUBBLES — bolhas ascendentes geradas em JS
+   HERO BUBBLES — bolhas ascendentes geradas dinamicamente
+   Cria um <div class="hero-bubbles"> com 9 <span>s animados.
+   Cada bolha tem: tamanho, posição horizontal, duração e
+   fase (delay negativo) aleatórios — nunca dois iguais.
+   aria-hidden="true": decorativo, invisível para leitores de tela.
 ========================= */
 function initHeroBubbles(hero) {
   if (!hero || prefersReducedMotion) return () => {};
 
   const container = document.createElement("div");
   container.className = "hero-bubbles";
-  container.setAttribute("aria-hidden", "true");
+  container.setAttribute("aria-hidden", "true"); // decorativo, ignora leitores de tela
   hero.appendChild(container);
 
   const BUBBLE_COUNT = 9;
@@ -240,12 +292,13 @@ function initHeroBubbles(hero) {
     const bubble = document.createElement("span");
     bubble.className = "hero-bubble";
 
-    const size     = 3 + Math.random() * 9;           // 3–12px
-    const left     = 8  + Math.random() * 84;          // 8–92%
-    const duration = 9  + Math.random() * 18;          // 9–27s
-    const delay    = Math.random() * duration;          // fase aleatória
-    const drift    = (Math.random() - 0.5) * 50;       // -25 → +25px
+    const size     = 3 + Math.random() * 9;          // diâmetro: 3–12px
+    const left     = 8  + Math.random() * 84;         // posição X: 8–92% (evita bordas)
+    const duration = 9  + Math.random() * 18;         // tempo de subida: 9–27s
+    const delay    = Math.random() * duration;        // fase aleatória → bolhas dessincronizadas
+    const drift    = (Math.random() - 0.5) * 50;     // desvio lateral: -25 → +25px
 
+    // delay negativo: a animação já começa "no meio" — sem todas as bolhas nascendo juntas
     bubble.style.cssText = `
       width: ${size}px;
       height: ${size}px;
@@ -258,12 +311,24 @@ function initHeroBubbles(hero) {
     container.appendChild(bubble);
   }
 
+  // Cleanup: remove o container do DOM
   return () => container.remove();
 }
 
 /* =========================
-   MAIN ANIMATIONS — ULTIMATE
+   MAIN ANIMATIONS — PONTO DE ENTRADA
+   Exportado para main.js. Orquestra todos os efeitos acima.
 ========================= */
+/**
+ * Inicializa todas as animações do portfólio.
+ *
+ * @param {Object} options
+ * @param {HTMLElement} options.heroContent     - Container .hero-content
+ * @param {HTMLElement[]} options.textReveal    - Spans de .text-reveal
+ * @param {HTMLElement} options.textMask        - Elemento .text-mask
+ * @param {HTMLElement[]} options.serviceCards  - Cards de serviço/projetos
+ * @param {HTMLElement[]} options.portfolioItems - Items do portfolio
+ */
 export function initAnimations({
   heroContent,
   textReveal = [],
@@ -277,6 +342,10 @@ export function initAnimations({
 
   const cleanups = [];
 
+  /**
+   * Fallback: exibe tudo de imediato sem animação.
+   * Usado quando: reduceMotion ativo OU GSAP não disponível.
+   */
   const showEverything = () => {
     heroContent?.classList.add("visible");
     revealText.forEach((el) => (el.style.transform = "translateY(0)"));
@@ -290,6 +359,7 @@ export function initAnimations({
     }
   };
 
+  // Sem animação: mostra tudo e sai
   if (prefersReducedMotion || !window.gsap) {
     showEverything();
     return { destroy: () => {} };
@@ -299,12 +369,17 @@ export function initAnimations({
     gsap.registerPlugin(ScrollTrigger);
   }
 
-  /* HERO INIT */
+  // ── HERO CONTENT ────────────────────────────────────────
+  // O heroContent começa com opacity:0 e translateY(20px) no CSS.
+  // Adicionar "visible" ativa a transição CSS declarada em hero.css.
   heroContent?.classList.add("visible");
 
-  /* TEXT REVEAL + MASK */
+  // ── TEXT REVEAL + MASK ──────────────────────────────────
+  // Os spans de .text-reveal começam em translateY(100%) — escondidos.
+  // A timeline sobe cada span com stagger para a posição original (y:0).
+  // textMask usa clip-path: polygon de 0 largura até cobrir o texto.
   const introTimeline = gsap.timeline({
-    defaults: { overwrite: "auto", force3D: true },
+    defaults: { overwrite: "auto", force3D: true }, // force3D: composição GPU
   });
 
   if (revealText.length) {
@@ -312,11 +387,11 @@ export function initAnimations({
       revealText,
       {
         y: 0,
-        stagger: 0.09,
+        stagger: 0.09,   // cada span começa 90ms após o anterior
         duration: 1.0,
-        ease: "power4.out",
+        ease: "power4.out", // desaceleração forte = sensação de peso
       },
-      0.15
+      0.15 // começa 150ms após o início da timeline
     );
   }
 
@@ -324,21 +399,23 @@ export function initAnimations({
     introTimeline.to(
       textMask,
       {
-        clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)",
+        clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)", // abre da esquerda para a direita
         duration: 1.2,
         ease: "power3.inOut",
       },
-      0.35
+      0.35 // começa depois do texto começar a revelar
     );
   }
 
   cleanups.push(() => introTimeline.kill());
 
-  /* SCROLL REVEAL — DEPTH (surfacing from below) */
+  // ── SCROLL REVEAL — DEPTH (surfacing from below) ────────
+  // Cards começam "submersos": turvo (blur), comprimido (scale 0.97), invisível.
+  // Ao entrar em view, "surfaceiam" para o estado normal com stagger.
   if (window.ScrollTrigger) {
     const items = [...services, ...portfolio];
 
-    // Estado inicial: objetos submersos — turvo, comprimido, invisível
+    // Estado inicial: objetos submersos
     gsap.set(items, {
       opacity: 0,
       y: 55,
@@ -349,8 +426,8 @@ export function initAnimations({
     });
 
     ScrollTrigger.batch(items, {
-      start: "top 84%",
-      once: true,
+      start: "top 84%",  // dispara quando o card está 84% descido na viewport
+      once: true,        // só anima uma vez por elemento
       onEnter: (batch) => {
         batch.forEach((el) => el.classList.add("visible"));
         gsap.to(batch, {
@@ -358,45 +435,43 @@ export function initAnimations({
           y: 0,
           scale: 1,
           filter: "blur(0px)",
-          stagger: 0.10,
+          stagger: 0.10,    // 100ms entre cada card
           duration: 0.90,
           ease: "power3.out",
           overwrite: "auto",
+          // Remove willChange após a animação: libera memória de composição GPU
           onComplete: () => gsap.set(batch, { clearProps: "willChange,filter" }),
         });
       },
     });
 
     try {
-      ScrollTrigger.refresh();
+      ScrollTrigger.refresh(); // recalcula posições após layout completo
     } catch {}
   } else {
-    showEverything();
+    showEverything(); // GSAP disponível mas sem ScrollTrigger: mostra tudo
   }
 
-  /* HERO MOUSE PARALLAX */
+  // ── EFEITOS DO HERO ─────────────────────────────────────
+
   const hero = document.querySelector(".hero");
-  const destroyParallax = initHeroParallax(hero);
+
+  const destroyParallax       = initHeroParallax(hero);       // mouse parallax
   cleanups.push(destroyParallax);
 
-  /* HERO SCROLL PARALLAX */
-  const destroyScrollParallax = initHeroScrollParallax(hero);
+  const destroyScrollParallax = initHeroScrollParallax(hero); // scroll parallax
   cleanups.push(destroyScrollParallax);
 
-  /* HERO BUBBLES */
-  const destroyBubbles = initHeroBubbles(hero);
+  const destroyBubbles        = initHeroBubbles(hero);        // bolhas ascendentes
   cleanups.push(destroyBubbles);
 
-  /* TILT (LAZY) */
-  const destroyTilt = initLazyTilt(services);
+  const destroyTilt           = initLazyTilt(services);       // tilt 3D nos cards
   cleanups.push(destroyTilt);
 
-  /* HOVER */
-  const destroyHover = initPortfolioHover(portfolio);
+  const destroyHover          = initPortfolioHover(portfolio); // hover nos cards
   cleanups.push(destroyHover);
 
   return {
     destroy: () => cleanups.forEach((fn) => fn()),
   };
 }
-

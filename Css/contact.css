@@ -1,3 +1,16 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  contact.css — Contato e Redes Sociais
+ *
+ *  Layout: grid de 2 colunas (highlight escuro à esq + channels à dir)
+ *  + formulário de email abaixo.
+ *
+ *  Formulário: sem backend — submissão abre mailto: com dados preenchidos
+ *  (ver main.js → contactForm handler). Estados visuais:
+ *  .is-loading, .show-success, .show-error controlados pelo JS.
+ * ═══════════════════════════════════════════════════════════
+ */
+
 /* =========================
    CONTACT / REDE SOCIAIS
    ========================= */
@@ -203,6 +216,9 @@
 
 /* =========================
    FORMULÁRIO DE CONTATO
+   Validação visual nativa do browser via :valid/:invalid.
+   O pseudo-selector :not(:placeholder-shown) garante que a
+   validação só apareça após o usuário ter digitado algo.
    ========================= */
 .contact-form {
   background: var(--grad-card);
@@ -274,7 +290,8 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, #ff6b7a 14%, transparent);
 }
 
-/* ── Character counter ── */
+/* ── Character counter: posicionado no canto inferior direito do textarea.
+   Muda de cor via .is-near-limit (amarelo) e .is-at-limit (vermelho). ── */
 .contact-form__field--textarea {
   position: relative;
 }
@@ -298,7 +315,8 @@
   font-weight: 700;
 }
 
-/* ── Loading state no botão ── */
+/* ── Loading state: desabilita o botão e adiciona spinner via ::after.
+   O spinner usa @keyframes loading (animations.css). ── */
 .contact-form__submit.is-loading {
   pointer-events: none;
   opacity: 0.75;
@@ -317,7 +335,9 @@
   vertical-align: middle;
 }
 
-/* ── Feedback toast (sucesso / erro) ── */
+/* ── Feedback toast: mensagem de sucesso ou erro após submissão.
+   display:none → display:flex via .show-success / .show-error no form.
+   Some automaticamente após 5s (ver main.js). ── */
 .contact-form__feedback {
   display: none;
   align-items: center;

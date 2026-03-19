@@ -1,3 +1,13 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  layout.css — Estrutura das Correntes
+ *  Regras de layout que se repetem entre seções:
+ *  o <main>, os shells centralizadores e os headers de seção.
+ * ═══════════════════════════════════════════════════════════
+ */
+
+/* O <main> é uma coluna flexível com espaço entre as seções.
+   gap: 6rem cria respiro visual entre elas. */
 main {
   display: flex;
   flex-direction: column;
@@ -6,7 +16,10 @@ main {
 
 /* =========================
    SECTION HELPERS
+   Classes reutilizáveis para estrutura interna das seções.
    ========================= */
+
+/* Título de seção largo — ocupa todas as colunas do grid pai */
 .section-title {
   grid-column: 1 / -1;
   font-size: 2rem;
@@ -14,6 +27,8 @@ main {
   margin-bottom: 1rem;
 }
 
+/* Shell centralizador — max-width + padding responsivo.
+   clamp() garante padding mínimo em mobile sem media query. */
 .section-shell{
   max-width: 1200px;
   margin: 0 auto;
@@ -22,6 +37,8 @@ main {
   gap: clamp(1.4rem, 2vw, 2.4rem);
 }
 
+/* Header da seção: título à esq, ação opcional à dir.
+   flex-wrap: wrap garante que em mobile empilhe verticalmente. */
 .section-header{
   display: flex;
   align-items: flex-start;
@@ -30,12 +47,18 @@ main {
   flex-wrap: wrap;
 }
 
+/* Container do título + subtítulo — max-width evita linhas muito longas */
 .section-heading{
   display: grid;
   gap: 0.75rem;
   max-width: 760px;
 }
 
+/* =========================
+   EYEBROW BADGE
+   Pequena pílula acima do título principal das seções.
+   Dá contexto sem competir com o h2.
+   ========================= */
 .eyebrow-badge{
   display: inline-flex;
   align-items: center;
@@ -49,15 +72,21 @@ main {
   border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   box-shadow:
     0 10px 30px color-mix(in srgb, var(--accent) 12%, transparent),
-    inset 0 1px 0 rgba(255,255,255,0.7);
+    inset 0 1px 0 rgba(255,255,255,0.7); /* brilho interno — efeito vidro */
 }
 
+/* Texto secundário de seção — cor suave, linha máxima de 60 chars */
 .section-subtitle{
   color: var(--text-subtle);
   line-height: 1.65;
   max-width: 60ch;
 }
 
+/* =========================
+   PANEL CARD — card base reutilizável
+   Fundo gradiente suave + glow interno no ::before.
+   Usado como base para cards de projeto, habilidades, etc.
+   ========================= */
 .panel-card{
   position: relative;
   border-radius: 1.2rem;
@@ -67,6 +96,7 @@ main {
   overflow: hidden;
 }
 
+/* Glow interno no canto superior esquerdo — iluminação "oceânica" */
 .panel-card::before{
   content:"";
   position:absolute;
@@ -77,5 +107,5 @@ main {
     transparent 60%);
   opacity: .25;
   filter: blur(12px);
-  pointer-events:none;
+  pointer-events:none; /* nunca bloqueia cliques no card */
 }

@@ -1,36 +1,57 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  animations.css — Correnteza Viva
+ *  Apenas @keyframes. Nenhuma regra de estilo aqui —
+ *  só o dicionário de movimentos que o restante do CSS usa.
+ *
+ *  Metáfora: cada animação é um fenômeno do oceano:
+ *   tideFlow → maré lenta e profunda
+ *   waveSweep → onda varrendo a superfície
+ *   seaGlow → bioluminescência pulsando
+ *   heroBubbleRise → bolhas subindo do fundo
+ * ═══════════════════════════════════════════════════════════
+ */
+
+/* Pulsa o botão CTA — escala e opacidade ritmadas */
 @keyframes btnPulse{
   0%{ transform: scale(0.9); opacity:0.5; }
   50%{ transform: scale(1.05); opacity:0.7; }
   100%{ transform: scale(0.9); opacity:0.5; }
 }
 
+/* Rotação contínua — usada no anel do loader */
 @keyframes spin{
   to { transform: rotate(360deg); }
 }
 
+/* Halo pulsante — expande e volta, como um coração luminoso */
 @keyframes haloPulse{
   0%{ transform: scale(1); opacity: 0.75; }
   50%{ transform: scale(1.12); opacity: 1; }
   100%{ transform: scale(1); opacity: 0.75; }
 }
 
+/* Glow pulsante de caixa — anel de luz que expande e encolhe */
 @keyframes pulseGlow{
   0%   { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 38%, transparent); }
   50%  { box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 50%, transparent); }
   100% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 38%, transparent); }
 }
 
-
 /* =========================
-   animations.css — Correnteza Viva
-   Apenas keyframes
+   LOADER
    ========================= */
-
+/* Giro do anel do loader — 1 volta completa */
 @keyframes loading {
   to { transform: rotate(1turn); }
 }
 
-/* Blob: mais orgânico (micro variação extra no meio) */
+/* =========================
+   BLOB — forma orgânica
+   Cada keyframe muda os 8 raios do border-radius independentemente,
+   criando uma forma "viva" que nunca para de mudar.
+   A micro variação no 55% evita o efeito de pêndulo.
+   ========================= */
 @keyframes blob {
   0%, 100% { border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%; }
   25%      { border-radius: 54% 46% 44% 56% / 52% 62% 38% 48%; }
@@ -38,8 +59,9 @@
   80%      { border-radius: 52% 48% 46% 54% / 50% 58% 42% 50%; }
 }
 
-/* Blob clip — mesmos valores do blob, para clip-path: inset()
-   Roda no compositor GPU sem antialiasing contra fundo branco */
+/* Mesmos valores do blob, mas via clip-path: inset()
+   Roda no compositor GPU sem antialiasing contra fundo branco —
+   solução para o "fringing" (borda branca) em imagens clipadas. */
 @keyframes blobClip {
   0%, 100% { clip-path: inset(0% round 46% 54% 52% 48% / 55% 48% 52% 45%); }
   25%      { clip-path: inset(0% round 54% 46% 44% 56% / 52% 62% 38% 48%); }
@@ -47,7 +69,11 @@
   80%      { clip-path: inset(0% round 52% 48% 46% 54% / 50% 58% 42% 50%); }
 }
 
-/* Glow bioluminescente do wrap — respira com o ritmo do oceano */
+/* =========================
+   GLOW DO WRAP — respira com o ritmo do oceano
+   box-shadow expande (50%) e encolhe (0/100%), simulando
+   uma criatura bioluminescente pulsando na escuridão.
+   ========================= */
 @keyframes wrapGlow {
   0%, 100% {
     box-shadow:
@@ -57,6 +83,7 @@
       0 24px 64px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
   }
   50% {
+    /* No pico: glow 60% mais intenso — "respiração" bioluminescente */
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--mint)       44%, transparent),
       0 0 52px   color-mix(in srgb, var(--accent)     40%, transparent),
@@ -65,109 +92,144 @@
   }
 }
 
-/* HERO: correnteza lenta (camada 1) */
+/* =========================
+   HERO: CORRENTEZA LENTA (camada 1)
+   translate3d() força aceleração de hardware.
+   Movimenta-se em diagonal (X e Y) + leve escala para
+   simular a deformação ótica da água em movimento.
+   ========================= */
 @keyframes tideFlow {
   0%   { transform: translate3d(-6%,  2%, 0) scale(1.02); }
   50%  { transform: translate3d( 6%, -3%, 0) scale(1.07); }
   100% { transform: translate3d(-6%,  2%, 0) scale(1.02); }
 }
 
-/* HERO: sweep (camada 2) — contínua e bem “água” */
+/* HERO: sweep de onda — pêndulo lateral com variação de opacidade */
 @keyframes waveSweep {
   0%   { transform: translateX(-18%) rotate(2.2deg); opacity: 0.35; }
   50%  { transform: translateX( 18%) rotate(-2.2deg); opacity: 0.85; }
   100% { transform: translateX(-18%) rotate(2.2deg); opacity: 0.35; }
 }
 
-/* HERO: micro-correnteza (camada 3) — dá “vida” sem gritar */
+/* HERO: micro-correnteza (camada 3) — dá "vida" sem gritar */
 @keyframes microDrift {
   0%   { transform: translate3d(0,0,0); opacity: 0.38; }
   50%  { transform: translate3d(-1.5%, 1%, 0); opacity: 0.60; }
   100% { transform: translate3d(0,0,0); opacity: 0.38; }
 }
 
-/* Glow do blob: mais “vivo” e com leve rotação */
+/* =========================
+   GLOW DO BLOB — bioluminescência com leve rotação
+   Combina translate + scale + rotate para um efeito
+   mais orgânico do que só pulsar scale.
+   ========================= */
 @keyframes seaGlow {
   0%   { transform: translate3d(0,0,0) scale(1.03) rotate(0deg);   opacity: 0.30; }
   50%  { transform: translate3d(2.8%, -2.2%, 0) scale(1.10) rotate(3deg); opacity: 0.66; }
   100% { transform: translate3d(0,0,0) scale(1.03) rotate(0deg);   opacity: 0.30; }
 }
 
-/* Luz na água: “caustics” suave porém perceptível */
+/* =========================
+   CAUSTICS — luz refratada sob a água
+   O blur varia levemente (0.15px → 0.55px) para simular
+   a oscilação de raios de luz passando pela superfície ondulada.
+   ========================= */
 @keyframes waterShimmer {
   0%   { transform: translate3d( 2%, -1%, 0); filter: blur(.15px); opacity: 0.42; }
   50%  { transform: translate3d(-4%,  3%, 0); filter: blur(.55px); opacity: 0.78; }
   100% { transform: translate3d( 2%, -1%, 0); filter: blur(.15px); opacity: 0.42; }
 }
 
-/* Hero content: flutuação + leve “pull” lateral (correnteza) */
+/* =========================
+   HERO CONTENT — flutuação + "pull" lateral
+   O deslocamento X imita ser levado pela correnteza.
+   --float-distance é definido em tokens.css.
+   ========================= */
 @keyframes floatPulse {
   0%   { transform: translate3d(0, 10px, 0); }
   50%  { transform: translate3d(-6px, calc(var(--float-distance) * -1.35), 0); }
   100% { transform: translate3d(0, 10px, 0); }
 }
 
-/* Botão: onda passando sempre (correnteza) */
+/* =========================
+   BOTÃO — ondas que passam
+   ========================= */
+
+/* Onda varrendo o botão sempre (correnteza constante) */
 @keyframes seaWave {
   0%   { transform: translateX(-85%) rotate(12deg); opacity: 0.32; }
   50%  { transform: translateX( 85%) rotate(12deg); opacity: 0.85; }
   100% { transform: translateX(-85%) rotate(12deg); opacity: 0.32; }
 }
 
-/* Botão: glow pulsando com micro deslocamento */
+/* Glow do botão pulsando com micro deslocamento */
 @keyframes seaGlowBtn {
   0%   { transform: translate3d(0,0,0) scale(1.01); opacity: 0.45; }
   50%  { transform: translate3d(-2.8%, 1.8%, 0) scale(1.06); opacity: 0.86; }
   100% { transform: translate3d(0,0,0) scale(1.01); opacity: 0.45; }
 }
 
-/* Cards: brilho deriva em correnteza */
+/* Brilho de card derivando como reflexo na correnteza */
 @keyframes shimmerDrift {
   0%   { transform: translateX(-70%) scale(1.01); opacity: 0.15; }
   50%  { transform: translateX( 45%) scale(1.05); opacity: 0.45; }
   100% { transform: translateX(-70%) scale(1.01); opacity: 0.15; }
 }
 
-/* Portfolio: faixa contínua tipo “onda passando” */
+/* Portfolio: faixa contínua — onda passando de ponta a ponta */
 @keyframes glideWave {
   0%   { transform: translateX(-110%) rotate(12deg); }
   100% { transform: translateX( 110%) rotate(12deg); }
 }
 
-/* Mar global: glow (correnteza) */
+/* =========================
+   MAR GLOBAL — fundo do <body>
+   ========================= */
+
+/* Glow oscilando lentamente — como ver o sol filtrar pela água */
 @keyframes oceanGlow {
   0%   { transform: translate3d( 2%, -1%, 0) scale(1.03); opacity: 0.30; }
   50%  { transform: translate3d(-5%,  3%, 0) scale(1.10); opacity: 0.78; }
   100% { transform: translate3d( 2%, -1%, 0) scale(1.03); opacity: 0.30; }
 }
 
-/* Mar global: onda passando mais “puxada” */
+/* Onda global varrendo em diagonal — mais "puxada" que waveSweep */
 @keyframes oceanWave {
   0%   { transform: translateX(-90%) rotate(12deg); opacity: 0.14; }
   50%  { transform: translateX( 90%) rotate(12deg); opacity: 0.34; }
   100% { transform: translateX(-90%) rotate(12deg); opacity: 0.14; }
 }
 
-/* Badges: pulsar de maré + bolha que sobe */
+/* =========================
+   BADGES — maré + bolha subindo
+   ========================= */
+
+/* Ripple de maré — badge pulsa suavemente */
 @keyframes ripplePulse {
   0%   { transform: translate3d(0, 1px, 0) scale(0.98); opacity: 0.8; }
   50%  { transform: translate3d(-2px, -2px, 0) scale(1.02); opacity: 1; }
   100% { transform: translate3d(0, 1px, 0) scale(0.98); opacity: 0.8; }
 }
 
+/* Bolha ascendendo levemente — sobe 8px e volta */
 @keyframes bubbleRise {
   0%   { transform: translate3d(0, 0, 0) scale(0.95); opacity: 0.72; }
   40%  { transform: translate3d(-2px, -3px, 0) scale(1.05); opacity: 1; }
   100% { transform: translate3d(0, -8px, 0) scale(0.96); opacity: 0.65; }
 }
 
-/* ===== ANIMAÇÕES (mar) ===== */
+/* =========================
+   SEÇÕES — efeitos oceânicos
+   ========================= */
+
+/* Reflexo de luz na água — brilho movendo-se diagonalmente */
 @keyframes oceanSheen{
   0%   { transform: translateX(-34%) translateY(7%); opacity: .65; }
   45%  { transform: translateX(10%) translateY(-2%); opacity: .92; }
   100% { transform: translateX(-34%) translateY(7%); opacity: .65; }
 }
 
+/* Bolha derivando — trajetória não-linear (como bolhas reais) */
 @keyframes bubbleDrift{
   0%   { transform: translate3d(0, 0, 0) scale(.92); opacity: .60; }
   35%  { transform: translate3d(-3px, -4px, 0) scale(1.02); opacity: .95; }
@@ -175,65 +237,74 @@
   100% { transform: translate3d(0, -10px, 0) scale(.92); opacity: .55; }
 }
 
-/* animação da textura (bem suave, sem enjoar) */
+/* Textura de água profunda — deriva muito suave, quase imperceptível */
 @keyframes deepWaterDrift{
   0%   { transform: translate3d(0, 0, 0); opacity: .14; }
   50%  { transform: translate3d(-10px, 6px, 0); opacity: .22; }
   100% { transform: translate3d(0, 0, 0); opacity: .14; }
 }
 
-/* ========================= FOOTER — Ocean Animations ========================= */
+/* =========================
+   FOOTER — Animações do Fundo do Oceano
+   Efeitos mais visíveis que o restante do site —
+   o footer é o "fundo do mar" mais dramático.
+   ========================= */
 
-/* “Luz da superfície” respirando — MAIS visível */
+/* "Luz da superfície" respirando — glow bem mais visível no footer */
 @keyframes footerSurfaceGlow{
   0%   { transform: translate3d(0,0,0) scale(1.03); opacity: .62; }
   50%  { transform: translate3d(3.2%, -2%, 0) scale(1.12); opacity: .92; }
   100% { transform: translate3d(0,0,0) scale(1.03); opacity: .62; }
 }
 
-/* Caústicas: luz tremendo no fundo — MAIS marcada */
+/* Caústicas do footer — luz tremendo no fundo mais marcada */
 @keyframes footerCaustics{
   0%   { transform: translate3d(-2.2%, 1.8%, 0) scale(1.03); opacity: .22; }
   50%  { transform: translate3d( 3.4%, -2.4%, 0) scale(1.10); opacity: .42; }
   100% { transform: translate3d(-2.2%, 1.8%, 0) scale(1.03); opacity: .22; }
 }
 
-/* Sweep profundo: correnteza diagonal — MAIS presente */
+/* Sweep profundo — correnteza diagonal mais presente */
 @keyframes footerDeepSweep{
   0%   { transform: translateX(-28%) rotate(10deg); opacity: .14; }
   45%  { transform: translateX( 20%) rotate(10deg); opacity: .34; }
   100% { transform: translateX(-28%) rotate(10deg); opacity: .14; }
 }
 
-/* Plâncton: deriva quase imperceptível — MAIS perceptível (ainda discreto) */
+/* Plâncton bioluminescente — pontos derivando quase imperceptivelmente */
 @keyframes footerPlankton{
   0%   { transform: translate3d(0,0,0); opacity: .14; }
   50%  { transform: translate3d(-12px, 9px, 0); opacity: .26; }
   100% { transform: translate3d(0,0,0); opacity: .14; }
 }
 
+/* Superfície oceânica — ondulação sutil horizontal */
 @keyframes oceanSurface{
   0%, 100% { transform: translate3d(0,0,0); opacity: .35; }
   50%      { transform: translate3d(10px,-6px,0); opacity: .42; }
 }
 
+/* Caustics genérico — deriva X/Y sem opacidade */
 @keyframes causticsDrift{
   0%, 100% { transform: translate3d(-10px, 6px, 0); }
   50%      { transform: translate3d(10px,-6px,0); }
 }
 
-
 /* =========================
-   WAVE SWEEP — fluxo unidirecional (não pêndulo)
+   WAVE SWEEP — fluxo UNIDIRECIONAL
+   Diferente de waveSweep (pêndulo), este fluxo vai sempre
+   da esquerda para a direita — como uma corrente marinha.
+   opacity: 0 no início e fim = entra e sai suavemente.
    ========================= */
 @keyframes waveSweepFlow {
   0%   { transform: translateX(-110%) rotate(1.5deg); opacity: 0.00; }
-  8%   { opacity: 0.55; }
-  40%  { opacity: 0.75; }
-  85%  { opacity: 0.40; }
+  8%   { opacity: 0.55; }   /* fade in rápido */
+  40%  { opacity: 0.75; }   /* pico de visibilidade */
+  85%  { opacity: 0.40; }   /* fade out gradual */
   100% { transform: translateX(110%) rotate(1.5deg); opacity: 0.00; }
 }
 
+/* Versão global do fluxo unidirecional — mais lenta e discreta */
 @keyframes oceanWaveFlow {
   0%   { transform: translateX(-110%) rotate(10deg); opacity: 0.00; }
   10%  { opacity: 0.28; }
@@ -244,7 +315,11 @@
 
 /* =========================
    HERO PANELS — flutuação independente
+   Cada painel tem sua própria trajetória, simulando
+   objetos em suspensão em diferentes posições na coluna d'água.
    ========================= */
+
+/* Painel 1: deriva diagonal leve (-3px, -6px no pico) */
 @keyframes panelDrift1 {
   0%   { transform: translate3d(0, 0px, 0); }
   35%  { transform: translate3d(-3px, -6px, 0); }
@@ -252,6 +327,7 @@
   100% { transform: translate3d(0, 0px, 0); }
 }
 
+/* Painel 2: deriva mais intensa (4px, -8px) — fase diferente do 1 */
 @keyframes panelDrift2 {
   0%   { transform: translate3d(0, 0px, 0); }
   40%  { transform: translate3d(4px, -8px, 0); }
@@ -259,6 +335,7 @@
   100% { transform: translate3d(0, 0px, 0); }
 }
 
+/* Badge flutuante: mantém translateX(-50%) centralizado durante toda a animação */
 @keyframes floatDrift {
  0%   { transform: translateX(-50%) translate3d(0, 0px, 0); }
   40%  { transform: translateX(-50%) translate3d(4px, -8px, 0); }
@@ -268,10 +345,14 @@
 
 /* =========================
    HERO BUBBLES — bolhas ascendentes
+   Cada bolha é gerada pelo JS com:
+   --bubble-drift: desvio horizontal aleatório (-25 → +25px)
+   A trajetória vai de bottom: -20px até translateY(-105vh),
+   desaparecendo antes de sair da tela (opacity: 0 aos 100%).
    ========================= */
 @keyframes heroBubbleRise {
   0%   { transform: translateY(0) translateX(0) scale(0.8); opacity: 0; }
-  6%   { opacity: 1; }
+  6%   { opacity: 1; }  /* fade in rápido — a bolha "aparece" */
   50%  { transform: translateY(-45vh) translateX(var(--bubble-drift, 8px)) scale(1.05); }
   88%  { opacity: 0.7; }
   100% { transform: translateY(-105vh) translateX(var(--bubble-drift, 8px)) scale(0.65); opacity: 0; }
@@ -279,6 +360,8 @@
 
 /* =========================
    PORTFOLIO — luz cáustica no fundo
+   Combina translate + scale + rotate para uma caustic
+   que parece genuinamente subaquática.
    ========================= */
 @keyframes portfolioCaustic {
   0%   { transform: translate3d(-8%, 4%, 0) scale(1.02) rotate(0deg);   opacity: 0.14; }
@@ -289,15 +372,20 @@
 
 /* =========================
    SECTION ENTRY — surfacing from depth
+   Elementos de seção entram "subindo da profundidade":
+   começam turvo (blur), comprimido (scale 0.97) e invisível,
+   e "surfaceiam" para o estado normal.
    ========================= */
 @keyframes surfaceEntry {
   0%   { opacity: 0; transform: translateY(45px) scale(0.97); filter: blur(4px); }
-  55%  { filter: blur(1px); }
+  55%  { filter: blur(1px); }  /* o desfoque some antes do movimento terminar */
   100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
 }
 
 /* =========================
-   HERO IMAGE RING — rotação do anel gradiente
+   HERO IMAGE RING — anel gradiente orbitando
+   Conic-gradient girando 360° — simula a aurora borealis
+   ou o brilho iridescente em volta de uma medusa.
    ========================= */
 @keyframes ringRotate {
   from { transform: rotate(0deg); }
