@@ -391,3 +391,57 @@
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+
+/* =========================
+   HEADER — caústica animada
+   Os radial-gradients do ::before se movem lentamente,
+   simulando luz refratada filtrando pela superfície do oceano.
+   22s de ciclo = movimento quase imperceptível, mas o header
+   "respira" — deixa de ser uma barra estática e vira ambiente.
+   ========================= */
+@keyframes headerCausticFloat {
+  0%   { transform: translate3d(0,    0,    0) scale(1.00); opacity: 0.40; }
+  38%  { transform: translate3d(4%,  -1.5%, 0) scale(1.05); opacity: 0.56; }
+  68%  { transform: translate3d(-2%,  1%,   0) scale(1.02); opacity: 0.44; }
+  100% { transform: translate3d(0,    0,    0) scale(1.00); opacity: 0.40; }
+}
+
+/* =========================
+   NAV LINK — ponto bioluminescente (indicador de seção ativa)
+   Escala e glow pulsam juntos, como uma criatura marinha
+   sinalizando posição no escuro da profundidade.
+   ========================= */
+@keyframes biolumDot {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow:
+      0 0 4px  color-mix(in srgb, var(--accent) 80%, transparent),
+      0 0 10px color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.45);
+    box-shadow:
+      0 0 7px  color-mix(in srgb, var(--accent) 100%, transparent),
+      0 0 18px color-mix(in srgb, var(--accent)  70%, transparent),
+      0 0 32px color-mix(in srgb, var(--accent)  35%, transparent);
+  }
+}
+
+/* =========================
+   PILL DOT — bioluminescência do indicador "disponível"
+   O halo de glow mint respira lentamente — como um peixe abissal
+   sinalizando presença no escuro do oceano.
+   ========================= */
+@keyframes pillDotBiolum {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--mint)   32%, transparent),
+      0 0 8px  color-mix(in srgb, var(--accent)  20%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--mint)   54%, transparent),
+      0 0 16px color-mix(in srgb, var(--accent)  40%, transparent),
+      0 0 28px color-mix(in srgb, var(--mint)    22%, transparent);
+  }
+}

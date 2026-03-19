@@ -93,38 +93,52 @@
   isolation: isolate;
 }
 
-/* glow sutil no topo (deixa mais “premium”) */
-.header::before{
-  content:"";
-  position:absolute;
-  inset: 0 0 auto 0;
-  height: 90px;
+/* ── Luz cáustica animada ──────────────────────────────────
+   O ::before cobre todo o header (inset:0) e carrega dois
+   focos de bioluminescência que derivam lentamente via
+   headerCausticFloat (22s, quase imperceptível).
+   Metáfora: luz solar filtrando pela superfície ondulada —
+   o header não é uma barra, é a interface do oceano.
+   ─────────────────────────────────────────────────────── */
+.header::before {
+  content: “”;
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(60% 90% at 20% 15%,
-      color-mix(in srgb, var(--accent) 20%, transparent),
-      transparent 70%),
-    radial-gradient(55% 90% at 80% 15%,
+    radial-gradient(60% 80% at 18% 45%,
+      color-mix(in srgb, var(--accent)      20%, transparent),
+      transparent 65%),
+    radial-gradient(50% 70% at 82% 45%,
       color-mix(in srgb, var(--bright-blue) 16%, transparent),
-      transparent 70%);
-  opacity: .45;
+      transparent 65%);
+  opacity: 0.45;
   pointer-events: none;
   z-index: -1;
+  animation: headerCausticFloat 22s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
-/* estado “scrolled” (quando rola a página) */
-.header.scrolled{
+/* ── Estado “scrolled” ─────────────────────────────────────
+   Ao rolar, o header “afunda” — fundo mais opaco, sombra em
+   camadas (parallax de profundidade), borda ganha sotaque do
+   accent. A sensação é de mergulhar mais fundo no oceano.
+   ─────────────────────────────────────────────────────── */
+.header.scrolled {
   padding: 0.85rem 2.2rem;
 
   background:
     linear-gradient(180deg,
-      color-mix(in srgb, var(--midnight-blue) 68%, transparent),
-      color-mix(in srgb, var(--midnight-blue) 50%, transparent)
+      color-mix(in srgb, var(--midnight-blue) 74%, transparent),
+      color-mix(in srgb, var(--midnight-blue) 56%, transparent)
     );
 
-  border-bottom-color: color-mix(in srgb, var(--accent) 22%, var(--border));
+  border-bottom-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+
   box-shadow:
-    0 14px 44px color-mix(in srgb, var(--midnight-blue) 35%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent) inset;
+    0 2px  12px color-mix(in srgb, var(--midnight-blue) 50%, transparent),
+    0 16px 48px color-mix(in srgb, var(--midnight-blue) 28%, transparent),
+    0 0 0 1px   color-mix(in srgb, var(--accent) 16%, transparent) inset,
+    0 1px 0     color-mix(in srgb, var(--accent) 22%, transparent) inset;
 }
 
 .header-shell{
@@ -150,24 +164,90 @@
   }
 }
 
-/* acessibilidade: reduz motion */
-@media (prefers-reduced-motion: reduce){
-  .header{
+/* ── Acessibilidade: reduz motion ──────────────────────────
+   Usuários com prefers-reduced-motion:reduce recebem um
+   header funcional sem nenhuma animação contínua.
+   Transições de estado (scrolled, hover) são mantidas mas
+   instantâneas — feedback ainda existe, apenas sem movimento.
+   ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: none;
+  }
+
+  .header::before {
+    animation: none;
+  }
+
+  .logo::after {
+    transition: none;
+  }
+
+  .nav__link::after {
+    transition: none;
+  }
+
+  .nav__link[aria-current="page"]::before {
+    animation: none;
+  }
+
+  .pill-dot {
+    animation: none;
+  }
+
+  .nav__cta {
     transition: none;
   }
 }
 
 
+/* ── Logo ──────────────────────────────────────────────────
+   Sempre branco (pure-white) para contraste máximo nos dois
+   modos: o header é sempre escuro (midnight-blue glass).
+   O ::after simula uma corrente subaquática que flui da
+   esquerda para a direita ao hover — a "onda que te marca".
+   ─────────────────────────────────────────────────────── */
 .logo {
+  position: relative;
+  display: inline-block;
   font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--surface);
-  transition: color 0.5s ease, transform 0.5s ease;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--pure-white);
+  user-select: none;
+  transition:
+    text-shadow 400ms var(--ease-out),
+    transform   350ms var(--ease-out);
+}
+
+/* Sublinhado-corrente: flui da esquerda para a direita no hover */
+.logo::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    var(--mint) 55%,
+    color-mix(in srgb, var(--sky-blue) 50%, transparent)
+  );
+  border-radius: 999px;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 55%, transparent);
+  transition: width 0.55s var(--ease-out);
 }
 
 .logo:hover {
-  color: var(--accent);
-  transform: scale(1.05);
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 40%, transparent),
+    0 0 36px color-mix(in srgb, var(--mint)   18%, transparent);
+  transform: translateX(2px);
+}
+
+.logo:hover::after {
+  width: 100%;
 }
 
 .nav{
@@ -190,40 +270,110 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
-.nav__link{
+/* ── Nav Links ─────────────────────────────────────────────
+   Duas camadas de pseudo-elementos:
+
+   ::before — ponto bioluminescente (indicador de seção ativa)
+     Nasce scale(0) e cresce para scale(1) quando o JS marca
+     [aria-current="page"]. Anima com biolumDot continuamente.
+     Metáfora: posição marcada no mapa de mergulho.
+
+   ::after — shimmer sweep (refração de luz ao hover)
+     Gradiente diagonal que translada de -30% → +30% no hover,
+     simulando luz atravessando água em movimento.
+     Substituímos o translateY(-1px) genérico por este efeito
+     com linguagem aquática real.
+   ─────────────────────────────────────────────────────── */
+.nav__link {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   padding: 0.65rem 0.9rem;
   border-radius: 999px;
-  color: var(--surface);
+  color: var(--pure-white);
   font-weight: 700;
-  letter-spacing: .01em;
-  transition: color var(--transition-base), background var(--transition-base), transform 160ms ease;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  transition:
+    color       var(--transition-base),
+    background  var(--transition-base),
+    transform   160ms ease;
 }
 
-.nav__link::after{
-  content:"";
-  position:absolute;
+/* Ponto indicador — invisível por padrão, bioluminescente no ativo */
+.nav__link::before {
+  content: "";
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow:
+    0 0 5px  color-mix(in srgb, var(--accent) 90%, transparent),
+    0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+  z-index: 2;
+  transition: transform 300ms var(--ease-out);
+  pointer-events: none;
+}
+
+/* Shimmer sweep — gradiente diagonal que deriva no hover */
+.nav__link::after {
+  content: "";
+  position: absolute;
   inset: 0;
   border-radius: inherit;
   opacity: 0;
-  background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 40%, transparent), color-mix(in srgb, var(--violet) 35%, transparent));
-  transition: opacity var(--transition-base);
+  background: linear-gradient(
+    105deg,
+    transparent                                             15%,
+    color-mix(in srgb, var(--accent)     35%, transparent) 40%,
+    color-mix(in srgb, var(--pure-white) 18%, transparent) 55%,
+    color-mix(in srgb, var(--violet)     28%, transparent) 75%,
+    transparent                                             90%
+  );
+  transform: translateX(-30%);
+  transition:
+    opacity   320ms var(--ease-out),
+    transform 450ms var(--ease-out);
   z-index: 0;
+  pointer-events: none;
 }
 
-.nav__link:hover{
+.nav__link:hover {
   color: var(--pure-white);
   transform: translateY(-1px);
 }
 
-.nav__link:hover::after{
-  opacity: 0.25;
+.nav__link:hover::after {
+  opacity: 0.38;
+  transform: translateX(30%);
 }
 
-.nav__link span{ position: relative; z-index: 1; }
+/* ── Estado ativo [aria-current="page"] ────────────────────
+   Quando o JS marca o link ativo, o ponto aparece e a
+   bioluminescência contínua sinaliza "você está aqui".
+   O fundo leve confirma a seleção sem gritar.
+   ─────────────────────────────────────────────────────── */
+.nav__link[aria-current="page"] {
+  color: var(--pure-white);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.nav__link[aria-current="page"]::before {
+  transform: translateX(-50%) scale(1);
+  animation: biolumDot 2.8s ease-in-out infinite;
+}
+
+.nav__link[aria-current="page"]::after {
+  opacity: 0.15;
+  transform: translateX(0%);
+}
+
+.nav__link span { position: relative; z-index: 1; }
 
 .nav__pill{
   display: inline-flex;
@@ -240,12 +390,19 @@
     inset 0 1px 0 rgba(255,255,255,0.16);
 }
 
-.pill-dot{
+/* ── Pill Dot ──────────────────────────────────────────────
+   Ponto bioluminescente que sinaliza "disponível para vagas".
+   pillDotBiolum pulsa o halo mint, simulando um organismo
+   abissal sinalizando presença — sutil, mas nunca apagado.
+   ─────────────────────────────────────────────────────── */
+.pill-dot {
   width: 9px;
   height: 9px;
   border-radius: 999px;
+  flex-shrink: 0;
   background: var(--pure-white);
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-soft) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mint) 35%, transparent);
+  animation: pillDotBiolum 2.4s ease-in-out infinite;
 }
 
 .header-actions{
@@ -254,16 +411,31 @@
   gap: 0.6rem;
 }
 
-/* Menu toggle — versão 2 spans */
+/* ── Menu Toggle ───────────────────────────────────────────
+   Container mínimo de 44x44px (WCAG 2.5.5 target size).
+   Padding de 0.6rem centraliza as linhas e expande o alvo
+   de toque sem alterar o visual das duas barras.
+   Hover com background sutil = affordance visual no touch.
+   ─────────────────────────────────────────────────────── */
 .menu-toggle {
   cursor: pointer;
   z-index: 11;
   display: inline-flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
   border: none;
   background: none;
-  padding: 0;
+  padding: 0.6rem;
+  border-radius: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  transition: background 220ms var(--ease-out);
+}
+
+.menu-toggle:hover {
+  background: color-mix(in srgb, var(--pure-white) 8%, transparent);
 }
 
 .menu-toggle:focus-visible {
@@ -630,4 +802,34 @@
 
 .portfolio-item::before {
   animation: glideWave calc(var(--wave-slow) * 0.65) linear infinite;
+}
+
+/* ── CTA do Header — presença oceânica ────────────────────
+   O ghost button padrão desaparecia no fundo escuro.
+   Aqui: borda com sotaque de accent, glow interno sutil,
+   e no hover o glow se expande como bioluminescência.
+   Mantemos transparência para não pesar na composição —
+   apenas o suficiente para ser o ponto mais luminoso.
+   ─────────────────────────────────────────────────────── */
+.nav__cta {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 0 1px   color-mix(in srgb, var(--accent)  8%, transparent),
+    0 4px 16px  color-mix(in srgb, var(--accent) 10%, transparent);
+  transition:
+    transform     180ms var(--ease-out),
+    box-shadow    300ms var(--ease-out),
+    background    220ms var(--ease-out),
+    border-color  220ms var(--ease-out);
+}
+
+.nav__cta:hover {
+  background:   color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 62%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 0 1px   color-mix(in srgb, var(--accent) 24%, transparent),
+    0 8px 24px  color-mix(in srgb, var(--accent) 22%, transparent),
+    0 0 40px    color-mix(in srgb, var(--accent) 10%, transparent);
 }
