@@ -146,7 +146,7 @@
   margin: 0 auto;
 
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: max-content minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: center;
 
@@ -255,11 +255,13 @@
   align-items: center;
   gap: 1rem;
   justify-content: center;
+  min-width: 0;
 }
 
 .nav__list{
   list-style: none;
   display: flex;
+  flex-wrap: nowarp;
   gap: 0.65rem;
   margin: 0;
   padding: 0.35rem 0.5rem;
@@ -289,11 +291,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  flex-shrink: 0;
   padding: 0.65rem 0.9rem;
   border-radius: 999px;
   color: var(--pure-white);
   font-weight: 700;
   letter-spacing: 0.01em;
+  white-space: nowrap;
   overflow: hidden;
   transition:
     color       var(--transition-base),
@@ -378,11 +382,13 @@
 .nav__pill{
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 0.4rem;
   padding: 0.55rem 0.85rem;
   border-radius: 999px;
   font-size: 0.88rem;
   color: var(--pure-white);
+  white-space: nowrap;
   background: linear-gradient(145deg, color-mix(in srgb, var(--mint) 50%, var(--primary) 50%), color-mix(in srgb, var(--violet) 35%, var(--accent) 65%));
   border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
   box-shadow:
@@ -409,6 +415,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  justify-self: end;
 }
 
 /* ── Menu Toggle ───────────────────────────────────────────
