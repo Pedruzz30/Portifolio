@@ -639,24 +639,29 @@
 }
 
 /* =========================
-   BOTÕES — sistema unificado
-   Variantes via modificadores BEM:
-   .btn--primary → gradiente azul profundo (ação principal)
-   .btn--soft    → fundo claro com borda sutil (ação secundária)
-   .btn--ghost   → transparente com borda (sobre fundos coloridos)
-   .btn--icon    → quadrado 44x44px (apenas ícone)
-   .btn--ripple  → adiciona o efeito onda ao clicar (ver ripple.js)
-   .btn--pill    → border-radius arredondado total
-   .btn__pulse   → halo de glow pulsante atrás do botão
+   BOTÕES — sistema oceânico
+   Cada botão é uma criatura bioluminescente:
+   parado: respira (btn__pulse); hover: onda de luz cáustica
+   varre a superfície (::before + btnWaveSweep); clique:
+   bolha mint se expande como impacto na água (ripple).
+
+   .btn--primary → profundidade (midnight → deep → surface light)
+   .btn--soft    → água rasa com brilho tênue
+   .btn--ghost   → transparente como água-viva
+   .btn--icon    → 44×44px, apenas ícone
+   .btn--ripple  → onda ao clicar (ver ripple.js)
+   .btn--pill    → border-radius total
+   .btn__pulse   → bioluminescência pulsante
    ========================= */
-.btn{
-  --btn-primary: linear-gradient(135deg,
-    color-mix(in srgb, var(--deep-blue) 90%, #000),
-    color-mix(in srgb, var(--bright-blue) 72%, var(--deep-blue) 28%));
-  --btn-soft: color-mix(in srgb, var(--surface, #fff) 78%, var(--very-light-blue) 22%);
-  --btn-ghost: color-mix(in srgb, var(--pure-white) 15%, transparent);
-  --btn-border: color-mix(in srgb, var(--accent) 30%, transparent);
-  --btn-shadow: 0 14px 35px color-mix(in srgb, var(--deep-blue) 22%, transparent);
+.btn {
+  --btn-primary: linear-gradient(145deg,
+    color-mix(in srgb, var(--midnight-blue) 88%, #000),
+    color-mix(in srgb, var(--deep-blue)     80%, var(--midnight-blue) 20%),
+    color-mix(in srgb, var(--bright-blue)   65%, var(--deep-blue)     35%));
+  --btn-soft:   color-mix(in srgb, var(--surface, #fff) 80%, var(--very-light-blue) 20%);
+  --btn-ghost:  color-mix(in srgb, var(--pure-white) 10%, transparent);
+  --btn-border: color-mix(in srgb, var(--accent)     35%, transparent);
+  --btn-shadow: 0 16px 44px color-mix(in srgb, var(--midnight-blue) 32%, transparent);
 
   position: relative;
   display: inline-flex;
@@ -677,48 +682,63 @@
   overflow: hidden;
   isolation: isolate;
   transition:
-    transform 180ms var(--ease-out),
-    box-shadow 220ms var(--ease-out),
-    filter 180ms var(--ease-out),
-    border-color 180ms var(--ease-out),
-    background 180ms var(--ease-out);
+    transform     180ms var(--ease-out),
+    box-shadow    260ms var(--ease-out),
+    filter        200ms var(--ease-out),
+    border-color  220ms var(--ease-out),
+    background    220ms var(--ease-out);
 }
 
-.btn--pill{ border-radius: 999px; }
-.btn__label{ position: relative; z-index: 2; }
+.btn--pill  { border-radius: 999px; }
+.btn__label { position: relative; z-index: 2; }
 
-.btn::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.15), transparent 38%),
-              radial-gradient(circle at 80% 0%, rgba(255,255,255,0.20), transparent 40%);
+/* Faixa de luz cáustica — varre o botão no hover como raio refratado sob água */
+.btn::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -60%;
+  width: 220%;
+  height: 140%;
+  background: linear-gradient(
+    112deg,
+    transparent  32%,
+    color-mix(in srgb, var(--pure-white) 18%, transparent) 48%,
+    color-mix(in srgb, var(--sky-blue)   10%, transparent) 54%,
+    transparent  66%
+  );
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform, opacity;
   opacity: 0;
-  transition: opacity 200ms var(--ease-out);
-  z-index:1;
 }
 
-.btn--primary{
-  background: var(--btn-primary);
-  border-color: var(--btn-border);
-  box-shadow: var(--btn-shadow);
+/* ── Variantes ── */
+.btn--primary {
+  background:   var(--btn-primary);
+  border-color: color-mix(in srgb, var(--bright-blue) 22%, transparent);
+  box-shadow:
+    var(--btn-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--sky-blue) 18%, transparent);
 }
 
-.btn--soft{
-  background: var(--btn-soft);
-  color: var(--navy-blue);
-  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
-  box-shadow: 0 10px 30px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+.btn--soft {
+  background:   var(--btn-soft);
+  color:        var(--navy-blue);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow:   0 10px 30px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
 }
 
-.btn--ghost{
-  background: var(--btn-ghost);
-  color: var(--surface);
-  border-color: color-mix(in srgb, var(--pure-white) 18%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
+.btn--ghost {
+  background:   var(--btn-ghost);
+  color:        var(--surface);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-.btn--icon{
+.btn--icon {
   width: 44px;
   height: 44px;
   padding: 0;
@@ -726,81 +746,112 @@
   font-size: 1.1rem;
 }
 
-.btn--glow{
+.btn--glow {
   box-shadow:
-    0 22px 62px color-mix(in srgb, var(--bright-blue) 18%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
+    0 0 0 1px   color-mix(in srgb, var(--accent)        28%, transparent),
+    0 0 22px    color-mix(in srgb, var(--accent)        20%, transparent),
+    0 0 52px    color-mix(in srgb, var(--bright-blue)   14%, transparent),
+    0 20px 56px color-mix(in srgb, var(--midnight-blue) 34%, transparent);
 }
 
-.btn:hover{
-  transform: translateY(-2px);
-  filter: saturate(1.05);
-  box-shadow: 0 18px 42px color-mix(in srgb, var(--deep-blue) 28%, transparent);
+/* ── Hover: sobe à superfície + onda cáustica varre o botão ── */
+.btn:hover {
+  transform: translateY(-3px);
+  filter: saturate(1.08) brightness(1.04);
+  box-shadow: 0 22px 50px color-mix(in srgb, var(--midnight-blue) 36%, transparent);
 }
 
-.btn:focus-visible{
+.btn:hover::before {
+  animation: btnWaveSweep 1.4s ease-out forwards;
+}
+
+.btn--primary:hover {
+  box-shadow:
+    0 0 0 1px   color-mix(in srgb, var(--accent)        36%, transparent),
+    0 0 28px    color-mix(in srgb, var(--accent)        22%, transparent),
+    0 0 60px    color-mix(in srgb, var(--bright-blue)   15%, transparent),
+    0 24px 58px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
+}
+
+.btn--soft:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow:
+    0 0 0 1px   color-mix(in srgb, var(--accent)        20%, transparent),
+    0 16px 36px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
+}
+
+.btn--ghost:hover {
+  background:   color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 38%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    0 0 0 1px   color-mix(in srgb, var(--accent) 22%, transparent),
+    0 0 22px    color-mix(in srgb, var(--accent) 16%, transparent),
+    0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.btn:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--sky-blue) 55%, transparent),
-    0 16px 44px color-mix(in srgb, var(--midnight-blue) 18%, transparent);
+    0 0 0 3px  color-mix(in srgb, var(--sky-blue) 58%, transparent),
+    0 0 18px   color-mix(in srgb, var(--accent)   24%, transparent),
+    0 16px 44px color-mix(in srgb, var(--midnight-blue) 20%, transparent);
 }
 
-.btn:active{
+.btn:active {
   transform: translateY(0);
+  filter: saturate(0.96);
 }
 
-.btn:hover::before{
-  opacity: 0.65;
-}
-
-.btn--soft:hover{
-  box-shadow: 0 16px 36px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
-}
-
-.btn--ghost:hover{
-  background: color-mix(in srgb, var(--pure-white) 18%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 12px 26px rgba(0,0,0,0.16);
-}
-
-.btn--ripple{
+/* ── Ripple — bolha mint que se expande ao clicar ── */
+.btn--ripple {
   --ripple-x: 50%;
   --ripple-y: 50%;
 }
 
-.btn--ripple::after{
-  content:"";
-  position:absolute;
-  left: var(--ripple-x);
-  top: var(--ripple-y);
-  width: 20px;
+.btn--ripple::after {
+  content: "";
+  position: absolute;
+  left:   var(--ripple-x);
+  top:    var(--ripple-y);
+  width:  20px;
   height: 20px;
   transform: translate(-50%, -50%) scale(0);
-  background: color-mix(in srgb, var(--pure-white) 80%, var(--accent) 20%);
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--mint)   55%, var(--pure-white) 45%),
+    color-mix(in srgb, var(--accent) 45%, transparent) 60%,
+    transparent
+  );
   border-radius: 50%;
-  opacity: 0.4;
+  opacity: 0.52;
   z-index: 0;
   pointer-events: none;
-  transition: transform 420ms ease, opacity 420ms ease;
+  transition: transform 500ms ease, opacity 500ms ease;
 }
 
-.btn--ripple.is-rippling::after{
-  transform: translate(-50%, -50%) scale(12);
+.btn--ripple.is-rippling::after {
+  transform: translate(-50%, -50%) scale(14);
   opacity: 0;
 }
 
-.btn__pulse{
-  position:absolute;
+/* ── Bioluminescência — halo mint pulsando atrás do botão ── */
+.btn__pulse {
+  position: absolute;
   inset: -40%;
   border-radius: 999px;
-  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%);
-  z-index:0;
-  opacity:0.55;
-  filter: blur(18px);
-  pointer-events:none;
-  animation: btnPulse 4s ease-in-out infinite;
+  background: radial-gradient(circle at 50% 50%,
+    color-mix(in srgb, var(--mint)   22%, transparent),
+    color-mix(in srgb, var(--accent) 16%, transparent) 42%,
+    transparent 62%
+  );
+  z-index: 0;
+  opacity: 0.65;
+  filter: blur(20px);
+  pointer-events: none;
+  animation: seaGlowBtn 5s ease-in-out infinite;
 }
 
-.btn-hover-effect::before { animation: seaWave 4.6s ease-in-out infinite; }
+.btn-hover-effect::before { animation: seaWave    4.6s ease-in-out infinite; }
 .btn-hover-effect::after  { animation: seaGlowBtn 4.2s ease-in-out infinite; }
 
 .service-card::after {

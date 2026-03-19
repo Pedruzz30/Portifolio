@@ -271,6 +271,16 @@
   100% { transform: translateX(-28%) rotate(10deg); opacity: .14; }
 }
 
+/* ── Varredura de onda única — disparada no hover do botão ──
+   Entra da esquerda, cruza o botão e sai pela direita (one-shot).
+   Simula um raio de luz cáustica passando pelo fundo do mar. */
+@keyframes btnWaveSweep {
+  0%   { transform: translateX(-110%) rotate(14deg); opacity: 0;    }
+  10%  { opacity: 1;    }
+  85%  { opacity: 0.75; }
+  100% { transform: translateX( 110%) rotate(14deg); opacity: 0;    }
+}
+
 /* Plâncton bioluminescente — pontos derivando quase imperceptivelmente */
 @keyframes footerPlankton{
   0%   { transform: translate3d(0,0,0); opacity: .14; }
