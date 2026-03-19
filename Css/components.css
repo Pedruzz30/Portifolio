@@ -254,8 +254,7 @@
   gap: 0.6rem;
 }
 
-/* Menu toggle (mantido)
-   OBS: se o seu HTML tem 3 spans, ative a versão 3 spans lá embaixo */
+/* Menu toggle — versão 2 spans */
 .menu-toggle {
   cursor: pointer;
   z-index: 11;

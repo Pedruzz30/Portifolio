@@ -172,47 +172,37 @@
   .menu-toggle { gap: 5px; }
 }
 
-@media (prefers-reduced-motion: reduce){
+@media (prefers-reduced-motion: reduce) {
   .btn,
   .btn::before,
   .btn--ripple::after,
-  .btn__pulse{
+  .btn__pulse,
+  .btn-hover-effect::before,
+  .btn-hover-effect::after {
     transition: none;
     animation: none;
   }
-  .btn:hover{ transform: none; }
-}
+  .btn:hover { transform: none; }
 
-@media (prefers-reduced-motion: reduce){
-  .skills2-chip{
-    transition: none;
-  }
-  .skills2-chip:hover{
-    transform: none;
-  }
-}
+  .skills2-chip { transition: none; }
+  .skills2-chip:hover { transform: none; }
 
-@media (prefers-reduced-motion: reduce){
   .skills2-card::after,
   .skills2-dot,
   .skills2-spark,
-  .skills2-ribbonDot{
+  .skills2-ribbonDot {
     animation: none !important;
   }
-}
 
-@media (prefers-reduced-motion: reduce){
   .site-footer::before,
   .site-footer::after,
   .footer-inner::after,
-  .footer-bottom::before{
+  .footer-bottom::before {
     animation: none !important;
   }
-  .footer-btn, .back-to-top, .site-footer a{ transition: none; }
-  .footer-btn:hover, .back-to-top:hover, .site-footer a:hover{ transform: none; }
-}
+  .footer-btn, .back-to-top, .site-footer a { transition: none; }
+  .footer-btn:hover, .back-to-top:hover, .site-footer a:hover { transform: none; }
 
-@media (prefers-reduced-motion: reduce) {
   .loader::after,
   .hero::before,
   .hero::after,
@@ -220,8 +210,6 @@
   .hero-image,
   .hero-image::before,
   .hero-image::after,
-  .btn-hover-effect::before,
-  .btn-hover-effect::after,
   .service-card::after,
   .portfolio-item::before,
   .badge::before,

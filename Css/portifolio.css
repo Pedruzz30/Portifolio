@@ -41,9 +41,6 @@
 .portfolio-shell {
   position: relative;
   z-index: 1;
-}
-
-.portfolio-shell {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(1.2rem, 5vw, 3rem);
