@@ -10,7 +10,7 @@
  *   tokens.css    → variáveis CSS (cores, tamanhos, durations)
  *   base.css      → reset, links, efeito oceano global
  *   layout.css    → estrutura de seção (shells, grids)
- *   sections.css  → hero (duplicado de hero.css, manter por compatibilidade)
+ *   sections.css  → hero base + skills + floating panels (hero detalhado em hero.css)
  *   components.css → loader, header, nav, botões, scroll progress
  *   darkmode.css  → override de tokens para data-theme="dark"
  *   hero.css      → seção hero detalhada (foto, panels, badge)
