@@ -38,7 +38,7 @@
     linear-gradient(110deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0)),
     linear-gradient(95deg, color-mix(in srgb, var(--accent) 28%, transparent), transparent 55%);
   mix-blend-mode: overlay;
-  animation: waveSweep calc(var(--wave-medium) * 0.80) ease-in-out infinite;
+  animation: wavePendulum calc(var(--wave-medium) * 0.80) ease-in-out infinite;
 }
 
 .hero-content {

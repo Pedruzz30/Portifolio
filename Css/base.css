@@ -103,7 +103,7 @@ a:focus-visible,
      mix-blend-mode: soft-light → integra com qualquer cor de seção
 
    ::after — onda de brilho varrendo da esquerda p/ direita
-     animation: oceanWaveFlow → fluxo unidirecional (corrente, não pêndulo)
+     animation: oceanFlow → fluxo unidirecional (corrente, não pêndulo)
      opacity baixa para que não distraia do conteúdo
    ========================= */
 body::before,
@@ -140,7 +140,7 @@ body::after {
   opacity: 0.3;
   filter: blur(0.3px);
   /* fluxo unidirecional — corrente global, não pendulum */
-  animation: oceanWaveFlow calc(var(--wave-slow) * 0.90) linear infinite;
+  animation: oceanFlow calc(var(--wave-slow) * 0.90) linear infinite;
 }
 
 /* Header, main e footer sobem acima do mar global (z-index: 1)

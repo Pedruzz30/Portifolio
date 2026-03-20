@@ -55,7 +55,7 @@
   border: 3px solid transparent;
   border-top-color: var(--accent);
   border-right-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  animation: loading 1s ease infinite;
+  animation: spin 1s ease infinite;
 }
 
 /* =========================

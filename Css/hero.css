@@ -39,7 +39,7 @@
     linear-gradient(95deg, color-mix(in srgb, var(--accent) 28%, transparent), transparent 55%);
   mix-blend-mode: overlay;
   /* fluxo unidirecional — corrente, não pêndulo */
-  animation: waveSweepFlow calc(var(--wave-medium) * 1.10) linear infinite;
+  animation: waveFlow calc(var(--wave-medium) * 1.10) linear infinite;
 }
 
 .hero-content {
@@ -422,7 +422,7 @@
   will-change: transform, opacity;
 }
 /* 2 · Anel orbital: conic-gradient girando ao redor do blob
-      Usa keyframe ringRotate (animations.css:284-287) — estava definido e sem uso
+      Usa keyframe spin (animations.css:284-287) — estava definido e sem uso
       Posicionado em .hero-visual para não ser clipado pela mask do wrap
       border-radius fixo (não anima blobClip) → faz parte do charme orgânico */
 .hero-visual::after {
@@ -444,7 +444,7 @@
     transparent 360deg
   );
   filter: blur(10px);
-  animation: ringRotate 16s linear infinite;
+  animation: spin 16s linear infinite;
   opacity: 0.45;
   will-change: transform;
 }
