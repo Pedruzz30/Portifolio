@@ -2,176 +2,214 @@
  * ═══════════════════════════════════════════════════════════
  *  responsive.css — Adaptações por Breakpoint
  *
- *  Breakpoints usados (mobile-first descendente):
+ *  Breakpoints (desktop-first, ordem decrescente):
  *   1920px+ → telas extra grandes: fonte base 18px
  *   1440px+ → telas grandes: hero mais espaçoso, grid 3 colunas
- *   1024px  → tablet landscape: header em 2 linhas
- *    980px  → tablet: skills/roadmap colapsa para 1 coluna
+ *   1280px  → header compacto, nav reduzida
+ *   1180px  → pill da nav some
+ *   1120px  → CTA da nav some
+ *   1024px  → tablet landscape: header em 2 linhas, about colapsa
+ *    980px  → tablet: skills/roadmap/portfolio colapsam para 1 coluna
  *    860px  → footer colapsa para 1 coluna
  *    768px  → mobile: hero empilha, nav vira menu flutuante
- *    600px  → formulário: row colapsa para 1 coluna
  *    400px  → mobile pequeno: hero mais compacto, fonts menores
  *
- *  prefers-reduced-motion: desativa TODAS as animações
+ *  prefers-reduced-motion: desativa animações por componente
  *  print: remove decorações, exibe URLs em links
  * ═══════════════════════════════════════════════════════════
  */
-
-@media (max-width: 1024px) {
-  .header-shell{ grid-template-columns: auto auto; grid-template-areas: "logo actions" "nav nav"; }
-  .nav{ grid-area: nav; justify-content: flex-start; }
-  .nav__list{ flex-wrap: wrap; }
-  .hero { padding-top: 140px; }
-  .hero-visual { width: 55%; }
-}
-
+ 
+/* =========================
+   1280px — header compacto
+   ========================= */
 @media (max-width: 1280px) {
-  .header{
+  .header {
     padding-inline: 1.5rem;
   }
-
-  .header.scrolled{
+ 
+  .header.scrolled {
     padding-inline: 1.5rem;
   }
-
-  .header-shell{
+ 
+  .header-shell {
     gap: 0.75rem;
   }
-
-  .nav{
+ 
+  .nav {
     gap: 0.75rem;
   }
-
-  .nav__list{
+ 
+  .nav__list {
     gap: 0.35rem;
     padding-inline: 0.35rem;
   }
-
-  .nav__link{
+ 
+  .nav__link {
     padding-inline: 0.72rem;
     font-size: 0.95rem;
   }
-
-  .nav__pill{
+ 
+  .nav__pill {
     font-size: 0.8rem;
     padding-inline: 0.75rem;
   }
-
-  .nav__cta .btn__label{
+ 
+  .nav__cta .btn__label {
     font-size: 0.92rem;
   }
 }
-
+ 
+/* =========================
+   1180px — pill da nav some
+   ========================= */
 @media (max-width: 1180px) {
-  .nav__pill{
+  .nav__pill {
     display: none;
   }
 }
-
+ 
+/* =========================
+   1120px — CTA da nav some
+   ========================= */
 @media (max-width: 1120px) {
-  .nav__cta{
+  .nav__cta {
     display: none;
   }
 }
-
-@media (max-width: 980px){
-  .skills2-layout{ grid-template-columns: 1fr; }
-  .skills2-metrics{ grid-template-columns: 1fr; }
-  .skills2-track{ grid-template-columns: 14px 1fr; }
-  .skills2-trackMeta{ display: none; }
-  .skills2-badges{ flex-direction: column; align-items: flex-start; }
-  .skills2-mini--grid{ grid-template-columns: 1fr; }
-}
-
-@media (min-width: 980px){
-  .stack-roadmap__header{
-    grid-template-columns: 1.1fr 0.9fr;
-    align-items: end;
-  }
-
-  .stack-roadmap__timeline{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: clamp(1.5rem, 3vw, 2.6rem);
-     --rail-x: 50%;
-  }
-
-  .stack-roadmap__timeline::before{
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .stack-roadmap__step{
-    padding-left: 0;
-  }
-
-  .stack-roadmap__step:nth-child(odd){
-    grid-column: 1;
-    padding-right: calc(var(--connector-length) + 1.4rem);
-  }
-
-  .stack-roadmap__step:nth-child(even){
-    grid-column: 2;
-    padding-left: calc(var(--connector-length) + 1.4rem);
-  }
-
-  .stack-roadmap__step::before{
-    left: var(--rail-x);
-  }
-
- .stack-roadmap__step::after{
-    left: calc(var(--rail-x) + (var(--node-size) / 2));
-  }
-
-  .stack-roadmap__step:nth-child(odd)::after{
-    left: calc(var(--rail-x) - (var(--node-size) / 2) - var(--connector-length));
-  }
-}
-
-@media (max-width: 980px){
-  .portfolio-grid{ grid-template-columns: 1fr; }
-}
-
-@media (max-width: 860px){
-  .footer-inner{ grid-template-columns: 1fr; }
-}
-
+ 
+/* =========================
+   1024px — tablet landscape
+   FIX 1: blocos duplicados de 1024px consolidados em um único bloco
+   ========================= */
 @media (max-width: 1024px) {
+  .header-shell {
+    grid-template-columns: auto auto;
+    grid-template-areas: "logo actions" "nav nav";
+  }
+ 
+  .nav {
+    grid-area: nav;
+    justify-content: flex-start;
+  }
+ 
+  .nav__list {
+    flex-wrap: wrap;
+  }
+ 
+  .hero {
+    padding-top: 140px;
+  }
+ 
+  .hero-visual {
+    width: 55%;
+  }
+ 
+  /* FIX 1: about-grid movido do segundo bloco 1024px para cá */
   .about-grid {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
 }
-
-@media (min-width: 769px) {
-  .menu-toggle {
-    display: none;
+ 
+/* =========================
+   980px — tablet
+   FIX 6: blocos max/min de 980px consolidados em sequência clara
+   ========================= */
+@media (max-width: 980px) {
+  .skills2-layout        { grid-template-columns: 1fr; }
+  .skills2-metrics       { grid-template-columns: 1fr; }
+  .skills2-track         { grid-template-columns: 14px 1fr; }
+  .skills2-trackMeta     { display: none; }
+  .skills2-badges        { flex-direction: column; align-items: flex-start; }
+  .skills2-mini--grid    { grid-template-columns: 1fr; }
+ 
+  /* FIX 3: declaração duplicada de .portfolio-grid removida do bloco 768px */
+  .portfolio-grid        { grid-template-columns: 1fr; }
+}
+ 
+@media (min-width: 980px) {
+  .stack-roadmap__header {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: end;
+  }
+ 
+  .stack-roadmap__timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 3vw, 2.6rem);
+    --rail-x: 50%;
+  }
+ 
+  .stack-roadmap__timeline::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+ 
+  .stack-roadmap__step {
+    padding-left: 0;
+  }
+ 
+  .stack-roadmap__step:nth-child(odd) {
+    grid-column: 1;
+    padding-right: calc(var(--connector-length) + 1.4rem);
+  }
+ 
+  .stack-roadmap__step:nth-child(even) {
+    grid-column: 2;
+    padding-left: calc(var(--connector-length) + 1.4rem);
+  }
+ 
+  .stack-roadmap__step::before {
+    left: var(--rail-x);
+  }
+ 
+  .stack-roadmap__step::after {
+    left: calc(var(--rail-x) + (var(--node-size) / 2));
+  }
+ 
+  .stack-roadmap__step:nth-child(odd)::after {
+    left: calc(var(--rail-x) - (var(--node-size) / 2) - var(--connector-length));
   }
 }
-
+ 
+/* =========================
+   860px — footer colapsa
+   ========================= */
+@media (max-width: 860px) {
+  .footer-inner { grid-template-columns: 1fr; }
+}
+ 
+/* =========================
+   768px — mobile
+   ========================= */
+ 
+/* FIX 5: 769px substituído por par consistente com 768px */
+@media (min-width: 768px) {
+  .menu-toggle { display: none; }
+}
+ 
 @media (max-width: 768px) {
   .hero {
     flex-direction: column;
     padding: 140px 8% 80px;
     gap: 2rem;
   }
-
+ 
   .hero-content,
   .hero-visual {
     width: 100%;
     position: relative;
     right: auto;
   }
-
-  .hero-visual { height: 320px; }
-
-  .text-reveal { font-size: 3.1rem; }
-  .hero-visual{ min-height: 340px; }
-  .floating-panels{ position: relative; right: auto; bottom: auto; width: 100%; }
-
-  .header-shell{
+ 
+  .hero-visual        { height: 320px; min-height: 340px; }
+  .text-reveal        { font-size: 3.1rem; }
+  .floating-panels    { position: relative; right: auto; bottom: auto; width: 100%; }
+ 
+  .header-shell {
     grid-template-columns: 1fr auto;
   }
-  .nav{
+ 
+  .nav {
     position: fixed;
     inset: 0;
     background: color-mix(in srgb, var(--midnight-blue) 92%, rgba(0,0,0,0.25));
@@ -186,47 +224,79 @@
     gap: 1rem;
     z-index: 10;
   }
-
-  .menu-open .nav{
+ 
+  .menu-open .nav {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
   }
-
-  .nav__list{
+ 
+  .nav__list {
     flex-direction: column;
     width: 100%;
   }
-
-  .nav__link{
+ 
+  .nav__link {
     width: 100%;
     justify-content: space-between;
     background: color-mix(in srgb, var(--surface) 6%, rgba(255,255,255,0.06));
   }
-
+ 
   .portfolio,
   .contact {
     padding: clamp(3rem, 8vw, 5rem) 0 6rem;
   }
-
-   .contact-grid{
-    grid-template-columns: 1fr;
-  }
-
-  .contact-channels{
-    grid-template-columns: 1fr;
-  }
-
-  /* FIX: era .portfolio (não é grid) */
-  .portfolio-grid {
-    grid-template-columns: 1fr;
-  }
-
+ 
+  .contact-grid     { grid-template-columns: 1fr; }
+  .contact-channels { grid-template-columns: 1fr; }
+ 
   .portfolio-link { grid-template-rows: 160px 1fr; }
-
+ 
   .menu-toggle { gap: 5px; }
 }
-
+ 
+/* =========================
+   400px — mobile pequeno
+   ========================= */
+@media (max-width: 400px) {
+  .text-reveal        { font-size: 2.4rem; }
+  .hero               { padding: 120px 5% 60px; }
+  .hero-badges        { flex-wrap: wrap; gap: 0.4rem; }
+  .hero-chip          { font-size: 0.72rem; padding: 0.28em 0.7em; }
+  .hero-stats         { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat               { padding: 0.75rem; }
+  .stat__value        { font-size: 1.3rem; }
+  .contact-form__row  { grid-template-columns: 1fr; }
+}
+ 
+/* =========================
+   1440px+ — telas grandes
+   ========================= */
+@media (min-width: 1440px) {
+  .hero                   { padding: 140px 10% 100px; }
+  .portfolio-grid         { grid-template-columns: repeat(3, 1fr); }
+  .stack-roadmap__shell   { max-width: 1400px; }
+  .contact-shell          { max-width: 1200px; }
+  .footer-inner           { max-width: 1400px; }
+}
+ 
+/* =========================
+   1920px+ — telas extra grandes
+   ========================= */
+@media (min-width: 1920px) {
+  :root { font-size: 18px; }
+ 
+  .section-shell,
+  .portfolio-shell,
+  .contact-shell { max-width: 1500px; }
+}
+ 
+/* =========================
+   prefers-reduced-motion
+   FIX 2: controle granular por componente mantido aqui.
+   O bloco global (*) foi removido do animations.css para
+   evitar conflito de especificidade e redundância.
+   ========================= */
 @media (prefers-reduced-motion: reduce) {
   .btn,
   .btn::before,
@@ -238,26 +308,32 @@
     animation: none;
   }
   .btn:hover { transform: none; }
-
+ 
   .skills2-chip { transition: none; }
   .skills2-chip:hover { transform: none; }
-
+ 
   .skills2-card::after,
   .skills2-dot,
   .skills2-spark,
   .skills2-ribbonDot {
     animation: none !important;
   }
-
+ 
   .site-footer::before,
   .site-footer::after,
   .footer-inner::after,
   .footer-bottom::before {
     animation: none !important;
   }
-  .footer-btn, .back-to-top, .site-footer a { transition: none; }
-  .footer-btn:hover, .back-to-top:hover, .site-footer a:hover { transform: none; }
-
+ 
+  .footer-btn,
+  .back-to-top,
+  .site-footer a { transition: none; }
+ 
+  .footer-btn:hover,
+  .back-to-top:hover,
+  .site-footer a:hover { transform: none; }
+ 
   .loader::after,
   .hero::before,
   .hero::after,
@@ -275,42 +351,7 @@
     animation-play-state: paused !important;
   }
 }
-/* =========================
-   Telas muito pequenas (360px)
-   ========================= */
-@media (max-width: 400px) {
-  .text-reveal { font-size: 2.4rem; }
-  .hero { padding: 120px 5% 60px; }
-  .hero-badges { flex-wrap: wrap; gap: 0.4rem; }
-  .hero-chip { font-size: 0.72rem; padding: 0.28em 0.7em; }
-  .hero-stats { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-  .stat { padding: 0.75rem; }
-  .stat__value { font-size: 1.3rem; }
-  .portfolio-grid { grid-template-columns: 1fr; }
-  .contact-form__row { grid-template-columns: 1fr; }
-}
-
-/* =========================
-   Telas grandes (1440px+)
-   ========================= */
-@media (min-width: 1440px) {
-  .hero { padding: 140px 10% 100px; }
-  .portfolio-grid { grid-template-columns: repeat(3, 1fr); }
-  .stack-roadmap__shell { max-width: 1400px; }
-  .contact-shell { max-width: 1200px; }
-  .footer-inner { max-width: 1400px; }
-}
-
-/* =========================
-   Telas extra grandes (1920px+)
-   ========================= */
-@media (min-width: 1920px) {
-  :root { font-size: 18px; }
-  .section-shell,
-  .portfolio-shell,
-  .contact-shell { max-width: 1500px; }
-}
-
+ 
 /* =========================
    IMPRESSÃO
    ========================= */
@@ -318,19 +359,19 @@
   *,
   *::before,
   *::after {
-    animation: none !important;
-    transition: none !important;
+    animation:   none !important;
+    transition:  none !important;
     will-change: auto !important;
-    box-shadow: none !important;
+    box-shadow:  none !important;
     text-shadow: none !important;
   }
-
+ 
   body {
     background: #fff !important;
     color: #000 !important;
     font-size: 12pt;
   }
-
+ 
   /* Oculta elementos de navegação e interação */
   .header,
   .nav,
@@ -346,7 +387,7 @@
   .btn--ripple::after {
     display: none !important;
   }
-
+ 
   /* Hero simplificado para impressão */
   .hero {
     min-height: auto;
@@ -354,25 +395,26 @@
     background: #e8f4ff !important;
     color: #000 !important;
   }
-
+ 
+  /* hero-visual mantida — exibe foto/imagem principal no currículo impresso */
   .hero-visual {
     width: 200px;
     height: 250px;
   }
-
+ 
   /* Links com URL visível */
   a[href^="http"]::after {
     content: " (" attr(href) ")";
     font-size: 0.8em;
     color: #555;
   }
-
+ 
   /* Garante que seções não quebrem no meio */
   section {
     break-inside: avoid;
     page-break-inside: avoid;
   }
-
+ 
   h2, h3 {
     break-after: avoid;
     page-break-after: avoid;

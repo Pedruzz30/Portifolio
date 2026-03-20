@@ -5,67 +5,81 @@
  *  o <main>, os shells centralizadores e os headers de seção.
  * ═══════════════════════════════════════════════════════════
  */
-
+ 
 /* O <main> é uma coluna flexível com espaço entre as seções.
-   gap: 6rem cria respiro visual entre elas. */
+   FIX 6: gap fixo substituído por clamp() — consistente com
+   o restante do arquivo e mais compacto em mobile pequeno. */
 main {
   display: flex;
   flex-direction: column;
-  gap: 6rem;
+  gap: clamp(3rem, 8vw, 6rem);
 }
-
+ 
 /* =========================
    SECTION HELPERS
    Classes reutilizáveis para estrutura interna das seções.
    ========================= */
-
-/* Título de seção largo — ocupa todas as colunas do grid pai */
+ 
+/* Título de seção largo — ocupa todas as colunas do grid pai.
+   FIX 7: usado dentro de um grid pai — não usar fora de contexto grid. */
 .section-title {
   grid-column: 1 / -1;
   font-size: 2rem;
   letter-spacing: 0.05em;
   margin-bottom: 1rem;
 }
-
+ 
 /* Shell centralizador — max-width + padding responsivo.
-   clamp() garante padding mínimo em mobile sem media query. */
-.section-shell{
+   clamp() garante padding mínimo em mobile sem media query.
+ 
+   FIX 1: grid-template-columns explicitado como 1fr para deixar
+   claro que é uma coluna única. Se filhos precisarem de múltiplas
+   colunas, sobrescrevem grid-template-columns no contexto específico.
+ 
+   Nota: classe ainda não aplicada no HTML (só existe no CSS).
+   Verificar uso antes de modificar o grid. */
+.section-shell {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.25rem;
   display: grid;
+  grid-template-columns: 1fr;
   gap: clamp(1.4rem, 2vw, 2.4rem);
 }
-
+ 
 /* Header da seção: título à esq, ação opcional à dir.
    flex-wrap: wrap garante que em mobile empilhe verticalmente. */
-.section-header{
+.section-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: clamp(1rem, 2vw, 1.8rem);
   flex-wrap: wrap;
 }
-
-/* Container do título + subtítulo — max-width evita linhas muito longas */
-.section-heading{
+ 
+/* Container do título + subtítulo — max-width evita linhas muito longas.
+   FIX 7: diferente de .section-title (que é filho de grid),
+   .section-heading é um container interno com gap entre título e subtítulo. */
+.section-heading {
   display: grid;
   gap: 0.75rem;
   max-width: 760px;
 }
-
+ 
 /* =========================
    EYEBROW BADGE
    Pequena pílula acima do título principal das seções.
    Dá contexto sem competir com o h2.
    ========================= */
-.eyebrow-badge{
+.eyebrow-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   padding: .5rem 1rem;
   border-radius: 999px;
-  font-weight: 700;
+  /* FIX 3: font-weight 700 → 500 — alinhado com o design system do projeto.
+     700 deixava o badge mais pesado que todos os outros elementos em negrito. */
+  font-weight: 500;
   letter-spacing: 0.03em;
   color: color-mix(in srgb, var(--midnight-blue) 90%, white);
   background: color-mix(in srgb, var(--surface) 86%, var(--very-light-blue) 14%);
@@ -74,20 +88,25 @@ main {
     0 10px 30px color-mix(in srgb, var(--accent) 12%, transparent),
     inset 0 1px 0 rgba(255,255,255,0.7); /* brilho interno — efeito vidro */
 }
-
+ 
 /* Texto secundário de seção — cor suave, linha máxima de 60 chars */
-.section-subtitle{
+.section-subtitle {
   color: var(--text-subtle);
   line-height: 1.65;
   max-width: 60ch;
 }
-
+ 
 /* =========================
    PANEL CARD — card base reutilizável
    Fundo gradiente suave + glow interno no ::before.
    Usado como base para cards de projeto, habilidades, etc.
+ 
+   FIX 5: overflow: hidden é dependência crítica do ::before —
+   o pseudoelemento expande 24% para fora com inset: -24%.
+   Não sobrescreva overflow: visible sem remover ou ajustar o ::before,
+   ou o glow vai vazar para fora do card silenciosamente.
    ========================= */
-.panel-card{
+.panel-card {
   position: relative;
   border-radius: 1.2rem;
   background: var(--grad-card);
@@ -95,17 +114,24 @@ main {
   box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
-
-/* Glow interno no canto superior esquerdo — iluminação "oceânica" */
-.panel-card::before{
-  content:"";
-  position:absolute;
-  inset:-24%;
+ 
+/* Glow interno no canto superior esquerdo — iluminação "oceânica".
+   FIX 2: blur restrito a desktop — filter: blur() em pseudoelemento
+   é caro em GPU mobile com vários cards visíveis simultaneamente. */
+.panel-card::before {
+  content: "";
+  position: absolute;
+  inset: -24%;
   border-radius: inherit;
   background: radial-gradient(120% 120% at 20% 20%,
     color-mix(in srgb, var(--accent) 18%, transparent),
     transparent 60%);
   opacity: .25;
-  filter: blur(12px);
-  pointer-events:none; /* nunca bloqueia cliques no card */
+  pointer-events: none; /* nunca bloqueia cliques no card */
+}
+ 
+@media (min-width: 1024px) {
+  .panel-card::before {
+    filter: blur(12px);
+  }
 }

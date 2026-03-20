@@ -2,26 +2,35 @@
  * ═══════════════════════════════════════════════════════════
  *  effects/webgl.js — Placeholder WebGL
  *
- *  Este arquivo existe para manter a assinatura de importação
- *  estável em main.js. O WebGL foi removido/adiado, mas o módulo
- *  permanece para não quebrar o sistema de módulos.
+ *  Mantém a assinatura de importação estável em main.js.
+ *  O WebGL foi removido/adiado — este módulo existe para que
+ *  o bootstrap não precise de guards ou imports condicionais.
  *
- *  Se quiser implementar um fundo WebGL no futuro,
- *  é aqui que ele vai viver.
+ *  Para implementar um fundo WebGL no futuro, substitua os
+ *  no-ops abaixo pela lógica real. A interface { destroy }
+ *  deve ser preservada para o lifecycle do bootstrap.
  * ═══════════════════════════════════════════════════════════
  */
 
 /**
- * No-op: retorna a interface { destroy } esperada pelo bootstrap,
- * mas não faz nada. Seguro chamar sem efeitos colaterais.
+ * Inicializa (ou simula) o contexto WebGL do hero.
+ *
+ * @returns {{ destroy: () => void }} Interface de lifecycle —
+ *   chame destroy() ao desmontar a página para liberar recursos.
+ *   No estado atual, destroy() é um no-op seguro.
  */
 export function initWebGL() {
   return { destroy() {} };
 }
 
 /**
- * No-op: mantido para compatibilidade com chamadas de resize.
+ * Notifica o contexto WebGL sobre mudanças de tamanho da viewport.
+ * No estado atual é um no-op — quando o WebGL for implementado,
+ * deverá chamar gl.viewport() com as novas dimensões.
+ *
+ * @param {number} _width  - Largura da viewport em pixels
+ * @param {number} _height - Altura da viewport em pixels
  */
-export function handleWebGLResize() {
-  // sem implementação
+export function handleWebGLResize(_width, _height) {
+  // no-op intencional — ver comentário do módulo
 }
