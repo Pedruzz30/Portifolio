@@ -286,27 +286,28 @@ function initHeroBubbles(hero) {
   container.setAttribute("aria-hidden", "true"); // decorativo, ignora leitores de tela
   hero.appendChild(container);
 
-  const BUBBLE_COUNT = 9;
+  const BUBBLE_COUNT = 12;
 
   for (let i = 0; i < BUBBLE_COUNT; i++) {
     const bubble = document.createElement("span");
     bubble.className = "hero-bubble";
 
-    const size     = 3 + Math.random() * 9;          // diâmetro: 3–12px
-    const left     = 8  + Math.random() * 84;         // posição X: 8–92% (evita bordas)
-    const duration = 9  + Math.random() * 18;         // tempo de subida: 9–27s
+    const size     = 8  + Math.random() * 20;         // diâmetro: 8–28px
+    const left     = 5  + Math.random() * 88;         // posição X: 5–93% (evita bordas)
+    const duration = 7  + Math.random() * 6;          // tempo de subida: 7–13s
     const delay    = Math.random() * duration;        // fase aleatória → bolhas dessincronizadas
-    const drift    = (Math.random() - 0.5) * 50;     // desvio lateral: -25 → +25px
 
-    // delay negativo: a animação já começa "no meio" — sem todas as bolhas nascendo juntas
-    bubble.style.cssText = `
-      width: ${size}px;
-      height: ${size}px;
-      left: ${left}%;
-      --bubble-drift: ${drift}px;
-      animation-duration: ${duration}s;
-      animation-delay: -${delay}s;
-    `;
+    // Trajetória em S: drift2 é o inverso proporcional de drift1
+    const drift1   = (Math.random() < 0.5 ? 1 : -1) * (8 + Math.random() * 16);
+    const drift2   = -drift1 * (0.5 + Math.random() * 0.6);
+
+    bubble.style.width            = size + "px";
+    bubble.style.height           = size + "px";
+    bubble.style.left             = left + "%";
+    bubble.style.animationDuration = duration + "s";
+    bubble.style.animationDelay   = "-" + delay + "s";
+    bubble.style.setProperty("--bubble-drift",  drift1.toFixed(1) + "px");
+    bubble.style.setProperty("--bubble-drift-2", drift2.toFixed(1) + "px");
 
     container.appendChild(bubble);
   }

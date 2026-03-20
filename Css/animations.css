@@ -387,21 +387,28 @@
    desaparecendo antes de sair da tela (opacity: 0 aos 100%).
    ========================= */
 @keyframes heroBubbleRise {
-  0%   {
+  0% {
     transform: translateY(0) translateX(0) scale(0.85);
     opacity: 0;
-    animation-timing-function: ease-out; /* arranca rápido */
+    animation-timing-function: ease-out;
   }
-  6%   { opacity: 1; }
-  50%  {
-    transform: translateY(-52vh) translateX(var(--bubble-drift, 8px)) scale(1.05);
-    animation-timing-function: ease-in-out; /* ritmo constante no meio */
+  6%  { opacity: 1; }
+  25% {
+    transform: translateY(-22vh) translateX(var(--bubble-drift, 10px)) scale(0.95);
+    animation-timing-function: ease-in-out;
   }
-  88%  { opacity: 0.5; }
+  50% {
+    transform: translateY(-50vh) translateX(var(--bubble-drift-2, -6px)) scale(1.05);
+    animation-timing-function: ease-in-out;
+  }
+  75% {
+    transform: translateY(-76vh) translateX(var(--bubble-drift, 10px)) scale(1.08);
+    animation-timing-function: ease-in;
+  }
+  88% { opacity: 0.5; }
   100% {
-    transform: translateY(-108vh) translateX(var(--bubble-drift, 8px)) scale(1.0);
+    transform: translateY(-108vh) translateX(var(--bubble-drift-2, -6px)) scale(1.0);
     opacity: 0;
-    /* desacelera naturalmente antes de sumir */
   }
 }
 
