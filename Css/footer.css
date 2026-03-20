@@ -1,108 +1,208 @@
 /*
  * ═══════════════════════════════════════════════════════════
  *  footer.css — Fundo do Oceano
- *  O footer é a parte mais profunda e dramática do site.
- *  4 camadas de efeito: glow de superfície, textura de água,
- *  sweep profundo e plâncton bioluminescente.
+ *
+ *  Direção visual: escuridão abissal + bioluminescência calma.
+ *  O footer é o ponto mais profundo do site — onde a luz
+ *  da superfície não chega mais, só partículas de plâncton
+ *  pulsando no escuro e caústicas quase imperceptíveis.
+ *
+ *  Camadas (ordem de baixo para cima):
+ *   1. .site-footer         — fundo sólido #020c18 (abissal)
+ *   2. .site-footer::before — caústicas: manchas de luz lenta
+ *   3. .site-footer::after  — textura: listras diagonais sutis
+ *   4. #footerParticleCanvas — plâncton bioluminescente (JS)
+ *   5. .footer-inner / .footer-bottom — conteúdo (z-index: 2)
  * ═══════════════════════════════════════════════════════════
  */
-
+ 
 /* =========================
-   FOOTER — Fundo do Oceano
+   ESTRUTURA PRINCIPAL
    ========================= */
-.site-footer{
+.site-footer {
   position: relative;
   overflow: hidden;
   isolation: isolate;
   padding: clamp(2.8rem, 5.5vw, 4.6rem) 1.25rem 1.25rem;
-  border-top: 1px solid color-mix(in srgb, var(--sky-blue) 14%, transparent);
+  border-top: 1px solid rgba(80, 190, 255, 0.08);
+ 
+  /* Fundo abissal — quase preto com leve gradiente de profundidade */
   background:
-    radial-gradient(120% 90% at 50% -10%,
-      rgba(255,255,255,0.12),
-      rgba(255,255,255,0) 55%),
-    radial-gradient(90% 70% at 20% 25%,
-      color-mix(in srgb, var(--accent) 10%, transparent),
-      transparent 65%),
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--navy-blue) 88%, #000 12%),
-      color-mix(in srgb, var(--deep-blue) 92%, #000 8%));
+    radial-gradient(ellipse 80% 40% at 50% 100%,  #041830 0%,  transparent 70%),
+    radial-gradient(ellipse 60% 30% at 20% 80%,   #031020 0%,  transparent 60%),
+    linear-gradient(180deg, #04111f 0%, #020c18 40%, #010810 100%);
 }
-
-/* Camada 1: "Luz da superfície" — glow radial branco no topo do footer,
-   como o sol filtrado por água. mix-blend-mode: screen = só ilumina. */
-.site-footer::before{
-  content:"";
-  position:absolute;
-  inset:-30% -25% auto -25%;
-  height: 70%;
-  pointer-events:none;
-  opacity: .65;
-  filter: blur(18px);
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(70% 60% at 50% 10%,
-      rgba(255,255,255,0.22),
-      rgba(255,255,255,0) 70%),
-    linear-gradient(180deg,
-      rgba(120,220,255,0.10),
-      rgba(0,0,0,0));
-  animation: footerSurfaceGlow calc(var(--wave-medium) * 1.05) ease-in-out infinite;
-}
-
-/* Camada 2: Textura de água profunda — padrão diagonal de listras
-   finas semi-transparentes, como a textura de luz no fundo do oceano. */
-.site-footer::after{
-  content:"";
-  position:absolute;
+ 
+/* Camada 1: Caústicas — manchas de luz que lembram reflexo
+   da superfície filtrado por metros de água.
+   Movimento muito lento (12s) — quase parado, como o abisso. */
+.site-footer::before {
+  content: "";
+  position: absolute;
   inset: 0;
-  pointer-events:none;
-  opacity: .18;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.07;
+  background:
+    radial-gradient(ellipse 35% 18% at 25% 30%,  rgba(100, 210, 255, 1) 0%, transparent 100%),
+    radial-gradient(ellipse 22% 12% at 72% 55%,  rgba(80,  190, 240, 1) 0%, transparent 100%),
+    radial-gradient(ellipse 28% 14% at 50% 18%,  rgba(120, 220, 255, 1) 0%, transparent 100%);
+  animation: footerCaustics calc(var(--wave-medium, 8s) * 0.95) ease-in-out infinite;
+}
+ 
+/* Camada 2: Textura de água profunda — listras diagonais finas.
+   mix-blend-mode: soft-light adiciona textura sem interferir nas cores. */
+.site-footer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.08;
   mix-blend-mode: soft-light;
   background:
     repeating-linear-gradient(
       135deg,
-      rgba(255,255,255,0.08) 0px,
-      rgba(255,255,255,0.08) 10px,
-      rgba(255,255,255,0.03) 20px,
-      rgba(255,255,255,0.03) 36px
-    ),
-    radial-gradient(120% 100% at 50% 0%,
-      rgba(255,255,255,0.10),
-      rgba(255,255,255,0) 55%);
-  animation: deepWaterDrift calc(var(--wave-slow) * 0.70) ease-in-out infinite;
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 10px,
+      rgba(255, 255, 255, 0.02) 20px,
+      rgba(255, 255, 255, 0.02) 36px
+    );
+  animation: deepWaterDrift calc(var(--wave-slow, 12s) * 0.70) ease-in-out infinite;
 }
-
-.footer-inner{
+ 
+/* Canvas das partículas bioluminescentes (injetado pelo JS).
+   Fica entre as camadas de fundo e o conteúdo. */
+#footerParticleCanvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+ 
+/* =========================
+   GRID INTERNO
+   ========================= */
+.footer-inner {
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
   gap: clamp(1.4rem, 3vw, 2.4rem);
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr 1fr;
   align-items: start;
   position: relative;
+  z-index: 2;
+}
+ 
+/* =========================
+   COLUNA BRAND
+   ========================= */
+.footer-title {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.92);
+}
+ 
+.footer-tagline {
+  margin: 0 0 1.25rem;
+  max-width: 44ch;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: rgba(160, 210, 240, 0.7);
+}
+ 
+.footer-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+ 
+.footer-mini {
+  margin: 1rem 0 0;
+  max-width: 44ch;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.32);
+  line-height: 1.6;
+}
+ 
+/* =========================
+   COLUNAS DE LINKS
+   ========================= */
+.footer-heading {
+  margin: 0 0 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+ 
+  /* Azul-gelo com baixa opacidade — rótulo de profundidade */
+  color: rgba(80, 190, 255, 0.45);
+}
+ 
+.footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+ 
+/* Links com ponto bioluminescente à esquerda */
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.9rem;
+  color: rgba(180, 220, 245, 0.6);
+  text-decoration: none;
+  position: relative;
   z-index: 1;
+  transition: color 0.35s ease;
 }
-
-.footer-inner::after{
-  content:"";
-  position:absolute;
-  inset:-70px -90px;
-  pointer-events:none;
-  z-index: 0;
-  opacity: .18;
-  mix-blend-mode: screen;
-  background:
-    linear-gradient(115deg,
-      rgba(255,255,255,0) 0%,
-      rgba(110,214,255,0.14) 38%,
-      rgba(255,255,255,0.08) 52%,
-      rgba(255,255,255,0) 72%);
-  filter: blur(1.2px);
-  transform: translateX(-18%) rotate(10deg);
-  animation: footerDeepSweep calc(var(--wave-slow) * 0.62) ease-in-out infinite;
+ 
+/* Ponto bioluminescente — pulsa levemente no estado normal */
+.site-footer a::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(80, 190, 255, 0.35);
+  flex-shrink: 0;
+  transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
 }
-
-.footer-bottom{
+ 
+.site-footer a:hover {
+  color: rgba(180, 235, 255, 0.95);
+}
+ 
+/* No hover: ponto acende como bioluminescência real */
+.site-footer a:hover::before {
+  background: rgba(80, 190, 255, 0.95);
+  transform: scale(2);
+  box-shadow:
+    0 0 6px  rgba(80, 190, 255, 0.7),
+    0 0 14px rgba(80, 190, 255, 0.3);
+}
+ 
+.site-footer a:focus-visible {
+  outline: 2px solid rgba(80, 190, 255, 0.5);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+ 
+/* Link em destaque (footer-link) — levemente mais visível */
+.footer-link {
+  font-weight: 500;
+  color: rgba(180, 220, 245, 0.8);
+}
+ 
+/* =========================
+   RODAPÉ INFERIOR
+   ========================= */
+.footer-bottom {
   max-width: 1100px;
   margin: clamp(1.9rem, 3.2vw, 2.8rem) auto 0;
   padding-top: 1rem;
@@ -111,108 +211,51 @@
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-  border-top: 1px solid rgba(255,255,255,0.10);
+ 
+  /* Linha divisória quase invisível — apenas um traço de profundidade */
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
-
-/* Camada 4: Plâncton bioluminescente — 7 pontos de luz minúsculos (1px)
-   derivando sutilmente. animation: footerPlankton dá vida a eles. */
-.footer-bottom::before{
-  content:"";
-  position:absolute;
-  inset:-26px -18px;
-  pointer-events:none;
-  z-index: 0;
-  opacity: .14;
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(circle at 12% 40%, rgba(200,245,255,0.20) 0 1px, transparent 2px),
-    radial-gradient(circle at 22% 60%, rgba(200,245,255,0.18) 0 1px, transparent 2px),
-    radial-gradient(circle at 38% 35%, rgba(200,245,255,0.16) 0 1px, transparent 2px),
-    radial-gradient(circle at 54% 70%, rgba(200,245,255,0.20) 0 1px, transparent 2px),
-    radial-gradient(circle at 66% 45%, rgba(200,245,255,0.15) 0 1px, transparent 2px),
-    radial-gradient(circle at 78% 62%, rgba(200,245,255,0.18) 0 1px, transparent 2px),
-    radial-gradient(circle at 90% 38%, rgba(200,245,255,0.20) 0 1px, transparent 2px);
-  animation: footerPlankton calc(var(--wave-slow) * 0.85) ease-in-out infinite;
-}
-
-.footer-inner::before{
-  animation: footerCaustics calc(var(--wave-medium) * 0.95) ease-in-out infinite;
-}
-
-.footer-title{
-  margin: 0 0 .55rem;
-  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
-  letter-spacing: -0.02em;
-  color: rgba(255,255,255,0.92);
-}
-
-.footer-tagline{
-  margin: 0 0 1.25rem;
-  max-width: 55ch;
-  opacity: .85;
-  color: rgba(255,255,255,0.78);
-}
-
-.footer-heading{
-  margin: 0 0 .85rem;
-  font-size: 1rem;
-  letter-spacing: .01em;
-  color: rgba(255,255,255,0.86);
-}
-
-.footer-list{
-  list-style: none;
-  padding: 0;
+ 
+.footer-bottom p {
   margin: 0;
-  display: grid;
-  gap: .6rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.25);
 }
-
-.site-footer a{
-  color: color-mix(in srgb, var(--accent-soft) 72%, white 28%);
-  text-decoration: none;
-  opacity: .9;
-  transition: opacity .2s ease, transform .2s ease, text-shadow .25s ease;
-  position: relative;
-  z-index: 1;
-}
-
-.site-footer a:hover{
-  opacity: 1;
-  transform: translateY(-1px);
-  text-shadow: 0 0 18px rgba(110,214,255,0.25);
-}
-
-.site-footer a:focus-visible{
-  outline: 3px solid rgba(110,214,255,0.55);
-  outline-offset: 4px;
-  border-radius: 10px;
-}
-
-.footer-cta{
-  display: flex;
+ 
+/* Indicador de profundidade — o "você está no fundo" do footer */
+.footer-depth-label {
+  display: inline-flex;
   align-items: center;
-  gap: .85rem;
-  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(80, 190, 255, 0.28);
 }
-
-.footer-link{
-  font-weight: 650;
-  opacity: .92;
+ 
+/* Ponto pulsante do indicador de profundidade */
+.footer-depth-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(80, 190, 255, 0.5);
+  animation: pillDotBiolum 3s ease-in-out infinite;
 }
-
-.footer-mini{
-  margin: 1rem 0 0;
-  max-width: 44ch;
-  color: rgba(255,255,255,0.74);
-  opacity: .92;
+ 
+/* =========================
+   RESPONSIVO
+   ========================= */
+@media (max-width: 860px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
 }
-
-.footer-bottom p{
-  margin: 0;
-  color: rgba(255,255,255,0.72);
-  position: relative;
-  z-index: 1;
-} 
+ 
+@media (max-width: 600px) {
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
