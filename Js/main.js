@@ -167,7 +167,7 @@ function bootstrap() {
 
   // ─── ROADMAP ─────────────────────────────────────────────
   // Calcula o progresso ponderado e anima os steps ao entrar em view
-   safelyInit(
+  safelyInit(
     setupRoadmap,
     {
       section: elements.roadmapSection,
@@ -212,6 +212,16 @@ function bootstrap() {
   if (fpHandle && typeof fpHandle.destroy === "function") {
     cleanups.push(fpHandle.destroy);
   }
+
+  // ─── OCEAN LIFE ──────────────────────────────────────────
+  // Cardume, ondas de perturbação, parallax de profundidade e bolhas nos cards
+  const destroyOceanLife = initOceanLife({
+    hero: document.querySelector('.hero'),
+    main: document.querySelector('main'),
+    projectCards: Array.from(document.querySelectorAll('.project-card')),
+    reduceMotion: prefersReducedMotion,
+  });
+  cleanups.push(destroyOceanLife.destroy);
 
   // ─── ANO DINÂMICO ────────────────────────────────────────
   // Atualiza o copyright no footer automaticamente todo ano

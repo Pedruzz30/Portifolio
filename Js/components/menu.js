@@ -87,7 +87,7 @@ export function setupMenu({
      * aria-expanded: informa leitores de tela se o menu está aberto.
      * aria-hidden no overlay: oculta de leitores quando fechado.
      */
-   const setA11yState = (isOpen) => {
+    const setA11yState = (isOpen) => {
       menuToggle.setAttribute("aria-expanded", String(isOpen));
       menuToggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
       if (overlay) overlay.setAttribute("aria-hidden", String(!isOpen));
@@ -151,7 +151,7 @@ export function setupMenu({
       const href = event.currentTarget.getAttribute("href");
       if (!href || !href.startsWith("#")) return;
 
-     event.preventDefault();
+      event.preventDefault();
       const target = document.querySelector(href);
       if (target) scrollWithOffset(target);
       closeMenu();

@@ -117,7 +117,7 @@ export function setupRipple({ rippleButtons, prefersReducedMotion }) {
     button.addEventListener("keydown", handleKeydown);
   });
 
-   return {
+  return {
     destroy: () => {
       rippleButtons.forEach((button) => {
         if (!button) return;

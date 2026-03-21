@@ -1,6 +1,6 @@
 /*
  * ═══════════════════════════════════════════════════════════
- *  effects/oceanLife.js — Vida do Oceano
+ *  effects/OceanLife.js — Vida do Oceano
  *
  *  Quatro efeitos que adicionam vida à narrativa oceânica:
  *
