@@ -17,6 +17,7 @@ import { initAnimations } from "./effects/animations.js";
 import { setupRoadmap } from "./components/roadmap.js";
 import { setupTheme } from "./components/theme.js";
 import { initFooterParticles } from "./effects/footerParticles.js";
+import { initHeroParticles } from "./effects/heroParticles.js";
 
 function bootstrap() {
   // AbortController centralizado: controller.abort() cancela TODOS os
@@ -36,6 +37,7 @@ function bootstrap() {
     menuSpans: Array.from(document.querySelectorAll(".menu-toggle span")),
     textReveal: Array.from(document.querySelectorAll(".text-reveal span")),
     textMask: document.querySelector(".text-mask"),
+    hero: document.querySelector(".hero"),
     heroContent: document.querySelector(".hero-content"),
     footer: document.querySelector(".site-footer"),
     serviceCards: Array.from(document.querySelectorAll(".project-card")),
@@ -186,9 +188,20 @@ function bootstrap() {
     (error) => console.warn("Theme toggle desabilitado:", error)
   );
 
+  const isMobile = window.matchMedia("(max-width: 600px)").matches;
+
+  // ─── HERO PARTICLES ──────────────────────────────────────
+  // Partículas de superfície + ondas SVG no hero
+  const heroParticleHandle = initHeroParticles(elements.hero, {
+    count: isMobile ? 16 : 28,
+    reduceMotion: prefersReducedMotion,
+  });
+  if (heroParticleHandle && typeof heroParticleHandle.destroy === "function") {
+    cleanups.push(heroParticleHandle.destroy);
+  }
+
   // ─── FOOTER PARTICLES ────────────────────────────────────
   // Plâncton bioluminescente no fundo do oceano
-  const isMobile = window.matchMedia("(max-width: 600px)").matches;
   const particleCount = isMobile ? 30 : 55;
   const fpHandle = initFooterParticles({
     footer: elements.footer,

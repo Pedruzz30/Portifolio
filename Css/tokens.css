@@ -5,7 +5,7 @@
  *  Altere estes tokens e toda a UI se transforma.
  * ═══════════════════════════════════════════════════════════
  */
-
+ 
 :root {
   /* =========================
      Escala de azuis
@@ -22,7 +22,7 @@
   --darker-blue: #095f92;     /* fundo escuro, com luz ainda visível */
   --navy-blue: #064465;       /* quase abismo */
   --midnight-blue: #032a40;   /* o fundo do oceano */
-
+ 
   /* =========================
      Escala de brancos e cinzas frios
      Usados em superfícies, textos e bordas —
@@ -35,10 +35,12 @@
   --silver: #c9d2df;
   --blue-gray-light: #aeb8c8;
   --blue-gray: #8f9bb0;
+  /* ⚠️ --gray (~4.0:1 contraste) NÃO passa WCAG AA em fundos claros.
+     Use --dark-gray para texto e --text-muted para elementos secundários. */
   --gray: #6f7b8e;
   --dark-gray: #4d5666;
   --charcoal: #2e3440;           /* texto principal: máximo contraste */
-
+ 
   /* ===== Base / Superfícies =====
      Backgrounds da página: levemente azulados para não parecer papel.
      color-mix() mistura variáveis de design sem valores hardcoded. */
@@ -46,24 +48,24 @@
   --surface: var(--pure-white);
   --surface-2: color-mix(in srgb, var(--light-gray) 55%, var(--pure-white) 45%);
   --surface-soft: color-mix(in srgb, var(--pure-white) 82%, var(--very-light-blue) 18%);
-
+ 
   /* ===== Texto =====
      --text-muted usa --dark-gray (~4.5:1 contraste) e NÃO --gray (~4.0:1),
      que falha WCAG AA em fundos claros. Acessibilidade em primeiro lugar. */
   --text: var(--charcoal);
   --text-muted: var(--dark-gray);
   --text-subtle: color-mix(in srgb, var(--dark-gray) 70%, var(--blue-gray) 30%);
-
+ 
   /* ===== Marca / Ação =====
      --primary é a cor de ação principal — botões, links, destaques.
      --primary-soft é o fundo suave nos estados hover/focus. */
   --primary: var(--deep-blue);
   --primary-hover: color-mix(in srgb, var(--darker-blue) 82%, var(--navy-blue));
   --primary-soft: color-mix(in srgb, var(--deep-blue) 14%, var(--pure-white));
-
+ 
   /* ===== Temperinho (acento) =====
      --accent é o brilho bioluminescente — usado em glows, badges e destaques.
-     --gradient-pop é o gradiente vibrante viola→magenta→mint (usado em bordas especiais). */
+     --gradient-pop é o gradiente vibrante viola→magenta→mint (bordas especiais). */
   --accent: var(--bright-blue);
   --violet: #9c8bff;
   --magenta: #ff7ac3;
@@ -71,15 +73,21 @@
   --accent-soft: color-mix(in srgb, var(--bright-blue) 14%, var(--pure-white));
   --accent-strong: color-mix(in srgb, var(--bright-blue) 78%, var(--midnight-blue));
   --gradient-pop: linear-gradient(120deg, var(--violet), var(--magenta), var(--mint));
-  --glass: color-mix(in srgb, var(--surface) 80%, var(--very-light-blue) 20%);
-
+ 
+  /* FIX 3: Cores de Java movidas de .skills2 local para :root —
+     permite uso global sem depender do escopo do componente. */
+  --java-orange: #f28c28;
+  --java-ember:  #ffb86b;
+  --java-deep:   #c65a1b;
+  --java-sand:   #ffe2c7;
+ 
   /* ===== Linhas / Bordas =====
      Bordas semi-transparentes para não "poluir" o design.
      --border-glow é usado quando o elemento está em foco/destaque. */
   --border: color-mix(in srgb, var(--blue-gray-light) 42%, transparent);
   --border-strong: color-mix(in srgb, var(--blue-gray) 58%, transparent);
   --border-glow: color-mix(in srgb, var(--accent) 28%, transparent);
-
+ 
   /* ===== Sombras / Glow =====
      Três tamanhos de sombra (sm → md → lg) para hierarquia visual.
      --focus é o outline de teclado acessível — azul brilhante, bem visível. */
@@ -87,52 +95,76 @@
   --shadow-md: 0 16px 42px color-mix(in srgb, var(--midnight-blue) 16%, transparent);
   --shadow-lg: 0 24px 64px color-mix(in srgb, var(--midnight-blue) 22%, transparent);
   --focus: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
-
+ 
   /* ===== Gradientes (personalidade) =====
-     --grad-hero: fundo do hero — vai do branco-azulado ao azul profundo (135deg).
-     --grad-card: fundo de cards — levemente azulado, dá sensação de vidro.
-     --grad-border: borda animável em hover — vai do accent ao sky-blue. */
+     Narrativa de profundidade vertical do site:
+     --grad-surface → hero (superfície): luz, claridade, reflexos
+     --grad-hero    → seções intermediárias: indo fundo, menos luz
+     --grad-card    → cards: vidro levemente azulado
+     --grad-border  → borda animável em hover
+     ========================= */
+ 
+  /* FIX 1: --grad-surface — novo token para o hero com vibe de superfície.
+     Substitui o gradiente hardcoded que estava em hero.css.
+     Azul claro no topo (espuma/céu) → azul profundo embaixo (mergulhando). */
+  --grad-surface: linear-gradient(180deg,
+    #b8eaf4  0%,
+    #7dd6ee 18%,
+    #4dc4e8 38%,
+    #2aaedc 58%,
+    #1a8fbf 78%,
+    #0e6d9e 100%
+  );
+ 
+  /* --grad-hero: mantido para seções intermediárias (sections.css).
+     Representa a zona de transição — nem superfície nem abismo.
+     Vai do branco-azulado ao azul profundo (135deg). */
   --grad-hero: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--white-blue) 68%, var(--bright-blue) 32%),
-    color-mix(in srgb, var(--light-blue) 60%, var(--deep-blue) 40%),
-    color-mix(in srgb, var(--deep-blue) 55%, var(--midnight-blue) 45%)
+    color-mix(in srgb, var(--white-blue)   68%, var(--bright-blue)    32%),
+    color-mix(in srgb, var(--light-blue)   60%, var(--deep-blue)      40%),
+    color-mix(in srgb, var(--deep-blue)    55%, var(--midnight-blue)  45%)
   );
-
+ 
   --grad-card: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--surface) 88%, var(--light-blue) 12%),
+    color-mix(in srgb, var(--surface) 88%, var(--light-blue)      12%),
     color-mix(in srgb, var(--surface) 78%, var(--very-light-blue) 22%)
   );
-
+ 
   --grad-border: linear-gradient(
     90deg,
     var(--accent),
     color-mix(in srgb, var(--accent) 70%, var(--primary) 30%),
     var(--sky-blue)
   );
-
-/* ===== Navegação =====
-   Offset do header fixo — usado em scroll-margin-top para que
-   ancoras (#secao) não fiquem escondidas atrás do header. */
+ 
+  /* FIX 7: --glass removido — confirmado sem uso via grep */
+ 
+  /* ===== Navegação =====
+     --header-offset é o fallback inicial — o scroll.js o sobrescreve
+     dinamicamente via root.style.setProperty com a altura real do header.
+     Se o JS ainda não rodou, âncoras usam este valor como scroll-margin-top. */
   --header-offset: 96px;
-
+ 
   /* ===== Hierarquia de z-index =====
      Camadas nomeadas: nunca mais guerre com números mágicos!
-     base → raised → content → overlay → header → loader (topo de tudo) */
-  --z-base: 0;
-  --z-raised: 1;
-  --z-content: 2;
-  --z-overlay: 9;
-  --z-header: 50;
-  --z-nav-mobile: 10;
-  --z-loader: 9999;
-
+     base → raised → content → overlay → header → nav-mobile → loader */
+  --z-base:       0;
+  --z-raised:     1;
+  --z-content:    2;
+  --z-overlay:    9;
+  --z-header:    50;
+  /* FIX 4: 10 → 60 — nav mobile deve ficar acima do header quando aberta,
+     não abaixo (10 < 50 = header cobre a nav em mobile). */
+  --z-nav-mobile: 60;
+  --z-loader:  9999;
+ 
   /* ===== Shapes =====
      Border-radius "blob" — forma orgânica que imita uma criatura marinha.
      Os valores são animados pelo keyframe `blob` em animations.css. */
   --blob-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
-
+ 
   /* ===== Motion =====
      Durações centralizadas para animações coerentes em todo o site.
      --wave-slow (16s) e --wave-medium (11s) são as "marés" do design.
