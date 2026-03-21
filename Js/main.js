@@ -18,7 +18,7 @@ import { setupRoadmap } from "./components/roadmap.js";
 import { setupTheme } from "./components/theme.js";
 import { initFooterParticles } from "./effects/footerParticles.js";
 import { initHeroParticles } from "./effects/heroParticles.js";
-import { initOceanLife } from "./effects/Oceanlife.js";
+import { initOceanLife } from "./effects/oceanLife.js";
 
 function bootstrap() {
   // AbortController centralizado: controller.abort() cancela TODOS os
@@ -212,6 +212,16 @@ function bootstrap() {
   if (fpHandle && typeof fpHandle.destroy === "function") {
     cleanups.push(fpHandle.destroy);
   }
+
+  // ─── OCEAN LIFE ──────────────────────────────────────────
+  // Cardume, ondas de perturbação, parallax de profundidade e bolhas nos cards
+  const destroyOceanLife = initOceanLife({
+    hero: document.querySelector('.hero'),
+    main: document.querySelector('main'),
+    projectCards: Array.from(document.querySelectorAll('.project-card')),
+    reduceMotion: prefersReducedMotion,
+  });
+  cleanups.push(destroyOceanLife.destroy);
 
   // ─── ANO DINÂMICO ────────────────────────────────────────
   // Atualiza o copyright no footer automaticamente todo ano
