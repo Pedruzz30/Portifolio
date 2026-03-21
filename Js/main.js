@@ -16,6 +16,7 @@ import { setupRipple } from "./components/ripple.js";
 import { initAnimations } from "./effects/animations.js";
 import { setupRoadmap } from "./components/roadmap.js";
 import { setupTheme } from "./components/theme.js";
+import { initFooterParticles } from "./effects/footerParticles.js";
 
 function bootstrap() {
   // AbortController centralizado: controller.abort() cancela TODOS os
@@ -36,6 +37,7 @@ function bootstrap() {
     textReveal: Array.from(document.querySelectorAll(".text-reveal span")),
     textMask: document.querySelector(".text-mask"),
     heroContent: document.querySelector(".hero-content"),
+    footer: document.querySelector(".site-footer"),
     serviceCards: Array.from(document.querySelectorAll(".project-card")),
     portfolioItems: Array.from(document.querySelectorAll(".project-card")),
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
@@ -183,6 +185,19 @@ function bootstrap() {
     { toggleBtn: elements.themeToggle },
     (error) => console.warn("Theme toggle desabilitado:", error)
   );
+
+  // ─── FOOTER PARTICLES ────────────────────────────────────
+  // Plâncton bioluminescente no fundo do oceano
+  const isMobile = window.matchMedia("(max-width: 600px)").matches;
+  const particleCount = isMobile ? 30 : 55;
+  const fpHandle = initFooterParticles({
+    footer: elements.footer,
+    count: particleCount,
+    reduceMotion: prefersReducedMotion,
+  });
+  if (fpHandle && typeof fpHandle.destroy === "function") {
+    cleanups.push(fpHandle.destroy);
+  }
 
   // ─── ANO DINÂMICO ────────────────────────────────────────
   // Atualiza o copyright no footer automaticamente todo ano

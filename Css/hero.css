@@ -9,42 +9,170 @@
   position: relative;
   overflow: hidden;
   gap: 3rem;
-  background: var(--grad-hero);
   color: var(--pure-white);
   isolation: isolate;
+
+  /* Superfície oceânica: azul claro no topo, aprofunda embaixo.
+     Substitui var(--grad-hero) — gradiente agora é parte da narrativa
+     de profundidade: hero (superfície) → seções → footer (abismo). */
+  background:
+    linear-gradient(180deg,
+      #b8eaf4 0%,
+      #7dd6ee 18%,
+      #4dc4e8 38%,
+      #2aaedc 58%,
+      #1a8fbf 78%,
+      #0e6d9e 100%
+    );
 }
 
-.hero::before,
+/* =========================
+   CAMADAS DE SUPERFÍCIE
+   Ordem de baixo para cima (z-index):
+   0 — gradiente base (background do .hero)
+   1 — raios de luz solar (::before)
+   2 — caustics + depth gradient (::after)
+   3 — canvas de partículas (JS, #heroParticleCanvas)
+   4 — reflexo da superfície (.hero-surface-glare)
+   5 — ondas da superfície (.hero-surface-waves)
+  10 — conteúdo (.hero-content, .hero-visual)
+   ========================= */
+
+/* Camada 1: Raios de luz solar — cônicos vindos de cima,
+   como o sol quebrando na interface ar/água.
+   conic-gradient cria os feixes; mix-blend-mode: screen = só ilumina. */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140%;
+  height: 65%;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+  background: conic-gradient(from 260deg at 50% 0%,
+    transparent                    0deg,
+    rgba(255,255,255,0.07)          4deg,
+    transparent                    8deg,
+    rgba(255,255,255,0.05)         14deg,
+    transparent                   18deg,
+    rgba(255,255,255,0.09)         24deg,
+    transparent                   28deg,
+    rgba(255,255,255,0.04)         33deg,
+    transparent                   37deg,
+    rgba(255,255,255,0.07)         42deg,
+    transparent                   46deg,
+    rgba(255,255,255,0.06)         52deg,
+    transparent                   56deg,
+    rgba(255,255,255,0.08)         60deg,
+    transparent                   64deg,
+    transparent                  180deg
+  );
+  animation: raysShift calc(var(--wave-slow, 12s) * 0.75) ease-in-out infinite;
+}
+
+@keyframes raysShift {
+  0%, 100% { transform: translateX(-50%) rotate(0deg)   scaleX(1);    opacity: 0.7; }
+  40%       { transform: translateX(-50%) rotate(2deg)   scaleX(1.04); opacity: 1;   }
+  70%       { transform: translateX(-50%) rotate(-1deg)  scaleX(0.97); opacity: 0.8; }
+}
+
+/* Camada 2: Caustics + gradiente de profundidade.
+   Caustics = manchas brancas irregulares como no fundo de piscina.
+   Gradiente escurece o rodapé do hero — transição para seções mais fundas. */
 .hero::after {
   content: "";
   position: absolute;
-  inset: -25%;
+  inset: 0;
   pointer-events: none;
-  z-index: 0;
-  filter: blur(14px);
-  opacity: 0.65;
-}
-
-.hero::before {
+  z-index: 2;
+  /* Caustics */
   background:
-    radial-gradient(90% 70% at 18% 20%, rgba(255, 255, 255, 0.45), transparent 60%),
-    radial-gradient(120% 80% at 70% 65%, color-mix(in srgb, var(--bright-blue) 60%, transparent), transparent 55%);
-  mix-blend-mode: screen;
-  animation: tideFlow calc(var(--wave-slow) * 0.75) ease-in-out infinite;
+    radial-gradient(ellipse 18% 8%  at 22% 28%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 5%  at 55% 18%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(ellipse 20% 9%  at 75% 35%, rgba(255,255,255,0.50) 0%, transparent 100%),
+    radial-gradient(ellipse 10% 4%  at 38% 48%, rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 15% 6%  at 88% 22%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(ellipse  8% 3%  at 12% 55%, rgba(255,255,255,0.30) 0%, transparent 100%),
+    /* Gradiente de profundidade — escurece embaixo */
+    linear-gradient(180deg,
+      transparent                          0%,
+      transparent                         40%,
+      rgba(10, 50, 90, 0.20)              70%,
+      rgba(8,  35, 65, 0.45)             100%
+    );
+  opacity: 0.22;
+  animation: causticsFloat calc(var(--wave-medium, 8s) * 0.88) ease-in-out infinite;
 }
 
-.hero::after {
-  background:
-    linear-gradient(110deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0)),
-    linear-gradient(95deg, color-mix(in srgb, var(--accent) 28%, transparent), transparent 55%);
-  mix-blend-mode: overlay;
-  /* fluxo unidirecional — corrente, não pêndulo */
-  animation: waveFlow calc(var(--wave-medium) * 1.10) linear infinite;
+@keyframes causticsFloat {
+  0%, 100% { transform: translate(0, 0) scale(1);           opacity: 0.22; }
+  30%       { transform: translate(1.5%, 0.8%) scale(1.05); opacity: 0.32; }
+  65%       { transform: translate(-1%, -0.5%) scale(0.96); opacity: 0.16; }
 }
 
+/* Canvas de partículas bioluminescentes (injetado pelo heroParticles.js) */
+#heroParticleCanvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Reflexo da superfície — brilho branco no topo do hero,
+   como estar olhando de baixo para cima para a interface ar/água. */
+.hero-surface-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.38) 0%,
+    rgba(255,255,255,0.12) 45%,
+    transparent            100%
+  );
+  animation: glareBreath calc(var(--wave-medium, 8s) * 0.62) ease-in-out infinite;
+}
+
+@keyframes glareBreath {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1;   }
+}
+
+/* Ondas da superfície — linhas SVG no topo do hero.
+   Injetadas pelo heroParticles.js junto com o canvas. */
+.hero-surface-waves {
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 52px;
+  pointer-events: none;
+  z-index: 5;
+  animation: wavesMove calc(var(--wave-medium, 8s) * 0.50) ease-in-out infinite;
+}
+
+.hero-surface-waves svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes wavesMove {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(-3%); }
+}
+
+/* =========================
+   HERO CONTENT
+   ========================= */
 .hero-content {
   width: 50%;
-  z-index: 2;
+  z-index: 10;
   transform: translateY(20px);
   opacity: 0;
   transition: transform 1s ease, opacity 1s ease;
@@ -68,7 +196,7 @@
   display: grid;
   place-items: center;
   isolation: isolate;
-  z-index: 2;
+  z-index: 10;
   will-change: transform;
   transform: translateZ(0);
 }
@@ -80,24 +208,21 @@
   overflow: visible;
   border-radius: 0;
   animation: none;
-  /* Fallback exibido quando minhaFoto.jpeg falha ao carregar */
   background: var(--primary-soft);
 }
 
-/* HERO IMG - SIZING/FIT*/
-
+/* HERO IMG - SIZING/FIT */
 .hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 18%;
   display: block;
-  /* Color grade oceânico: satura levemente sem distorcer pele */
   filter: saturate(1.08) brightness(0.97) contrast(1.02);
   transition: filter 0.4s ease;
 }
 
-.floating-panels{
+.floating-panels {
   position: absolute;
   bottom: 2rem;
   right: clamp(1.2rem, 3vw, 2rem);
@@ -108,13 +233,8 @@
 }
 
 /* Flutuação independente — objetos em suspensão na coluna d'água */
-.hero-panel:nth-child(1) {
-  animation: panelDrift1 10s ease-in-out infinite;
-}
-.hero-panel:nth-child(2) {
-  animation: panelDrift2 13s ease-in-out infinite;
-  animation-delay: -4s;
-}
+.hero-panel:nth-child(1) { animation: panelDrift1 10s ease-in-out infinite; }
+.hero-panel:nth-child(2) { animation: panelDrift2 13s ease-in-out infinite; animation-delay: -4s; }
 
 /* Container de bolhas */
 .hero-bubbles {
@@ -139,29 +259,18 @@
   will-change: transform, opacity;
 }
 
-.hero-panel{
+.hero-panel {
   padding: 1rem 1.1rem;
   border-radius: 1rem;
-  background: color-mix(
-    in srgb,
-    var(--pure-white) 10%,
-    rgba(255,255,255,0.08)
-  );
-  border: 1px solid color-mix(
-    in srgb,
-    var(--accent) 22%,
-    var(--border)
-  );
+  background: color-mix(in srgb, var(--pure-white) 10%, rgba(255,255,255,0.08));
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
   backdrop-filter: blur(14px) saturate(1.1);
   box-shadow: var(--shadow-sm);
 }
 
-/* Gradiente de borda real (não quebra o border-radius) */
-.hero-panel--border{
-  position: relative;
-}
+.hero-panel--border { position: relative; }
 
-.hero-panel--border::before{
+.hero-panel--border::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -169,52 +278,34 @@
   border-radius: inherit;
   background: var(--gradient-pop);
   pointer-events: none;
-
-  /* WebKit (Chrome/Safari) */
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-
-  /* Standard (Firefox e afins) */
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
 
-
-.hero-panel__eyebrow{
+.hero-panel__eyebrow {
   margin: 0 0 .4rem;
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 600;
-  color: color-mix(
-    in srgb,
-    var(--surface-soft) 88%,
-    rgba(255,255,255,0.7)
-  );
+  color: color-mix(in srgb, var(--surface-soft) 88%, rgba(255,255,255,0.7));
 }
 
-.hero-panel__title{
+.hero-panel__title {
   margin: 0 0 .3rem;
   font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.2;
 }
 
-.hero-panel__text{
+.hero-panel__text {
   margin: 0;
   font-size: 0.92rem;
   line-height: 1.55;
-  color: color-mix(
-    in srgb,
-    var(--surface-soft) 85%,
-    rgba(255,255,255,0.65)
-  );
+  color: color-mix(in srgb, var(--surface-soft) 85%, rgba(255,255,255,0.65));
 }
-
 
 .text-reveal {
   font-size: 5rem;
@@ -238,13 +329,13 @@
   transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.hero-badges{
+.hero-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
 }
 
-.hero-chip{
+.hero-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -257,21 +348,21 @@
   box-shadow: 0 12px 28px color-mix(in srgb, var(--midnight-blue) 18%, transparent);
 }
 
-.hero-actions{
+.hero-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
 }
 
-.hero-stats{
+.hero-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 0.75rem;
   margin-top: 0.5rem;
 }
 
-.stat{
+.stat {
   padding: 0.95rem 1rem;
   border-radius: 1rem;
   background: color-mix(in srgb, var(--pure-white) 12%, rgba(255,255,255,0.06));
@@ -280,14 +371,14 @@
   box-shadow: var(--shadow-sm);
 }
 
-.stat__value{
+.stat__value {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
-.stat__label{
+.stat__label {
   margin: 0.2rem 0 0;
   color: color-mix(in srgb, var(--surface-soft) 90%, rgba(255,255,255,0.76));
 }
@@ -302,29 +393,23 @@
   display: grid;
   place-items: center;
   isolation: isolate;
-  /* O mesmo recorte precisa existir no wrapper e na imagem para evitar fringing/“costura” nas bordas do blob. */
   overflow: hidden;
   border-radius: var(--blob-radius);
   animation:
-    blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
-    wrapGlow calc(var(--wave-slow) * 0.85) ease-in-out              infinite;
+    blob     calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
+    wrapGlow calc(var(--wave-slow) * 0.85) ease-in-out                  infinite;
   will-change: border-radius, box-shadow;
   transform: translate3d(0,0,0);
   backface-visibility: hidden;
   border: 4px solid color-mix(in srgb, var(--accent) 26%, rgba(255,255,255,0.35));
   background: color-mix(in srgb, var(--deep-blue) 18%, rgba(255,255,255,0.18));
-  /* Glow bioluminescente multicamada */
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--mint) 22%, transparent),
-    0 0 36px color-mix(in srgb, var(--accent) 28%, transparent),
-    0 0 80px color-mix(in srgb, var(--deep-blue) 20%, transparent),
+    0 0 0 1px  color-mix(in srgb, var(--mint)          22%, transparent),
+    0 0 36px   color-mix(in srgb, var(--accent)         28%, transparent),
+    0 0 80px   color-mix(in srgb, var(--deep-blue)      20%, transparent),
     0 24px 64px color-mix(in srgb, var(--midnight-blue) 42%, transparent);
 }
 
-/* 5 · Glow bioluminescente interno — borda da moldura "emana" luz
-      4 radiais nas bordas: mint (topo/superfície), accent (dir), violet (esq), deep-blue (base)
-      mix-blend-mode: screen → aditivo, nunca escurece
-      Reutiliza seaGlow com fase negativa para dessincronizar do wrap */
 .hero-image-wrap::before {
   content: "";
   position: absolute;
@@ -333,26 +418,10 @@
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(
-      ellipse 110% 22% at 50% 0%,
-      color-mix(in srgb, var(--mint)      28%, transparent),
-      transparent 100%
-    ),
-    radial-gradient(
-      ellipse 22% 110% at 100% 50%,
-      color-mix(in srgb, var(--accent)    18%, transparent),
-      transparent 100%
-    ),
-    radial-gradient(
-      ellipse 22% 110% at 0% 50%,
-      color-mix(in srgb, var(--violet)    14%, transparent),
-      transparent 100%
-    ),
-    radial-gradient(
-      ellipse 110% 22% at 50% 100%,
-      color-mix(in srgb, var(--deep-blue) 20%, transparent),
-      transparent 100%
-    );
+    radial-gradient(ellipse 110% 22% at 50% 0%,   color-mix(in srgb, var(--mint)      28%, transparent), transparent 100%),
+    radial-gradient(ellipse  22% 110% at 100% 50%, color-mix(in srgb, var(--accent)    18%, transparent), transparent 100%),
+    radial-gradient(ellipse  22% 110% at 0% 50%,   color-mix(in srgb, var(--violet)    14%, transparent), transparent 100%),
+    radial-gradient(ellipse 110% 22% at 50% 100%,  color-mix(in srgb, var(--deep-blue) 20%, transparent), transparent 100%);
   mix-blend-mode: screen;
   animation: seaGlow calc(var(--wave-slow) * 1.1) ease-in-out infinite;
   animation-delay: -7s;
@@ -360,10 +429,6 @@
   will-change: opacity;
 }
 
-/* 6 · Raios de luz sweeping — luz solar refratada pela superfície
-      2 bandas diagonais que varrem a imagem com tideFlow
-      inset negativo: os raios atravessam sem "começar" visivelmente
-      mix-blend-mode: screen → puramente aditivo */
 .hero-image-wrap::after {
   content: "";
   position: absolute;
@@ -371,18 +436,17 @@
   z-index: 5;
   border-radius: inherit;
   pointer-events: none;
-  background:
-    linear-gradient(
-      -54deg,
-      transparent                                           0%,
-      transparent                                          24%,
-      color-mix(in srgb, var(--sky-blue) 14%, transparent) 30%,
-      color-mix(in srgb, var(--mint)      10%, transparent) 34%,
-      transparent                                          40%,
-      transparent                                          62%,
-      color-mix(in srgb, var(--accent)    10%, transparent) 68%,
-      transparent                                          74%
-    );
+  background: linear-gradient(
+    -54deg,
+    transparent                                            0%,
+    transparent                                           24%,
+    color-mix(in srgb, var(--sky-blue) 14%, transparent)  30%,
+    color-mix(in srgb, var(--mint)     10%, transparent)  34%,
+    transparent                                           40%,
+    transparent                                           62%,
+    color-mix(in srgb, var(--accent)   10%, transparent)  68%,
+    transparent                                           74%
+  );
   mix-blend-mode: screen;
   animation: tideFlow calc(var(--wave-slow) * 1.45) ease-in-out infinite;
   animation-delay: -4s;
@@ -391,14 +455,8 @@
 }
 
 /* =========================
-   HERO-IMG OCEANIC DEPTH SYSTEM
-   Camadas de profundidade, bioluminescência e luz refratada
-   — sem alterar HTML, reutiliza keyframes existentes —
+   HERO DEPTH SYSTEM (blob + caustics)
    ========================= */
-/* 1 · Aura bioluminescente: halo oceânico por trás do blob
-      Usa keyframe seaGlow (animations.css:72-76)
-      z-index: -1 dentro do contexto isolado de .hero-visual
-      → fica atrás de .hero-image-wrap, não afeta badge */
 .hero-visual::before {
   content: "";
   position: absolute;
@@ -406,14 +464,12 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(
-      ellipse 72% 82% at 50% 48%,
-      color-mix(in srgb, var(--accent) 24%, transparent) 0%,
-      color-mix(in srgb, var(--mint) 14%, transparent) 38%,
+    radial-gradient(ellipse 72% 82% at 50% 48%,
+      color-mix(in srgb, var(--accent)    24%, transparent) 0%,
+      color-mix(in srgb, var(--mint)      14%, transparent) 38%,
       transparent 68%
     ),
-    radial-gradient(
-      ellipse 48% 58% at 50% 74%,
+    radial-gradient(ellipse 48% 58% at 50% 74%,
       color-mix(in srgb, var(--deep-blue) 30%, transparent) 0%,
       transparent 58%
     );
@@ -421,37 +477,30 @@
   animation: seaGlow calc(var(--wave-slow) * 0.85) ease-in-out infinite;
   will-change: transform, opacity;
 }
-/* 2 · Anel orbital: conic-gradient girando ao redor do blob
-      Usa keyframe spin (animations.css:284-287) — estava definido e sem uso
-      Posicionado em .hero-visual para não ser clipado pela mask do wrap
-      border-radius fixo (não anima blobClip) → faz parte do charme orgânico */
+
 .hero-visual::after {
   content: "";
   position: absolute;
   inset: -2%;
   z-index: 0;
   pointer-events: none;
-  /* circular: coerente com rotação — blob que roda nunca parece natural */
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
-    transparent 0deg,
+    transparent                                              0deg,
     color-mix(in srgb, var(--mint)      55%, transparent)  48deg,
     color-mix(in srgb, var(--accent)    65%, transparent)  80deg,
     color-mix(in srgb, var(--sky-blue)  40%, transparent) 130deg,
-    transparent 200deg,
+    transparent                                            200deg,
     color-mix(in srgb, var(--deep-blue) 35%, transparent) 300deg,
-    transparent 360deg
+    transparent                                            360deg
   );
   filter: blur(10px);
   animation: spin 16s linear infinite;
   opacity: 0.45;
   will-change: transform;
 }
-/* 3 · Caustics: luz subaquática refratada sobre a figura
-      Usa keyframe waterShimmer (animations.css:79-83)
-      mix-blend-mode: screen → só ilumina, nunca escurece
-      Clipado pelo clip-path do .hero-image-wrap pai */
+
 .hero-image::before {
   content: "";
   position: absolute;
@@ -459,30 +508,15 @@
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(
-      ellipse 60% 40% at 25% 15%,
-      color-mix(in srgb, var(--mint)      30%, transparent) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 40% 55% at 75% 65%,
-      color-mix(in srgb, var(--accent)    24%, transparent) 0%,
-      transparent 65%
-    ),
-    radial-gradient(
-      ellipse 35% 30% at 55% 42%,
-      color-mix(in srgb, var(--sky-blue)  18%, transparent) 0%,
-      transparent 100%
-    );
-  /* soft-light: visível em fundos claros E escuros — screen desaparece em céu claro */
+    radial-gradient(ellipse 60% 40% at 25% 15%, color-mix(in srgb, var(--mint)      30%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 55% at 75% 65%, color-mix(in srgb, var(--accent)    24%, transparent) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 30% at 55% 42%, color-mix(in srgb, var(--sky-blue)  18%, transparent) 0%, transparent 100%);
   mix-blend-mode: soft-light;
   animation: waterShimmer calc(var(--wave-medium) * 1.15) ease-in-out infinite;
   animation-delay: -2.8s;
   will-change: transform, opacity;
 }
-/* 4 · Vinheta de profundidade: borda escurece como nas camadas d'água
-      Efeito estático (sem animação) — alto impacto, zero custo de perf
-      mix-blend-mode: multiply → integra com qualquer cor de fundo da foto */
+
 .hero-image::after {
   content: "";
   position: absolute;
@@ -490,14 +524,11 @@
   z-index: 2;
   pointer-events: none;
   background:
-    radial-gradient(
-      ellipse 88% 92% at 50% 50%,
+    radial-gradient(ellipse 88% 92% at 50% 50%,
       transparent 52%,
       color-mix(in srgb, var(--midnight-blue) 38%, transparent) 100%
     ),
-    /* profundidade direcional: base mais densa, como água em maior pressão */
-    linear-gradient(
-      to bottom,
+    linear-gradient(to bottom,
       transparent 55%,
       color-mix(in srgb, var(--navy-blue) 28%, transparent) 100%
     );
@@ -565,7 +596,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.45rem;
-  z-index: 5;
+  z-index: 10;
   cursor: pointer;
   text-decoration: none;
   animation: scrollIndicatorBounce 2.4s ease-in-out infinite;
@@ -595,21 +626,18 @@
 }
 
 @keyframes scrollIndicatorBounce {
-  0%, 100% {
-    transform: translateX(-50%) translateY(0);
-    opacity: 0.7;
-  }
-  50% {
-    transform: translateX(-50%) translateY(7px);
-    opacity: 1;
-  }
+  0%, 100% { transform: translateX(-50%) translateY(0);  opacity: 0.7; }
+  50%       { transform: translateX(-50%) translateY(7px); opacity: 1;   }
 }
 
 /* =========================
-   REDUCED MOTION — hero-img
-   Desativa animações decorativas; mantém o layout e a borda estáticos
+   REDUCED MOTION
    ========================= */
 @media (prefers-reduced-motion: reduce) {
+  .hero::before,
+  .hero::after,
+  .hero-surface-glare,
+  .hero-surface-waves,
   .hero-visual::before,
   .hero-visual::after,
   .hero-image::before,
