@@ -18,6 +18,7 @@ import { setupRoadmap } from "./components/roadmap.js";
 import { setupTheme } from "./components/theme.js";
 import { initFooterParticles } from "./effects/footerParticles.js";
 import { initHeroParticles } from "./effects/heroParticles.js";
+import { initOceanLife } from "./effects/Oceanlife.js";
 
 function bootstrap() {
   // AbortController centralizado: controller.abort() cancela TODOS os
