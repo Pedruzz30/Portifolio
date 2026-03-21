@@ -20,13 +20,6 @@
   100% { transform: scale(0.9);  opacity: 0.5; }
 }
 
-/* FIX 4: spin / loading / ringRotate colapsados em um único keyframe.
-   rotate(1turn) e rotate(360deg) são idênticos — mantido 1turn por ser
-   mais legível. O from: rotate(0) foi removido pois 0 é o valor padrão. */
-@keyframes spin {
-  to { transform: rotate(1turn); }
-}
-
 /* Halo pulsante — expande e volta, como um coração luminoso */
 @keyframes haloPulse {
   0%   { transform: scale(1);    opacity: 0.75; }
