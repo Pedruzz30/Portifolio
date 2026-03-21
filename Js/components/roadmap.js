@@ -83,14 +83,19 @@ export function setupRoadmap({
 
   // Anima a barra de progresso para o percentual calculado.
   // Com reduceMotion: aplica imediatamente sem transição CSS.
-  // Sem reduceMotion: usa rAF para garantir que o browser pinte o estado inicial (0%)
-  // antes de aplicar o valor final, ativando a transição CSS.
+  // Sem reduceMotion: duplo rAF garante que o browser confirme o estado inicial (0%)
+  // antes de aplicar o valor final — sem isso, a transição CSS pode não disparar
+  // se o primeiro frame ainda não tiver pintado o valor inicial da folha de estilo.
   if (progressFill) {
     if (prefersReducedMotion) {
       progressFill.style.width = `${percent}%`;
     } else {
       requestAnimationFrame(() => {
-        progressFill.style.width = `${percent}%`;
+        // Força reflow para garantir que width: 0% do CSS seja committed
+        void progressFill.offsetWidth;
+        requestAnimationFrame(() => {
+          progressFill.style.width = `${percent}%`;
+        });
       });
     }
   }

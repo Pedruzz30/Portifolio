@@ -1,343 +1,239 @@
 /*
  * ═══════════════════════════════════════════════════════════
- *  contact.css — Contato e Redes Sociais
+ *  contact.css — Zona Abissal
  *
- *  Layout: grid de 2 colunas (highlight escuro à esq + channels à dir)
- *  + formulário de email abaixo.
+ *  Na narrativa de profundidade, o Contato fica na zona
+ *  abissal — entre o portfólio (zona de pressão) e o
+ *  footer (abismo total). Quase sem luz, pressão máxima,
+ *  mas criaturas bioluminescentes sinalizam presença.
  *
- *  Formulário: sem backend — submissão abre mailto: com dados preenchidos
- *  (ver main.js → contactForm handler). Estados visuais:
- *  .is-loading, .show-success, .show-error controlados pelo JS.
+ *  Interatividade:
+ *  - Chips de contato sobem no hover (objetos submersos)
+ *  - Sweep de luz diagonal no hover dos chips
+ *  - Ponto bioluminescente acende no hover
+ *  - Inputs com borda ciano no focus
+ *  - Feedback de sucesso/erro com glassmorphism abissal
+ *
+ *  Formulário: sem backend — abre mailto: com dados preenchidos
+ *  (ver main.js). Estados: .is-loading, .show-success, .show-error
  * ═══════════════════════════════════════════════════════════
  */
-
+ 
 /* =========================
-   CONTACT / REDE SOCIAIS
+   CONTACT — Zona Abissal
    ========================= */
-
-.contact{
+.contact {
   position: relative;
   padding: clamp(3.5rem, 7vw, 6rem) 0;
-  background:
-    radial-gradient(120% 80% at 20% 10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    radial-gradient(90% 60% at 80% 0%, color-mix(in srgb, var(--bright-blue) 22%, transparent), transparent 60%),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface) 90%, #fff 10%), color-mix(in srgb, var(--very-light-blue) 60%, #fff 40%));
+  overflow: hidden;
+  isolation: isolate;
+ 
+  /* Zona abissal: quase sem luz, azul escuro denso.
+     Mais escuro que o portfólio, preparando o abismo do footer. */
+  background: linear-gradient(180deg,
+    #082d55  0%,
+    #051d3d 45%,
+    #030f22 100%
+  );
 }
-
-.contact-shell{
+ 
+/* Caustics residuais — luz chegando de muito longe.
+   Opacidade mínima (0.07) — quase não existe luz aqui. */
+.contact::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.07;
+  background:
+    radial-gradient(ellipse 35% 20% at 20% 25%, rgba(80, 190, 255, 1) 0%, transparent 100%),
+    radial-gradient(ellipse 25% 15% at 75% 55%, rgba(60, 170, 240, 1) 0%, transparent 100%),
+    radial-gradient(ellipse 20% 10% at 50% 80%, rgba(45, 226, 230, 1) 0%, transparent 100%);
+  animation: causticsFloat calc(var(--wave-slow) * 0.75) ease-in-out infinite;
+}
+ 
+/* Gradiente de profundidade — escurece o rodapé,
+   fundindo com o abismo do footer */
+.contact::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(180deg,
+    transparent  0%,
+    transparent 55%,
+    rgba(2, 8, 20, 0.40)  80%,
+    rgba(1, 5, 15, 0.65) 100%
+  );
+}
+ 
+.contact-shell {
   width: min(1120px, 92vw);
   margin: 0 auto;
   display: grid;
   gap: clamp(1.5rem, 3vw, 2.4rem);
+  position: relative;
+  z-index: 1;
 }
-
-.contact-header{
+ 
+/* =========================
+   HEADER
+   ========================= */
+.contact-header {
   display: grid;
   gap: 0.4rem;
   text-align: center;
-  color: var(--midnight-blue);
 }
-
-.contact-eyebrow{
+ 
+.contact-eyebrow {
   margin: 0;
-  font-size: 0.85rem;
-  letter-spacing: 0.3em;
+  font-size: 0.78rem;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: rgba(80, 190, 255, 0.50);
 }
-
-.contact-title{
+ 
+/* h2 gerado pelo HTML — sobrescreve qualquer herança */
+.contact-header h2 {
   margin: 0;
   font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 860;
+  font-weight: 800;
   letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.92);
 }
-
-.contact-subtitle{
+ 
+.contact-subtitle {
   margin: 0 auto;
   max-width: 560px;
-  color: var(--text-subtle);
+  color: rgba(160, 210, 240, 0.50);
   line-height: 1.6;
 }
-
-.contact-grid{
-  display: grid;
-  grid-template-columns: minmax(240px, 0.9fr) minmax(320px, 1.4fr);
-  gap: clamp(1rem, 2.6vw, 1.8rem);
-  align-items: start;
-}
-
-.contact-highlight{
-  padding: clamp(1.2rem, 2.4vw, 1.7rem);
-  border-radius: 1.4rem;
-  background:
-    radial-gradient(120% 120% at 10% 10%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 55%),
-    linear-gradient(150deg,
-      color-mix(in srgb, var(--deep-blue) 92%, #000),
-      color-mix(in srgb, var(--bright-blue) 70%, var(--violet) 30%));
-  color: #f7fbff;
-  box-shadow: 0 18px 45px color-mix(in srgb, var(--deep-blue) 35%, transparent);
-  display: grid;
-  gap: 0.9rem;
-}
-
-.contact-highlight__title{
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-
-.contact-highlight__text{
-  margin: 0;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.86);
-}
-
-.contact-highlight__list{
-  margin: 0;
-  padding-left: 1.1rem;
-  display: grid;
-  gap: 0.35rem;
-  color: rgba(255,255,255,0.86);
-}
-
-.contact-highlight__cta{
-  width: fit-content;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25);
-}
-
-.contact-channels{
-  padding: clamp(1.1rem, 2.2vw, 1.6rem);
-  border-radius: 1.5rem;
-  border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
-  background:
-    radial-gradient(90% 70% at 15% 20%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 65%),
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--surface, #fff) 85%, var(--very-light-blue) 15%),
-      color-mix(in srgb, var(--surface-soft, #f3f6fb) 90%, #fff 10%));
-  box-shadow: 0 16px 35px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
-  display: grid;
-  grid-template-columns: minmax(200px, 0.9fr) minmax(280px, 1.6fr);
-  gap: clamp(1rem, 2vw, 1.5rem);
-}
-
-.contact-channels__intro{
-  display: grid;
-  gap: 0.25rem;
-  align-content: start;
-  color: var(--midnight-blue);
-}
-
-.contact-channels__eyebrow{
-  margin: 0;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.contact-channels__title{
-  margin: 0;
-  font-weight: 820;
-  font-size: 1.2rem;
-  letter-spacing: -0.01em;
-}
-
-.contact-channels__text{
-  margin: 0;
-  color: var(--text-subtle);
-  line-height: 1.55;
-}
-
-.contact-channels__list{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.65rem;
-}
-
-.contact-chip{
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.7rem 0.85rem;
-  border-radius: 1rem;
-  text-decoration: none;
-  background: color-mix(in srgb, var(--surface, #fff) 85%, var(--very-light-blue) 15%);
-  border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
-  box-shadow: 0 10px 20px color-mix(in srgb, var(--midnight-blue) 10%, transparent);
-  color: var(--midnight-blue);
-  transition: transform .18s ease, box-shadow .22s ease, border-color .22s ease;
-}
-
-.contact-chip:hover{
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent) 24%, transparent);
-  box-shadow: 0 14px 26px color-mix(in srgb, var(--midnight-blue) 12%, transparent);
-}
-
-.contact-chip:focus-visible{
-  outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  outline-offset: 3px;
-}
-
-.contact-chip__icon{
-  width: 42px;
-  height: 42px;
-  padding: 8px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--accent-soft) 50%, white 50%);
-  display: grid;
-  place-items: center;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
-}
-
-.contact-chip__icon img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.contact-chip__body{
-  display: grid;
-  gap: 0.15rem;
-}
-
-.contact-chip__body strong{
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-
-.contact-chip__body small{
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-
+ 
 /* =========================
-   FORMULÁRIO DE CONTATO
-   Validação visual nativa do browser via :valid/:invalid.
-   O pseudo-selector :not(:placeholder-shown) garante que a
-   validação só apareça após o usuário ter digitado algo.
+   FORMULÁRIO — vidro abissal
    ========================= */
 .contact-form {
-  background: var(--grad-card);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(80, 180, 255, 0.12);
   border-radius: 1.1rem;
   padding: clamp(1.5rem, 3vw, 2.5rem);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  box-shadow:
+    0 24px 56px rgba(2, 8, 25, 0.50),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
   margin-bottom: 3rem;
 }
-
+ 
 .contact-form__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
 }
-
+ 
 .contact-form__field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
-
+ 
 .contact-form__label {
-  font-size: 0.83rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(100, 190, 255, 0.50);
 }
-
+ 
 .contact-form__input {
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(80, 180, 255, 0.14);
   border-radius: 0.65rem;
   padding: 0.75rem 1rem;
   font-family: inherit;
   font-size: 0.95rem;
-  color: var(--text);
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  color: rgba(255, 255, 255, 0.82);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
   outline: none;
   resize: none;
 }
-
+ 
 .contact-form__input::placeholder {
-  color: var(--text-subtle);
+  color: rgba(120, 180, 220, 0.28);
 }
-
+ 
+/* Focus: borda bioluminescente ciano */
 .contact-form__input:focus {
-  border-color: var(--accent);
-  box-shadow: var(--focus);
+  border-color: rgba(80, 190, 255, 0.40);
+  box-shadow: 0 0 0 3px rgba(80, 190, 255, 0.08);
 }
-
+ 
 .contact-form__textarea {
   min-height: 110px;
 }
-
+ 
 .contact-form__submit {
   align-self: flex-start;
 }
-
-/* ── Validação visual de campos ── */
+ 
+/* Validação visual */
 .contact-form__input:valid:not(:placeholder-shown) {
-  border-color: color-mix(in srgb, #2de2a8 55%, transparent);
+  border-color: rgba(45, 226, 168, 0.35);
 }
-
+ 
 .contact-form__input:invalid:not(:placeholder-shown) {
-  border-color: color-mix(in srgb, #ff6b7a 55%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, #ff6b7a 14%, transparent);
+  border-color: rgba(255, 107, 122, 0.40);
+  box-shadow: 0 0 0 3px rgba(255, 107, 122, 0.08);
 }
-
-/* ── Character counter: posicionado no canto inferior direito do textarea.
-   Muda de cor via .is-near-limit (amarelo) e .is-at-limit (vermelho). ── */
+ 
+/* =========================
+   CHARACTER COUNTER
+   ========================= */
 .contact-form__field--textarea {
   position: relative;
 }
-
+ 
 .contact-form__counter {
   position: absolute;
   bottom: 0.5rem;
   right: 0.75rem;
   font-size: 0.72rem;
-  color: var(--text-subtle);
+  color: rgba(120, 180, 220, 0.38);
   pointer-events: none;
   transition: color 180ms ease;
 }
-
-.contact-form__counter.is-near-limit {
-  color: #e07b00;
-}
-
-.contact-form__counter.is-at-limit {
-  color: #e03030;
-  font-weight: 700;
-}
-
-/* ── Loading state: desabilita o botão e adiciona spinner via ::after.
-   O spinner usa @keyframes loading (animations.css). ── */
+ 
+.contact-form__counter.is-near-limit { color: rgba(230, 160, 30, 0.80); }
+.contact-form__counter.is-at-limit   { color: rgba(230, 60, 60, 0.90); font-weight: 700; }
+ 
+/* =========================
+   LOADING STATE
+   ========================= */
 .contact-form__submit.is-loading {
   pointer-events: none;
-  opacity: 0.75;
+  opacity: 0.70;
 }
-
+ 
 .contact-form__submit.is-loading .btn__label::after {
   content: "";
   display: inline-block;
   width: 12px;
   height: 12px;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-top-color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.30);
+  border-top-color: rgba(255, 255, 255, 0.90);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   margin-left: 0.5rem;
   vertical-align: middle;
 }
-
-/* ── Feedback toast: mensagem de sucesso ou erro após submissão.
-   display:none → display:flex via .show-success / .show-error no form.
-   Some automaticamente após 5s (ver main.js). ── */
+ 
+/* =========================
+   FEEDBACK TOAST — glassmorphism abissal
+   ========================= */
 .contact-form__feedback {
   display: none;
   align-items: center;
@@ -346,47 +242,319 @@
   border-radius: 0.75rem;
   font-size: 0.9rem;
   font-weight: 600;
+  backdrop-filter: blur(12px);
   animation: feedbackSlideIn 320ms var(--ease-out);
 }
-
+ 
 @keyframes feedbackSlideIn {
   from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
-
+ 
 .contact-form__feedback--success {
-  background: color-mix(in srgb, #2de2a8 12%, var(--surface));
-  border: 1px solid color-mix(in srgb, #2de2a8 35%, transparent);
-  color: #1a9e7a;
+  background: rgba(45, 226, 168, 0.10);
+  border: 1px solid rgba(45, 226, 168, 0.25);
+  color: rgba(100, 240, 200, 0.92);
 }
-
+ 
 .contact-form__feedback--error {
-  background: color-mix(in srgb, #ff6b7a 10%, var(--surface));
-  border: 1px solid color-mix(in srgb, #ff6b7a 30%, transparent);
-  color: #c0384a;
+  background: rgba(255, 107, 122, 0.10);
+  border: 1px solid rgba(255, 107, 122, 0.25);
+  color: rgba(255, 140, 150, 0.92);
 }
-
+ 
 .contact-form.show-success .contact-form__feedback--success,
 .contact-form.show-error   .contact-form__feedback--error {
   display: flex;
 }
-
+ 
 .contact-form__feedback-icon {
   font-size: 1.1rem;
   flex-shrink: 0;
 }
-
-/* ── Título da seção ── */
-.contact-header h2 {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 860;
-  letter-spacing: -0.02em;
-  margin: 0;
-  color: var(--text);
+ 
+/* =========================
+   GRID DE CANAIS
+   ========================= */
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.9fr) minmax(320px, 1.4fr);
+  gap: clamp(1rem, 2.6vw, 1.8rem);
+  align-items: start;
 }
-
+ 
+/* Card de destaque — mantido mas com estética abissal */
+.contact-highlight {
+  padding: clamp(1.2rem, 2.4vw, 1.7rem);
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(120% 120% at 10% 10%,
+      rgba(80, 190, 255, 0.14),
+      transparent 55%),
+    linear-gradient(150deg,
+      rgba(8, 40, 90, 0.90),
+      rgba(4, 25, 60, 0.95));
+  border: 1px solid rgba(80, 180, 255, 0.14);
+  color: rgba(255, 255, 255, 0.90);
+  box-shadow:
+    0 18px 45px rgba(2, 8, 25, 0.50),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  display: grid;
+  gap: 0.9rem;
+}
+ 
+.contact-highlight__title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.92);
+}
+ 
+.contact-highlight__text {
+  margin: 0;
+  line-height: 1.6;
+  color: rgba(160, 210, 240, 0.65);
+}
+ 
+.contact-highlight__list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+  color: rgba(160, 210, 240, 0.65);
+}
+ 
+.contact-highlight__cta {
+  width: fit-content;
+}
+ 
+/* Painel de canais */
+.contact-channels {
+  padding: clamp(1.1rem, 2.2vw, 1.6rem);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(80, 180, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow:
+    0 16px 35px rgba(2, 8, 25, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  display: grid;
+  grid-template-columns: minmax(200px, 0.9fr) minmax(280px, 1.6fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+ 
+.contact-channels__intro {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+}
+ 
+.contact-channels__eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(80, 190, 255, 0.45);
+}
+ 
+.contact-channels__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.85);
+}
+ 
+.contact-channels__text {
+  margin: 0;
+  color: rgba(140, 190, 230, 0.50);
+  line-height: 1.55;
+  font-size: 0.9rem;
+}
+ 
+.contact-channels__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.65rem;
+}
+ 
+/* =========================
+   CHIPS DE CONTATO — criaturas bioluminescentes
+   ========================= */
+.contact-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 1rem;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+ 
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(80, 180, 255, 0.10);
+  box-shadow:
+    0 8px 24px rgba(2, 8, 25, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+ 
+  transition:
+    transform     300ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow    300ms ease,
+    border-color  300ms ease;
+}
+ 
+/* Sweep de luz diagonal — onda passando pelo chip */
+.contact-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent                       30%,
+    rgba(255, 255, 255, 0.04)         50%,
+    transparent                       70%
+  );
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 0.2s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+ 
+.contact-chip:hover {
+  transform: translateY(-4px);
+  border-color: rgba(80, 180, 255, 0.24);
+  box-shadow:
+    0 16px 40px rgba(2, 8, 25, 0.55),
+    0 0 18px rgba(80, 180, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+ 
+.contact-chip:hover::before {
+  opacity: 1;
+  transform: translateX(100%);
+}
+ 
+.contact-chip:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(80, 190, 255, 0.25),
+    0 8px 24px rgba(2, 8, 25, 0.40);
+}
+ 
+/* Ícone do chip — acende no hover */
+.contact-chip__icon {
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(80, 180, 255, 0.10);
+  border: 1px solid rgba(80, 180, 255, 0.15);
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  transition: background 300ms ease, box-shadow 300ms ease;
+}
+ 
+.contact-chip__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+ 
+.contact-chip:hover .contact-chip__icon {
+  background: rgba(80, 180, 255, 0.18);
+  box-shadow: 0 0 14px rgba(80, 180, 255, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+ 
+.contact-chip__body {
+  display: grid;
+  gap: 0.15rem;
+  flex: 1;
+}
+ 
+.contact-chip__body strong {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(200, 230, 255, 0.82);
+  font-size: 0.9rem;
+  transition: color 250ms ease;
+}
+ 
+.contact-chip:hover .contact-chip__body strong {
+  color: rgba(220, 240, 255, 0.98);
+}
+ 
+.contact-chip__body small {
+  color: rgba(120, 180, 220, 0.42);
+  font-size: 0.82rem;
+}
+ 
+/* Ponto bioluminescente — sinaliza presença no escuro */
+.contact-chip::after {
+  content: "";
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(80, 190, 255, 0.30);
+  box-shadow: 0 0 4px rgba(80, 190, 255, 0.20);
+  transition: background 300ms ease, box-shadow 300ms ease;
+}
+ 
+.contact-chip:hover::after {
+  background: rgba(80, 190, 255, 0.85);
+  box-shadow: 0 0 8px rgba(80, 190, 255, 0.60);
+}
+ 
+/* =========================
+   REDUCED MOTION
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+  .contact::before { animation: none; }
+ 
+  .contact-chip {
+    transition: none;
+  }
+ 
+  .contact-chip:hover {
+    transform: none;
+  }
+ 
+  .contact-chip::before {
+    display: none;
+  }
+ 
+  .contact-form__input {
+    transition: none;
+  }
+}
+ 
+/* =========================
+   RESPONSIVO
+   ========================= */
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+ 
+  .contact-channels {
+    grid-template-columns: 1fr;
+  }
+}
+ 
 @media (max-width: 600px) {
   .contact-form__row {
+    grid-template-columns: 1fr;
+  }
+ 
+  .contact-channels__list {
     grid-template-columns: 1fr;
   }
 }

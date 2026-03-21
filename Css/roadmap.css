@@ -1,71 +1,91 @@
 /*
  * ═══════════════════════════════════════════════════════════
- *  roadmap.css — Stack Roadmap (Jornada de Aprendizado Java)
+ *  roadmap.css — Zona Crepuscular
+ *
+ *  Na narrativa de profundidade do portfólio, o Roadmap fica
+ *  na zona crepuscular (200–1000m): azul médio-escuro, menos
+ *  luz chegando da superfície, pressão aumentando.
+ *  Criaturas bioluminescentes (nodes pulsantes) sinalizam
+ *  posição no escuro crescente.
  *
  *  Linha do tempo vertical com:
- *  - Rail central: linha gradiente em ::before do .timeline
- *  - Nodes: pontos circulares com glow colorido por status
- *  - Connectors: linhas horizontais do node até o card
- *  - Cards: glassmorphism com efeito de hover + abertura via <details>
+ *  - Rail: fio de luz bioluminescente descendo pelo centro
+ *  - Nodes: pontos com glow colorido por status
+ *  - Connectors: linhas horizontais do node ao card
+ *  - Cards: glassmorphism escuro — vidro submerso
  *
  *  Estados do node (data-status):
- *   "now"      → accent + glow pulsante (animation: pulseGlow)
- *   "progress" → primary azul
- *   "next"     → primary mais apagado
- *   "future"   → border/cinza — ainda distante
+ *   "now"      → accent ciano pulsante (bioluminescência ativa)
+ *   "progress" → azul primário, ainda iluminado
+ *   "next"     → azul apagado, luz chegando de longe
+ *   "future"   → cinza-azulado, quase sem luz
  * ═══════════════════════════════════════════════════════════
  */
-
+ 
 /* =========================
-   STACK ROADMAP — Java
+   STACK ROADMAP — Zona Crepuscular
    ========================= */
-
-.stack-roadmap{
+.stack-roadmap {
   position: relative;
   padding: clamp(3.5rem, 6.5vw, 6rem) 1.25rem;
   overflow: hidden;
   isolation: isolate;
+ 
+  /* Zona crepuscular: azul médio-escuro com gradiente de profundidade.
+     Mais escuro que o hero (superfície) mas mais claro que o footer (abismo). */
   background:
-    radial-gradient(120% 90% at 18% 8%,
-      color-mix(in srgb, var(--pure-white) 75%, var(--very-light-blue) 25%),
-      transparent 58%),
-    radial-gradient(100% 80% at 90% 35%,
-      color-mix(in srgb, var(--accent) 24%, transparent),
-      transparent 60%),
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--very-light-blue) 32%, transparent),
-      color-mix(in srgb, var(--deep-blue) 10%, transparent));
-}
-
-.stack-roadmap::before,
-.stack-roadmap::after{
-  content:"";
-  position:absolute;
-  inset:-20%;
-  pointer-events:none;
-  filter: blur(28px);
-  opacity: .4;
-  mix-blend-mode: screen;
-}
-
-.stack-roadmap::before{
-  background:
-    radial-gradient(60% 50% at 30% 20%,
-      color-mix(in srgb, var(--accent) 30%, transparent),
+    radial-gradient(ellipse 90% 60% at 50% 0%,
+      color-mix(in srgb, var(--sky-blue) 22%, transparent),
+      transparent 65%),
+    radial-gradient(ellipse 70% 50% at 15% 80%,
+      color-mix(in srgb, var(--accent) 12%, transparent),
       transparent 70%),
-    radial-gradient(60% 60% at 75% 60%,
-      color-mix(in srgb, var(--bright-blue) 26%, transparent),
-      transparent 72%);
+    linear-gradient(180deg,
+      #1a5f85  0%,
+      #0f4a6e 35%,
+      #0a3554 70%,
+      #062540 100%
+    );
 }
-
-.stack-roadmap::after{
+ 
+/* Caustics da zona crepuscular — luz solar chegando de longe,
+   muito mais fraca e dispersa que na superfície */
+.stack-roadmap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.08;
   background:
-    radial-gradient(65% 55% at 55% 40%,
-      color-mix(in srgb, var(--surface-soft) 55%, transparent),
-      transparent 72%);
+    radial-gradient(ellipse 25% 12% at 20% 22%, rgba(100,210,255,1) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 8%  at 65% 38%, rgba(80,190,240,1)  0%, transparent 100%),
+    radial-gradient(ellipse 22% 10% at 85% 15%, rgba(120,220,255,1) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 5%  at 42% 55%, rgba(80,180,230,1)  0%, transparent 100%);
+  animation: causticsFloat calc(var(--wave-medium) * 1.20) ease-in-out infinite;
 }
-
-.stack-roadmap__shell{
+ 
+/* Textura de água profunda — corrente fria passando */
+.stack-roadmap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  mix-blend-mode: screen;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(100,200,255,0.10)  0px,
+      rgba(100,200,255,0.10) 10px,
+      rgba(100,200,255,0.03) 20px,
+      rgba(100,200,255,0.03) 36px
+    );
+  animation: deepWaterDrift calc(var(--wave-slow) * 0.80) ease-in-out infinite;
+}
+ 
+.stack-roadmap__shell {
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
@@ -73,204 +93,228 @@
   display: grid;
   gap: clamp(1.5rem, 3vw, 2.4rem);
 }
-
-.stack-roadmap__shell::before{
-  content:"";
+ 
+/* Halo de luz difusa no topo — rastro da superfície acima */
+.stack-roadmap__shell::before {
+  content: "";
   position: absolute;
   inset: -15% -5% auto;
   height: 260px;
   background:
-    radial-gradient(closest-side, color-mix(in srgb, var(--accent) 20%, transparent), transparent 70%),
-    radial-gradient(closest-side, color-mix(in srgb, var(--bright-blue) 18%, transparent), transparent 75%);
-  opacity: 0.25;
-  filter: blur(12px);
+    radial-gradient(ellipse 60% 50% at 40% 20%,
+      color-mix(in srgb, var(--sky-blue) 18%, transparent),
+      transparent 70%),
+    radial-gradient(ellipse 50% 40% at 75% 30%,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      transparent 75%);
+  opacity: 0.30;
+  filter: blur(18px);
   pointer-events: none;
 }
-
-.stack-roadmap__header{
+ 
+/* =========================
+   HEADER
+   ========================= */
+.stack-roadmap__header {
   display: grid;
   gap: 1.5rem;
 }
-
-.stack-roadmap__heading{
+ 
+.stack-roadmap__heading {
   display: grid;
   gap: 0.5rem;
 }
-
-.stack-roadmap__eyebrow{
+ 
+.stack-roadmap__eyebrow {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: color-mix(in srgb, var(--accent) 65%, var(--deep-blue));
+  /* Ciano bioluminescente — como um marcador de posição no escuro */
+  color: rgba(100, 210, 255, 0.7);
   font-weight: 700;
 }
-
-.stack-roadmap__heading h2{
+ 
+.stack-roadmap__heading h2 {
   margin: 0;
   font-size: clamp(1.65rem, 3vw, 2.35rem);
   letter-spacing: -0.03em;
-  color: var(--midnight-blue);
-  background: linear-gradient(120deg, var(--accent), var(--primary), var(--midnight-blue));
+  /* Texto claro sobre fundo escuro */
+  color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(120deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(160, 220, 255, 0.90),
+    rgba(100, 190, 255, 0.85)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
-.stack-roadmap__subtitle{
+ 
+.stack-roadmap__subtitle {
   margin: 0;
   max-width: 68ch;
   line-height: 1.65;
-  color: var(--text-subtle);
+  color: rgba(180, 220, 245, 0.65);
 }
-
-.stack-roadmap__progress{
+ 
+/* =========================
+   CARD DE PROGRESSO — Profundômetro
+   ========================= */
+.stack-roadmap__progress {
   border-radius: 1.25rem;
   padding: clamp(1rem, 2.5vw, 1.5rem);
+  /* Vidro submerso: fundo escuro translúcido */
   background:
     linear-gradient(135deg,
-      color-mix(in srgb, var(--surface) 82%, var(--very-light-blue) 18%),
-      color-mix(in srgb, var(--surface) 70%, var(--bright-blue) 30%));
-  border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(14px);
+      rgba(255, 255, 255, 0.07),
+      rgba(100, 180, 255, 0.05));
+  border: 1px solid rgba(100, 200, 255, 0.15);
+  box-shadow:
+    0 16px 42px rgba(2, 20, 40, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
   display: grid;
   gap: 0.85rem;
   position: relative;
   overflow: hidden;
 }
-
-.stack-roadmap__progress::after{
-  content:"";
+ 
+/* Brilho bioluminescente interno no canto */
+.stack-roadmap__progress::after {
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(120deg,
-      color-mix(in srgb, var(--accent) 24%, transparent),
-      transparent 45%,
-      color-mix(in srgb, var(--bright-blue) 20%, transparent));
-  opacity: 0.35;
+  background: radial-gradient(ellipse 60% 50% at 10% 10%,
+    rgba(80, 190, 255, 0.12),
+    transparent 65%);
   pointer-events: none;
 }
-
-.stack-roadmap__progress-label{
+ 
+.stack-roadmap__progress-label {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--text-subtle);
+  color: rgba(140, 200, 240, 0.55);
 }
-
-.stack-roadmap__progress-value{
+ 
+.stack-roadmap__progress-value {
   margin: 0.15rem 0 0;
   font-size: clamp(1.35rem, 2.5vw, 1.75rem);
   font-weight: 800;
-  color: var(--midnight-blue);
+  color: rgba(255, 255, 255, 0.92);
 }
-
-.stack-roadmap__progress-caption{
+ 
+.stack-roadmap__progress-caption {
   margin: 0;
-  color: var(--text-muted);
+  color: rgba(180, 220, 245, 0.65);
   font-weight: 600;
 }
-
-.stack-roadmap__progress-bar{
+ 
+.stack-roadmap__progress-bar {
   position: relative;
-  height: 10px;
+  height: 8px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--surface-soft) 75%, var(--accent) 25%);
+  background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
+  border: 1px solid rgba(80, 190, 255, 0.15);
 }
-
-.stack-roadmap__progress-fill{
+ 
+/* FIX 6: scaleX em vez de width — compositor GPU, sem reflow */
+.stack-roadmap__progress-fill {
   position: absolute;
   inset: 0;
-  width: 0%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent), var(--primary));
-  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent);
-  transition: width 600ms var(--ease-out);
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg,
+    rgba(80, 190, 255, 0.9),
+    rgba(45, 226, 230, 0.8));
+  box-shadow: 0 0 14px rgba(80, 190, 255, 0.50);
+  transition: transform 600ms var(--ease-out);
 }
-
-.stack-roadmap__progress-steps{
+ 
+.stack-roadmap__progress-steps {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
 }
-
-.stack-roadmap__progress-step{
+ 
+.stack-roadmap__progress-step {
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-subtle);
-  background: color-mix(in srgb, var(--surface) 72%, transparent);
-  border: 1px dashed color-mix(in srgb, var(--border) 65%, transparent);
+  color: rgba(140, 200, 240, 0.5);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(100, 190, 255, 0.18);
 }
-
-.stack-roadmap__progress-step.is-active{
-  color: var(--midnight-blue);
-  background: color-mix(in srgb, var(--accent) 18%, var(--surface) 82%);
+ 
+.stack-roadmap__progress-step.is-active {
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(80, 190, 255, 0.15);
   border-style: solid;
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color: rgba(80, 190, 255, 0.35);
+  box-shadow: 0 0 12px rgba(80, 190, 255, 0.15);
 }
-
-.stack-roadmap__highlights{
+ 
+.stack-roadmap__highlights {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
 }
-
-.stack-roadmap__highlight{
+ 
+.stack-roadmap__highlight {
   position: relative;
   padding: 1rem 1.15rem;
   border-radius: 1.1rem;
-  background:
-    linear-gradient(160deg,
-      color-mix(in srgb, var(--surface) 78%, transparent),
-      color-mix(in srgb, var(--very-light-blue) 40%, transparent));
-  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
-  box-shadow: 0 14px 32px color-mix(in srgb, var(--accent) 15%, transparent);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(100, 200, 255, 0.14);
+  box-shadow: 0 14px 32px rgba(2, 20, 40, 0.30);
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
-
-.stack-roadmap__highlight::after{
-  content:"";
+ 
+.stack-roadmap__highlight::after {
+  content: "";
   position: absolute;
   inset: -40% 45% auto -10%;
   height: 120px;
   background: radial-gradient(circle,
-      color-mix(in srgb, var(--accent) 35%, transparent),
-      transparent 70%);
-  opacity: 0.5;
+    rgba(80, 190, 255, 0.18),
+    transparent 70%);
+  opacity: 0.6;
   pointer-events: none;
 }
-
-.stack-roadmap__highlight-label{
+ 
+.stack-roadmap__highlight-label {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--text-subtle);
+  color: rgba(100, 190, 255, 0.55);
   font-weight: 700;
 }
-
-.stack-roadmap__highlight-value{
+ 
+.stack-roadmap__highlight-value {
   margin: 0.35rem 0 0.2rem;
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--midnight-blue);
+  color: rgba(255, 255, 255, 0.90);
 }
-
-.stack-roadmap__highlight-meta{
+ 
+.stack-roadmap__highlight-meta {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: rgba(160, 210, 240, 0.60);
 }
-
-/* Grid da timeline. Em mobile: 1 coluna com rail à esquerda.
-   Em desktop (>=980px via responsive.css): 2 colunas, rail no centro. */
-.stack-roadmap__timeline{
+ 
+/* =========================
+   TIMELINE
+   ========================= */
+.stack-roadmap__timeline {
   --rail-x: 1.45rem;
   --node-size: 18px;
   --node-top: 1.3rem;
@@ -280,44 +324,47 @@
   position: relative;
   isolation: isolate;
 }
-
-/* Rail vertical: linha de 2px com gradiente (accent → primary → apagado)
-   posicionada em --rail-x da borda esquerda do grid. */
-.stack-roadmap__timeline::before{
-  content:"";
-  position:absolute;
+ 
+/* Rail: fio de luz bioluminescente descendo pelo centro */
+.stack-roadmap__timeline::before {
+  content: "";
+  position: absolute;
   top: 0;
   bottom: 0;
   left: var(--rail-x);
   width: 2px;
   transform: translateX(-50%);
   background: linear-gradient(180deg,
-    color-mix(in srgb, var(--accent) 70%, transparent),
-    color-mix(in srgb, var(--primary) 55%, transparent),
-    color-mix(in srgb, var(--accent) 30%, transparent));
+    rgba(80, 190, 255, 0.80),
+    rgba(45, 226, 230, 0.55) 40%,
+    rgba(80, 190, 255, 0.25) 75%,
+    rgba(80, 190, 255, 0.05));
+  box-shadow: 0 0 8px rgba(80, 190, 255, 0.20);
 }
-
-.stack-roadmap__step{
+ 
+/* =========================
+   STEPS
+   ========================= */
+.stack-roadmap__step {
   position: relative;
   padding-left: calc(var(--rail-x) + var(--connector-length) + 1rem);
-  --node-color: color-mix(in srgb, var(--accent) 70%, var(--primary));
-  --node-glow: color-mix(in srgb, var(--accent) 30%, transparent);
-  --connector-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  --node-color: rgba(80, 190, 255, 0.85);
+  --node-glow: rgba(80, 190, 255, 0.25);
+  --connector-color: rgba(80, 190, 255, 0.45);
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
 }
-
-.stack-roadmap__step.is-visible{
+ 
+.stack-roadmap__step.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
-
-/* Node circular: posicionado no rail com transform: translate(-50%, -50%)
-   para centralizar. --node-color e --node-glow variam por data-status. */
-.stack-roadmap__step::before{
-  content:"";
-  position:absolute;
+ 
+/* Node: criatura bioluminescente sinalizando posição */
+.stack-roadmap__step::before {
+  content: "";
+  position: absolute;
   top: var(--node-top);
   left: var(--rail-x);
   width: var(--node-size);
@@ -325,355 +372,409 @@
   border-radius: 50%;
   transform: translate(-50%, -50%);
   background: radial-gradient(circle at 35% 35%,
-      color-mix(in srgb, var(--node-color) 85%, #fff 15%),
-      var(--node-color) 70%);
-  border: 1px solid color-mix(in srgb, var(--node-color) 60%, var(--border));
-  box-shadow: 0 0 0 6px var(--node-glow), 0 0 16px color-mix(in srgb, var(--node-color) 35%, transparent);
+    rgba(255, 255, 255, 0.90),
+    var(--node-color) 65%);
+  border: 1px solid color-mix(in srgb, var(--node-color) 55%, transparent);
+  box-shadow:
+    0 0 0 5px var(--node-glow),
+    0 0 14px var(--node-color);
   transition: box-shadow 240ms var(--ease-out), filter 240ms var(--ease-out);
 }
-
-/* Connector: linha horizontal de 2px do node até o card,
-   com gradiente que desaparece na direção do card. */
-.stack-roadmap__step::after{
-  content:"";
+ 
+/* Connector: linha de luz do node ao card */
+.stack-roadmap__step::after {
+  content: "";
   position: absolute;
   top: var(--node-top);
   left: calc(var(--rail-x) + (var(--node-size) / 2));
   width: var(--connector-length);
-  height: 2px;
+  height: 1px;
   transform: translateY(-50%);
   background: linear-gradient(90deg,
-      var(--connector-color),
-      color-mix(in srgb, var(--connector-color) 30%, transparent));
-  opacity: 0.8;
+    var(--connector-color),
+    rgba(80, 190, 255, 0.05));
+  opacity: 0.7;
   pointer-events: none;
-  transition: opacity 240ms var(--ease-out), filter 240ms var(--ease-out);
+  transition: opacity 240ms var(--ease-out);
 }
-
-.stack-roadmap__step[data-status="now"]{
-  --node-color: color-mix(in srgb, var(--accent) 70%, var(--primary));
-  --node-glow: color-mix(in srgb, var(--accent) 40%, transparent);
-  --connector-color: color-mix(in srgb, var(--accent) 75%, var(--primary));
+ 
+/* Status: "now" — bioluminescência ativa, ciano brilhante */
+.stack-roadmap__step[data-status="now"] {
+  --node-color: rgba(45, 226, 230, 0.95);
+  --node-glow: rgba(45, 226, 230, 0.22);
+  --connector-color: rgba(45, 226, 230, 0.60);
 }
-
-.stack-roadmap__step[data-status="progress"]{
-  --node-color: color-mix(in srgb, var(--primary) 65%, var(--accent));
-  --node-glow: color-mix(in srgb, var(--primary) 35%, transparent);
-  --connector-color: color-mix(in srgb, var(--primary) 65%, var(--accent));
+ 
+/* Status: "progress" — azul primary, ainda com energia */
+.stack-roadmap__step[data-status="progress"] {
+  --node-color: rgba(80, 190, 255, 0.88);
+  --node-glow: rgba(80, 190, 255, 0.20);
+  --connector-color: rgba(80, 190, 255, 0.50);
 }
-
-.stack-roadmap__step[data-status="next"]{
-  --node-color: color-mix(in srgb, var(--primary) 50%, var(--border));
-  --node-glow: color-mix(in srgb, var(--primary) 25%, transparent);
-  --connector-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+ 
+/* Status: "next" — azul apagado, luz chegando de longe */
+.stack-roadmap__step[data-status="next"] {
+  --node-color: rgba(80, 150, 200, 0.60);
+  --node-glow: rgba(80, 150, 200, 0.14);
+  --connector-color: rgba(80, 150, 200, 0.35);
 }
-
-.stack-roadmap__step[data-status="future"]{
-  --node-color: color-mix(in srgb, var(--border) 70%, var(--text-subtle));
-  --node-glow: color-mix(in srgb, var(--border) 35%, transparent);
-  --connector-color: color-mix(in srgb, var(--border) 75%, var(--text-subtle));
+ 
+/* Status: "future" — quase sem luz, no escuro */
+.stack-roadmap__step[data-status="future"] {
+  --node-color: rgba(100, 130, 160, 0.40);
+  --node-glow: rgba(100, 130, 160, 0.08);
+  --connector-color: rgba(100, 130, 160, 0.22);
 }
-
+ 
 .stack-roadmap__step:hover::before,
-.stack-roadmap__step:focus-within::before{
-  box-shadow: 0 0 0 8px color-mix(in srgb, var(--node-color) 30%, transparent),
-    0 0 20px color-mix(in srgb, var(--node-color) 45%, transparent);
+.stack-roadmap__step:focus-within::before {
+  box-shadow:
+    0 0 0 8px var(--node-glow),
+    0 0 22px var(--node-color);
 }
-
+ 
 .stack-roadmap__step:hover::after,
-.stack-roadmap__step:focus-within::after{
+.stack-roadmap__step:focus-within::after {
   opacity: 1;
-  filter: brightness(1.05);
 }
-
-@media (prefers-reduced-motion: no-preference){
-  .stack-roadmap__step[data-status="now"]::before{
+ 
+/* Pulso bioluminescente — só no node "now" */
+@media (prefers-reduced-motion: no-preference) {
+  .stack-roadmap__step[data-status="now"]::before {
     animation: pulseGlow 3.4s ease-in-out infinite;
   }
 }
-
-.stack-roadmap__card{
+ 
+/* =========================
+   CARDS — vidro submerso
+   ========================= */
+.stack-roadmap__card {
   border-radius: 1.35rem;
   padding: clamp(1.1rem, 2.2vw, 1.55rem);
+  /* Glassmorphism escuro: fundo translúcido azul-noturno */
   background:
-    radial-gradient(120% 120% at 10% 0%,
-      rgba(255,255,255,0.92),
-      rgba(255,255,255,0.42) 45%,
-      rgba(255,255,255,0) 70%),
-    var(--grad-card);
-  border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--border));
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(16px);
+    radial-gradient(ellipse 120% 100% at 10% 0%,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.01) 60%),
+    linear-gradient(145deg,
+      rgba(30, 80, 130, 0.55),
+      rgba(15, 50, 90, 0.70));
+  border: 1px solid rgba(100, 200, 255, 0.14);
+  box-shadow:
+    0 18px 48px rgba(2, 15, 35, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(18px);
   transition: transform 260ms var(--ease-out), box-shadow 260ms var(--ease-out), border-color 260ms var(--ease-out);
   position: relative;
   overflow: hidden;
 }
-
-.stack-roadmap__card::after{
-  content:"";
+ 
+/* Reflexo interno — luz de superfície vazando para o card */
+.stack-roadmap__card::after {
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-      color-mix(in srgb, var(--accent) 20%, transparent),
-      transparent 55%);
+  background: radial-gradient(ellipse 80% 60% at 20% 0%,
+    rgba(100, 210, 255, 0.10),
+    transparent 65%);
   opacity: 0;
   transition: opacity 260ms var(--ease-out);
   pointer-events: none;
 }
-
-.stack-roadmap__card:hover{
+ 
+.stack-roadmap__card:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-  box-shadow: var(--shadow-lg);
+  border-color: rgba(80, 190, 255, 0.30);
+  box-shadow:
+    0 24px 56px rgba(2, 15, 35, 0.55),
+    0 0 0 1px rgba(80, 190, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
 }
-
-.stack-roadmap__card:hover::after{
-  opacity: 0.8;
+ 
+.stack-roadmap__card:hover::after { opacity: 1; }
+ 
+.stack-roadmap__card:focus-within {
+  box-shadow:
+    0 24px 56px rgba(2, 15, 35, 0.55),
+    var(--focus);
 }
-
-.stack-roadmap__card:focus-within{
-  box-shadow: var(--shadow-lg), var(--focus);
-}
-
-.stack-roadmap__card-head{
+ 
+.stack-roadmap__card-head {
   display: grid;
   gap: 0.4rem;
   margin-bottom: 0.75rem;
 }
-
-.stack-roadmap__badge{
-  align-self: flex-start;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  background: color-mix(in srgb, var(--surface) 65%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
-  color: var(--text-subtle);
-}
-
-.stack-roadmap__badge--now{
-  background: color-mix(in srgb, var(--accent) 22%, var(--surface) 78%);
-  color: var(--midnight-blue);
-}
-
-.stack-roadmap__badge--progress{
-  background: color-mix(in srgb, var(--bright-blue) 18%, var(--surface) 82%);
-  color: var(--midnight-blue);
-}
-
-.stack-roadmap__badge--next{
-  background: color-mix(in srgb, var(--violet) 18%, var(--surface) 82%);
-  color: var(--midnight-blue);
-}
-
-.stack-roadmap__badge--future{
-  background: color-mix(in srgb, var(--silver-light) 55%, var(--surface) 45%);
-  color: var(--text-subtle);
-}
-
-.stack-roadmap__step-title{
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 750;
-  color: var(--midnight-blue);
-}
-
-.stack-roadmap__step-desc{
-  margin: 0;
-  color: var(--text-muted);
-}
-
-.stack-roadmap__details{
-  border-top: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
-  padding-top: 0.75rem;
-}
-
-.stack-roadmap__summary{
-  list-style: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.85rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 75%, var(--accent) 25%);
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  font-weight: 600;
-  color: var(--midnight-blue);
-  cursor: pointer;
-  transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
-}
-
-.stack-roadmap__summary::-webkit-details-marker{
-  display: none;
-}
-
-.stack-roadmap__summary:hover{
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-}
-
-.stack-roadmap__summary:focus-visible{
-  outline: none;
-  box-shadow: var(--focus);
-}
-
-.stack-roadmap__summary-icon{
-  position: relative;
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-}
-
-.stack-roadmap__summary-icon::before,
-.stack-roadmap__summary-icon::after{
-  content:"";
-  position:absolute;
-  background: currentColor;
-  border-radius: 999px;
-}
-
-.stack-roadmap__summary-icon::before{
-  inset: 6px 0 6px 0;
-}
-
-.stack-roadmap__summary-icon::after{
-  inset: 0 6px 0 6px;
-  transition: transform 220ms var(--ease-out);
-}
-
-.stack-roadmap__details[open] .stack-roadmap__summary-icon::after{
-  transform: scaleY(0);
-}
-
-/* Animação de abertura do <details> via grid-template-rows: 0fr → 1fr.
-   Técnica mais performática que height: 0 → auto (não força reflow).
-   O filho .content-inner tem overflow:hidden para que 0fr o oculte. */
-.stack-roadmap__content{
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 240ms var(--ease-out), opacity 240ms var(--ease-out);
-  opacity: 0;
-}
-
-.stack-roadmap__content-inner{
-  overflow: hidden;
-  display: grid;
-  gap: 0.9rem;
-  padding-top: 0.85rem;
-}
-
-.stack-roadmap__details[open] .stack-roadmap__content{
-  grid-template-rows: 1fr;
-  opacity: 1;
-}
-
-.stack-roadmap__list,
-.stack-roadmap__projects-list,
-.stack-roadmap__projects-stage{
-  margin: 0;
-  padding-left: 1.2rem;
-  display: grid;
-  gap: 0.45rem;
-  color: var(--text-muted);
-}
-
-.stack-roadmap__projects-title{
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--midnight-blue);
-}
-
-.stack-roadmap__projects-stage strong{
-  color: var(--midnight-blue);
-}
-
-/* --- Card meta row (badge + duration) --- */
-.stack-roadmap__card-meta{
+ 
+/* Card meta row */
+.stack-roadmap__card-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
-
-/* --- Duration pill --- */
-.stack-roadmap__step-duration{
-  font-size: 0.75rem;
+ 
+/* =========================
+   BADGES DE STATUS
+   Cada variante deve declarar color explicitamente.
+   ========================= */
+.stack-roadmap__badge {
+  align-self: flex-start;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(100, 190, 255, 0.15);
+  color: rgba(140, 200, 240, 0.60);
+}
+ 
+.stack-roadmap__badge--now {
+  background: rgba(45, 226, 230, 0.15);
+  border-color: rgba(45, 226, 230, 0.35);
+  color: rgba(45, 226, 230, 0.95);
+  box-shadow: 0 0 12px rgba(45, 226, 230, 0.15);
+}
+ 
+.stack-roadmap__badge--progress {
+  background: rgba(80, 190, 255, 0.14);
+  border-color: rgba(80, 190, 255, 0.30);
+  color: rgba(140, 210, 255, 0.90);
+}
+ 
+.stack-roadmap__badge--next {
+  background: rgba(156, 139, 255, 0.12);
+  border-color: rgba(156, 139, 255, 0.25);
+  color: rgba(180, 168, 255, 0.80);
+}
+ 
+.stack-roadmap__badge--future {
+  background: rgba(100, 130, 160, 0.10);
+  border-color: rgba(100, 130, 160, 0.20);
+  color: rgba(140, 170, 200, 0.50);
+}
+ 
+/* Step title e desc */
+.stack-roadmap__step-title {
+  margin: 0;
+  font-size: 1.15rem;
+  /* FIX 1: 750 → 700 — font-weight válido */
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.90);
+}
+ 
+.stack-roadmap__step-desc {
+  margin: 0;
+  color: rgba(160, 210, 240, 0.60);
+}
+ 
+/* Duration pill */
+.stack-roadmap__step-duration {
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-subtle);
-  background: color-mix(in srgb, var(--surface-soft) 80%, transparent);
-  border: 1px dashed color-mix(in srgb, var(--border) 70%, transparent);
+  color: rgba(120, 180, 220, 0.55);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(100, 190, 255, 0.18);
   border-radius: 999px;
   padding: 0.2rem 0.6rem;
   white-space: nowrap;
 }
-
-/* --- Tech tags --- */
-.stack-roadmap__tags{
+ 
+/* Tech tags */
+.stack-roadmap__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   margin-bottom: 0.8rem;
 }
-
-.stack-roadmap__tag{
+ 
+.stack-roadmap__tag {
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.22rem 0.6rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--very-light-blue) 55%, var(--surface) 45%);
-  color: color-mix(in srgb, var(--accent) 80%, var(--midnight-blue));
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  background: rgba(80, 190, 255, 0.10);
+  color: rgba(140, 215, 255, 0.85);
+  border: 1px solid rgba(80, 190, 255, 0.20);
   letter-spacing: 0.03em;
 }
-
-.stack-roadmap__step[data-status="future"] .stack-roadmap__tag{
-  background: color-mix(in srgb, var(--surface-soft) 70%, transparent);
-  color: var(--text-subtle);
-  border-color: color-mix(in srgb, var(--border) 70%, transparent);
+ 
+.stack-roadmap__step[data-status="future"] .stack-roadmap__tag {
+  background: rgba(100, 130, 160, 0.08);
+  color: rgba(140, 170, 200, 0.45);
+  border-color: rgba(100, 130, 160, 0.15);
 }
-
-/* --- Progress last updated --- */
-.stack-roadmap__progress-updated{
+ 
+/* =========================
+   DETAILS / SUMMARY
+   ========================= */
+.stack-roadmap__details {
+  border-top: 1px solid rgba(100, 190, 255, 0.10);
+  padding-top: 0.75rem;
+}
+ 
+.stack-roadmap__summary {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(80, 190, 255, 0.10);
+  border: 1px solid rgba(80, 190, 255, 0.20);
+  font-weight: 600;
+  color: rgba(140, 215, 255, 0.85);
+  cursor: pointer;
+  transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out), background 200ms var(--ease-out);
+}
+ 
+.stack-roadmap__summary::-webkit-details-marker { display: none; }
+ 
+.stack-roadmap__summary:hover {
+  transform: translateY(-1px);
+  background: rgba(80, 190, 255, 0.16);
+  box-shadow: 0 0 14px rgba(80, 190, 255, 0.14);
+}
+ 
+.stack-roadmap__summary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+ 
+.stack-roadmap__summary-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+ 
+.stack-roadmap__summary-icon::before,
+.stack-roadmap__summary-icon::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+  border-radius: 999px;
+}
+ 
+.stack-roadmap__summary-icon::before { inset: 6px 0 6px 0; }
+ 
+.stack-roadmap__summary-icon::after {
+  inset: 0 6px 0 6px;
+  transition: transform 220ms var(--ease-out);
+}
+ 
+.stack-roadmap__details[open] .stack-roadmap__summary-icon::after {
+  transform: scaleY(0);
+}
+ 
+/* Abertura via grid-template-rows: 0fr → 1fr (compositor GPU).
+   Nota: Safari < 16 não suporta — se necessário, adicionar
+   fallback com max-height: 0 → max-height: 9999px */
+.stack-roadmap__content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 240ms var(--ease-out), opacity 240ms var(--ease-out);
+  opacity: 0;
+}
+ 
+.stack-roadmap__content-inner {
+  overflow: hidden;
+  display: grid;
+  gap: 0.9rem;
+  padding-top: 0.85rem;
+}
+ 
+.stack-roadmap__details[open] .stack-roadmap__content {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+ 
+.stack-roadmap__list,
+.stack-roadmap__projects-list,
+.stack-roadmap__projects-stage {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.45rem;
+  color: rgba(160, 210, 240, 0.60);
+}
+ 
+.stack-roadmap__projects-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.80);
+}
+ 
+.stack-roadmap__projects-stage strong {
+  color: rgba(255, 255, 255, 0.80);
+}
+ 
+/* Progress updated */
+.stack-roadmap__progress-updated {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: rgba(120, 180, 220, 0.50);
   display: flex;
   align-items: center;
   gap: 0.35rem;
 }
-
-.stack-roadmap__progress-updated::before{
+ 
+.stack-roadmap__progress-updated::before {
   content: "";
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) 70%, transparent);
+  background: rgba(45, 226, 230, 0.60);
+  box-shadow: 0 0 6px rgba(45, 226, 230, 0.40);
   flex-shrink: 0;
 }
-
-/* --- Animated border for active "now" card --- */
-@keyframes cardPulse{
-  0%,100%{ border-color: color-mix(in srgb, var(--accent) 16%, var(--border)); }
-  50%    { border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: var(--shadow-md), 0 0 18px color-mix(in srgb, var(--accent) 18%, transparent); }
+ 
+/* =========================
+   ANIMAÇÃO DO CARD "now"
+   FIX 2: box-shadow incluído em 0%/100% para evitar
+   que o card perca a sombra base nos extremos do ciclo.
+   ========================= */
+@keyframes cardPulse {
+  0%, 100% {
+    border-color: rgba(45, 226, 230, 0.18);
+    box-shadow:
+      0 18px 48px rgba(2, 15, 35, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+  50% {
+    border-color: rgba(45, 226, 230, 0.45);
+    box-shadow:
+      0 18px 48px rgba(2, 15, 35, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 0 22px rgba(45, 226, 230, 0.18);
+  }
 }
-
-@media (prefers-reduced-motion: no-preference){
-  .stack-roadmap__step[data-status="now"] .stack-roadmap__card{
+ 
+@media (prefers-reduced-motion: no-preference) {
+  .stack-roadmap__step[data-status="now"] .stack-roadmap__card {
     animation: cardPulse 4s ease-in-out infinite;
   }
 }
-
-@media (prefers-reduced-motion: reduce){
-  .stack-roadmap__step,
+ 
+/* =========================
+   REDUCED MOTION
+   FIX 3: opacity: 1 e transform: none adicionados para que
+   os steps apareçam imediatamente sem depender do JS
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+  .stack-roadmap__step {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+ 
   .stack-roadmap__progress-fill,
   .stack-roadmap__summary,
-  .stack-roadmap__content{
+  .stack-roadmap__content {
     transition: none;
-  } 
+  }
 }

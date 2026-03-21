@@ -1,138 +1,302 @@
 /*
  * ═══════════════════════════════════════════════════════════
- *  about.css — Seção "Sobre Mim"
- *  Grid de 2 colunas: texto à esquerda, stack de tecnologias à direita.
- *  Inclui: grade de tecnologias, card de educação, FAB "voltar ao topo"
- *  e divider de onda SVG entre seções.
+ *  about.css — A Correnteza
+ *
+ *  Metáfora: corrente submarina oculta.
+ *  Na superfície parece calma — azul cristalino, quase raso.
+ *  Mas há uma força invisível que te puxa para dentro:
+ *  faixas de luz atravessando em diagonal, glassmorphism
+ *  aquático nos cards, valores que deslizam no hover.
+ *  Quanto mais você lê, mais afunda. Essa é a intenção.
+ *
+ *  Posição na narrativa de profundidade:
+ *  Hero (superfície) → About (corrente) → Roadmap (zona crepuscular)
+ *
+ *  Camadas (baixo → cima):
+ *   1. background linear — azul raso a médio
+ *   2. ::before — correntes de luz (faixas diagonais animadas)
+ *   3. ::after  — caustics suaves (manchas de luz dispersa)
+ *   4. .about-depth-gradient — escurece o rodapé (transição)
+ *   5. conteúdo (z-index: 2)
  * ═══════════════════════════════════════════════════════════
  */
-
+ 
 /* =========================
-   SOBRE MIM — About Section
+   ABOUT — A Correnteza
    ========================= */
-
 .about {
   padding: clamp(4rem, 8vw, 7rem) 0;
   position: relative;
-  background:
-    radial-gradient(80% 60% at 100% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
-    radial-gradient(60% 50% at 0% 80%, color-mix(in srgb, var(--violet) 6%, transparent), transparent 60%),
-    var(--bg);
   overflow: hidden;
+  isolation: isolate;
+ 
+  /* Zona de transição superfície→profundidade.
+     Azul claro no topo (ainda perto do hero) → azul médio embaixo
+     (preparando o Roadmap/zona crepuscular). */
+  background: linear-gradient(180deg,
+    #c8eefa  0%,
+    #9fd8f0 28%,
+    #6bbee6 58%,
+    #3a9fd4 82%,
+    #1a7ab8 100%
+  );
 }
-
+ 
+/* Camada 1: Correntes de luz — faixas diagonais que atravessam
+   a seção em velocidades e opacidades diferentes.
+   Nunca sincronizadas — como correntes submarinas reais.
+   A força que te puxa para dentro sem você perceber. */
+.about::before {
+  content: "";
+  position: absolute;
+  inset: -10% -20%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* Corrente principal — larga e lenta */
+    linear-gradient(
+      108deg,
+      transparent                       0%,
+      transparent                      22%,
+      rgba(255, 255, 255, 0.10)        28%,
+      rgba(180, 230, 255, 0.14)        32%,
+      rgba(255, 255, 255, 0.08)        36%,
+      transparent                      42%,
+      transparent                      58%,
+      rgba(255, 255, 255, 0.07)        63%,
+      rgba(160, 220, 255, 0.11)        67%,
+      rgba(255, 255, 255, 0.06)        71%,
+      transparent                      77%
+    );
+  animation: currentDrift1 14s ease-in-out infinite;
+  will-change: transform;
+}
+ 
+/* Camada 2: Caustics — manchas de luz dispersa, como sol
+   passando por água ondulada. Mais sutis que na superfície
+   (estamos mais fundo), mas ainda presentes. */
+.about::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.14;
+  background:
+    radial-gradient(ellipse 22% 10% at 28% 20%, rgba(255,255,255,0.90) 0%, transparent 100%),
+    radial-gradient(ellipse 16% 7%  at 68% 42%, rgba(255,255,255,0.80) 0%, transparent 100%),
+    radial-gradient(ellipse 20% 9%  at 52% 72%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 5%  at 14% 58%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 8%  at 88% 25%, rgba(255,255,255,0.70) 0%, transparent 100%);
+  animation: causticsFloat calc(var(--wave-medium) * 0.90) ease-in-out infinite;
+}
+ 
+/* Segunda corrente — mais fina, velocidade diferente,
+   cria a sensação de múltiplas camadas de água em movimento */
+.about-shell::before {
+  content: "";
+  position: absolute;
+  inset: -15% -25%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(
+      95deg,
+      transparent                       0%,
+      transparent                      35%,
+      rgba(255, 255, 255, 0.06)        40%,
+      rgba(140, 210, 255, 0.10)        44%,
+      rgba(255, 255, 255, 0.05)        48%,
+      transparent                      54%,
+      transparent                      72%,
+      rgba(255, 255, 255, 0.07)        76%,
+      rgba(120, 200, 255, 0.09)        80%,
+      transparent                      85%
+    );
+  animation: currentDrift2 19s ease-in-out infinite 2.5s;
+  will-change: transform;
+}
+ 
+/* Gradiente de profundidade — escurece o rodapé da seção,
+   sinalizando que vamos mergulhar mais fundo no roadmap */
+.about-depth-gradient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(180deg,
+    transparent   0%,
+    transparent  55%,
+    rgba(8, 40, 85, 0.18)  80%,
+    rgba(5, 25, 60, 0.35) 100%
+  );
+}
+ 
+/* Keyframes das correntes — movimento translacional + leve rotação
+   simula a ondulação real de uma corrente submarina */
+@keyframes currentDrift1 {
+  0%   { transform: translateX(-8%)  skewY(-0.8deg) scaleX(1);    opacity: 0.8; }
+  35%  { transform: translateX(2%)   skewY(0.4deg)  scaleX(1.02); opacity: 1;   }
+  65%  { transform: translateX(8%)   skewY(-0.5deg) scaleX(0.98); opacity: 0.9; }
+  100% { transform: translateX(-8%)  skewY(-0.8deg) scaleX(1);    opacity: 0.8; }
+}
+ 
+@keyframes currentDrift2 {
+  0%   { transform: translateX(5%)   skewY(0.6deg)  scaleX(1);    opacity: 0.7; }
+  40%  { transform: translateX(-6%)  skewY(-0.3deg) scaleX(1.03); opacity: 1;   }
+  70%  { transform: translateX(-10%) skewY(0.5deg)  scaleX(0.97); opacity: 0.8; }
+  100% { transform: translateX(5%)   skewY(0.6deg)  scaleX(1);    opacity: 0.7; }
+}
+ 
+/* =========================
+   SHELL
+   ========================= */
 .about-shell {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(1.2rem, 5vw, 3rem);
+  position: relative;
+  z-index: 2;
 }
-
+ 
+/* =========================
+   HEADER
+   ========================= */
 .about-header {
   margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
   display: grid;
   gap: 0.6rem;
 }
-
+ 
 .about-header .section-eyebrow {
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  /* Azul escuro sobre fundo claro — contraste adequado */
+  color: rgba(10, 55, 120, 0.80);
   margin: 0;
 }
-
+ 
 .about-header h2 {
   margin: 0;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 900;
-  color: var(--text);
   line-height: 1.15;
   letter-spacing: -0.02em;
+  color: rgba(5, 25, 65, 0.92);
 }
-
+ 
+/* =========================
+   GRID PRINCIPAL
+   ========================= */
 .about-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: clamp(2.5rem, 6vw, 6rem);
   align-items: start;
 }
-
-/* ── Lado esquerdo: texto descritivo + valores + ações ── */
+ 
+/* =========================
+   LADO ESQUERDO — texto
+   ========================= */
 .about-text {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
 }
-
+ 
 .about-desc {
   font-size: 1.05rem;
-  color: var(--text-muted);
   line-height: 1.75;
   margin: 0;
+  color: rgba(10, 45, 100, 0.75);
 }
-
+ 
 .about-desc strong {
-  color: var(--text);
+  color: rgba(5, 25, 65, 0.92);
   font-weight: 700;
 }
-
+ 
+/* Valores: pílulas de vidro aquático que deslizam no hover —
+   a corrente te puxando para dentro do conteúdo */
 .about-values {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.5rem;
   margin: 0.5rem 0 0;
 }
-
+ 
 .about-value-item {
   display: flex;
   align-items: center;
   gap: 0.7rem;
   font-size: 0.95rem;
-  color: var(--text-muted);
+  color: rgba(10, 45, 100, 0.72);
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  /* Glassmorphism aquático: vidro translúcido sobre a água */
+  background: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(10, 40, 100, 0.08);
+  /* Desliza para a direita no hover — como ser arrastado pela corrente */
+  transition:
+    transform 300ms var(--ease-out),
+    background 300ms var(--ease-out),
+    box-shadow 300ms var(--ease-out);
 }
-
+ 
+.about-value-item:hover {
+  transform: translateX(8px);
+  background: rgba(255, 255, 255, 0.50);
+  box-shadow: 0 6px 22px rgba(10, 40, 100, 0.14);
+}
+ 
+/* Ponto bioluminescente — marcador de posição na corrente */
 .about-value-item::before {
   content: "";
   flex-shrink: 0;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+  background: rgba(10, 70, 160, 0.75);
+  box-shadow: 0 0 8px rgba(80, 180, 255, 0.65);
 }
-
+ 
 .about-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1rem;
 }
-
-/* ── Lado habilidades ── */
+ 
+/* =========================
+   LADO DIREITO — skills
+   ========================= */
 .about-skills-side {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-
+ 
 .about-skills__label {
   margin: 0 0 0.85rem;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: rgba(10, 50, 110, 0.60);
 }
-
-/* Grid de tecnologias: auto-fill garante que se adapte ao espaço disponível.
-   Cada item tem ícone + label; fallback via .tech-item__icon-text para ícones sem SVG. */
+ 
+/* Grid de tecnologias: objetos suspensos na corrente —
+   translúcidos, com reflexo de vidro molhado */
 .tech-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
   gap: 0.65rem;
 }
-
+ 
 .tech-item {
   display: flex;
   flex-direction: column;
@@ -140,29 +304,39 @@
   gap: 0.5rem;
   padding: 0.85rem 0.5rem 0.75rem;
   border-radius: 0.9rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  /* Vidro aquático: translúcido com reflexo interno */
+  background: rgba(255, 255, 255, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.60);
+  box-shadow:
+    0 4px 18px rgba(10, 40, 100, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(12px);
   transition:
-    transform 180ms var(--ease-out),
+    transform 200ms var(--ease-out),
     box-shadow 220ms var(--ease-out),
-    border-color 180ms var(--ease-out);
+    background 220ms var(--ease-out);
   cursor: default;
   text-align: center;
 }
-
+ 
+/* No hover: sobe como objeto levado pela corrente ascendente */
 .tech-item:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--border-glow);
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 10px 30px rgba(10, 40, 100, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.80);
 }
-
+ 
 .tech-item img {
   width: 32px;
   height: 32px;
   object-fit: contain;
+  /* Leve drop-shadow aquático na imagem */
+  filter: drop-shadow(0 2px 4px rgba(10, 40, 100, 0.15));
 }
-
+ 
+/* Fallback de ícone para tecnologias sem SVG */
 .tech-item__icon-text {
   width: 32px;
   height: 32px;
@@ -170,78 +344,88 @@
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   flex-shrink: 0;
 }
-
-.tech-item__icon-text--spring  { background: #6db33f22; color: #6db33f; }
-.tech-item__icon-text--mongo   { background: #47a24822; color: #47a248; }
-.tech-item__icon-text--jpa     { background: #f8981d22; color: #c07a00; }
-.tech-item__icon-text--git     { background: #f0503222; color: #e04020; }
-.tech-item__icon-text--junit   { background: #25a24422; color: #1a8a34; }
-.tech-item__icon-text--docker  { background: #2496ed22; color: #1a7fd4; }
-
+ 
+.tech-item__icon-text--spring  { background: rgba(109,179,63,0.18);  color: #5a9e35; }
+.tech-item__icon-text--mongo   { background: rgba(71,162,72,0.18);   color: #3a8a40; }
+.tech-item__icon-text--jpa     { background: rgba(248,152,29,0.18);  color: #c07a00; }
+.tech-item__icon-text--git     { background: rgba(240,80,50,0.18);   color: #c83520; }
+.tech-item__icon-text--junit   { background: rgba(37,162,68,0.18);   color: #1a8a38; }
+.tech-item__icon-text--docker  { background: rgba(36,150,237,0.18);  color: #1a7fd4; }
+ 
 .tech-item span:last-child {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: rgba(10, 45, 100, 0.72);
   line-height: 1.2;
 }
-
-/* ── Card de educação: exibe curso, instituição e badge de status ── */
-.about-edu {
-  margin-top: 0.5rem;
-}
-
+ 
+/* =========================
+   CARD DE EDUCAÇÃO
+   ========================= */
+.about-edu { margin-top: 0.5rem; }
+ 
 .edu-card {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
   border-radius: 1rem;
-  background:
-    linear-gradient(135deg,
-      color-mix(in srgb, var(--accent) 10%, var(--surface)),
-      var(--surface));
-  border: 1px solid var(--border-glow);
-  box-shadow: var(--shadow-sm);
+  /* Vidro mais opaco — objeto mais denso, mais fundo na corrente */
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  box-shadow:
+    0 8px 28px rgba(10, 40, 100, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+  transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out);
 }
-
+ 
+.edu-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 14px 38px rgba(10, 40, 100, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.80);
+}
+ 
 .edu-card__icon {
   width: 46px;
   height: 46px;
   border-radius: 0.75rem;
-  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.50);
+  border: 1px solid rgba(255, 255, 255, 0.70);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
   flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.80);
 }
-
+ 
 .edu-card__body {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   flex: 1;
 }
-
+ 
 .edu-card__degree {
   margin: 0;
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--text);
+  color: rgba(5, 25, 65, 0.90);
 }
-
+ 
 .edu-card__institution {
   margin: 0;
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: rgba(10, 45, 100, 0.62);
 }
-
+ 
 .edu-card__badge {
   display: inline-flex;
   align-items: center;
@@ -250,15 +434,16 @@
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  border: 1px solid var(--border-glow);
+  color: rgba(10, 70, 160, 0.88);
+  background: rgba(80, 180, 255, 0.18);
+  border: 1px solid rgba(80, 180, 255, 0.32);
   width: fit-content;
   margin-top: 0.15rem;
 }
-
-/* ── Wave divider: SVG inline de onda que separa visualmente duas seções.
-   margin-bottom: -1px corrige o gap de 1px entre o SVG e a seção seguinte. ── */
+ 
+/* =========================
+   WAVE DIVIDER
+   ========================= */
 .section-wave {
   display: block;
   width: 100%;
@@ -266,15 +451,12 @@
   line-height: 0;
   margin-bottom: -1px;
 }
-
-.section-wave svg {
-  display: block;
-  width: 100%;
-}
-
-/* ── FAB Voltar ao Topo: botão fixo no canto inferior direito.
-   Começa invisível (opacity:0, pointer-events:none) e ganha .is-visible
-   após 400px de scroll (via main.js). ── */
+ 
+.section-wave svg { display: block; width: 100%; }
+ 
+/* =========================
+   FAB — Voltar ao topo
+   ========================= */
 .fab-top {
   position: fixed;
   bottom: 2rem;
@@ -288,7 +470,7 @@
   font-size: 1.2rem;
   font-weight: 700;
   cursor: pointer;
-  z-index: 40;
+  z-index: var(--z-overlay);
   box-shadow: 0 8px 28px color-mix(in srgb, var(--deep-blue) 38%, transparent);
   opacity: 0;
   transform: translateY(12px) scale(0.9);
@@ -301,37 +483,38 @@
   align-items: center;
   justify-content: center;
 }
-
+ 
 .fab-top.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
 }
-
+ 
 .fab-top:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 14px 38px color-mix(in srgb, var(--deep-blue) 48%, transparent);
 }
-
+ 
 .fab-top:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: var(--focus);
 }
-
-.fab-top:active {
-  transform: scale(0.97);
-}
-
+ 
+.fab-top:active { transform: scale(0.97); }
+ 
+/* =========================
+   RESPONSIVO
+   ========================= */
 @media (max-width: 768px) {
   .about-grid {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-
+ 
   .tech-grid {
     grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
   }
-
+ 
   .fab-top {
     bottom: 1.5rem;
     right: 1.5rem;
@@ -339,9 +522,38 @@
     height: 44px;
   }
 }
-
+ 
 @media (max-width: 400px) {
   .tech-grid {
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  }
+}
+ 
+/* =========================
+   REDUCED MOTION
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+  .about::before,
+  .about::after,
+  .about-shell::before {
+    animation: none;
+  }
+ 
+  .about-value-item {
+    transition: none;
+  }
+ 
+  .about-value-item:hover {
+    transform: none;
+  }
+ 
+  .tech-item,
+  .edu-card {
+    transition: none;
+  }
+ 
+  .tech-item:hover,
+  .edu-card:hover {
+    transform: none;
   }
 }
