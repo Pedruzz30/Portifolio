@@ -1,503 +1,621 @@
 /*
  * ═══════════════════════════════════════════════════════════
- *  effects/OceanLife.js — Vida do Oceano
+ *  effects/oceanLife.js — Vida Oceânica
  *
- *  Quatro efeitos que adicionam vida à narrativa oceânica:
+ *  Quatro efeitos complementares à narrativa de profundidade:
  *
- *  1. Cardume (Flocking)
- *     Peixinhos com comportamento de flocking real:
- *     separação, coesão e alinhamento. Fogem do cursor.
- *     Vivem no hero, mas podem ser ativados em qualquer seção.
+ *  1. Header  — Tensão Superficial (ripples no cursor)
+ *  2. About   — Correnteza com Corpo (fios de corrente bezier)
+ *  3. Roadmap — Nodes com Vida Própria (DOM: pulso + partícula + onda)
+ *  4. Footer  — Abismo que Respira (medusas + respiração radial)
  *
- *  2. Ondas de perturbação (Ripples)
- *     A cada movimento do cursor, uma onda circular se forma
- *     naquela posição, expande e desaparece — como um dedo
- *     tocando a superfície da água.
+ *  Cada efeito:
+ *  - Tem seu próprio canvas/DOM injetado na seção
+ *  - Usa IntersectionObserver para pausar/retomar rAF
+ *  - Usa ResizeObserver para redimensionar
+ *  - Retorna função de cleanup
  *
- *  3. Parallax de profundidade
- *     Três camadas de partículas subindo em velocidades
- *     diferentes. As mais "distantes" sobem mais devagar.
- *     Reage ao scroll para intensificar o efeito de mergulho.
- *
- *  4. Bolhas nos cards do portfólio
- *     No mouseenter, bolhas emergem da base do card com
- *     trajetória em S e somem gradualmente — como um objeto
- *     submerso perturbado liberando ar.
- *
- *  Padrão do projeto:
- *  - Respeita prefersReducedMotion
- *  - Retorna { destroy } para cleanup no pagehide
- *  - Usa ResizeObserver para redimensionar o canvas
- *  - Não usa will-change além do necessário
+ *  API pública:
+ *    initOceanLife({ header, hero, about, roadmap, footer, projectCards, reduceMotion })
+ *    → { destroy }
  * ═══════════════════════════════════════════════════════════
  */
- 
-/**
- * Inicializa todos os efeitos de vida oceânica.
- *
- * @param {Object}      options
- * @param {HTMLElement} options.hero          - Elemento .hero (canvas do cardume + ripples)
- * @param {HTMLElement} options.main          - Elemento <main> (parallax de profundidade)
- * @param {HTMLElement[]} options.projectCards - Cards .project-card (bolhas no hover)
- * @param {boolean}     [options.reduceMotion=false]
- * @returns {{ destroy: () => void }}
- */
+
 export function initOceanLife({
+  header,
   hero,
-  main,
+  about,
+  roadmap,
+  footer,
   projectCards = [],
-  reduceMotion  = false,
+  reduceMotion = false,
 } = {}) {
   if (reduceMotion) return { destroy: () => {} };
- 
+
   const cleanups = [];
- 
-  // ── 1. Cardume + Ripples no Hero ───────────────────────
-  if (hero) {
-    cleanups.push(initFlock(hero));
-  }
- 
-  // ── 2. Parallax de profundidade no <main> ──────────────
-  if (main) {
-    cleanups.push(initParallaxLayers(main));
-  }
- 
-  // ── 3. Bolhas nos cards do portfólio ───────────────────
-  const cards = projectCards.filter(Boolean);
-  if (cards.length) {
-    cleanups.push(initCardBubbles(cards));
-  }
- 
+  const hasHover = window.matchMedia("(hover: hover)").matches;
+
+  if (header) cleanups.push(initSurfaceTension(header, hasHover));
+  if (about) cleanups.push(initCurrentStreams(about, hasHover));
+  if (roadmap) cleanups.push(initRoadmapLife(roadmap));
+  if (footer) cleanups.push(initAbyssBreath(footer));
+
   return {
-    destroy: () => cleanups.forEach(fn => fn()),
+    destroy: () => cleanups.forEach((fn) => fn()),
   };
 }
- 
+
 /* ═══════════════════════════════════════════════════════════
-   EFEITO 1 — CARDUME + ONDAS DE PERTURBAÇÃO
-   Canvas injetado no hero. Peixinhos com flocking real
-   que fogem do cursor. Ondas circulares a cada mousemove.
+   HELPER — Cria canvas com padrão do projeto
    ═══════════════════════════════════════════════════════════ */
-function initFlock(hero) {
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('aria-hidden', 'true');
+function createCanvas(parent, zIndex) {
+  const canvas = document.createElement("canvas");
+  canvas.setAttribute("aria-hidden", "true");
   canvas.style.cssText = `
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 4;
+    z-index: ${zIndex};
   `;
-  hero.appendChild(canvas);
- 
-  const ctx = canvas.getContext('2d');
-  let W = 0, H = 0;
+  parent.appendChild(canvas);
+  return canvas;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HELPER — IntersectionObserver para pausar/retomar rAF
+   ═══════════════════════════════════════════════════════════ */
+function createVisibilityObserver(element, onVisible, onHidden) {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) onVisible();
+      else onHidden();
+    },
+    { threshold: 0 }
+  );
+  observer.observe(element);
+  return observer;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EFEITO 1 — HEADER: TENSÃO SUPERFICIAL
+   Ondas circulares (ripples) na posição do cursor.
+   ═══════════════════════════════════════════════════════════ */
+function initSurfaceTension(header, hasHover) {
+  const canvas = createCanvas(header, 0);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return () => canvas.remove();
+
+  let W = 0,
+    H = 0;
   let rafId = null;
-  let t = 0;
- 
-  const mouse = { x: -9999, y: -9999 };
- 
-  // ── Resize ─────────────────────────────────────────────
+  let visible = false;
+
   const resize = () => {
-    W = canvas.width  = hero.offsetWidth;
-    H = canvas.height = hero.offsetHeight;
+    W = canvas.width = header.offsetWidth;
+    H = canvas.height = header.offsetHeight;
   };
   resize();
- 
-  let resizeObserver = null;
-  if ('ResizeObserver' in window) {
-    resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(hero);
-  }
- 
-  // ── Cardume ────────────────────────────────────────────
-  const FISH_COUNT = 48;
- 
-  const flock = Array.from({ length: FISH_COUNT }, () => ({
-    x:     Math.random() * window.innerWidth,
-    y:     Math.random() * (window.innerHeight * 0.6) + 60,
-    vx:    (Math.random() - 0.5) * 1.2,
-    vy:    (Math.random() - 0.5) * 0.8,
-    size:  2.2 + Math.random() * 2,
-    phase: Math.random() * Math.PI * 2,
-    depth: 0.4 + Math.random() * 0.6,
-  }));
- 
-  const updateFlock = () => {
-    flock.forEach(f => {
-      let ax = 0, ay = 0;
-      let sepX = 0, sepY = 0, sepN = 0;
-      let cohX = 0, cohY = 0, cohN = 0;
-      let aliVx = 0, aliVy = 0, aliN = 0;
- 
-      flock.forEach(n => {
-        if (n === f) return;
-        const dx = n.x - f.x;
-        const dy = n.y - f.y;
-        const d  = Math.sqrt(dx * dx + dy * dy);
- 
-        // Separação — evita colisão
-        if (d < 30 && d > 0) {
-          sepX -= dx / d;
-          sepY -= dy / d;
-          sepN++;
-        }
- 
-        // Coesão + alinhamento
-        if (d < 85) {
-          cohX  += n.x;  cohY  += n.y;  cohN++;
-          aliVx += n.vx; aliVy += n.vy; aliN++;
-        }
-      });
- 
-      if (sepN) { ax += (sepX / sepN) * 0.08; ay += (sepY / sepN) * 0.08; }
-      if (cohN) { ax += (cohX / cohN - f.x) * 0.0014; ay += (cohY / cohN - f.y) * 0.0014; }
-      if (aliN) { ax += (aliVx / aliN - f.vx) * 0.055; ay += (aliVy / aliN - f.vy) * 0.055; }
- 
-      // Fuga do cursor
-      const cdx = f.x - mouse.x;
-      const cdy = f.y - mouse.y;
-      const cd  = Math.sqrt(cdx * cdx + cdy * cdy);
-      if (cd < 100 && cd > 0) {
-        const force = (100 - cd) / 100;
-        ax += (cdx / cd) * force * 0.40;
-        ay += (cdy / cd) * force * 0.40;
-      }
- 
-      // Atração suave ao centro do hero
-      ax += (W * 0.5 - f.x) * 0.00025;
-      ay += (H * 0.4 - f.y) * 0.00025;
- 
-      // Limita velocidade
-      f.vx = Math.max(-2.4, Math.min(2.4, f.vx + ax));
-      f.vy = Math.max(-1.8, Math.min(1.8, f.vy + ay));
-      f.x += f.vx;
-      f.y += f.vy;
- 
-      // Wrap nas bordas
-      if (f.x < -10)    f.x = W + 10;
-      if (f.x > W + 10) f.x = -10;
-      if (f.y < 40)        f.y = 40;
-      if (f.y > H - 80)    f.y = H - 80;
-    });
-  };
- 
-  const drawFish = (f) => {
-    const angle  = Math.atan2(f.vy, f.vx);
-    const wobble = Math.sin(t * 4 + f.phase) * 0.14;
-    const op     = 0.28 + f.depth * 0.45;
-    const sz     = f.size * f.depth;
-    const r      = Math.round(80  + f.depth * 80);
-    const g      = Math.round(170 + f.depth * 40);
- 
-    ctx.save();
-    ctx.translate(f.x, f.y);
-    ctx.rotate(angle + wobble);
- 
-    // Corpo
-    ctx.beginPath();
-    ctx.ellipse(0, 0, sz * 2.2, sz * 0.85, 0, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${r},${g},255,${op})`;
-    ctx.fill();
- 
-    // Cauda
-    ctx.beginPath();
-    ctx.moveTo(-sz * 1.8, 0);
-    ctx.lineTo(-sz * 3.0, -sz * 1.1);
-    ctx.lineTo(-sz * 3.0,  sz * 1.1);
-    ctx.closePath();
-    ctx.fill();
- 
-    ctx.restore();
-  };
- 
-  // ── Ondas de perturbação ────────────────────────────────
+
+  const resizeObs = new ResizeObserver(resize);
+  resizeObs.observe(header);
+
   const ripples = [];
-  let lastRipple = 0;
- 
+  let lastRippleTime = 0;
+
   const onMouseMove = (e) => {
     const now = Date.now();
-    if (now - lastRipple < 75) return; // throttle: 1 onda a cada 75ms
-    lastRipple = now;
- 
-    const rect = hero.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
- 
-    mouse.x = x;
-    mouse.y = y;
- 
-    ripples.push({ x, y, r: 0, op: 0.32 });
-    if (ripples.length > 14) ripples.shift();
+    if (now - lastRippleTime < 80) return;
+    lastRippleTime = now;
+
+    const rect = header.getBoundingClientRect();
+    ripples.push({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      r: 0,
+      op: 0.25,
+    });
+    if (ripples.length > 10) ripples.shift();
   };
- 
+
+  if (hasHover) {
+    header.addEventListener("mousemove", onMouseMove);
+  }
+
+  const draw = () => {
+    if (!visible) {
+      rafId = null;
+      return;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const rp = ripples[i];
+      rp.r += 1.5;
+      rp.op -= 0.25 / (40 / 1.5); // fade over ~40px radius growth
+
+      if (rp.op <= 0 || rp.r > 40) {
+        ripples.splice(i, 1);
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,255,255,${rp.op})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    rafId = requestAnimationFrame(draw);
+  };
+
+  const visObs = createVisibilityObserver(
+    header,
+    () => {
+      visible = true;
+      if (!rafId) rafId = requestAnimationFrame(draw);
+    },
+    () => {
+      visible = false;
+    }
+  );
+
+  return () => {
+    visible = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    resizeObs.disconnect();
+    visObs.disconnect();
+    if (hasHover) header.removeEventListener("mousemove", onMouseMove);
+    canvas.remove();
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EFEITO 2 — ABOUT: CORRENTEZA COM CORPO
+   6 fios de corrente fluindo da esquerda para a direita,
+   com desvio do cursor e profundidade variável.
+   ═══════════════════════════════════════════════════════════ */
+function initCurrentStreams(about, hasHover) {
+  const canvas = createCanvas(about, 1);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return () => canvas.remove();
+
+  let W = 0,
+    H = 0;
+  let rafId = null;
+  let visible = false;
+  let t = 0;
+
+  const resize = () => {
+    W = canvas.width = about.offsetWidth;
+    H = canvas.height = about.offsetHeight;
+  };
+  resize();
+
+  const resizeObs = new ResizeObserver(resize);
+  resizeObs.observe(about);
+
+  const mouse = { x: -9999, y: -9999 };
+
+  const onMouseMove = (e) => {
+    const rect = about.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  };
   const onMouseLeave = () => {
     mouse.x = -9999;
     mouse.y = -9999;
   };
- 
-  hero.addEventListener('mousemove',  onMouseMove);
-  hero.addEventListener('mouseleave', onMouseLeave);
- 
-  // ── Loop ────────────────────────────────────────────────
-  const draw = () => {
-    ctx.clearRect(0, 0, W, H);
-    t += 0.016;
- 
-    // Flocking
-    updateFlock();
-    flock.forEach(drawFish);
- 
-    // Ripples
-    for (let i = ripples.length - 1; i >= 0; i--) {
-      const rp = ripples[i];
-      rp.r  += 2.5;
-      rp.op -= 0.016;
-      if (rp.op <= 0) { ripples.splice(i, 1); continue; }
- 
-      ctx.beginPath();
-      ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(180,230,255,${rp.op})`;
-      ctx.lineWidth   = 1;
-      ctx.stroke();
-    }
- 
-    rafId = requestAnimationFrame(draw);
-  };
- 
-  rafId = requestAnimationFrame(draw);
- 
-  return () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    resizeObserver?.disconnect();
-    hero.removeEventListener('mousemove',  onMouseMove);
-    hero.removeEventListener('mouseleave', onMouseLeave);
-    canvas.remove();
-  };
-}
- 
-/* ═══════════════════════════════════════════════════════════
-   EFEITO 2 — PARALLAX DE PROFUNDIDADE
-   Canvas injetado no <main>. Três camadas de partículas
-   subindo em velocidades diferentes. Reage ao scroll.
-   ═══════════════════════════════════════════════════════════ */
-function initParallaxLayers(main) {
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('aria-hidden', 'true');
-  canvas.style.cssText = `
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.55;
-  `;
-  document.body.appendChild(canvas);
- 
-  const ctx = canvas.getContext('2d');
-  let W = 0, H = 0;
-  let rafId = null;
-  let t = 0;
- 
-  const resize = () => {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  };
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
- 
-  // Três camadas de profundidade
-  const layers = [
-    // Camada distante — pequena, lenta, transparente
-    Array.from({ length: 14 }, () => ({
-      x:     Math.random() * window.innerWidth,
-      y:     Math.random() * window.innerHeight,
-      r:     0.8 + Math.random() * 1.2,
-      speed: 0.12,
-      op:    0.10 + Math.random() * 0.08,
-      phase: Math.random() * Math.PI * 2,
-    })),
-    // Camada média
-    Array.from({ length: 9 }, () => ({
-      x:     Math.random() * window.innerWidth,
-      y:     Math.random() * window.innerHeight,
-      r:     1.5 + Math.random() * 2,
-      speed: 0.24,
-      op:    0.16 + Math.random() * 0.10,
-      phase: Math.random() * Math.PI * 2,
-    })),
-    // Camada próxima — grande, rápida, mais visível
-    Array.from({ length: 5 }, () => ({
-      x:     Math.random() * window.innerWidth,
-      y:     Math.random() * window.innerHeight,
-      r:     2.5 + Math.random() * 3,
-      speed: 0.42,
-      op:    0.22 + Math.random() * 0.12,
-      phase: Math.random() * Math.PI * 2,
-    })),
-  ];
- 
-  // Scroll velocity
-  let scrollVel = 0;
-  let lastScroll = window.scrollY;
- 
-  const onScroll = () => {
-    const current = window.scrollY;
-    scrollVel = (current - lastScroll) * 0.4;
-    lastScroll = current;
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
- 
-  const draw = () => {
-    ctx.clearRect(0, 0, W, H);
-    t += 0.012;
- 
-    // Decai o scroll velocity
-    scrollVel *= 0.92;
- 
-    layers.forEach((layer, li) => {
-      const depthFactor = (li + 1) / layers.length;
- 
-      layer.forEach(p => {
-        // Sobe sozinho + reage ao scroll
-        p.y -= p.speed + scrollVel * depthFactor;
-        // Drift lateral orgânico
-        p.x += Math.sin(t * 0.4 + p.phase) * 0.18;
- 
-        // Wrap: renasce no fundo quando sai pelo topo
-        if (p.y < -10) {
-          p.y = H + 10;
-          p.x = Math.random() * W;
-        }
-        if (p.x < -10)    p.x = W + 10;
-        if (p.x > W + 10) p.x = -10;
- 
-        // Pulso de opacidade
-        const pulseOp = p.op * (0.6 + 0.4 * Math.sin(t * 1.5 + p.phase));
- 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(100,210,255,${pulseOp})`;
-        ctx.fill();
-      });
-    });
- 
-    rafId = requestAnimationFrame(draw);
-  };
- 
-  rafId = requestAnimationFrame(draw);
- 
-  return () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    window.removeEventListener('resize', resize);
-    window.removeEventListener('scroll', onScroll);
-    canvas.remove();
-  };
-}
- 
-/* ═══════════════════════════════════════════════════════════
-   EFEITO 3 — BOLHAS NOS CARDS DO PORTFÓLIO
-   Canvas global para bolhas. No mouseenter de cada card,
-   7 bolhas emergem da base com trajetória em S.
-   ═══════════════════════════════════════════════════════════ */
-function initCardBubbles(cards) {
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('aria-hidden', 'true');
-  canvas.style.cssText = `
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 999;
-  `;
-  document.body.appendChild(canvas);
- 
-  const ctx = canvas.getContext('2d');
-  let W = 0, H = 0;
-  let rafId = null;
- 
-  const resize = () => {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  };
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
- 
-  const bubbles = [];
- 
-  /**
-   * Spawna bolhas na base de um card.
-   * @param {HTMLElement} card
-   */
-  const spawnBubbles = (card) => {
-    const rect = card.getBoundingClientRect();
-    const cx   = rect.left + rect.width / 2;
-    const cy   = rect.bottom;
- 
-    for (let i = 0; i < 7; i++) {
-      bubbles.push({
-        x:      cx + (Math.random() - 0.5) * rect.width * 0.65,
-        y:      cy,
-        vy:     -(0.9 + Math.random() * 1.5),
-        vx:     (Math.random() - 0.5) * 0.5,
-        r:      2.2 + Math.random() * 4,
-        op:     0.45 + Math.random() * 0.30,
-        life:   1.0,
-        decay:  0.007 + Math.random() * 0.006,
-        driftA: Math.random() * Math.PI * 2,  // fase do drift lateral
-        driftF: 1.5 + Math.random() * 1.5,    // frequência do drift
-      });
-    }
-  };
- 
-  // Registra eventos nos cards
-  const handlers = cards.map(card => {
-    const fn = () => spawnBubbles(card);
-    card.addEventListener('mouseenter', fn);
-    return { card, fn };
+
+  if (hasHover) {
+    about.addEventListener("mousemove", onMouseMove);
+    about.addEventListener("mouseleave", onMouseLeave);
+  }
+
+  // 6 fios de corrente com profundidade variável
+  const STRAND_COUNT = 6;
+  const POINTS_PER_STRAND = 8;
+
+  const strands = Array.from({ length: STRAND_COUNT }, (_, i) => {
+    const depth = 0.3 + Math.random() * 0.7;
+    const speed = 0.4 + Math.random() * 0.4;
+    const baseY = ((i + 1) / (STRAND_COUNT + 1)) * (H || 600);
+    const phase = Math.random() * Math.PI * 2;
+    const opacity = 0.04 + depth * 0.06;
+    const lineWidth = 1 + depth;
+
+    const points = Array.from({ length: POINTS_PER_STRAND }, (_, j) => ({
+      x: (j / (POINTS_PER_STRAND - 1)) * (W || 1200),
+      y: baseY,
+      baseY: baseY,
+      phaseOffset: j * 0.8 + phase,
+    }));
+
+    return { points, depth, speed, opacity, lineWidth, phase, offsetX: 0 };
   });
- 
-  // Loop
-  let t = 0;
+
   const draw = () => {
+    if (!visible) {
+      rafId = null;
+      return;
+    }
+
     ctx.clearRect(0, 0, W, H);
     t += 0.016;
- 
-    for (let i = bubbles.length - 1; i >= 0; i--) {
-      const b = bubbles[i];
- 
-      b.life -= b.decay;
-      if (b.life <= 0) { bubbles.splice(i, 1); continue; }
- 
-      // Movimento: sobe com drift lateral em S
-      b.y  += b.vy;
-      b.x  += b.vx + Math.sin(t * b.driftF + b.driftA) * 0.32;
- 
-      // Desacelera levemente ao subir
-      b.vy *= 0.995;
- 
-      const currentOp = b.op * b.life;
- 
-      // Círculo da bolha
+
+    for (const strand of strands) {
+      strand.offsetX += strand.speed;
+      if (strand.offsetX > W / (POINTS_PER_STRAND - 1)) {
+        strand.offsetX = 0;
+      }
+
+      // Update point positions
+      const spacing = W / (POINTS_PER_STRAND - 1);
+      for (let j = 0; j < strand.points.length; j++) {
+        const p = strand.points[j];
+        p.x = j * spacing - strand.offsetX;
+
+        // Wrap: when a point exits right, wrap to left
+        if (p.x > W + spacing) p.x -= W + spacing * 2;
+
+        // Vertical oscillation
+        const wave = Math.sin(t * 1.2 + p.phaseOffset) * 25 * strand.depth;
+        p.y = p.baseY + wave;
+
+        // Cursor deflection
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 80 && dist > 0) {
+          const force = (80 - dist) / 80;
+          p.y += (dy / dist) * force * 30;
+        }
+      }
+
+      // Draw bezier curve through points
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(180,230,255,${currentOp})`;
-      ctx.lineWidth   = 1;
+      ctx.moveTo(strand.points[0].x, strand.points[0].y);
+
+      for (let j = 0; j < strand.points.length - 1; j++) {
+        const curr = strand.points[j];
+        const next = strand.points[j + 1];
+        const cpx = (curr.x + next.x) / 2;
+        const cpy = (curr.y + next.y) / 2;
+        ctx.quadraticCurveTo(curr.x, curr.y, cpx, cpy);
+      }
+
+      const last = strand.points[strand.points.length - 1];
+      ctx.lineTo(last.x, last.y);
+
+      ctx.strokeStyle = `rgba(255,255,255,${strand.opacity})`;
+      ctx.lineWidth = strand.lineWidth;
       ctx.stroke();
- 
-      // Brilho interno — reflexo de luz
-      ctx.beginPath();
-      ctx.arc(b.x - b.r * 0.28, b.y - b.r * 0.28, b.r * 0.28, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${0.32 * b.life})`;
-      ctx.fill();
     }
- 
+
     rafId = requestAnimationFrame(draw);
   };
- 
-  rafId = requestAnimationFrame(draw);
- 
+
+  // Recalculate baseY on resize
+  const origResize = resize;
+  const resizeWithStrands = () => {
+    origResize();
+    for (let i = 0; i < strands.length; i++) {
+      const baseY = ((i + 1) / (STRAND_COUNT + 1)) * H;
+      for (const p of strands[i].points) {
+        p.baseY = baseY;
+      }
+    }
+  };
+  resizeObs.disconnect();
+  const resizeObs2 = new ResizeObserver(resizeWithStrands);
+  resizeObs2.observe(about);
+
+  const visObs = createVisibilityObserver(
+    about,
+    () => {
+      visible = true;
+      if (!rafId) rafId = requestAnimationFrame(draw);
+    },
+    () => {
+      visible = false;
+    }
+  );
+
   return () => {
+    visible = false;
     if (rafId) cancelAnimationFrame(rafId);
-    window.removeEventListener('resize', resize);
-    handlers.forEach(({ card, fn }) => card.removeEventListener('mouseenter', fn));
+    resizeObs2.disconnect();
+    visObs.disconnect();
+    if (hasHover) {
+      about.removeEventListener("mousemove", onMouseMove);
+      about.removeEventListener("mouseleave", onMouseLeave);
+    }
     canvas.remove();
   };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EFEITO 3 — ROADMAP: NODES COM VIDA PRÓPRIA
+   A) Pulso individual nos nodes via CSS
+   B) Partícula de luz no rail via CSS animation
+   C) Onda de energia no hover dos cards
+   ═══════════════════════════════════════════════════════════ */
+function initRoadmapLife(roadmap) {
+  const cleanups = [];
+
+  // ── Inject stylesheet for pulse + rail particle ──────────
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes oceanNodePulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(calc(1 + var(--pulse-intensity, 0.08))); }
+    }
+
+    .is-pulsing::before {
+      animation: oceanNodePulse var(--pulse-duration, 3s) ease-in-out infinite !important;
+    }
+
+    @keyframes railParticleTravel {
+      0% { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    .rail-particle {
+      position: absolute;
+      left: calc(var(--rail-x, 1.45rem) - 2px);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(80, 190, 255, 0.90);
+      box-shadow: 0 0 8px rgba(80, 190, 255, 0.80), 0 0 16px rgba(80, 190, 255, 0.40);
+      animation: railParticleTravel 3s linear infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes oceanNodeWave {
+      0% { box-shadow: 0 0 0 5px var(--node-glow), 0 0 14px var(--node-color); }
+      50% { box-shadow: 0 0 0 14px var(--node-glow), 0 0 22px var(--node-color); }
+      100% { box-shadow: 0 0 0 5px var(--node-glow), 0 0 14px var(--node-color); }
+    }
+
+    .node-wave::before {
+      animation: oceanNodeWave 400ms ease-out forwards !important;
+    }
+  `;
+  document.head.appendChild(style);
+  cleanups.push(() => style.remove());
+
+  // ── Part A: Pulsing nodes ─────────────────────────────────
+  const steps = Array.from(roadmap.querySelectorAll(".stack-roadmap__step"));
+  steps.forEach((step) => {
+    const isNow = step.dataset.status === "now";
+    step.style.setProperty("--pulse-intensity", isNow ? "0.15" : "0.08");
+    step.style.setProperty(
+      "--pulse-duration",
+      isNow ? `${2 + Math.random() * 0.5}s` : `${2.5 + Math.random() * 1.5}s`
+    );
+    step.classList.add("is-pulsing");
+  });
+  cleanups.push(() => {
+    steps.forEach((step) => {
+      step.classList.remove("is-pulsing");
+      step.style.removeProperty("--pulse-intensity");
+      step.style.removeProperty("--pulse-duration");
+    });
+  });
+
+  // ── Part B: Rail particle ─────────────────────────────────
+  const timeline = roadmap.querySelector(".stack-roadmap__timeline");
+  if (timeline) {
+    const particle = document.createElement("div");
+    particle.classList.add("rail-particle");
+    particle.setAttribute("aria-hidden", "true");
+    timeline.style.position = timeline.style.position || "relative";
+    timeline.appendChild(particle);
+    cleanups.push(() => particle.remove());
+  }
+
+  // ── Part C: Energy wave on card hover ─────────────────────
+  const cardHandlers = [];
+  steps.forEach((step) => {
+    const card = step.querySelector(".stack-roadmap__card");
+    if (!card) return;
+
+    const onEnter = () => {
+      step.classList.add("node-wave");
+    };
+    const onAnimEnd = () => {
+      step.classList.remove("node-wave");
+    };
+
+    card.addEventListener("mouseenter", onEnter);
+    step.addEventListener("animationend", onAnimEnd);
+    cardHandlers.push({ card, step, onEnter, onAnimEnd });
+  });
+  cleanups.push(() => {
+    cardHandlers.forEach(({ card, step, onEnter, onAnimEnd }) => {
+      card.removeEventListener("mouseenter", onEnter);
+      step.removeEventListener("animationend", onAnimEnd);
+      step.classList.remove("node-wave");
+    });
+  });
+
+  // IntersectionObserver not needed for CSS-only animations (browser handles it)
+  // but we use it to add/remove is-pulsing for GPU savings
+  const visObs = createVisibilityObserver(
+    roadmap,
+    () => steps.forEach((s) => s.classList.add("is-pulsing")),
+    () => steps.forEach((s) => s.classList.remove("is-pulsing"))
+  );
+  cleanups.push(() => visObs.disconnect());
+
+  return () => cleanups.forEach((fn) => fn());
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EFEITO 4 — FOOTER: ABISMO QUE RESPIRA
+   A) Medusas derivando no canvas
+   B) Respiração radial via CSS animation
+   ═══════════════════════════════════════════════════════════ */
+function initAbyssBreath(footer) {
+  const cleanups = [];
+
+  // ── Part B: Breathing div (CSS animation — no rAF) ────────
+  const breathStyle = document.createElement("style");
+  breathStyle.textContent = `
+    @keyframes abyssBreath {
+      0%, 100% { opacity: 0.03; }
+      50% { opacity: 0.10; }
+    }
+    .footer-breath {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 100%, rgba(80,190,255,0.5), transparent 60%);
+      animation: abyssBreath 8s ease-in-out infinite;
+      z-index: 0;
+    }
+  `;
+  document.head.appendChild(breathStyle);
+  cleanups.push(() => breathStyle.remove());
+
+  const breathDiv = document.createElement("div");
+  breathDiv.classList.add("footer-breath");
+  breathDiv.setAttribute("aria-hidden", "true");
+  footer.appendChild(breathDiv);
+  cleanups.push(() => breathDiv.remove());
+
+  // ── Part A: Jellyfish canvas ──────────────────────────────
+  // z-index 0 for breath, footerParticleCanvas is z-index 1, content is z-index 2
+  // Use z-index 0 for jellyfish canvas (between breath and plankton)
+  const canvas = createCanvas(footer, 0);
+  canvas.style.zIndex = "0";
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    cleanups.push(() => canvas.remove());
+    return () => cleanups.forEach((fn) => fn());
+  }
+
+  let W = 0,
+    H = 0;
+  let rafId = null;
+  let visible = false;
+  let t = 0;
+
+  const resize = () => {
+    W = canvas.width = footer.offsetWidth;
+    H = canvas.height = footer.offsetHeight;
+  };
+  resize();
+
+  const resizeObs = new ResizeObserver(resize);
+  resizeObs.observe(footer);
+
+  // 3 jellyfish
+  const jellies = Array.from({ length: 3 }, () => {
+    const capRadius = 20 + Math.random() * 15;
+    const tentacleCount = 6 + Math.floor(Math.random() * 3);
+    return {
+      x: Math.random() * (W || 800),
+      y: Math.random() * (H || 300),
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.3,
+      capRadius,
+      tentacleCount,
+      tentacleLen: 20 + Math.random() * 20,
+      pulseCycle: 3 + Math.random() * 2,
+      pulsePhase: Math.random() * Math.PI * 2,
+      opacity: 0.12 + Math.random() * 0.08,
+    };
+  });
+
+  const drawJelly = (j) => {
+    const pulseScale = 0.9 + 0.2 * (0.5 + 0.5 * Math.sin((t * Math.PI * 2) / j.pulseCycle + j.pulsePhase));
+    const cr = j.capRadius * pulseScale;
+    const op = j.opacity;
+
+    ctx.save();
+    ctx.translate(j.x, j.y);
+
+    // Cap (semi-ellipse)
+    ctx.beginPath();
+    ctx.ellipse(0, 0, cr, cr * 0.65, 0, Math.PI, 0);
+    ctx.fillStyle = `rgba(80,190,255,${op})`;
+    ctx.fill();
+
+    // Inner glow
+    ctx.beginPath();
+    ctx.ellipse(0, -cr * 0.15, cr * 0.5, cr * 0.3, 0, Math.PI, 0);
+    ctx.fillStyle = `rgba(120,220,255,${op * 0.5})`;
+    ctx.fill();
+
+    // Tentacles
+    const tentOp = op / 2;
+    const baseWidth = cr * 2;
+    for (let i = 0; i < j.tentacleCount; i++) {
+      const tx = -baseWidth / 2 + (i / (j.tentacleCount - 1)) * baseWidth;
+      const len = j.tentacleLen * (0.7 + 0.3 * Math.sin(t * 2 + i * 1.3 + j.pulsePhase));
+
+      ctx.beginPath();
+      ctx.moveTo(tx, 0);
+
+      // Wavy tentacle using quadratic curves
+      const waveMid = Math.sin(t * 3 + i * 0.9 + j.pulsePhase) * 8;
+      ctx.quadraticCurveTo(tx + waveMid, len * 0.5, tx + waveMid * 0.5, len);
+
+      ctx.strokeStyle = `rgba(45,226,230,${tentOp})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  };
+
+  const draw = () => {
+    if (!visible) {
+      rafId = null;
+      return;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    t += 0.016;
+
+    for (const j of jellies) {
+      // Drift movement
+      j.x += j.vx;
+      j.y += j.vy + Math.sin(t * 0.5 + j.pulsePhase) * 0.15;
+
+      // Wrap around edges
+      if (j.x < -50) j.x = W + 50;
+      if (j.x > W + 50) j.x = -50;
+      if (j.y < -50) j.y = H + 50;
+      if (j.y > H + 50) j.y = -50;
+
+      drawJelly(j);
+    }
+
+    rafId = requestAnimationFrame(draw);
+  };
+
+  const visObs = createVisibilityObserver(
+    footer,
+    () => {
+      visible = true;
+      if (!rafId) rafId = requestAnimationFrame(draw);
+    },
+    () => {
+      visible = false;
+    }
+  );
+
+  cleanups.push(() => {
+    visible = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    resizeObs.disconnect();
+    visObs.disconnect();
+    canvas.remove();
+  });
+
+  return () => cleanups.forEach((fn) => fn());
 }

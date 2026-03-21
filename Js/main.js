@@ -18,7 +18,7 @@ import { setupRoadmap } from "./components/roadmap.js";
 import { setupTheme } from "./components/theme.js";
 import { initFooterParticles } from "./effects/footerParticles.js";
 import { initHeroParticles } from "./effects/heroParticles.js";
-import { initOceanLife } from "./effects/Oceanlife.js";
+import { initOceanLife } from "./effects/oceanLife.js";
 
 function bootstrap() {
   // AbortController centralizado: controller.abort() cancela TODOS os
@@ -214,11 +214,14 @@ function bootstrap() {
   }
 
   // ─── OCEAN LIFE ──────────────────────────────────────────
-  // Cardume, ondas de perturbação, parallax de profundidade e bolhas nos cards
+  // Tensão superficial, correnteza, nodes vivos e abismo que respira
   const destroyOceanLife = initOceanLife({
-    hero: document.querySelector('.hero'),
-    main: document.querySelector('main'),
-    projectCards: Array.from(document.querySelectorAll('.project-card')),
+    header:       elements.header,
+    hero:         elements.hero,
+    about:        document.querySelector('.about'),
+    roadmap:      elements.roadmapSection,
+    footer:       elements.footer,
+    projectCards: elements.serviceCards,
     reduceMotion: prefersReducedMotion,
   });
   cleanups.push(destroyOceanLife.destroy);
