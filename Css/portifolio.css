@@ -14,6 +14,17 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  /* Zona de pressão: sky-blue → deep-blue — azul escuro, pressão da água. */
+  background:
+    radial-gradient(80% 60% at 30% 40%,
+      color-mix(in srgb, var(--bright-blue) 15%, transparent),
+      transparent 70%),
+    radial-gradient(60% 50% at 70% 60%,
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 65%),
+    linear-gradient(180deg,
+      var(--sky-blue),
+      color-mix(in srgb, var(--deep-blue) 80%, var(--navy-blue) 20%));
 }
 
 /* Luz cáustica — brilho subaquático no fundo da seção.
@@ -58,19 +69,22 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  /* light-blue visível sobre fundo sky-blue/deep-blue */
+  color: var(--light-blue);
 }
 
 .portfolio-header h2 {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 900;
-  color: var(--text);
+  /* pure-white sobre sky-blue: excelente contraste */
+  color: var(--pure-white);
   line-height: 1.15;
 }
 
 .portfolio-header p {
   font-size: 1.05rem;
-  color: var(--text-muted);
+  /* very-light-blue: visível sobre fundo azul escuro */
+  color: var(--very-light-blue);
   max-width: 560px;
   line-height: 1.65;
 }
@@ -111,10 +125,17 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, transparent), transparent 60%);
+  /* Cáustico subaquático no hover: radial-gradient + screen simula
+     luz refratada pela superfície do oceano nos cards abaixo. */
+  background: radial-gradient(
+    ellipse at 35% 20%,
+    color-mix(in srgb, var(--bright-blue) 55%, transparent),
+    transparent 70%
+  );
+  mix-blend-mode: screen;
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--transition-base);
+  transition: opacity 0.3s var(--ease-out);
 }
 
 .project-card:hover {
@@ -125,6 +146,12 @@
 
 .project-card:hover::before {
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card::before {
+    transition: none;
+  }
 }
 
 /* Conteúdo do card acima do glow */

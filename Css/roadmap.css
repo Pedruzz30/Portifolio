@@ -25,16 +25,15 @@
   padding: clamp(3.5rem, 6.5vw, 6rem) 1.25rem;
   overflow: hidden;
   isolation: isolate;
+  /* Zona crepuscular: light-blue → sky-blue — menos luz, mergulhando. */
   background:
-    radial-gradient(120% 90% at 18% 8%,
-      color-mix(in srgb, var(--pure-white) 75%, var(--very-light-blue) 25%),
-      transparent 58%),
-    radial-gradient(100% 80% at 90% 35%,
-      color-mix(in srgb, var(--accent) 24%, transparent),
+    radial-gradient(100% 80% at 85% 25%,
+      color-mix(in srgb, var(--accent) 22%, transparent),
       transparent 60%),
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--very-light-blue) 32%, transparent),
-      color-mix(in srgb, var(--deep-blue) 10%, transparent));
+    radial-gradient(80% 70% at 15% 70%,
+      color-mix(in srgb, var(--bright-blue) 18%, transparent),
+      transparent 65%),
+    linear-gradient(180deg, var(--light-blue), var(--sky-blue));
 }
 
 .stack-roadmap::before,
@@ -102,7 +101,8 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: color-mix(in srgb, var(--accent) 65%, var(--deep-blue));
+  /* --darker-blue garante contraste suficiente sobre fundo light-blue/sky-blue */
+  color: var(--darker-blue);
   font-weight: 700;
 }
 
@@ -111,7 +111,8 @@
   font-size: clamp(1.65rem, 3vw, 2.35rem);
   letter-spacing: -0.03em;
   color: var(--midnight-blue);
-  background: linear-gradient(120deg, var(--accent), var(--primary), var(--midnight-blue));
+  /* Gradiente darker sobre fundo médio-azul: dark → deeper → midnight */
+  background: linear-gradient(120deg, var(--darker-blue), var(--navy-blue), var(--midnight-blue));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

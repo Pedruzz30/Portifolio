@@ -14,10 +14,18 @@
 .about {
   padding: clamp(4rem, 8vw, 7rem) 0;
   position: relative;
+  /* Zona de transição superfície→profundidade: azul claro com névoa sutil.
+     very-light-blue → light-blue: água rasa e cristalina, com reflexos de luz. */
   background:
-    radial-gradient(80% 60% at 100% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
-    radial-gradient(60% 50% at 0% 80%, color-mix(in srgb, var(--violet) 6%, transparent), transparent 60%),
-    var(--bg);
+    radial-gradient(80% 60% at 100% 0%,
+      color-mix(in srgb, var(--bright-blue) 14%, transparent),
+      transparent 60%),
+    radial-gradient(60% 50% at 0% 80%,
+      color-mix(in srgb, var(--sky-blue) 12%, transparent),
+      transparent 60%),
+    linear-gradient(180deg,
+      var(--very-light-blue),
+      color-mix(in srgb, var(--light-blue) 80%, var(--very-light-blue) 20%));
   overflow: hidden;
 }
 
@@ -38,7 +46,8 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  /* --primary (deep-blue) tem contraste adequado sobre --very-light-blue */
+  color: var(--primary);
   margin: 0;
 }
 
@@ -98,7 +107,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent);
+  /* darker-blue: visible sobre o fundo very-light-blue */
+  background: var(--darker-blue);
   box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 

@@ -18,10 +18,17 @@
 .contact{
   position: relative;
   padding: clamp(3.5rem, 7vw, 6rem) 0;
+  /* Zona quase abissal: deep-blue → navy-blue — próximo ao footer/abismo. */
   background:
-    radial-gradient(120% 80% at 20% 10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    radial-gradient(90% 60% at 80% 0%, color-mix(in srgb, var(--bright-blue) 22%, transparent), transparent 60%),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface) 90%, #fff 10%), color-mix(in srgb, var(--very-light-blue) 60%, #fff 40%));
+    radial-gradient(120% 80% at 20% 10%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 60%),
+    radial-gradient(90% 60% at 80% 0%,
+      color-mix(in srgb, var(--bright-blue) 14%, transparent),
+      transparent 60%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--sky-blue) 55%, var(--deep-blue) 45%),
+      var(--navy-blue));
 }
 
 .contact-shell{
@@ -35,7 +42,8 @@
   display: grid;
   gap: 0.4rem;
   text-align: center;
-  color: var(--midnight-blue);
+  /* pure-white visível sobre fundo deep-blue/navy-blue */
+  color: var(--pure-white);
 }
 
 .contact-eyebrow{
@@ -43,7 +51,8 @@
   font-size: 0.85rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  /* light-blue visível sobre fundo escuro */
+  color: var(--light-blue);
 }
 
 .contact-title{
@@ -56,7 +65,8 @@
 .contact-subtitle{
   margin: 0 auto;
   max-width: 560px;
-  color: var(--text-subtle);
+  /* very-light-blue: suficientemente visível sobre fundo azul escuro */
+  color: color-mix(in srgb, var(--pure-white) 85%, var(--light-blue) 15%);
   line-height: 1.6;
 }
 
