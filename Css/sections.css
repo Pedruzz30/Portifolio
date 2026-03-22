@@ -206,28 +206,6 @@
   color: color-mix(in srgb, var(--surface-soft) 85%, rgba(255,255,255,0.65));
 }
  
-.text-reveal {
-  font-size: 5rem;
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-  overflow: hidden;
-}
- 
-.text-reveal span {
-  display: inline-block;
-  transform: translateY(100%);
-  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-}
- 
-.text-mask {
-  font-size: 1.12rem;
-  color: var(--surface-soft);
-  margin-bottom: 1.6rem;
-  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-  transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-}
- 
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
