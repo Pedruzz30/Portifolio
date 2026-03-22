@@ -32,6 +32,8 @@ export function safeGetComputedStyle(property) {
 export function finalizeLoader(loader) {
   if (!loader) return;
 
+  console.log('[dom] finalizeLoader called, state:', loader?.dataset?.state);
+
   try {
     // Idempotente: se já foi finalizado, não faz nada
     if (loader.dataset?.state === "done") return;
