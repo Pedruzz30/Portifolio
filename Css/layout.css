@@ -6,13 +6,15 @@
  * ═══════════════════════════════════════════════════════════
  */
  
-/* O <main> é uma coluna flexível com espaço entre as seções.
-   FIX 6: gap fixo substituído por clamp() — consistente com
-   o restante do arquivo e mais compacto em mobile pequeno. */
+/* O <main> organiza as seções em coluna, sem gap visual entre elas.
+   Os divisores SVG (.section-wave) dependem de contato direto entre
+   blocos adjacentes; qualquer gap do flex container cria faixas brancas
+   entre as seções, como nas capturas reportadas. O respiro visual já
+   vem do padding interno de cada seção. */
 main {
   display: flex;
   flex-direction: column;
-  gap: clamp(3rem, 8vw, 6rem);
+  gap: 0;
 }
  
 /* =========================
