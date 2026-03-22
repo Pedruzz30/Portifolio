@@ -82,6 +82,10 @@ function initLoaderMerge(gsap) {
   const ring   = document.querySelector('.loader-ring');
   if (!loader) return () => {};
 
+  // Sinaliza que o GSAP assumiu o controle do loader,
+  // impedindo que finalizeLoader (dom.js) interfira na animação.
+  loader.dataset.state = "gsap";
+
   // Injeta a camada de água
   const water = document.createElement('div');
   water.setAttribute('aria-hidden', 'true');
@@ -143,6 +147,7 @@ function initLoaderMerge(gsap) {
     onComplete: () => {
       loader.style.display = 'none';
       loader.style.pointerEvents = 'none';
+      loader.dataset.state = 'done';
     },
   }, '-=0.10');
 

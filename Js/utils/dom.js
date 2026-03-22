@@ -36,6 +36,9 @@ export function finalizeLoader(loader) {
     // Idempotente: se já foi finalizado, não faz nada
     if (loader.dataset?.state === "done") return;
 
+    // Permite que outro sistema (ex: GSAP) assuma o controle do loader
+    if (loader.dataset?.state === "gsap") return;
+
     loader.dataset.state = "done";
     loader.style.opacity = "0";
     loader.style.visibility = "hidden";
