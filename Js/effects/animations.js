@@ -355,10 +355,7 @@ export function initAnimations({
     if (textMask) {
       textMask.style.clipPath = "polygon(0 0,100% 0,100% 100%,0 100%)";
     }
-    if (typeof window.fillProgressInstant === "function") {
-      window.fillProgressInstant();
-    }
-  };
+   };
 
   // Sem animação: mostra tudo e sai
   if (prefersReducedMotion || !window.gsap) {

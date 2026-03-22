@@ -42,7 +42,6 @@ function bootstrap() {
     heroContent: document.querySelector(".hero-content"),
     footer: document.querySelector(".site-footer"),
     serviceCards: Array.from(document.querySelectorAll(".project-card")),
-    portfolioItems: Array.from(document.querySelectorAll(".project-card")),
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
@@ -120,7 +119,7 @@ function bootstrap() {
         textReveal: elements.textReveal,
         textMask: elements.textMask,
         serviceCards: elements.serviceCards,
-        portfolioItems: elements.portfolioItems,
+        portfolioItems: elements.serviceCards,
       });
     } finally {
       finalizeOnce(); // loader some após os visuais iniciarem
