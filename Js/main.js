@@ -19,6 +19,7 @@ import { setupTheme } from "./components/theme.js";
 import { initFooterParticles } from "./effects/footerParticles.js";
 import { initHeroParticles } from "./effects/heroParticles.js";
 import { initOceanLife } from "./effects/oceanLife.js";
+import { initGsapEffects } from "./effects/gsapEffects.js";
 
 function bootstrap() {
   // AbortController centralizado: controller.abort() cancela TODOS os
@@ -121,6 +122,11 @@ function bootstrap() {
         serviceCards: elements.serviceCards,
         portfolioItems: elements.serviceCards,
       });
+
+      const destroyGsap = initGsapEffects ({
+        reduceMotion: prefersReducedMotion,
+      })
+      cleanups.push(destroyGsap);
     } finally {
       finalizeOnce(); // loader some após os visuais iniciarem
     }

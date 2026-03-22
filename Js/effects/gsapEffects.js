@@ -38,9 +38,8 @@ export function initGsapEffects({ reduceMotion = false } = {}) {
     return { destroy: () => {} };
   }
 
-  if (ScrollTrigger) {
-    gsap.registerPlugin(ScrollTrigger);
-  }
+  // ScrollTrigger já é registrado em animations.js — não duplicar aqui.
+
 
   // Respeita preferência do usuário por movimento reduzido
   if (reduceMotion) {
