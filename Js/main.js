@@ -125,11 +125,12 @@ function bootstrap() {
         serviceCards: elements.serviceCards,
         portfolioItems: elements.serviceCards,
       });
-console.log('[boot] initAnimations done');
+      console.log('[boot] initAnimations done');
 
       console.log('[boot] initGsapEffects start');
       const destroyGsap = initGsapEffects({
         reduceMotion: prefersReducedMotion,
+        isMobile:     isMobile,
       });
       // BUG FIX: initGsapEffects retorna { destroy }, não a função diretamente
       if (destroyGsap?.destroy) cleanups.push(destroyGsap.destroy);
@@ -202,16 +203,16 @@ console.log('[boot] initAnimations done');
     (error) => console.warn("Theme toggle desabilitado:", error)
   );
 
-  const isMobile = window.matchMedia("(max-width: 600px)").matches;
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
   // ─── HERO PARTICLES ──────────────────────────────────────
-  // Partículas de superfície + ondas SVG no hero
-  const heroParticleHandle = initHeroParticles(elements.hero, {
-    count: isMobile ? 16 : 28,
-    reduceMotion: prefersReducedMotion,
-  });
-  if (heroParticleHandle && typeof heroParticleHandle.destroy === "function") {
-    cleanups.push(heroParticleHandle.destroy);
+  // Partículas de superfície + ondas SVG no hero — desativado no mobile
+  if (!isMobile) {
+    const heroParticleHandle = initHeroParticles(elements.hero, {
+      count: 28,
+      reduceMotion: prefersReducedMotion,
+    });
+    if (heroParticleHandle?.destroy) cleanups.push(heroParticleHandle.destroy);
   }
 
   // ─── FOOTER PARTICLES ────────────────────────────────────
@@ -239,6 +240,7 @@ console.log('[boot] initAnimations done');
       footer:       elements.footer,
       projectCards: elements.serviceCards,
       reduceMotion: prefersReducedMotion,
+      isMobile:     isMobile,
     },
     (error) => console.warn('OceanLife desabilitado:', error)
   );
