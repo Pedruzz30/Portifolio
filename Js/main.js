@@ -112,9 +112,12 @@ function bootstrap() {
     if (visualsStarted) return;
     visualsStarted = true;
 
+    console.log('[boot] runVisualsOnce start, readyState:', document.readyState);
+
     try {
       // initAnimations cuida de: reveal do hero, parallax do mouse,
       // bubbles, tilt dos cards e animações de scroll.
+      console.log('[boot] initAnimations start');
       safelyInit(initAnimations, {
         heroContent: elements.heroContent,
         textReveal: elements.textReveal,
@@ -122,12 +125,17 @@ function bootstrap() {
         serviceCards: elements.serviceCards,
         portfolioItems: elements.serviceCards,
       });
+console.log('[boot] initAnimations done');
 
-      const destroyGsap = initGsapEffects ({
+      console.log('[boot] initGsapEffects start');
+      const destroyGsap = initGsapEffects({
         reduceMotion: prefersReducedMotion,
-      })
-      cleanups.push(destroyGsap);
+      });
+      // BUG FIX: initGsapEffects retorna { destroy }, não a função diretamente
+      if (destroyGsap?.destroy) cleanups.push(destroyGsap.destroy);
+      console.log('[boot] initGsapEffects done');
     } finally {
+      console.log('[boot] finalizeOnce called');
       finalizeOnce(); // loader some após os visuais iniciarem
     }
   };
@@ -220,16 +228,21 @@ function bootstrap() {
 
   // ─── OCEAN LIFE ──────────────────────────────────────────
   // Tensão superficial, correnteza, nodes vivos e abismo que respira
-  const destroyOceanLife = initOceanLife({
-    header:       elements.header,
-    hero:         elements.hero,
-    about:        document.querySelector('.about'),
-    roadmap:      elements.roadmapSection,
-    footer:       elements.footer,
-    projectCards: elements.serviceCards,
-    reduceMotion: prefersReducedMotion,
-  });
-  cleanups.push(destroyOceanLife.destroy);
+  console.log('[boot] initOceanLife start');
+  safelyInit(
+    initOceanLife,
+    {
+      header:       elements.header,
+      hero:         elements.hero,
+      about:        document.querySelector('.about'),
+      roadmap:      elements.roadmapSection,
+      footer:       elements.footer,
+      projectCards: elements.serviceCards,
+      reduceMotion: prefersReducedMotion,
+    },
+    (error) => console.warn('OceanLife desabilitado:', error)
+  );
+  console.log('[boot] initOceanLife done');
 
   // ─── ANO DINÂMICO ────────────────────────────────────────
   // Atualiza o copyright no footer automaticamente todo ano
@@ -338,7 +351,7 @@ function bootstrap() {
   // Se o evento "load" nunca disparar (scripts externos lentos, etc.),
   // remove o loader após 1.5s de qualquer jeito.
   loaderFallbackTimeoutId = window.setTimeout(() => {
-    console.warn("Loader finalizado por fallback após timeout.");
+    console.warn('[boot] fallback timeout fired — loader may be stuck');
     finalizeOnce();
   }, 1500);
 

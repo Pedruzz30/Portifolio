@@ -17,6 +17,12 @@
   box-sizing: border-box;
 }
 
+/* Reserva o espaço da scrollbar em browsers com scrollbar nativa (Chrome),
+   evitando layout shift vs browsers com overlay scrollbar (Opera GX). */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   position: relative;
   font-family: 'Inter', sans-serif;

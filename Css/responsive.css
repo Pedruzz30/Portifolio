@@ -86,7 +86,7 @@
     grid-template-columns: auto auto;
     grid-template-areas: "logo actions" "nav nav";
   }
- 
+
   .nav {
     grid-area: nav;
     justify-content: flex-start;
