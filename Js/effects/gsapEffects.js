@@ -29,7 +29,7 @@
  * @param {boolean} [options.reduceMotion=false]
  * @returns {{ destroy: () => void }}
  */
-export function initGsapEffects({ reduceMotion = false } = {}) {
+export function initGsapEffects({ reduceMotion = false, isMobile = false } = {}) {
   const gsap          = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
 
@@ -54,13 +54,24 @@ export function initGsapEffects({ reduceMotion = false } = {}) {
   const cleanups = [];
 
   // ── Registra cada efeito ──────────────────────────────
+  // Loader — roda em todos (mobile também precisa do loader sumindo)
   cleanups.push(initLoaderMerge(gsap));
+  // Text reveal — roda em todos (leve, só CSS transform)
   cleanups.push(initHeroTextReveal(gsap));
-  cleanups.push(initHeroParallax(gsap, ScrollTrigger));
+  // Stats counter — roda em todos (leve, só número)
   cleanups.push(initStatsCounter(gsap, ScrollTrigger));
-  cleanups.push(initMagneticButtons(gsap));
-  cleanups.push(initStaggerCards(gsap, ScrollTrigger));
+  // Scroll reveal — roda em todos (essencial para UX)
   cleanups.push(initScrollReveal(gsap, ScrollTrigger));
+  // Stagger cards — roda em todos (essencial para UX)
+  cleanups.push(initStaggerCards(gsap, ScrollTrigger));
+  // Parallax — APENAS desktop (causa layout shift no mobile)
+  if (!isMobile) {
+    cleanups.push(initHeroParallax(gsap, ScrollTrigger));
+  }
+  // Magnetic buttons — APENAS desktop (não tem hover no mobile)
+  if (!isMobile) {
+    cleanups.push(initMagneticButtons(gsap));
+  }
 
   return {
     destroy: () => {

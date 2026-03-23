@@ -20,6 +20,9 @@ const canHover = window.matchMedia("(hover: hover)").matches;
 const prefersReducedMotion =
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// Flag mobile padronizada — mesma breakpoint usada em main.js
+const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
 /* =========================
    VANILLA TILT — LAZY INIT
    Inicializa o efeito 3D tilt nos cards apenas quando entram
@@ -28,8 +31,8 @@ const prefersReducedMotion =
 ========================= */
 function initLazyTilt(cards) {
   const items = cards.filter(Boolean);
-  // Sem VanillaTilt, sem itens, ou com preferência de sem-movimento: no-op
-  if (!window.VanillaTilt || !items.length || prefersReducedMotion) {
+  // Sem VanillaTilt, sem itens, mobile ou com preferência de sem-movimento: no-op
+  if (!window.VanillaTilt || !items.length || prefersReducedMotion || isMobile) {
     return () => {};
   }
 
