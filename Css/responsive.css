@@ -49,22 +49,14 @@
     font-size: 0.95rem;
   }
  
-  .nav__pill {
-    font-size: 0.8rem;
-    padding-inline: 0.75rem;
-  }
- 
-  .nav__cta .btn__label {
-    font-size: 0.92rem;
-  }
-}
- 
-/* =========================
-   1180px — pill da nav some
-   ========================= */
-@media (max-width: 1180px) {
+  /* pill some junto com o header compacto — evita overflow no Chrome
+     (scrollbar nativa ~17px reduz o espaço disponível no nav column) */
   .nav__pill {
     display: none;
+  }
+
+  .nav__cta .btn__label {
+    font-size: 0.92rem;
   }
 }
  
