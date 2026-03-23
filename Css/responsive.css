@@ -86,7 +86,11 @@
     grid-template-columns: auto auto;
     grid-template-areas: "logo actions" "nav nav";
   }
- 
+
+  .nav__pill {
+    display: none;
+  }
+
   .nav {
     grid-area: nav;
     justify-content: flex-start;
