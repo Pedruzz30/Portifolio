@@ -261,7 +261,8 @@
 .nav__list{
   list-style: none;
   display: flex;
-  flex-wrap: nowarp;
+  flex-wrap: nowrap;
+  overflow: hidden;
   gap: 0.65rem;
   margin: 0;
   padding: 0.35rem 0.5rem;
@@ -389,6 +390,9 @@
   font-size: 0.88rem;
   color: var(--pure-white);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: clamp(140px, 20vw, 260px);
   background: linear-gradient(145deg, color-mix(in srgb, var(--mint) 50%, var(--primary) 50%), color-mix(in srgb, var(--violet) 35%, var(--accent) 65%));
   border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
   box-shadow:
