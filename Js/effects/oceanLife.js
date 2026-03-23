@@ -29,8 +29,10 @@ export function initOceanLife({
   footer,
   projectCards = [],
   reduceMotion = false,
+  isMobile = false,
 } = {}) {
   if (reduceMotion) return { destroy: () => {} };
+  if (isMobile) return { destroy: () => {} };
 
   const cleanups = [];
   const hasHover = window.matchMedia("(hover: hover)").matches;
