@@ -34,6 +34,10 @@
   .header-shell {
     gap: 0.75rem;
   }
+
+  .header-meta {
+    gap: 0.55rem;
+  }
  
   .nav {
     gap: 0.75rem;
@@ -83,8 +87,14 @@
    ========================= */
 @media (max-width: 1024px) {
   .header-shell {
-    grid-template-columns: auto auto;
-    grid-template-areas: "logo actions" "nav nav";
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "logo meta"
+      "nav nav";
+  }
+
+  .header-meta {
+    justify-self: end;
   }
 
   .nav__pill {
@@ -211,6 +221,11 @@
  
   .header-shell {
     grid-template-columns: 1fr auto;
+    grid-template-areas: "logo meta";
+  }
+
+  .header-meta {
+    justify-self: end;
   }
  
   .nav {
