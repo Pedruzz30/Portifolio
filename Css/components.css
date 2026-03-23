@@ -146,7 +146,7 @@
   margin: 0 auto;
 
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr) auto;
+  grid-template-columns: max-content minmax(0, 1fr) max-content auto;
   gap: 1rem;
   align-items: center;
 
