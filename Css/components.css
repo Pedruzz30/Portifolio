@@ -397,7 +397,7 @@
 
 .nav__link span { position: relative; z-index: 1; }
 
-.hheader-meta {
+.header-meta {
   grid-area: meta;
   display: inline-flex;
   align-items: center;
