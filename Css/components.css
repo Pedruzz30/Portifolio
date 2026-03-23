@@ -146,7 +146,8 @@
   margin: 0 auto;
 
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr) max-content auto;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  grid-template-areas: "logo nav meta";
   gap: 1rem;
   align-items: center;
 
@@ -208,6 +209,7 @@
    esquerda para a direita ao hover — a "onda que te marca".
    ─────────────────────────────────────────────────────── */
 .logo {
+  grid-area: logo;
   position: relative;
   display: inline-block;
   font-size: 1.5rem;
@@ -251,6 +253,7 @@
 }
 
 .nav{
+  grid-area: nav;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -379,8 +382,18 @@
 
 .nav__link span { position: relative; z-index: 1; }
 
+.header-meta {
+  grid-area: meta;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
 .nav__pill{
   display: inline-flex;
+  min-width: 0;
   align-items: center;
   flex-shrink: 0;
   gap: 0.4rem;
@@ -413,6 +426,7 @@
 
 .header-actions{
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 0.6rem;
   justify-self: end;
