@@ -457,6 +457,10 @@
   flex-shrink: 0;
   transition: background 300ms ease, box-shadow 300ms ease;
 }
+
+.contact-chip__icon--github {
+  background: color-mix(in srgb, #1a1a2e 14%, white);
+}
  
 .contact-chip__icon img {
   width: 100%;
@@ -469,7 +473,7 @@
   background: rgba(80, 180, 255, 0.18);
   box-shadow: 0 0 14px rgba(80, 180, 255, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.10);
 }
- 
+
 .contact-chip__body {
   display: grid;
   gap: 0.15rem;

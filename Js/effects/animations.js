@@ -17,8 +17,9 @@
 const canHover = window.matchMedia("(hover: hover)").matches;
 
 // Detecta preferência de acessibilidade uma única vez no módulo
-const prefersReducedMotion =
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
 
 // Flag mobile padronizada — mesma breakpoint usada em main.js
 const isMobile = window.matchMedia("(max-width: 768px)").matches;
@@ -32,7 +33,12 @@ const isMobile = window.matchMedia("(max-width: 768px)").matches;
 function initLazyTilt(cards) {
   const items = cards.filter(Boolean);
   // Sem VanillaTilt, sem itens, mobile ou com preferência de sem-movimento: no-op
-  if (!window.VanillaTilt || !items.length || prefersReducedMotion || isMobile) {
+  if (
+    !window.VanillaTilt ||
+    !items.length ||
+    prefersReducedMotion ||
+    isMobile
+  ) {
     return () => {};
   }
 
@@ -50,8 +56,8 @@ function initLazyTilt(cards) {
       idleHandles.delete(el);
       if (el.vanillaTilt) return; // checagem dupla (rAF pode chegar depois)
       window.VanillaTilt.init(el, {
-        max: 8,           // máximo 8° de rotação
-        speed: 600,       // velocidade de retorno (ms)
+        max: 8, // máximo 8° de rotação
+        speed: 600, // velocidade de retorno (ms)
         glare: true,
         "max-glare": 0.12, // brilho sutil, não distrativo
       });
@@ -77,7 +83,7 @@ function initLazyTilt(cards) {
         }
       });
     },
-    { threshold: 0.25 }
+    { threshold: 0.25 },
   );
 
   items.forEach((card) => observer.observe(card));
@@ -119,9 +125,9 @@ function initPortfolioHover(items) {
 
   cards.forEach((card) => {
     // Seleciona os elementos animados dentro do card
-    const glow  = card.querySelector(".project-card__glow");   // halo de luz
+    const glow = card.querySelector(".project-card__glow"); // halo de luz
     const score = card.querySelector(".project-card__status"); // badge de status
-    const meta  = card.querySelectorAll(".project-tag");       // tecnologias usadas
+    const meta = card.querySelectorAll(".project-tag"); // tecnologias usadas
 
     const targets = [glow, score, ...meta].filter(Boolean);
     gsap.set(targets, { clearProps: "all" }); // reset inicial
@@ -129,9 +135,15 @@ function initPortfolioHover(items) {
     // Timeline pausada: play() no enter, reverse() no leave
     const tl = gsap.timeline({ paused: true, defaults: { overwrite: "auto" } });
 
-    if (glow)       tl.to(glow,   { opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
-    if (score)      tl.to(score,  { y: -4,       duration: 0.35, ease: "power2.out" }, 0);
-    if (meta.length) tl.to(meta,  { y: -2, stagger: 0.04, duration: 0.35, ease: "power2.out" }, 0);
+    if (glow)
+      tl.to(glow, { opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
+    if (score) tl.to(score, { y: -4, duration: 0.35, ease: "power2.out" }, 0);
+    if (meta.length)
+      tl.to(
+        meta,
+        { y: -2, stagger: 0.04, duration: 0.35, ease: "power2.out" },
+        0,
+      );
 
     const enter = () => tl.play();
     const leave = () => tl.reverse();
@@ -160,44 +172,47 @@ function initPortfolioHover(items) {
    Camada mais distante = maior deslocamento.
 ========================= */
 function initHeroParallax(hero) {
-  if (!hero || prefersReducedMotion || !canHover || !window.gsap) return () => {};
+  if (!hero || prefersReducedMotion || !canHover || !window.gsap)
+    return () => {};
 
-  const orbs   = hero.querySelector(".hero-orbs");
-  const panels = hero.querySelector(".floating-panels");
+  const orbs = hero.querySelector(".hero-orbs");
   const visual = hero.querySelector(".hero-visual");
 
   if (!visual) return () => {};
 
   // quickTo cria uma função de animação contínua sem criar novas tweens a cada frame
-  const orbsX   = orbs   ? gsap.quickTo(orbs,   "x", { duration: 0.9, ease: "power1.out" }) : null;
-  const orbsY   = orbs   ? gsap.quickTo(orbs,   "y", { duration: 0.9, ease: "power1.out" }) : null;
-  const panelsX = panels ? gsap.quickTo(panels, "x", { duration: 1.4, ease: "power1.out" }) : null;
-  const panelsY = panels ? gsap.quickTo(panels, "y", { duration: 1.4, ease: "power1.out" }) : null;
-  const visualX = visual ? gsap.quickTo(visual, "x", { duration: 1.1, ease: "power1.out" }) : null;
-  const visualY = visual ? gsap.quickTo(visual, "y", { duration: 1.1, ease: "power1.out" }) : null;
+  const orbsX = orbs
+    ? gsap.quickTo(orbs, "x", { duration: 0.9, ease: "power1.out" })
+    : null;
+  const orbsY = orbs
+    ? gsap.quickTo(orbs, "y", { duration: 0.9, ease: "power1.out" })
+    : null;
+  const visualX = visual
+    ? gsap.quickTo(visual, "x", { duration: 1.1, ease: "power1.out" })
+    : null;
+  const visualY = visual
+    ? gsap.quickTo(visual, "y", { duration: 1.1, ease: "power1.out" })
+    : null;
 
   const onMove = (e) => {
     const rect = hero.getBoundingClientRect();
     // Normaliza o cursor para -0.5 → +0.5 relativo ao centro do hero
-    const x = (e.clientX - rect.left)  / rect.width  - 0.5;
-    const y = (e.clientY - rect.top)   / rect.height - 0.5;
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-    orbsX?.(x * 32);  // orbs: camada mais "distante", maior movimento
+    orbsX?.(x * 32); // orbs: camada mais "distante", maior movimento
     orbsY?.(y * 18);
 
     visualX?.(x * 18); // visual: camada intermediária
     visualY?.(y * 10);
-
-    // Panels: camada "mais próxima" — movimento menor (parallax inverso)
-    panelsX?.(x * 10);
-    panelsY?.(y * 6);
   };
 
   // Ao sair: todos voltam para a posição original (0, 0)
   const onLeave = () => {
-    orbsX?.(0);   orbsY?.(0);
-    visualX?.(0); visualY?.(0);
-    panelsX?.(0); panelsY?.(0);
+    orbsX?.(0);
+    orbsY?.(0);
+    visualX?.(0);
+    visualY?.(0);
   };
 
   hero.addEventListener("mousemove", onMove);
@@ -206,7 +221,7 @@ function initHeroParallax(hero) {
   return () => {
     hero.removeEventListener("mousemove", onMove);
     hero.removeEventListener("mouseleave", onLeave);
-    gsap.set([orbs, visual, panels].filter(Boolean), { x: 0, y: 0 });
+    gsap.set([orbs, visual].filter(Boolean), { x: 0, y: 0 });
   };
 }
 
@@ -214,43 +229,25 @@ function initHeroParallax(hero) {
    SCROLL PARALLAX — Hero
    Camadas deslizam a velocidades distintas conforme o usuário rola.
    ScrollTrigger + scrub cria o efeito de "profundidade" no scroll.
-
-   visual:  yPercent: +18  (sobe mais rápido — "mais distante")
-   panels:  yPercent: -14  (desce um pouco — "mais próximo")
-   content: yPercent: +10  (intermediário)
 ========================= */
 function initHeroScrollParallax(hero) {
-  if (!hero || prefersReducedMotion || !window.gsap || !window.ScrollTrigger) return () => {};
+  if (!hero || prefersReducedMotion || !window.gsap || !window.ScrollTrigger)
+    return () => {};
 
-  const visual  = hero.querySelector(".hero-visual");
-  const panels  = hero.querySelector(".floating-panels");
+  const visual = hero.querySelector(".hero-visual");
   const content = hero.querySelector(".hero-content");
 
   const tls = [];
 
   if (visual) {
     const tl = gsap.to(visual, {
-      yPercent: 18,   // move 18% da própria altura para cima ao scrollar
-      ease: "none",   // linear — o ScrollTrigger controla o timing via scrub
+      yPercent: 18, // move 18% da própria altura para cima ao scrollar
+      ease: "none", // linear — o ScrollTrigger controla o timing via scrub
       scrollTrigger: {
         trigger: hero,
         start: "top top",
         end: "bottom top",
-        scrub: 0.8,   // delay de 0.8s para suavizar (quanto maior, mais "borrachudo")
-      },
-    });
-    tls.push(tl);
-  }
-
-  if (panels) {
-    const tl = gsap.to(panels, {
-      yPercent: -14,  // painéis descem ligeiramente (efeito parallax inverso)
-      ease: "none",
-      scrollTrigger: {
-        trigger: hero,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.2,
+        scrub: 0.8, // delay de 0.8s para suavizar (quanto maior, mais "borrachudo")
       },
     });
     tls.push(tl);
@@ -295,21 +292,21 @@ function initHeroBubbles(hero) {
     const bubble = document.createElement("span");
     bubble.className = "hero-bubble";
 
-    const size     = 8  + Math.random() * 20;         // diâmetro: 8–28px
-    const left     = 5  + Math.random() * 88;         // posição X: 5–93% (evita bordas)
-    const duration = 7  + Math.random() * 6;          // tempo de subida: 7–13s
-    const delay    = Math.random() * duration;        // fase aleatória → bolhas dessincronizadas
+    const size = 8 + Math.random() * 20; // diâmetro: 8–28px
+    const left = 5 + Math.random() * 88; // posição X: 5–93% (evita bordas)
+    const duration = 7 + Math.random() * 6; // tempo de subida: 7–13s
+    const delay = Math.random() * duration; // fase aleatória → bolhas dessincronizadas
 
     // Trajetória em S: drift2 é o inverso proporcional de drift1
-    const drift1   = (Math.random() < 0.5 ? 1 : -1) * (8 + Math.random() * 16);
-    const drift2   = -drift1 * (0.5 + Math.random() * 0.6);
+    const drift1 = (Math.random() < 0.5 ? 1 : -1) * (8 + Math.random() * 16);
+    const drift2 = -drift1 * (0.5 + Math.random() * 0.6);
 
-    bubble.style.width            = size + "px";
-    bubble.style.height           = size + "px";
-    bubble.style.left             = left + "%";
+    bubble.style.width = size + "px";
+    bubble.style.height = size + "px";
+    bubble.style.left = left + "%";
     bubble.style.animationDuration = duration + "s";
-    bubble.style.animationDelay   = "-" + delay + "s";
-    bubble.style.setProperty("--bubble-drift",  drift1.toFixed(1) + "px");
+    bubble.style.animationDelay = "-" + delay + "s";
+    bubble.style.setProperty("--bubble-drift", drift1.toFixed(1) + "px");
     bubble.style.setProperty("--bubble-drift-2", drift2.toFixed(1) + "px");
 
     container.appendChild(bubble);
@@ -341,8 +338,8 @@ export function initAnimations({
   portfolioItems = [],
 }) {
   const revealText = textReveal.filter(Boolean);
-  const services   = serviceCards.filter(Boolean);
-  const portfolio  = portfolioItems.filter(Boolean);
+  const services = serviceCards.filter(Boolean);
+  const portfolio = portfolioItems.filter(Boolean);
 
   const cleanups = [];
 
@@ -358,7 +355,7 @@ export function initAnimations({
     if (textMask) {
       textMask.style.clipPath = "polygon(0 0,100% 0,100% 100%,0 100%)";
     }
-   };
+  };
 
   // Sem animação: mostra tudo e sai
   if (prefersReducedMotion || !window.gsap) {
@@ -388,11 +385,11 @@ export function initAnimations({
       revealText,
       {
         y: 0,
-        stagger: 0.09,   // cada span começa 90ms após o anterior
+        stagger: 0.09, // cada span começa 90ms após o anterior
         duration: 1.0,
         ease: "power4.out", // desaceleração forte = sensação de peso
       },
-      0.15 // começa 150ms após o início da timeline
+      0.15, // começa 150ms após o início da timeline
     );
   }
 
@@ -404,7 +401,7 @@ export function initAnimations({
         duration: 1.2,
         ease: "power3.inOut",
       },
-      0.35 // começa depois do texto começar a revelar
+      0.35, // começa depois do texto começar a revelar
     );
   }
 
@@ -427,8 +424,8 @@ export function initAnimations({
     });
 
     ScrollTrigger.batch(items, {
-      start: "top 84%",  // dispara quando o card está 84% descido na viewport
-      once: true,        // só anima uma vez por elemento
+      start: "top 84%", // dispara quando o card está 84% descido na viewport
+      once: true, // só anima uma vez por elemento
       onEnter: (batch) => {
         batch.forEach((el) => el.classList.add("visible"));
         gsap.to(batch, {
@@ -436,12 +433,13 @@ export function initAnimations({
           y: 0,
           scale: 1,
           filter: "blur(0px)",
-          stagger: 0.10,    // 100ms entre cada card
-          duration: 0.90,
+          stagger: 0.1, // 100ms entre cada card
+          duration: 0.9,
           ease: "power3.out",
           overwrite: "auto",
           // Remove willChange após a animação: libera memória de composição GPU
-          onComplete: () => gsap.set(batch, { clearProps: "willChange,filter" }),
+          onComplete: () =>
+            gsap.set(batch, { clearProps: "willChange,filter" }),
         });
       },
     });
@@ -457,19 +455,19 @@ export function initAnimations({
 
   const hero = document.querySelector(".hero");
 
-  const destroyParallax       = initHeroParallax(hero);       // mouse parallax
+  const destroyParallax = initHeroParallax(hero); // mouse parallax
   cleanups.push(destroyParallax);
 
   const destroyScrollParallax = initHeroScrollParallax(hero); // scroll parallax
   cleanups.push(destroyScrollParallax);
 
-  const destroyBubbles        = initHeroBubbles(hero);        // bolhas ascendentes
+  const destroyBubbles = initHeroBubbles(hero); // bolhas ascendentes
   cleanups.push(destroyBubbles);
 
-  const destroyTilt           = initLazyTilt(services);       // tilt 3D nos cards
+  const destroyTilt = initLazyTilt(services); // tilt 3D nos cards
   cleanups.push(destroyTilt);
 
-  const destroyHover          = initPortfolioHover(portfolio); // hover nos cards
+  const destroyHover = initPortfolioHover(portfolio); // hover nos cards
   cleanups.push(destroyHover);
 
   return {

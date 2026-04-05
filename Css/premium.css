@@ -1,0 +1,244 @@
+/*
+ * premium.css - estilos premium antes embutidos no index.html
+ * Extraido para manter o HTML limpo e facilitar manutencao.
+ */
+h1,
+h2,
+h3,
+.logo,
+.footer-title {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+}
+
+/* =========================================================
+ Premium Portfolio Cards - Oceanic Case Study Aesthetics
+ ========================================================= */
+.project-card.project-card--premium {
+  position: relative;
+  background: color-mix(in srgb, #062540 80%, rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 20, 50, 0.4);
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  z-index: 1;
+  text-align: left;
+}
+
+.project-card.project-card--premium:hover {
+  border-color: rgba(80, 190, 255, 0.25);
+  box-shadow:
+    0 16px 48px rgba(0, 20, 50, 0.6),
+    inset 0 0 32px rgba(80, 190, 255, 0.05);
+  transform: translateY(-6px);
+}
+
+.project-card--premium .project-card__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 80% 0%,
+    rgba(80, 190, 255, 0.12),
+    transparent 50%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.5s ease;
+}
+
+.project-card--premium .project-card__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  z-index: 2;
+}
+
+.project-card--premium .project-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.project-card--premium .project-card__eyebrow {
+  font-family: var(--font-family-headings, "Space Grotesk", sans-serif);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #7dd6ee;
+  font-weight: 700;
+}
+
+.project-card--premium .project-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.7rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+
+@keyframes statusBreathe {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px currentColor;
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 2px currentColor;
+  }
+}
+
+
+.project-card--premium[data-status="progress"] .status-dot {
+  background-color: #f5a623;
+  color: #f5a623;
+  animation: statusBreathe 3s ease-in-out infinite;
+}
+
+.project-card--premium[data-status="done"] .status-dot {
+  background-color: #50beff;
+  box-shadow: 0 0 8px #50beff;
+}
+
+.project-card--premium .project-card__title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.8rem 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.project-card--premium .project-card__desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.65;
+  margin: 0 0 1.5rem 0;
+}
+
+.project-card--premium .project-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.project-card--premium .project-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #b8eaf4;
+  transition:
+    background 0.3s,
+    border-color 0.3s;
+}
+
+.project-card--premium:hover .project-tag {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.project-card--premium .project-card__bottom {
+  margin-top: 1.8rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.project-card--premium .project-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+}
+
+.project-card--premium .project-card__link:hover {
+  color: #50beff;
+}
+
+.project-card--premium .link-icon {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card--premium .project-card__link:hover .link-icon {
+  transform: translateX(4px) translateY(-4px);
+}
+
+/* =========================================================
+ Premium Roadmap - Deep Dive Timeline
+ ========================================================= */
+.roadmap-card--premium {
+  position: relative;
+  background: color-mix(in srgb, #062540 60%, rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  box-shadow: 0 8px 32px rgba(0, 20, 50, 0.3);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  z-index: 1;
+}
+
+.roadmap-card--premium:hover {
+  border-color: rgba(80, 190, 255, 0.25);
+  box-shadow: 0 16px 48px rgba(0, 20, 50, 0.5), inset 0 0 32px rgba(80, 190, 255, 0.05);
+  transform: translateX(4px); /* Moves sideways to imply following the current */
+}
+
+.roadmap-card--premium.is-active {
+  border-color: rgba(245, 166, 35, 0.4);
+  background: color-mix(in srgb, #062540 80%, rgba(245, 166, 35, 0.04));
+}
+
+.roadmap-card--premium.is-active:hover {
+  border-color: rgba(245, 166, 35, 0.6);
+  box-shadow: 0 16px 48px rgba(0, 20, 50, 0.5), inset 0 0 32px rgba(245, 166, 35, 0.08);
+}
+
+.roadmap-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1.2rem;
+}
+
+.roadmap-card--premium[data-status="now"] .status-dot { background-color: #f5a623; box-shadow: 0 0 8px #f5a623; }
+.roadmap-card--premium[data-status="done"] .status-dot { background-color: #50beff; box-shadow: 0 0 8px #50beff; }
+.roadmap-card--premium[data-status="next"] .status-dot { background-color: #b8eaf4; box-shadow: 0 0 8px rgba(184, 234, 244, 0.6); }
+.roadmap-card--premium[data-status="future"] .status-dot { background-color: rgba(255, 255, 255, 0.3); box-shadow: none; }
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -49,12 +49,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    h1, h2, h3, .logo, .footer-title {
-      font-family: 'Space Grotesk', 'Inter', sans-serif;
-    }
-  </style>
 
   <!-- Preload da imagem principal do hero (above-the-fold) -->
   <link rel="preload" as="image" href="./assets/minhaFoto.jpeg" fetchpriority="high">
@@ -136,10 +130,10 @@
           <span class="hero-chip">Git & GitHub</span>
         </div>
         <div class="hero-actions">
-          <a class="btn btn--depth btn--pill btn--ripple" href="#portfolio-title">
+          <a class="btn btn--hero-primary btn--pill btn--ripple" href="#portfolio-title">
             <span class="btn__label">Ver projetos</span>
           </a>
-          <button class="btn btn--surface btn--pill btn--ripple" type="button" data-scroll="#contact-title">
+          <button class="btn btn--hero-secondary btn--pill btn--ripple" type="button" data-scroll="#contact-title">
             <span class="btn__label">Falar comigo</span>
           </button>
         </div>
@@ -180,18 +174,6 @@
         </div>
       </div>
 
-      <div class="floating-panels" aria-label="Highlights">
-        <article class="hero-panel">
-          <p class="hero-panel__eyebrow">Back-end Java</p>
-          <h3 class="hero-panel__title">APIs REST com Spring Boot</h3>
-          <p class="hero-panel__text">Criando endpoints seguros, organizados por camadas, com validação e tratamento de erros.</p>
-        </article>
-        <article class="hero-panel hero-panel--border">
-          <p class="hero-panel__eyebrow">Boas práticas</p>
-          <h3 class="hero-panel__title">SOLID + Clean Code</h3>
-          <p class="hero-panel__text">Código legível, testável e organizado — princípios de engenharia aplicados em cada projeto.</p>
-        </article>
-      </div>
       <a class="scroll-indicator" href="#about-title" aria-label="Rolar para baixo">
         <span class="scroll-indicator__label">Explore</span>
         <span class="scroll-indicator__arrow"></span>
@@ -619,44 +601,44 @@
 
         <div class="portfolio-grid">
           <!-- Projeto 1 -->
-          <article class="project-card" data-status="progress">
+          <article class="project-card project-card--premium" data-status="progress">
             <div class="project-card__glow" aria-hidden="true"></div>
-            <div class="project-card__caustic" aria-hidden="true"></div>
-            <div class="project-card__sweep" aria-hidden="true"></div>
-            <div class="project-card__head">
-              <span class="project-card__icon" aria-hidden="true">☕</span>
-              <span class="project-card__status project-card__status--progress">Em progresso</span>
-            </div>
-            <div class="project-card__body">
+            <div class="project-card__content">
+              <div class="project-card__top">
+                <span class="project-card__eyebrow">Fundamentos Back-end</span>
+                <span class="project-card__status project-card__status--progress">
+                  <span class="status-dot"></span> Em andamento
+                </span>
+              </div>
               <h3 class="project-card__title">Sistema de Gerenciamento</h3>
-              <p class="project-card__desc">Meu primeiro projeto Java — sistema de gerenciamento em console com estrutura orientada a objetos, aplicando os fundamentos da linguagem com foco em boas práticas.</p>
+              <p class="project-card__desc">Arquitetura orientada a objetos em console. Aplicação de pilares OOP, Collections e princípios SOLID com foco na organização e clareza do código.</p>
               <div class="project-card__tags">
                 <span class="project-tag">Java</span>
                 <span class="project-tag">OOP</span>
                 <span class="project-tag">Collections</span>
-                <span class="project-tag">IntelliJ</span>
+                <span class="project-tag">SOLID</span>
               </div>
             </div>
-            <div class="project-card__footer">
+            <div class="project-card__bottom">
               <a class="project-card__link" href="https://github.com/Pedruzz30/Sistema_de_Gerenciamento" target="_blank" rel="noopener">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.68.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                Ver no GitHub
+                <span class="link-text">Explorar código</span>
+                <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
               </a>
             </div>
           </article>
 
           <!-- Projeto 2 -->
-          <article class="project-card" data-status="progress">
+          <article class="project-card project-card--premium" data-status="progress">
             <div class="project-card__glow" aria-hidden="true"></div>
-            <div class="project-card__caustic" aria-hidden="true"></div>
-            <div class="project-card__sweep" aria-hidden="true"></div>
-            <div class="project-card__head">
-              <span class="project-card__icon" aria-hidden="true">🤖</span>
-              <span class="project-card__status project-card__status--progress">Em progresso</span>
-            </div>
-            <div class="project-card__body">
-              <h3 class="project-card__title">Jarvis — Agente de IA</h3>
-              <p class="project-card__desc">Um dos meus favoritos. Agente de IA pessoal inspirado no JARVIS do Iron Man, construído em Python com engenharia de prompts e arquitetura de agentes. Ainda em desenvolvimento.</p>
+            <div class="project-card__content">
+              <div class="project-card__top">
+                <span class="project-card__eyebrow">Engenharia de IA</span>
+                <span class="project-card__status project-card__status--progress">
+                  <span class="status-dot"></span> Em andamento
+                </span>
+              </div>
+              <h3 class="project-card__title">Jarvis — Agente Autônomo</h3>
+              <p class="project-card__desc">Assistente pessoal construído com Python. Foco em integração e automação com LLMs, engenharia de prompts dinâmica e arquitetura orientada a agentes.</p>
               <div class="project-card__tags">
                 <span class="project-tag">Python</span>
                 <span class="project-tag">AI Agent</span>
@@ -664,26 +646,26 @@
                 <span class="project-tag">LLM</span>
               </div>
             </div>
-            <div class="project-card__footer">
+            <div class="project-card__bottom">
               <a class="project-card__link" href="https://github.com/Pedruzz30/Jarvis" target="_blank" rel="noopener">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.68.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                Ver no GitHub
+                <span class="link-text">Explorar repositório</span>
+                <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
               </a>
             </div>
           </article>
 
           <!-- Projeto 3 -->
-          <article class="project-card" data-status="done">
+          <article class="project-card project-card--premium" data-status="done">
             <div class="project-card__glow" aria-hidden="true"></div>
-            <div class="project-card__caustic" aria-hidden="true"></div>
-            <div class="project-card__sweep" aria-hidden="true"></div>
-            <div class="project-card__head">
-              <span class="project-card__icon" aria-hidden="true">🥗</span>
-              <span class="project-card__status project-card__status--done">Concluído</span>
-            </div>
-            <div class="project-card__body">
+            <div class="project-card__content">
+              <div class="project-card__top">
+                <span class="project-card__eyebrow">Web Plataforma</span>
+                <span class="project-card__status project-card__status--done">
+                  <span class="status-dot"></span> Concluído
+                </span>
+              </div>
               <h3 class="project-card__title">LucasNutri — Site de Nutrição</h3>
-              <p class="project-card__desc">Site profissional de nutrição com design responsivo, otimizado para SEO e mobile. Desenvolvido com HTML, CSS e JavaScript, incluindo assets organizados e sitemap.</p>
+              <p class="project-card__desc">Plataforma profissional otimizada para SEO e alta conversão. Design responsivo focado na clareza da experiência do usuário e semântica web.</p>
               <div class="project-card__tags">
                 <span class="project-tag">HTML5</span>
                 <span class="project-tag">CSS3</span>
@@ -691,26 +673,26 @@
                 <span class="project-tag">SEO</span>
               </div>
             </div>
-            <div class="project-card__footer">
+            <div class="project-card__bottom">
               <a class="project-card__link" href="https://github.com/Pedruzz30/LucasNutri" target="_blank" rel="noopener">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.68.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                Ver no GitHub
+                <span class="link-text">Visitar projeto</span>
+                <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
               </a>
             </div>
           </article>
 
           <!-- Projeto 4 -->
-          <article class="project-card" data-status="done">
+          <article class="project-card project-card--premium" data-status="done">
             <div class="project-card__glow" aria-hidden="true"></div>
-            <div class="project-card__caustic" aria-hidden="true"></div>
-            <div class="project-card__sweep" aria-hidden="true"></div>
-            <div class="project-card__head">
-              <span class="project-card__icon" aria-hidden="true">💼</span>
-              <span class="project-card__status project-card__status--done">Concluído</span>
-            </div>
-            <div class="project-card__body">
+            <div class="project-card__content">
+              <div class="project-card__top">
+                <span class="project-card__eyebrow">Web Portfólio</span>
+                <span class="project-card__status project-card__status--done">
+                  <span class="status-dot"></span> Concluído
+                </span>
+              </div>
               <h3 class="project-card__title">Luciano — Portfólio Web</h3>
-              <p class="project-card__desc">Portfólio profissional completo desenvolvido para um cliente. Site multi-página com seções de apresentação, serviços e contato, com foco em design e experiência do usuário.</p>
+              <p class="project-card__desc">Landing page multi-seção focada em apresentação de serviços. Estruturada com ênfase em design limpo, performance fluida e total acessibilidade.</p>
               <div class="project-card__tags">
                 <span class="project-tag">HTML5</span>
                 <span class="project-tag">CSS3</span>
@@ -718,10 +700,10 @@
                 <span class="project-tag">UI/UX</span>
               </div>
             </div>
-            <div class="project-card__footer">
+            <div class="project-card__bottom">
               <a class="project-card__link" href="https://github.com/Pedruzz30/Luciano_Portifolio" target="_blank" rel="noopener">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.68.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                Ver no GitHub
+                <span class="link-text">Visitar projeto</span>
+                <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
               </a>
             </div>
           </article>

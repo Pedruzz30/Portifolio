@@ -8,6 +8,7 @@
  *
  *  Estrutura:
  *   tokens.css    → variáveis CSS (cores, tamanhos, durations)
+ *   premium.css   → estilos premium extraídos do index (cards e roadmap)
  *   base.css      → reset, links, efeito oceano global
  *   layout.css    → estrutura de seção (shells, grids)
  *   sections.css  → hero base + skills + floating panels (hero detalhado em hero.css)
@@ -26,6 +27,7 @@
  */
 
 @import "./tokens.css";
+@import "./premium.css";
 @import "./base.css";
 @import "./layout.css";
 @import "./sections.css";

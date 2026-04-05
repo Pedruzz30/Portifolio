@@ -29,25 +29,31 @@
  * @param {boolean} [options.reduceMotion=false]
  * @returns {{ destroy: () => void }}
  */
-export function initGsapEffects({ reduceMotion = false, isMobile = false } = {}) {
-  const gsap          = window.gsap;
+export function initGsapEffects({
+  reduceMotion = false,
+  isMobile = false,
+} = {}) {
+  const gsap = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
 
   if (!gsap) {
-    console.warn('[gsapEffects] GSAP não encontrado. Verifique se gsap.min.js está carregado.');
+    console.warn(
+      "[gsapEffects] GSAP não encontrado. Verifique se gsap.min.js está carregado.",
+    );
     return { destroy: () => {} };
   }
 
   // ScrollTrigger já é registrado em animations.js — não duplicar aqui.
 
-
   // Respeita preferência do usuário por movimento reduzido
   if (reduceMotion) {
     // Garante que todos os elementos estejam visíveis mesmo sem animação
-    document.querySelectorAll('.js-reveal, .text-reveal span, .stat__value').forEach(el => {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-    });
+    document
+      .querySelectorAll(".js-reveal, .text-reveal span, .stat__value")
+      .forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
     return { destroy: () => {} };
   }
 
@@ -75,8 +81,8 @@ export function initGsapEffects({ reduceMotion = false, isMobile = false } = {})
 
   return {
     destroy: () => {
-      cleanups.forEach(fn => fn && fn());
-      ScrollTrigger?.getAll().forEach(st => st.kill());
+      cleanups.forEach((fn) => fn && fn());
+      ScrollTrigger?.getAll().forEach((st) => st.kill());
     },
   };
 }
@@ -88,9 +94,9 @@ export function initGsapEffects({ reduceMotion = false, isMobile = false } = {})
    hero sobe, como a câmera atravessando a superfície.
    ═══════════════════════════════════════════════════════════ */
 function initLoaderMerge(gsap) {
-  const loader = document.querySelector('.loader');
-  const brand  = document.querySelector('.loader-brand');
-  const ring   = document.querySelector('.loader-ring');
+  const loader = document.querySelector(".loader");
+  const brand = document.querySelector(".loader-brand");
+  const ring = document.querySelector(".loader-ring");
   if (!loader) return () => {};
 
   // Sinaliza que o GSAP assumiu o controle do loader,
@@ -98,8 +104,8 @@ function initLoaderMerge(gsap) {
   loader.dataset.state = "gsap";
 
   // Injeta a camada de água
-  const water = document.createElement('div');
-  water.setAttribute('aria-hidden', 'true');
+  const water = document.createElement("div");
+  water.setAttribute("aria-hidden", "true");
   water.style.cssText = `
     position: absolute;
     bottom: 0; left: 0; right: 0;
@@ -115,52 +121,64 @@ function initLoaderMerge(gsap) {
   loader.appendChild(water);
 
   // Garante que o brand e ring ficam acima da água
-  if (brand) brand.style.position = 'relative';
-  if (brand) brand.style.zIndex   = '2';
-  if (ring)  ring.style.zIndex    = '2';
+  if (brand) brand.style.position = "relative";
+  if (brand) brand.style.zIndex = "2";
+  if (ring) ring.style.zIndex = "2";
 
   // Timeline: espera 800ms → água sobe → PH afunda → loader sai
   const tl = gsap.timeline({ delay: 0.8 });
 
   // Água subindo — tensão superficial chegando
   tl.to(water, {
-    height: '100%',
+    height: "100%",
     duration: 0.85,
-    ease: 'power2.inOut',
+    ease: "power2.inOut",
   });
 
   // PH afunda junto com a maré
   if (brand) {
-    tl.to(brand, {
-      y: 12,
-      opacity: 0,
-      duration: 0.45,
-      ease: 'power2.in',
-    }, '-=0.55');
+    tl.to(
+      brand,
+      {
+        y: 12,
+        opacity: 0,
+        duration: 0.45,
+        ease: "power2.in",
+      },
+      "-=0.55",
+    );
   }
 
   // Anel some
   if (ring) {
-    tl.to(ring, {
-      scale: 0,
-      opacity: 0,
-      duration: 0.30,
-      ease: 'back.in(2)',
-    }, '<');
+    tl.to(
+      ring,
+      {
+        scale: 0,
+        opacity: 0,
+        duration: 0.3,
+        ease: "back.in(2)",
+      },
+      "<",
+    );
   }
 
   // Loader desce — câmera mergulhando
-  tl.to(loader, {
-    yPercent: 8,
-    opacity: 0,
-    duration: 0.55,
-    ease: 'power3.in',
-    onComplete: () => {
-      loader.style.display = 'none';
-      loader.style.pointerEvents = 'none';
-      loader.dataset.state = 'done';
+  tl.to(
+    loader,
+    {
+      yPercent: 8,
+      opacity: 0,
+      duration: 0.55,
+      ease: "power3.in",
+      onComplete: () => {
+        loader.style.display = "none";
+        loader.style.pointerEvents = "none";
+        loader.dataset.state = "done";
+      },
     },
-  }, '-=0.10');
+    "-=0.10",
+  );
 
   return () => {
     tl.kill();
@@ -176,75 +194,73 @@ function initLoaderMerge(gsap) {
    efeito de "revelar sem aparecer de repente".
    ═══════════════════════════════════════════════════════════ */
 function initHeroTextReveal(gsap) {
-  const h1 = document.querySelector('#hero-title');
+  const h1 = document.querySelector("#hero-title");
   if (!h1) return () => {};
 
   // Aguarda o loader terminar (~1.8s) para começar
-  const spans = h1.querySelectorAll('span');
+  const spans = h1.querySelectorAll("span");
   if (!spans.length) return () => {};
 
   // Wrap cada span em um container overflow:hidden
-  spans.forEach(span => {
-    const wrapper = document.createElement('span');
-    wrapper.style.cssText = 'display: inline-block; overflow: hidden; vertical-align: bottom;';
+  spans.forEach((span) => {
+    const wrapper = document.createElement("span");
+    wrapper.style.cssText =
+      "display: inline-block; overflow: hidden; vertical-align: bottom;";
     span.parentNode.insertBefore(wrapper, span);
     wrapper.appendChild(span);
-    gsap.set(span, { y: '105%', opacity: 0 });
+    gsap.set(span, { y: "105%", opacity: 0 });
   });
 
   const tl = gsap.timeline({ delay: 1.65 });
 
   tl.to(spans, {
-    y: '0%',
+    y: "0%",
     opacity: 1,
     duration: 0.75,
-    ease: 'power3.out',
+    ease: "power3.out",
     stagger: 0.09,
   });
 
   // Subtítulo e badges entram depois
-  const subtitle = document.querySelector('.text-mask');
-  const badges   = document.querySelector('.hero-badges');
-  const actions  = document.querySelector('.hero-actions');
-  const stats    = document.querySelector('.hero-stats');
+  const subtitle = document.querySelector(".text-mask");
+  const badges = document.querySelector(".hero-badges");
+  const actions = document.querySelector(".hero-actions");
+  const stats = document.querySelector(".hero-stats");
 
   if (subtitle) gsap.set(subtitle, { opacity: 0, y: 18 });
-  if (badges)   gsap.set(badges,   { opacity: 0, y: 14 });
-  if (actions)  gsap.set(actions,  { opacity: 0, y: 14 });
-  if (stats)    gsap.set(stats,    { opacity: 0, y: 14 });
+  if (badges) gsap.set(badges, { opacity: 0, y: 14 });
+  if (actions) gsap.set(actions, { opacity: 0, y: 14 });
+  if (stats) gsap.set(stats, { opacity: 0, y: 14 });
 
-  tl.to([subtitle, badges, actions, stats].filter(Boolean), {
-    opacity: 1,
-    y: 0,
-    duration: 0.60,
-    ease: 'power2.out',
-    stagger: 0.10,
-  }, '-=0.30');
+  tl.to(
+    [subtitle, badges, actions, stats].filter(Boolean),
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power2.out",
+      stagger: 0.1,
+    },
+    "-=0.30",
+  );
 
   // Imagem do hero entra com scale
-  const heroVisual = document.querySelector('.hero-visual');
+  const heroVisual = document.querySelector(".hero-visual");
   if (heroVisual) {
     gsap.set(heroVisual, { opacity: 0, scale: 0.96, x: 18 });
-    tl.to(heroVisual, {
-      opacity: 1,
-      scale: 1,
-      x: 0,
-      duration: 0.85,
-      ease: 'power2.out',
-    }, '-=0.70');
+    tl.to(
+      heroVisual,
+      {
+        opacity: 1,
+        scale: 1,
+        x: 0,
+        duration: 0.85,
+        ease: "power2.out",
+      },
+      "-=0.70",
+    );
   }
 
-  // Painéis flutuantes em stagger
-  const panels = document.querySelectorAll('.hero-panel');
-  if (panels.length) {
-    gsap.set(panels, { opacity: 0, y: 22, x: 10 });
-    tl.to(panels, {
-      opacity: 1, y: 0, x: 0,
-      duration: 0.60,
-      ease: 'power2.out',
-      stagger: 0.14,
-    }, '-=0.55');
-  }
 
   return () => tl.kill();
 }
@@ -258,68 +274,61 @@ function initHeroTextReveal(gsap) {
 function initHeroParallax(gsap, ScrollTrigger) {
   if (!ScrollTrigger) return () => {};
 
-  const hero = document.querySelector('.hero');
+  const hero = document.querySelector(".hero");
   if (!hero) return () => {};
 
   const triggers = [];
 
   // Imagem — camada mais próxima, move mais rápido
-  const heroImage = document.querySelector('.hero-image-wrap');
+  const heroImage = document.querySelector(".hero-image-wrap");
   if (heroImage) {
-    triggers.push(ScrollTrigger.create({
-      trigger: hero,
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1.2,
-      onUpdate: self => {
-        gsap.set(heroImage, { y: self.progress * 90 });
-      },
-    }));
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: hero,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.2,
+        onUpdate: (self) => {
+          gsap.set(heroImage, { y: self.progress * 90 });
+        },
+      }),
+    );
   }
 
   // Conteúdo de texto — camada intermediária
-  const heroContent = document.querySelector('.hero-content');
+  const heroContent = document.querySelector(".hero-content");
   if (heroContent) {
-    triggers.push(ScrollTrigger.create({
-      trigger: hero,
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1.5,
-      onUpdate: self => {
-        gsap.set(heroContent, { y: self.progress * 55 });
-      },
-    }));
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: hero,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5,
+        onUpdate: (self) => {
+          gsap.set(heroContent, { y: self.progress * 55 });
+        },
+      }),
+    );
   }
 
-  // Painéis flutuantes — camada do meio
-  const panels = document.querySelector('.floating-panels');
-  if (panels) {
-    triggers.push(ScrollTrigger.create({
-      trigger: hero,
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1.8,
-      onUpdate: self => {
-        gsap.set(panels, { y: self.progress * 35 });
-      },
-    }));
-  }
 
   // Scroll indicator some ao rolar
-  const scrollIndicator = document.querySelector('.scroll-indicator');
+  const scrollIndicator = document.querySelector(".scroll-indicator");
   if (scrollIndicator) {
-    triggers.push(ScrollTrigger.create({
-      trigger: hero,
-      start: 'top top',
-      end: '20% top',
-      scrub: true,
-      onUpdate: self => {
-        gsap.set(scrollIndicator, { opacity: 1 - self.progress * 2 });
-      },
-    }));
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: hero,
+        start: "top top",
+        end: "20% top",
+        scrub: true,
+        onUpdate: (self) => {
+          gsap.set(scrollIndicator, { opacity: 1 - self.progress * 2 });
+        },
+      }),
+    );
   }
 
-  return () => triggers.forEach(t => t.kill());
+  return () => triggers.forEach((t) => t.kill());
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -329,56 +338,65 @@ function initHeroParallax(gsap, ScrollTrigger) {
    numéricos aparecem com fade simples.
    ═══════════════════════════════════════════════════════════ */
 function initStatsCounter(gsap, ScrollTrigger) {
-  const statsContainer = document.querySelector('.hero-stats');
+  const statsContainer = document.querySelector(".hero-stats");
   if (!statsContainer || !ScrollTrigger) return () => {};
 
-  const stats = statsContainer.querySelectorAll('.stat');
+  const stats = statsContainer.querySelectorAll(".stat");
   const triggers = [];
 
-  stats.forEach(stat => {
-    const valueEl = stat.querySelector('.stat__value');
+  stats.forEach((stat) => {
+    const valueEl = stat.querySelector(".stat__value");
     if (!valueEl) return;
 
-    const raw     = valueEl.textContent.trim();
-    const numeric = parseFloat(raw.replace(/[^0-9.]/g, ''));
-    const suffix  = raw.replace(/[0-9.]/g, '').trim(); // ex: "+" em "4+"
-    const isYear  = numeric >= 2000 && numeric <= 2100;
+    const raw = valueEl.textContent.trim();
+    const numeric = parseFloat(raw.replace(/[^0-9.]/g, ""));
+    const suffix = raw.replace(/[0-9.]/g, "").trim(); // ex: "+" em "4+"
+    const isYear = numeric >= 2000 && numeric <= 2100;
 
     if (!isNaN(numeric)) {
       gsap.set(valueEl, { opacity: 0 });
 
-      triggers.push(ScrollTrigger.create({
-        trigger: stat,
-        start: 'top 88%',
-        once: true,
-        onEnter: () => {
-          const obj = { val: isYear ? numeric - 4 : 0 };
-          gsap.set(valueEl, { opacity: 1 });
-          gsap.to(obj, {
-            val: numeric,
-            duration: isYear ? 1.6 : 1.2,
-            ease: 'power2.out',
-            onUpdate() {
-              valueEl.textContent = Math.round(obj.val) + suffix;
-            },
-          });
-        },
-      }));
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: stat,
+          start: "top 88%",
+          once: true,
+          onEnter: () => {
+            const obj = { val: isYear ? numeric - 4 : 0 };
+            gsap.set(valueEl, { opacity: 1 });
+            gsap.to(obj, {
+              val: numeric,
+              duration: isYear ? 1.6 : 1.2,
+              ease: "power2.out",
+              onUpdate() {
+                valueEl.textContent = Math.round(obj.val) + suffix;
+              },
+            });
+          },
+        }),
+      );
     } else {
       // Texto não numérico — fade in
       gsap.set(valueEl, { opacity: 0, y: 8 });
-      triggers.push(ScrollTrigger.create({
-        trigger: stat,
-        start: 'top 88%',
-        once: true,
-        onEnter: () => {
-          gsap.to(valueEl, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
-        },
-      }));
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: stat,
+          start: "top 88%",
+          once: true,
+          onEnter: () => {
+            gsap.to(valueEl, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power2.out",
+            });
+          },
+        }),
+      );
     }
   });
 
-  return () => triggers.forEach(t => t.kill());
+  return () => triggers.forEach((t) => t.kill());
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -388,40 +406,44 @@ function initStatsCounter(gsap, ScrollTrigger) {
    quando ele está perto. Voltam com spring elastic.
    ═══════════════════════════════════════════════════════════ */
 function initMagneticButtons(gsap) {
-  const hasHover = window.matchMedia('(hover: hover)').matches;
+  const hasHover = window.matchMedia("(hover: hover)").matches;
   if (!hasHover) return () => {};
 
-  const buttons = document.querySelectorAll('.btn--depth, .btn--surface, .btn--bio, .btn--ghost');
+  const buttons = document.querySelectorAll(
+    ".btn--depth, .btn--surface, .btn--bio, .btn--ghost, .btn--hero-primary, .btn--hero-secondary",
+  );
   const handlers = [];
 
-  buttons.forEach(btn => {
-    const onMove = e => {
-      const r  = btn.getBoundingClientRect();
-      const cx = r.left + r.width  / 2;
-      const cy = r.top  + r.height / 2;
+  buttons.forEach((btn) => {
+    const onMove = (e) => {
+      const r = btn.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
       const dx = (e.clientX - cx) * 0.28;
       const dy = (e.clientY - cy) * 0.28;
 
       gsap.to(btn, {
-        x: dx, y: dy,
+        x: dx,
+        y: dy,
         duration: 0.35,
-        ease: 'power2.out',
+        ease: "power2.out",
       });
     };
 
     const onLeave = () => {
       gsap.to(btn, {
-        x: 0, y: 0,
+        x: 0,
+        y: 0,
         duration: 0.65,
-        ease: 'elastic.out(1, 0.45)',
+        ease: "elastic.out(1, 0.45)",
       });
     };
 
     // Ripple no click
-    const onClick = e => {
-      const r      = btn.getBoundingClientRect();
-      const ripple = document.createElement('span');
-      ripple.setAttribute('aria-hidden', 'true');
+    const onClick = (e) => {
+      const r = btn.getBoundingClientRect();
+      const ripple = document.createElement("span");
+      ripple.setAttribute("aria-hidden", "true");
       ripple.style.cssText = `
         position: absolute;
         left: ${e.clientX - r.left}px;
@@ -439,23 +461,23 @@ function initMagneticButtons(gsap) {
         height: Math.max(r.width, r.height) * 2.5,
         opacity: 0,
         duration: 0.65,
-        ease: 'power2.out',
+        ease: "power2.out",
         onComplete: () => ripple.remove(),
       });
     };
 
-    btn.addEventListener('mousemove',  onMove);
-    btn.addEventListener('mouseleave', onLeave);
-    btn.addEventListener('click',      onClick);
+    btn.addEventListener("mousemove", onMove);
+    btn.addEventListener("mouseleave", onLeave);
+    btn.addEventListener("click", onClick);
 
     handlers.push({ btn, onMove, onLeave, onClick });
   });
 
   return () => {
     handlers.forEach(({ btn, onMove, onLeave, onClick }) => {
-      btn.removeEventListener('mousemove',  onMove);
-      btn.removeEventListener('mouseleave', onLeave);
-      btn.removeEventListener('click',      onClick);
+      btn.removeEventListener("mousemove", onMove);
+      btn.removeEventListener("mouseleave", onLeave);
+      btn.removeEventListener("click", onClick);
       gsap.set(btn, { x: 0, y: 0 });
     });
   };
@@ -473,81 +495,91 @@ function initStaggerCards(gsap, ScrollTrigger) {
   const triggers = [];
 
   // ── Cards do portfólio ────────────────────────────────
-  const portfolioGrid = document.querySelector('.portfolio-grid');
+  const portfolioGrid = document.querySelector(".portfolio-grid");
   if (portfolioGrid) {
-    const cards = portfolioGrid.querySelectorAll('.project-card');
+    const cards = portfolioGrid.querySelectorAll(".project-card");
     gsap.set(cards, { opacity: 0, y: 40, scale: 0.97 });
 
-    triggers.push(ScrollTrigger.create({
-      trigger: portfolioGrid,
-      start: 'top 82%',
-      once: true,
-      onEnter: () => {
-        gsap.to(cards, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.65,
-          ease: 'power3.out',
-          stagger: {
-            each: 0.12,
-            from: 'start',
-          },
-        });
-      },
-    }));
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: portfolioGrid,
+        start: "top 82%",
+        once: true,
+        onEnter: () => {
+          gsap.to(cards, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.65,
+            ease: "power3.out",
+            stagger: {
+              each: 0.12,
+              from: "start",
+            },
+          });
+        },
+      }),
+    );
   }
 
   // ── Steps do roadmap ─────────────────────────────────
-  const roadmapTimeline = document.querySelector('.stack-roadmap__timeline');
+  const roadmapTimeline = document.querySelector(".stack-roadmap__timeline");
   if (roadmapTimeline) {
-    const steps = roadmapTimeline.querySelectorAll('.stack-roadmap__step');
+    const steps = roadmapTimeline.querySelectorAll(".stack-roadmap__step");
 
     steps.forEach((step, i) => {
       // Alterna: par entra da esquerda, ímpar da direita
       const fromX = i % 2 === 0 ? -28 : 28;
       gsap.set(step, { opacity: 0, x: fromX, y: 16 });
 
-      triggers.push(ScrollTrigger.create({
-        trigger: step,
-        start: 'top 86%',
-        once: true,
-        onEnter: () => {
-          gsap.to(step, {
-            opacity: 1, x: 0, y: 0,
-            duration: 0.60,
-            ease: 'power2.out',
-          });
-        },
-      }));
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: step,
+          start: "top 86%",
+          once: true,
+          onEnter: () => {
+            gsap.to(step, {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              duration: 0.6,
+              ease: "power2.out",
+            });
+          },
+        }),
+      );
     });
   }
 
   // ── Tech items do about ───────────────────────────────
-  const techGrid = document.querySelector('.tech-grid');
+  const techGrid = document.querySelector(".tech-grid");
   if (techGrid) {
-    const items = techGrid.querySelectorAll('.tech-item');
+    const items = techGrid.querySelectorAll(".tech-item");
     gsap.set(items, { opacity: 0, scale: 0.88, y: 14 });
 
-    triggers.push(ScrollTrigger.create({
-      trigger: techGrid,
-      start: 'top 85%',
-      once: true,
-      onEnter: () => {
-        gsap.to(items, {
-          opacity: 1, scale: 1, y: 0,
-          duration: 0.45,
-          ease: 'back.out(1.4)',
-          stagger: {
-            each: 0.055,
-            from: 'start',
-          },
-        });
-      },
-    }));
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: techGrid,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          gsap.to(items, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.45,
+            ease: "back.out(1.4)",
+            stagger: {
+              each: 0.055,
+              from: "start",
+            },
+          });
+        },
+      }),
+    );
   }
 
-  return () => triggers.forEach(t => t.kill());
+  return () => triggers.forEach((t) => t.kill());
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -568,157 +600,235 @@ function initScrollReveal(gsap, ScrollTrigger) {
   // ── Helper: revela header de seção ───────────────────
   const revealSectionHeader = (header, config = {}) => {
     if (!header) return;
-    const eyebrow = header.querySelector('.section-eyebrow, .stack-roadmap__eyebrow, .contact-eyebrow, .portfolio-header .section-eyebrow');
-    const heading = header.querySelector('h2');
-    const sub     = header.querySelector('p:not(.section-eyebrow)');
+    const eyebrow = header.querySelector(
+      ".section-eyebrow, .stack-roadmap__eyebrow, .contact-eyebrow, .portfolio-header .section-eyebrow",
+    );
+    const heading = header.querySelector("h2");
+    const sub = header.querySelector("p:not(.section-eyebrow)");
 
     if (eyebrow) gsap.set(eyebrow, { opacity: 0, y: 12 });
     if (heading) gsap.set(heading, { opacity: 0, y: 20 });
-    if (sub)     gsap.set(sub,     { opacity: 0, y: 16 });
+    if (sub) gsap.set(sub, { opacity: 0, y: 16 });
 
-    triggers.push(ScrollTrigger.create({
-      trigger: header,
-      start: 'top 85%',
-      once: true,
-      onEnter: () => {
-        const tl = gsap.timeline();
-        if (eyebrow) tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.50, ease: 'power2.out' });
-        if (heading) tl.to(heading, { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, '-=0.25');
-        if (sub)     tl.to(sub,     { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.35');
-      },
-    }));
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: header,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          if (eyebrow)
+            tl.to(eyebrow, {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              ease: "power2.out",
+            });
+          if (heading)
+            tl.to(
+              heading,
+              { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" },
+              "-=0.25",
+            );
+          if (sub)
+            tl.to(
+              sub,
+              { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" },
+              "-=0.35",
+            );
+        },
+      }),
+    );
   };
 
   // ── ABOUT ─────────────────────────────────────────────
-  const about = document.querySelector('.about');
+  const about = document.querySelector(".about");
   if (about) {
-    revealSectionHeader(about.querySelector('.about-header'));
+    revealSectionHeader(about.querySelector(".about-header"));
 
     // Texto e side entram em paralelo
-    const aboutText = about.querySelector('.about-text');
-    const aboutSide = about.querySelector('.about-skills-side');
+    const aboutText = about.querySelector(".about-text");
+    const aboutSide = about.querySelector(".about-skills-side");
 
     if (aboutText) {
       gsap.set(aboutText, { opacity: 0, y: 32 });
-      triggers.push(ScrollTrigger.create({
-        trigger: aboutText,
-        start: 'top 84%',
-        once: true,
-        onEnter: () => gsap.to(aboutText, { opacity: 1, y: 0, duration: 0.70, ease: 'power2.out' }),
-      }));
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: aboutText,
+          start: "top 84%",
+          once: true,
+          onEnter: () =>
+            gsap.to(aboutText, {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power2.out",
+            }),
+        }),
+      );
     }
 
     if (aboutSide) {
       gsap.set(aboutSide, { opacity: 0, y: 32 });
-      triggers.push(ScrollTrigger.create({
-        trigger: aboutSide,
-        start: 'top 84%',
-        once: true,
-        onEnter: () => gsap.to(aboutSide, { opacity: 1, y: 0, duration: 0.70, ease: 'power2.out', delay: 0.10 }),
-      }));
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: aboutSide,
+          start: "top 84%",
+          once: true,
+          onEnter: () =>
+            gsap.to(aboutSide, {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power2.out",
+              delay: 0.1,
+            }),
+        }),
+      );
     }
 
     // Value items com stagger
-    const valueItems = about.querySelectorAll('.about-value-item');
+    const valueItems = about.querySelectorAll(".about-value-item");
     if (valueItems.length) {
       gsap.set(valueItems, { opacity: 0, x: -16 });
-      triggers.push(ScrollTrigger.create({
-        trigger: valueItems[0],
-        start: 'top 88%',
-        once: true,
-        onEnter: () => gsap.to(valueItems, {
-          opacity: 1, x: 0, duration: 0.45, ease: 'power2.out', stagger: 0.08,
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: valueItems[0],
+          start: "top 88%",
+          once: true,
+          onEnter: () =>
+            gsap.to(valueItems, {
+              opacity: 1,
+              x: 0,
+              duration: 0.45,
+              ease: "power2.out",
+              stagger: 0.08,
+            }),
         }),
-      }));
+      );
     }
   }
 
   // ── ROADMAP ───────────────────────────────────────────
-  const roadmap = document.querySelector('.stack-roadmap');
+  const roadmap = document.querySelector(".stack-roadmap");
   if (roadmap) {
-    revealSectionHeader(roadmap.querySelector('.stack-roadmap__heading'));
+    revealSectionHeader(roadmap.querySelector(".stack-roadmap__heading"));
 
     // Progress bar anima ao entrar
-    const progressFill = roadmap.querySelector('.stack-roadmap__progress-fill');
+    const progressFill = roadmap.querySelector(".stack-roadmap__progress-fill");
     if (progressFill) {
-      const targetWidth = progressFill.style.width || progressFill.getAttribute('style')?.match(/width:\s*([^;]+)/)?.[1] || '0%';
-      gsap.set(progressFill, { scaleX: 0, transformOrigin: 'left' });
-      triggers.push(ScrollTrigger.create({
-        trigger: progressFill,
-        start: 'top 88%',
-        once: true,
-        onEnter: () => gsap.to(progressFill, {
-          scaleX: 1, duration: 1.2, ease: 'power2.out', delay: 0.3,
+      const targetWidth =
+        progressFill.style.width ||
+        progressFill.getAttribute("style")?.match(/width:\s*([^;]+)/)?.[1] ||
+        "0%";
+      gsap.set(progressFill, { scaleX: 0, transformOrigin: "left" });
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: progressFill,
+          start: "top 88%",
+          once: true,
+          onEnter: () =>
+            gsap.to(progressFill, {
+              scaleX: 1,
+              duration: 1.2,
+              ease: "power2.out",
+              delay: 0.3,
+            }),
         }),
-      }));
+      );
     }
 
     // Highlights
-    const highlights = roadmap.querySelectorAll('.stack-roadmap__highlight');
+    const highlights = roadmap.querySelectorAll(".stack-roadmap__highlight");
     if (highlights.length) {
       gsap.set(highlights, { opacity: 0, y: 20 });
-      triggers.push(ScrollTrigger.create({
-        trigger: highlights[0],
-        start: 'top 86%',
-        once: true,
-        onEnter: () => gsap.to(highlights, {
-          opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.10,
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: highlights[0],
+          start: "top 86%",
+          once: true,
+          onEnter: () =>
+            gsap.to(highlights, {
+              opacity: 1,
+              y: 0,
+              duration: 0.55,
+              ease: "power2.out",
+              stagger: 0.1,
+            }),
         }),
-      }));
+      );
     }
   }
 
   // ── PORTFOLIO ─────────────────────────────────────────
-  const portfolio = document.querySelector('.portfolio');
+  const portfolio = document.querySelector(".portfolio");
   if (portfolio) {
-    revealSectionHeader(portfolio.querySelector('.portfolio-header'));
+    revealSectionHeader(portfolio.querySelector(".portfolio-header"));
   }
 
   // ── CONTACT ───────────────────────────────────────────
-  const contact = document.querySelector('.contact');
+  const contact = document.querySelector(".contact");
   if (contact) {
-    revealSectionHeader(contact.querySelector('.contact-header'));
+    revealSectionHeader(contact.querySelector(".contact-header"));
 
     // Formulário
-    const form = contact.querySelector('.contact-form');
+    const form = contact.querySelector(".contact-form");
     if (form) {
       gsap.set(form, { opacity: 0, y: 28 });
-      triggers.push(ScrollTrigger.create({
-        trigger: form,
-        start: 'top 86%',
-        once: true,
-        onEnter: () => gsap.to(form, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }),
-      }));
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: form,
+          start: "top 86%",
+          once: true,
+          onEnter: () =>
+            gsap.to(form, {
+              opacity: 1,
+              y: 0,
+              duration: 0.65,
+              ease: "power2.out",
+            }),
+        }),
+      );
     }
 
     // Chips de contato em stagger
-    const chips = contact.querySelectorAll('.contact-chip');
+    const chips = contact.querySelectorAll(".contact-chip");
     if (chips.length) {
       gsap.set(chips, { opacity: 0, x: -18 });
-      triggers.push(ScrollTrigger.create({
-        trigger: chips[0],
-        start: 'top 88%',
-        once: true,
-        onEnter: () => gsap.to(chips, {
-          opacity: 1, x: 0, duration: 0.50, ease: 'power2.out', stagger: 0.09,
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: chips[0],
+          start: "top 88%",
+          once: true,
+          onEnter: () =>
+            gsap.to(chips, {
+              opacity: 1,
+              x: 0,
+              duration: 0.5,
+              ease: "power2.out",
+              stagger: 0.09,
+            }),
         }),
-      }));
+      );
     }
   }
 
   // ── Elementos genéricos com .js-reveal ───────────────
   // Para qualquer elemento que queira revelar via scroll
   // sem configuração específica — basta adicionar .js-reveal no HTML
-  const revealEls = document.querySelectorAll('.js-reveal');
-  revealEls.forEach(el => {
+  const revealEls = document.querySelectorAll(".js-reveal");
+  revealEls.forEach((el) => {
     gsap.set(el, { opacity: 0, y: 22 });
-    triggers.push(ScrollTrigger.create({
-      trigger: el,
-      start: 'top 88%',
-      once: true,
-      onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.60, ease: 'power2.out' }),
-    }));
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () =>
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }),
+      }),
+    );
   });
 
-  return () => triggers.forEach(t => t.kill());
+  return () => triggers.forEach((t) => t.kill());
 }

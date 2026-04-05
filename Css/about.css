@@ -455,7 +455,27 @@
   z-index: 2;
 }
 
-.section-wave svg { display: block; width: 100%; }
+.section-wave svg {
+  display: block;
+  width: 100%;
+  height: 80px;
+}
+
+.section-wave--hero-about {
+  background: linear-gradient(180deg, #0e6d9e 0%, #c8eefa 100%);
+}
+
+.section-wave--about-roadmap {
+  background: linear-gradient(180deg, #1a7ab8 0%, #1a5f85 100%);
+}
+
+.section-wave--roadmap-portfolio {
+  background: linear-gradient(180deg, #062540 0%, #1a5a8a 100%);
+}
+
+.section-wave--portfolio-contact {
+  background: linear-gradient(180deg, #041c3a 0%, #082d55 100%);
+}
  
 /* =========================
    FAB — Voltar ao topo

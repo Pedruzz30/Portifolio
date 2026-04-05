@@ -4,11 +4,13 @@
 .hero {
   min-height: 100vh;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 120px 8% 80px;
+  justify-content: space-between;
+  padding: clamp(100px, 12vh, 160px) clamp(1.5rem, 6vw, 5rem) clamp(60px, 10vh, 100px);
   position: relative;
   overflow: hidden;
-  gap: 3rem;
+  gap: clamp(2rem, 5vw, 4rem);
   color: var(--pure-white);
   isolation: isolate;
 
@@ -22,8 +24,7 @@
       #4dc4e8 38%,
       #2aaedc 58%,
       #1a8fbf 78%,
-      #0e6d9e 100%
-    );
+      #0e6d9e 100%);
 }
 
 /* =========================
@@ -44,39 +45,56 @@
 .hero::before {
   content: "";
   position: absolute;
+  inset: auto;
   top: -60px;
   left: 50%;
+  right: auto;
+  bottom: auto;
   transform: translateX(-50%);
   width: 140%;
   height: 65%;
   pointer-events: none;
   z-index: 1;
+  opacity: 1;
+  filter: none;
   mix-blend-mode: screen;
   background: conic-gradient(from 260deg at 50% 0%,
-    transparent                    0deg,
-    rgba(255,255,255,0.07)          4deg,
-    transparent                    8deg,
-    rgba(255,255,255,0.05)         14deg,
-    transparent                   18deg,
-    rgba(255,255,255,0.09)         24deg,
-    transparent                   28deg,
-    rgba(255,255,255,0.04)         33deg,
-    transparent                   37deg,
-    rgba(255,255,255,0.07)         42deg,
-    transparent                   46deg,
-    rgba(255,255,255,0.06)         52deg,
-    transparent                   56deg,
-    rgba(255,255,255,0.08)         60deg,
-    transparent                   64deg,
-    transparent                  180deg
-  );
+      transparent 0deg,
+      rgba(255, 255, 255, 0.07) 4deg,
+      transparent 8deg,
+      rgba(255, 255, 255, 0.05) 14deg,
+      transparent 18deg,
+      rgba(255, 255, 255, 0.09) 24deg,
+      transparent 28deg,
+      rgba(255, 255, 255, 0.04) 33deg,
+      transparent 37deg,
+      rgba(255, 255, 255, 0.07) 42deg,
+      transparent 46deg,
+      rgba(255, 255, 255, 0.06) 52deg,
+      transparent 56deg,
+      rgba(255, 255, 255, 0.08) 60deg,
+      transparent 64deg,
+      transparent 180deg);
   animation: raysShift calc(var(--wave-slow, 12s) * 0.75) ease-in-out infinite;
 }
 
 @keyframes raysShift {
-  0%, 100% { transform: translateX(-50%) rotate(0deg)   scaleX(1);    opacity: 0.7; }
-  40%       { transform: translateX(-50%) rotate(2deg)   scaleX(1.04); opacity: 1;   }
-  70%       { transform: translateX(-50%) rotate(-1deg)  scaleX(0.97); opacity: 0.8; }
+
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(0deg) scaleX(1);
+    opacity: 0.15;
+  }
+
+  40% {
+    transform: translateX(-50%) rotate(2deg) scaleX(1.04);
+    opacity: 0.25;
+  }
+
+  70% {
+    transform: translateX(-50%) rotate(-1deg) scaleX(0.97);
+    opacity: 0.20;
+  }
 }
 
 /* Camada 2: Caustics + gradiente de profundidade.
@@ -88,29 +106,43 @@
   inset: 0;
   pointer-events: none;
   z-index: 2;
+  filter: none;
+  mix-blend-mode: normal;
   /* Caustics */
   background:
-    radial-gradient(ellipse 18% 8%  at 22% 28%, rgba(255,255,255,0.55) 0%, transparent 100%),
-    radial-gradient(ellipse 12% 5%  at 55% 18%, rgba(255,255,255,0.45) 0%, transparent 100%),
-    radial-gradient(ellipse 20% 9%  at 75% 35%, rgba(255,255,255,0.50) 0%, transparent 100%),
-    radial-gradient(ellipse 10% 4%  at 38% 48%, rgba(255,255,255,0.35) 0%, transparent 100%),
-    radial-gradient(ellipse 15% 6%  at 88% 22%, rgba(255,255,255,0.45) 0%, transparent 100%),
-    radial-gradient(ellipse  8% 3%  at 12% 55%, rgba(255,255,255,0.30) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 8% at 22% 28%, rgba(255, 255, 255, 0.55) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 5% at 55% 18%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
+    radial-gradient(ellipse 20% 9% at 75% 35%, rgba(255, 255, 255, 0.50) 0%, transparent 100%),
+    radial-gradient(ellipse 10% 4% at 38% 48%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 15% 6% at 88% 22%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
+    radial-gradient(ellipse 8% 3% at 12% 55%, rgba(255, 255, 255, 0.30) 0%, transparent 100%),
     /* Gradiente de profundidade — escurece embaixo */
     linear-gradient(180deg,
-      transparent                          0%,
-      transparent                         40%,
-      rgba(10, 50, 90, 0.20)              70%,
-      rgba(8,  35, 65, 0.45)             100%
-    );
-  opacity: 0.22;
+      transparent 0%,
+      transparent 40%,
+      rgba(10, 50, 90, 0.20) 70%,
+      rgba(8, 35, 65, 0.45) 100%);
+  opacity: 0.06;
   animation: causticsFloat calc(var(--wave-medium, 8s) * 0.88) ease-in-out infinite;
 }
 
 @keyframes causticsFloat {
-  0%, 100% { transform: translate(0, 0) scale(1);           opacity: 0.22; }
-  30%       { transform: translate(1.5%, 0.8%) scale(1.05); opacity: 0.32; }
-  65%       { transform: translate(-1%, -0.5%) scale(0.96); opacity: 0.16; }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.06;
+  }
+
+  30% {
+    transform: translate(1.5%, 0.8%) scale(1.05);
+    opacity: 0.10;
+  }
+
+  65% {
+    transform: translate(-1%, -0.5%) scale(0.96);
+    opacity: 0.04;
+  }
 }
 
 /* Canvas de partículas bioluminescentes (injetado pelo heroParticles.js) */
@@ -132,16 +164,22 @@
   pointer-events: none;
   z-index: 4;
   background: linear-gradient(180deg,
-    rgba(255,255,255,0.38) 0%,
-    rgba(255,255,255,0.12) 45%,
-    transparent            100%
-  );
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.12) 45%,
+      transparent 100%);
   animation: glareBreath calc(var(--wave-medium, 8s) * 0.62) ease-in-out infinite;
 }
 
 @keyframes glareBreath {
-  0%, 100% { opacity: 0.7; }
-  50%       { opacity: 1;   }
+
+  0%,
+  100% {
+    opacity: 0.08;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
 }
 
 /* Ondas da superfície — linhas SVG no topo do hero.
@@ -163,15 +201,24 @@
 }
 
 @keyframes wavesMove {
-  0%, 100% { transform: translateX(0); }
-  50%       { transform: translateX(-3%); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-3%);
+  }
 }
 
 /* =========================
    HERO CONTENT
    ========================= */
 .hero-content {
-  width: 50%;
+  flex: 1 1 50%;
+  width: auto;
+  min-width: min(100%, 480px);
   z-index: 10;
   transform: translateY(20px);
   opacity: 0;
@@ -190,8 +237,10 @@
 
 .hero-visual {
   position: relative;
-  width: 38%;
-  min-width: 320px;
+  flex: 1 1 38%;
+  width: auto;
+  min-width: min(100%, 320px);
+  max-width: min(100%, 460px);
   height: clamp(340px, 65vh, 680px);
   display: grid;
   place-items: center;
@@ -222,20 +271,6 @@
   transition: filter 0.4s ease;
 }
 
-.floating-panels {
-  position: absolute;
-  bottom: 2rem;
-  right: clamp(1.2rem, 3vw, 2rem);
-  display: grid;
-  gap: 0.8rem;
-  width: min(360px, 42vw);
-  z-index: 3;
-}
-
-/* Flutuação independente — objetos em suspensão na coluna d'água */
-.hero-panel:nth-child(1) { animation: panelDrift1 10s ease-in-out infinite; }
-.hero-panel:nth-child(2) { animation: panelDrift2 13s ease-in-out infinite; animation-delay: -4s; }
-
 /* Container de bolhas */
 .hero-bubbles {
   position: absolute;
@@ -249,70 +284,42 @@
   position: absolute;
   bottom: -20px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 30%,
-    rgba(255, 255, 255, 0.85),
-    rgba(79, 191, 255, 0.25)
-  );
+  background: radial-gradient(circle at 35% 30%,
+      rgba(255, 255, 255, 0.85),
+      rgba(79, 191, 255, 0.25));
   border: 1px solid rgba(255, 255, 255, 0.35);
   animation: heroBubbleRise linear infinite;
   will-change: transform, opacity;
 }
 
-.hero-panel {
-  padding: 1rem 1.1rem;
-  border-radius: 1rem;
-  background: color-mix(in srgb, var(--pure-white) 10%, rgba(255,255,255,0.08));
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
-  backdrop-filter: blur(14px) saturate(1.1);
-  box-shadow: var(--shadow-sm);
-}
+@keyframes heroBubbleRise {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
 
-.hero-panel--border { position: relative; }
+  10% {
+    opacity: 1;
+    transform: translate(calc(var(--bubble-drift) * 0.2), -10vh) scale(1.1);
+  }
 
-.hero-panel--border::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: var(--gradient-pop);
-  pointer-events: none;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-}
+  50% {
+    transform: translate(var(--bubble-drift), -50vh) scale(1.2);
+  }
 
-.hero-panel__eyebrow {
-  margin: 0 0 .4rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: color-mix(in srgb, var(--surface-soft) 88%, rgba(255,255,255,0.7));
-}
-
-.hero-panel__title {
-  margin: 0 0 .3rem;
-  font-size: 1.05rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.hero-panel__text {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: color-mix(in srgb, var(--surface-soft) 85%, rgba(255,255,255,0.65));
+  100% {
+    transform: translate(var(--bubble-drift-2), -110vh) scale(1);
+    opacity: 0;
+  }
 }
 
 .text-reveal {
-  font-size: 5rem;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: 1rem;
   overflow: hidden;
+  text-shadow: 0 16px 48px rgba(0, 15, 35, 0.7);
 }
 
 .text-reveal span {
@@ -329,30 +336,44 @@
   transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.hero-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.hero-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 0.85rem;
-  border-radius: 0.9rem;
-  font-weight: 700;
-  color: var(--navy-blue);
-  background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--midnight-blue) 18%, transparent);
-}
-
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btn--hero-primary {
+  background-color: var(--mint);
+  color: var(--navy-blue);
+  padding: 0.8rem 1.8rem;
+  font-weight: 800;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--mint) 40%, transparent);
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.btn--hero-primary:hover {
+  background-color: color-mix(in srgb, var(--mint) 85%, #fff);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--mint) 60%, transparent);
+}
+
+.btn--hero-secondary {
+  background-color: transparent;
+  color: var(--pure-white);
+  padding: 0.8rem 1.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn--hero-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
 }
 
 .hero-stats {
@@ -365,7 +386,7 @@
 .stat {
   padding: 0.95rem 1rem;
   border-radius: 1rem;
-  background: color-mix(in srgb, var(--pure-white) 12%, rgba(255,255,255,0.06));
+  background: color-mix(in srgb, var(--pure-white) 12%, rgba(255, 255, 255, 0.06));
   border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow-sm);
@@ -380,7 +401,7 @@
 
 .stat__label {
   margin: 0.2rem 0 0;
-  color: color-mix(in srgb, var(--surface-soft) 90%, rgba(255,255,255,0.76));
+  color: color-mix(in srgb, var(--surface-soft) 90%, rgba(255, 255, 255, 0.76));
 }
 
 /* =========================
@@ -394,189 +415,78 @@
   place-items: center;
   isolation: isolate;
   overflow: hidden;
-  border-radius: var(--blob-radius);
+  border-radius: var(--blob-radius, 46% 54% 52% 48% / 55% 48% 52% 45%);
   animation:
-    blob     calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
-    wrapGlow calc(var(--wave-slow) * 0.85) ease-in-out                  infinite;
+    blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
+    wrapGlow calc(var(--wave-slow) * 0.85) ease-in-out infinite;
   will-change: border-radius, box-shadow;
-  transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
-  border: 4px solid color-mix(in srgb, var(--accent) 26%, rgba(255,255,255,0.35));
-  background: color-mix(in srgb, var(--deep-blue) 18%, rgba(255,255,255,0.18));
+  border: 4px solid color-mix(in srgb, var(--accent) 26%, rgba(255, 255, 255, 0.35));
+  background: color-mix(in srgb, var(--deep-blue) 18%, rgba(255, 255, 255, 0.18));
   box-shadow:
-    0 0 0 1px  color-mix(in srgb, var(--mint)          22%, transparent),
-    0 0 36px   color-mix(in srgb, var(--accent)         28%, transparent),
-    0 0 80px   color-mix(in srgb, var(--deep-blue)      20%, transparent),
-    0 24px 64px color-mix(in srgb, var(--midnight-blue) 42%, transparent);
-}
-
-.hero-image-wrap::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  border-radius: inherit;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 110% 22% at 50% 0%,   color-mix(in srgb, var(--mint)      28%, transparent), transparent 100%),
-    radial-gradient(ellipse  22% 110% at 100% 50%, color-mix(in srgb, var(--accent)    18%, transparent), transparent 100%),
-    radial-gradient(ellipse  22% 110% at 0% 50%,   color-mix(in srgb, var(--violet)    14%, transparent), transparent 100%),
-    radial-gradient(ellipse 110% 22% at 50% 100%,  color-mix(in srgb, var(--deep-blue) 20%, transparent), transparent 100%);
-  mix-blend-mode: screen;
-  animation: seaGlow calc(var(--wave-slow) * 1.1) ease-in-out infinite;
-  animation-delay: -7s;
-  opacity: 0.62;
-  will-change: opacity;
-}
-
-.hero-image-wrap::after {
-  content: "";
-  position: absolute;
-  inset: -10% -20%;
-  z-index: 5;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(
-    -54deg,
-    transparent                                            0%,
-    transparent                                           24%,
-    color-mix(in srgb, var(--sky-blue) 14%, transparent)  30%,
-    color-mix(in srgb, var(--mint)     10%, transparent)  34%,
-    transparent                                           40%,
-    transparent                                           62%,
-    color-mix(in srgb, var(--accent)   10%, transparent)  68%,
-    transparent                                           74%
-  );
-  mix-blend-mode: screen;
-  animation: tideFlow calc(var(--wave-slow) * 1.45) ease-in-out infinite;
-  animation-delay: -4s;
-  opacity: 0.48;
-  will-change: transform;
+    0 8px 32px color-mix(in srgb, var(--midnight-blue) 40%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--mint) 20%, transparent);
 }
 
 /* =========================
-   HERO DEPTH SYSTEM (blob + caustics)
+   HERO DEPTH SYSTEM (subtle glow)
    ========================= */
 .hero-visual::before {
   content: "";
   position: absolute;
-  inset: -20%;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 72% 82% at 50% 48%,
-      color-mix(in srgb, var(--accent)    24%, transparent) 0%,
-      color-mix(in srgb, var(--mint)      14%, transparent) 38%,
-      transparent 68%
-    ),
-    radial-gradient(ellipse 48% 58% at 50% 74%,
-      color-mix(in srgb, var(--deep-blue) 30%, transparent) 0%,
-      transparent 58%
-    );
-  filter: blur(24px);
-  animation: seaGlow calc(var(--wave-slow) * 0.85) ease-in-out infinite;
-  will-change: transform, opacity;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--mint) 12%, transparent) 0%, transparent 65%);
+  filter: blur(32px);
 }
 
-.hero-visual::after {
-  content: "";
-  position: absolute;
-  inset: -2%;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    transparent                                              0deg,
-    color-mix(in srgb, var(--mint)      55%, transparent)  48deg,
-    color-mix(in srgb, var(--accent)    65%, transparent)  80deg,
-    color-mix(in srgb, var(--sky-blue)  40%, transparent) 130deg,
-    transparent                                            200deg,
-    color-mix(in srgb, var(--deep-blue) 35%, transparent) 300deg,
-    transparent                                            360deg
-  );
-  filter: blur(10px);
-  animation: spin 16s linear infinite;
-  opacity: 0.45;
-  will-change: transform;
-}
 
-.hero-image::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 40% at 25% 15%, color-mix(in srgb, var(--mint)      30%, transparent) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 55% at 75% 65%, color-mix(in srgb, var(--accent)    24%, transparent) 0%, transparent 65%),
-    radial-gradient(ellipse 35% 30% at 55% 42%, color-mix(in srgb, var(--sky-blue)  18%, transparent) 0%, transparent 100%);
-  mix-blend-mode: soft-light;
-  animation: waterShimmer calc(var(--wave-medium) * 1.15) ease-in-out infinite;
-  animation-delay: -2.8s;
-  will-change: transform, opacity;
-}
-
-.hero-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 88% 92% at 50% 50%,
-      transparent 52%,
-      color-mix(in srgb, var(--midnight-blue) 38%, transparent) 100%
-    ),
-    linear-gradient(to bottom,
-      transparent 55%,
-      color-mix(in srgb, var(--navy-blue) 28%, transparent) 100%
-    );
-  mix-blend-mode: multiply;
-}
-
-/* =========================
-   HERO BADGE — disponibilidade
-   ========================= */
 .hero-badge {
   position: absolute;
-  bottom: 1.8rem;
   left: 50%;
+  bottom: 1.1rem;
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.45rem 1rem;
-  border-radius: 2rem;
-  background: color-mix(in srgb, var(--pure-white) 12%, rgba(255,255,255,0.07));
-  border: 1px solid color-mix(in srgb, var(--mint) 45%, transparent);
-  backdrop-filter: blur(16px) saturate(1.2);
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
   font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  color: var(--pure-white);
+  font-weight: 700;
+  color: color-mix(in srgb, var(--midnight-blue) 82%, #fff);
+  background: color-mix(in srgb, var(--surface) 72%, rgba(255, 255, 255, 0.25));
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--midnight-blue) 26%, transparent);
+  backdrop-filter: blur(8px);
+  z-index: 12;
   white-space: nowrap;
-  z-index: 5;
-  animation: floatDrift 13s ease-in-out infinite;
-  box-shadow: 0 4px 18px color-mix(in srgb, var(--mint) 18%, transparent);
 }
 
 .hero-badge__dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--mint);
-  box-shadow: 0 0 6px var(--mint), 0 0 12px color-mix(in srgb, var(--mint) 60%, transparent);
-  animation: badgePulse 2.2s ease-in-out infinite;
-  flex-shrink: 0;
+  animation: badgePulse 2.4s ease-in-out infinite;
 }
 
+.hero-panel__text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--surface-soft) 85%, rgba(255, 255, 255, 0.65));
+}
 @keyframes badgePulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 6px var(--mint), 0 0 12px color-mix(in srgb, var(--mint) 60%, transparent);
   }
+
   50% {
     opacity: 0.6;
     transform: scale(0.78);
@@ -620,20 +530,30 @@
   display: block;
 }
 
-.scroll-indicator__arrow + .scroll-indicator__arrow {
+.scroll-indicator__arrow+.scroll-indicator__arrow {
   margin-top: -6px;
   opacity: 0.35;
 }
 
 @keyframes scrollIndicatorBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0);  opacity: 0.7; }
-  50%       { transform: translateX(-50%) translateY(7px); opacity: 1;   }
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(7px);
+    opacity: 1;
+  }
 }
 
 /* =========================
    REDUCED MOTION
    ========================= */
 @media (prefers-reduced-motion: reduce) {
+
   .hero::before,
   .hero::after,
   .hero-surface-glare,
@@ -647,3 +567,5 @@
     animation: none;
   }
 }
+
+
