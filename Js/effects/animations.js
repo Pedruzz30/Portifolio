@@ -182,16 +182,16 @@ function initHeroParallax(hero) {
 
   // quickTo cria uma função de animação contínua sem criar novas tweens a cada frame
   const orbsX = orbs
-    ? gsap.quickTo(orbs, "x", { duration: 0.9, ease: "power1.out" })
+    ? gsap.quickTo(orbs, "x", { duration: 0.7, ease: "power2.out" })
     : null;
   const orbsY = orbs
-    ? gsap.quickTo(orbs, "y", { duration: 0.9, ease: "power1.out" })
+    ? gsap.quickTo(orbs, "y", { duration: 0.7, ease: "power2.out" })
     : null;
   const visualX = visual
-    ? gsap.quickTo(visual, "x", { duration: 1.1, ease: "power1.out" })
+    ? gsap.quickTo(visual, "x", { duration: 0.9, ease: "power2.out" })
     : null;
   const visualY = visual
-    ? gsap.quickTo(visual, "y", { duration: 1.1, ease: "power1.out" })
+    ? gsap.quickTo(visual, "y", { duration: 0.9, ease: "power2.out" })
     : null;
 
   const onMove = (e) => {
@@ -200,11 +200,11 @@ function initHeroParallax(hero) {
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-    orbsX?.(x * 32); // orbs: camada mais "distante", maior movimento
-    orbsY?.(y * 18);
+    orbsX?.(x * 50); // Mais vida = maior amplitude no parallax
+    orbsY?.(y * 30);
 
-    visualX?.(x * 18); // visual: camada intermediária
-    visualY?.(y * 10);
+    visualX?.(x * 25);
+    visualY?.(y * 15);
   };
 
   // Ao sair: todos voltam para a posição original (0, 0)
@@ -286,7 +286,8 @@ function initHeroBubbles(hero) {
   container.setAttribute("aria-hidden", "true"); // decorativo, ignora leitores de tela
   hero.appendChild(container);
 
-  const BUBBLE_COUNT = 12;
+  // Um pouco mais de bolhas para trazer mais vida ao fundo
+  const BUBBLE_COUNT = isMobile ? 8 : 18;
 
   for (let i = 0; i < BUBBLE_COUNT; i++) {
     const bubble = document.createElement("span");

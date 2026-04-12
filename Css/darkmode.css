@@ -4,6 +4,9 @@
  *  Sobrescreve os tokens de cores quando data-theme="dark"
  *  está no <html>. O restante do CSS usa variáveis, então
  *  basta trocar os tokens aqui — tudo se adapta sozinho.
+ *
+ *  Conceito: "Mergulho Noturno". Sem o sol, a superfície já
+ *  é escura. A única luz vem da bioluminescência extrema (neon).
  * ═══════════════════════════════════════════════════════════
  */
 
@@ -14,46 +17,79 @@
    Os azuis profundos viram fundos; os claros viram texto.
    ========================= */
 [data-theme="dark"] {
-  /* Fundos: do midnight-blue (fundo) ao navy-blue (cards) */
-  --bg: color-mix(in srgb, var(--midnight-blue) 88%, var(--navy-blue) 12%);
-  --surface: color-mix(in srgb, var(--navy-blue) 72%, var(--midnight-blue) 28%);
-  --surface-2: color-mix(in srgb, var(--darker-blue) 60%, var(--navy-blue) 40%);
-  --surface-soft: color-mix(in srgb, var(--navy-blue) 80%, var(--darker-blue) 20%);
+  /* Fundos: Extrema escuridão abissal em todo o site */
+  --bg: #01060a;
+  --surface: color-mix(in srgb, var(--midnight-blue) 40%, #010a12);
+  --surface-2: color-mix(in srgb, var(--navy-blue) 30%, #010a12);
+  --surface-soft: rgba(2, 15, 28, 0.4);
 
-  /* Texto: os azuis claros viram cor de letra */
-  --text: var(--white-blue);
-  --text-muted: var(--light-blue);
-  --text-subtle: color-mix(in srgb, var(--sky-blue) 70%, var(--light-blue) 30%);
+  /* Texto: Ajuste anti-halation (brilho excessivo).
+     Branco puro em fundo preto cansa a vista. Usamos um branco-azulado suave,
+     e escurecemos as variantes muted/subtle para recuperar a hierarquia visual. */
+  --text: color-mix(in srgb, var(--pure-white) 90%, var(--sky-blue) 10%);
+  --text-muted: color-mix(in srgb, var(--white-blue) 65%, var(--navy-blue) 35%);
+  --text-subtle: color-mix(in srgb, var(--sky-blue) 45%, var(--navy-blue) 55%);
 
   /* Marca: o sky-blue vira primário — mais luminoso no fundo escuro */
   --primary: var(--bright-blue);
-  --primary-hover: color-mix(in srgb, var(--sky-blue) 82%, var(--bright-blue));
-  --primary-soft: color-mix(in srgb, var(--bright-blue) 18%, var(--navy-blue));
+  --primary-hover: var(--sky-blue);
+  --primary-soft: color-mix(in srgb, var(--bright-blue) 12%, transparent);
 
-  /* Accent: sky-blue (mais suave que bright-blue em fundo escuro) */
-  --accent: var(--sky-blue);
-  --accent-soft: color-mix(in srgb, var(--sky-blue) 16%, var(--navy-blue));
-  --accent-strong: color-mix(in srgb, var(--bright-blue) 85%, var(--white-blue));
+  /* Accent: O grande truque do Night Dive. Transforma o ciano
+     em um Neon/Mint puramente bioluminescente de altíssimo contraste. */
+  --accent: var(--mint);
+  --accent-soft: color-mix(in srgb, var(--mint) 12%, transparent);
+  --accent-strong: #40f9ff;
 
-  /* Bordas: mais visíveis no fundo escuro */
-  --border: color-mix(in srgb, var(--blue-gray) 35%, transparent);
-  --border-strong: color-mix(in srgb, var(--sky-blue) 50%, transparent);
-  --border-glow: color-mix(in srgb, var(--bright-blue) 40%, transparent);
+  /* Bordas: mais sutis para o neon brilhar e não poluir o preto */
+  --border: color-mix(in srgb, var(--sky-blue) 12%, transparent);
+  --border-strong: color-mix(in srgb, var(--sky-blue) 25%, transparent);
+  --border-glow: color-mix(in srgb, var(--mint) 45%, transparent);
 
   /* Sombras: mais opacas (preto puro em vez de azul-marinho) */
-  --shadow-sm: 0 8px 24px color-mix(in srgb, #000 25%, transparent);
-  --shadow-md: 0 16px 42px color-mix(in srgb, #000 35%, transparent);
-  --shadow-lg: 0 24px 64px color-mix(in srgb, #000 45%, transparent);
+  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 16px 42px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.8);
 
   /* Glass: fundo vítreo com base no navy-blue */
-  --glass: color-mix(in srgb, var(--navy-blue) 75%, rgba(255,255,255,0.04));
+  --glass: color-mix(in srgb, #010a12 75%, rgba(255, 255, 255, 0.02));
 
   /* Gradiente de card: tons escuros de azul */
-  --grad-card: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--navy-blue) 82%, var(--darker-blue) 18%),
-    color-mix(in srgb, var(--midnight-blue) 75%, var(--navy-blue) 25%)
-  );
+  --grad-card: linear-gradient(180deg,
+      rgba(4, 25, 45, 0.4),
+      rgba(2, 10, 20, 0.6));
+}
+
+/* =========================
+   SOBRESCRITAS DE ZONA OCEÂNICA (NIGHT DIVE)
+   Como hardcodamos as cores das seções para a metáfora do oceano,
+   precisamos apagar as luzes aqui quando o dark mode ativa.
+   A superfície vira breu, iluminada apenas pelo brilho das UI.
+   ========================= */
+[data-theme="dark"] .hero {
+  background:
+    radial-gradient(128% 96% at 50% 0%, rgba(21, 158, 230, 0.03) 0%, transparent 68%),
+    linear-gradient(180deg, #02111d 0%, #010a12 100%);
+}
+
+[data-theme="dark"] .hero::before {
+  opacity: 0.04;
+  /* Luz do luar em vez de luz do sol */
+}
+
+[data-theme="dark"] .about {
+  background: linear-gradient(180deg, #010a12 0%, #01050a 100%);
+}
+
+[data-theme="dark"] .stack-roadmap {
+  background: linear-gradient(180deg, #01050a 0%, #000000 100%);
+}
+
+[data-theme="dark"] .portfolio,
+[data-theme="dark"] .contact,
+[data-theme="dark"] .site-footer {
+  background: #000000;
+  /* O abismo toma conta mais cedo */
 }
 
 /* Transição suave ao trocar tema — restrita às propriedades de cor para
@@ -81,24 +117,26 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface-soft);
-  color: var(--text-muted);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  background: color-mix(in srgb, var(--surface-soft) 40%, transparent);
+  backdrop-filter: blur(8px);
+  color: color-mix(in srgb, var(--text-muted) 80%, var(--pure-white));
   cursor: pointer;
-  transition: background var(--transition-base), border-color var(--transition-base),
-    color var(--transition-base), transform var(--transition-base);
+  transition: all 400ms var(--ease-out);
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Hover: fundo levemente colorido + rotação divertida */
 .theme-toggle:hover {
-  background: var(--accent-soft);
-  border-color: var(--border-glow);
+  background: color-mix(in srgb, var(--accent-soft) 60%, transparent);
+  border-color: var(--accent);
   color: var(--accent);
-  transform: rotate(20deg) scale(1.08);
+  transform: rotate(15deg) scale(1.06);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .theme-toggle:focus-visible {
@@ -107,9 +145,10 @@ html {
 }
 
 .theme-toggle svg {
-  width: 16px;
-  height: 16px;
-  pointer-events: none; /* evita que o clique "passe" para o SVG */
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  /* evita que o clique "passe" para o SVG */
 }
 
 .theme-toggle .icon-moon {
@@ -125,8 +164,91 @@ html {
 /* Lógica de visibilidade dos ícones:
    Modo claro → mostra lua (para convidar ao modo escuro)
    Modo escuro → mostra sol (para convidar ao modo claro) */
-.theme-toggle .icon-sun { display: none; }
-.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun {
+  display: none;
+}
 
-[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+.theme-toggle .icon-moon {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+/* =========================
+   TEXTOS DA ZONA BATIPELÁGICA (SOBRE MIM / SKILLS)
+   No modo escuro, as cores "hardcoded" em azul escuro do modo claro 
+   são substituídas por tons claros e de alto contraste.
+   ========================= */
+[data-theme="dark"] .about-header .section-eyebrow,
+[data-theme="dark"] .about-skills__label {
+  color: rgba(100, 210, 255, 0.8);
+}
+
+[data-theme="dark"] .about-header h2,
+[data-theme="dark"] .about-desc strong,
+[data-theme="dark"] .edu-card__degree {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="dark"] .about-desc,
+[data-theme="dark"] .about-value-item,
+[data-theme="dark"] .tech-item span:last-child {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .edu-card__institution {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Correção do fundo de cards (Glassmorphism) no modo escuro da seção Sobre */
+[data-theme="dark"] .about-value-item,
+[data-theme="dark"] .tech-item,
+[data-theme="dark"] .edu-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .about-value-item:hover,
+[data-theme="dark"] .tech-item:hover,
+[data-theme="dark"] .edu-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .edu-card__icon {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Correções vitais para a seção "Skills v2" (se aplicável) */
+[data-theme="dark"] .skills2-heading h2 {
+  background: linear-gradient(120deg, var(--java-orange), var(--accent-strong), var(--pure-white));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="dark"] .skills2-cardTitle,
+[data-theme="dark"] .skills2-trackBody strong,
+[data-theme="dark"] .skills2-metaValue,
+[data-theme="dark"] .skills2-mStrong,
+[data-theme="dark"] .skills2-meterLabel,
+[data-theme="dark"] .skills2-toolLabel {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="dark"] .skills2-subtitle,
+[data-theme="dark"] .skills2-cardHint,
+[data-theme="dark"] .skills2-trackBody p,
+[data-theme="dark"] .skills2-toolMeta,
+[data-theme="dark"] .skills2-mText,
+[data-theme="dark"] .skills2-metaLabel {
+  color: rgba(255, 255, 255, 0.7);
+}

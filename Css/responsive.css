@@ -408,7 +408,6 @@
   .menu-toggle,
   .theme-toggle,
   .hero-badge,
-  .section-wave,
   .btn--ripple::after {
     display: none !important;
   }

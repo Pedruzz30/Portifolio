@@ -20,7 +20,12 @@
  * @param {boolean} options.reduceMotion - Desabilita animação se true
  * @returns {{ destroy: () => void }}
  */
-export function initFooterParticles({ footer, count = 40, reduceMotion = false }) {
+export function initFooterParticles({
+  footer,
+  count = 65,
+  reduceMotion = false,
+}) {
+  // Mais plâncton
   if (!footer || typeof window === "undefined") return { destroy: () => {} };
 
   // Cria o canvas e injeta no footer
@@ -38,25 +43,25 @@ export function initFooterParticles({ footer, count = 40, reduceMotion = false }
 
   // Redimensiona o canvas para cobrir o footer
   const resize = () => {
-    canvas.width  = footer.offsetWidth;
+    canvas.width = footer.offsetWidth;
     canvas.height = footer.offsetHeight;
   };
 
   // Gera uma partícula com propriedades aleatórias
   const createParticle = () => {
-    const w = canvas.width  || 600;
+    const w = canvas.width || 600;
     const h = canvas.height || 200;
     return {
-      x:       Math.random() * w,
-      y:       Math.random() * h,
-      r:       0.8 + Math.random() * 1.6,     // raio: 0.8–2.4 px
-      opacity: 0.15 + Math.random() * 0.55,   // opacidade inicial
-      opBase:  0.15 + Math.random() * 0.55,   // base para pulsação
-      speedX:  (Math.random() - 0.5) * 0.18,  // deriva horizontal
-      speedY:  -0.06 - Math.random() * 0.14,  // sobe levemente
-      phase:   Math.random() * Math.PI * 2,   // fase da pulsação
-      pulse:   0.008 + Math.random() * 0.012, // velocidade de pulso
-      hue:     190 + Math.random() * 30,      // azul-ciano (190–220)
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: 1.5 + Math.random() * 2.5, // medusas maiores no escuro
+      opacity: 0.4 + Math.random() * 0.6, // brilho base muito mais intenso
+      opBase: 0.4 + Math.random() * 0.6,
+      speedX: (Math.random() - 0.5) * 0.25, // mais vivas
+      speedY: -0.1 - Math.random() * 0.2,
+      phase: Math.random() * Math.PI * 2, // fase da pulsação
+      pulse: 0.012 + Math.random() * 0.02, // piscam mais rápido
+      hue: 190 + Math.random() * 30, // azul-ciano (190–220)
     };
   };
 
@@ -65,9 +70,24 @@ export function initFooterParticles({ footer, count = 40, reduceMotion = false }
     particles = Array.from({ length: count }, createParticle);
   };
 
+  let isVisible = false;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      isVisible = entries[0].isIntersecting;
+      if (isVisible && running && !reduceMotion && !rafId) {
+        rafId = requestAnimationFrame(draw);
+      }
+    },
+    { threshold: 0 },
+  );
+  observer.observe(footer);
+
   // Desenha um frame
   const draw = (timestamp) => {
-    if (!running) return;
+    if (!running || !isVisible) {
+      rafId = null;
+      return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (const p of particles) {
@@ -80,18 +100,23 @@ export function initFooterParticles({ footer, count = 40, reduceMotion = false }
       p.y += p.speedY;
 
       // Rebobina quando sai da tela
-      if (p.y < -4)            p.y = canvas.height + 4;
-      if (p.x < -4)            p.x = canvas.width + 4;
+      if (p.y < -4) p.y = canvas.height + 4;
+      if (p.x < -4) p.x = canvas.width + 4;
       if (p.x > canvas.width + 4) p.x = -4;
 
       // Ponto bioluminescente com halo radial
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
-      grad.addColorStop(0,   `hsla(${p.hue}, 90%, 70%, ${Math.min(alpha, 1)})`);
-      grad.addColorStop(0.4, `hsla(${p.hue}, 80%, 55%, ${Math.min(alpha * 0.5, 1)})`);
-      grad.addColorStop(1,   `hsla(${p.hue}, 70%, 45%, 0)`);
+      const glowRadius = p.r * 4.5; // Expande muito mais a luz em volta da partícula
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
+      // Centro quase branco e puro, clareando o núcleo da medusa
+      grad.addColorStop(0, `hsla(${p.hue}, 100%, 80%, ${Math.min(alpha, 1)})`);
+      grad.addColorStop(
+        0.3,
+        `hsla(${p.hue}, 90%, 60%, ${Math.min(alpha * 0.6, 1)})`,
+      );
+      grad.addColorStop(1, `hsla(${p.hue}, 80%, 40%, 0)`);
 
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
       ctx.fillStyle = grad;
       ctx.fill();
     }
@@ -103,11 +128,15 @@ export function initFooterParticles({ footer, count = 40, reduceMotion = false }
   const drawStatic = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const p of particles) {
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-      grad.addColorStop(0,   `hsla(${p.hue}, 90%, 70%, ${p.opBase * 0.6})`);
-      grad.addColorStop(1,   `hsla(${p.hue}, 70%, 45%, 0)`);
+      const glowRadius = p.r * 4;
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
+      grad.addColorStop(
+        0,
+        `hsla(${p.hue}, 100%, 80%, ${Math.min(p.opBase * 0.8, 1)})`,
+      );
+      grad.addColorStop(1, `hsla(${p.hue}, 80%, 40%, 0)`);
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
       ctx.fillStyle = grad;
       ctx.fill();
     }
@@ -133,6 +162,7 @@ export function initFooterParticles({ footer, count = 40, reduceMotion = false }
       running = false;
       if (rafId) cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
+      observer.disconnect();
       canvas.remove();
     },
   };

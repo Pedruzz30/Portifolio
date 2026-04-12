@@ -7,14 +7,14 @@
  */
  
 /* O <main> organiza as seções em coluna, sem gap visual entre elas.
-   Os divisores SVG (.section-wave) dependem de contato direto entre
-   blocos adjacentes; qualquer gap do flex container cria faixas brancas
-   entre as seções, como nas capturas reportadas. O respiro visual já
-   vem do padding interno de cada seção. */
+   O respiro visual vem do padding interno de cada seção, então o fluxo
+   permanece contínuo sem precisar de divisores extras entre blocos. */
 main {
   display: flex;
   flex-direction: column;
   gap: 0;
+  position: relative;
+  isolation: isolate;
 }
  
 /* =========================

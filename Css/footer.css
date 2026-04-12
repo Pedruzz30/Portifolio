@@ -24,13 +24,13 @@
   overflow: hidden;
   isolation: isolate;
   padding: clamp(2.8rem, 5.5vw, 4.6rem) 1.25rem 1.25rem;
-  border-top: 1px solid rgba(80, 190, 255, 0.08);
+  border-top: 0;
  
-  /* Fundo abissal — quase preto com leve gradiente de profundidade */
+  /* Fundo abissal — continua o gradiente global com um véu final */
   background:
-    radial-gradient(ellipse 80% 40% at 50% 100%,  #041830 0%,  transparent 70%),
-    radial-gradient(ellipse 60% 30% at 20% 80%,   #031020 0%,  transparent 60%),
-    linear-gradient(180deg, #04111f 0%, #020c18 40%, #010810 100%);
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(4, 24, 48, 0.24) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 30% at 20% 80%, rgba(3, 16, 32, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(4, 17, 31, 0.18) 0%, rgba(2, 12, 24, 0.34) 40%, rgba(1, 8, 16, 0.68) 100%);
 }
  
 /* Camada 1: Caústicas — manchas de luz que lembram reflexo
@@ -48,6 +48,7 @@
     radial-gradient(ellipse 22% 12% at 72% 55%,  rgba(80,  190, 240, 1) 0%, transparent 100%),
     radial-gradient(ellipse 28% 14% at 50% 18%,  rgba(120, 220, 255, 1) 0%, transparent 100%);
   animation: footerCaustics calc(var(--wave-medium, 8s) * 0.95) ease-in-out infinite;
+  animation-play-state: paused;
 }
  
 /* Camada 2: Textura de água profunda — listras diagonais finas.
@@ -69,6 +70,13 @@
       rgba(255, 255, 255, 0.02) 36px
     );
   animation: deepWaterDrift calc(var(--wave-slow, 12s) * 0.70) ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+/* Ativa as animações de maré apenas quando o footer entra na viewport */
+.site-footer.is-in-view::before,
+.site-footer.is-in-view::after {
+  animation-play-state: running;
 }
  
 /* Canvas das partículas bioluminescentes (injetado pelo JS).
@@ -110,7 +118,7 @@
   max-width: 44ch;
   font-size: 0.9rem;
   line-height: 1.65;
-  color: rgba(160, 210, 240, 0.7);
+  color: rgba(185, 228, 250, 0.88);
 }
  
 .footer-cta {
@@ -124,7 +132,7 @@
   margin: 1rem 0 0;
   max-width: 44ch;
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.32);
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.6;
 }
  
@@ -137,9 +145,9 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
- 
-  /* Azul-gelo com baixa opacidade — rótulo de profundidade */
-  color: rgba(80, 190, 255, 0.45);
+
+  /* Azul-gelo — rótulo de profundidade */
+  color: rgba(100, 205, 255, 0.68);
 }
  
 .footer-list {
@@ -156,7 +164,7 @@
   align-items: center;
   gap: 0.45rem;
   font-size: 0.9rem;
-  color: rgba(180, 220, 245, 0.6);
+  color: rgba(190, 228, 252, 0.80);
   text-decoration: none;
   position: relative;
   z-index: 1;
@@ -221,7 +229,7 @@
 .footer-bottom p {
   margin: 0;
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.48);
 }
  
 /* Indicador de profundidade — o "você está no fundo" do footer */
@@ -231,7 +239,7 @@
   gap: 0.4rem;
   font-size: 0.72rem;
   letter-spacing: 0.06em;
-  color: rgba(80, 190, 255, 0.28);
+  color: rgba(100, 205, 255, 0.52);
 }
  
 /* Ponto pulsante do indicador de profundidade */

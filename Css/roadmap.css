@@ -41,10 +41,9 @@
       color-mix(in srgb, var(--accent) 12%, transparent),
       transparent 70%),
     linear-gradient(180deg,
-      #1a5f85  0%,
-      #0f4a6e 35%,
-      #0a3554 70%,
-      #062540 100%
+      rgba(18, 71, 104, 0.08) 0%,
+      rgba(10, 47, 76, 0.16) 52%,
+      rgba(4, 25, 45, 0.26) 100%
     );
 }
  
@@ -56,7 +55,7 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.08;
+  opacity: 0.06;
   background:
     radial-gradient(ellipse 25% 12% at 20% 22%, rgba(100,210,255,1) 0%, transparent 100%),
     radial-gradient(ellipse 18% 8%  at 65% 38%, rgba(80,190,240,1)  0%, transparent 100%),
@@ -77,10 +76,10 @@
   background:
     repeating-linear-gradient(
       135deg,
-      rgba(100,200,255,0.10)  0px,
-      rgba(100,200,255,0.10) 10px,
-      rgba(100,200,255,0.03) 20px,
-      rgba(100,200,255,0.03) 36px
+      rgba(100,200,255,0.05)  0px,
+      rgba(100,200,255,0.05) 10px,
+      rgba(100,200,255,0.01) 20px,
+      rgba(100,200,255,0.01) 36px
     );
   animation: deepWaterDrift calc(var(--wave-slow) * 0.80) ease-in-out infinite;
 }
@@ -155,7 +154,7 @@
   margin: 0;
   max-width: 68ch;
   line-height: 1.65;
-  color: rgba(180, 220, 245, 0.65);
+  color: rgba(190, 228, 250, 0.84);
 }
  
 /* =========================
@@ -197,7 +196,7 @@
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: rgba(140, 200, 240, 0.55);
+  color: rgba(160, 215, 248, 0.78);
 }
  
 .stack-roadmap__progress-value {
@@ -209,7 +208,7 @@
  
 .stack-roadmap__progress-caption {
   margin: 0;
-  color: rgba(180, 220, 245, 0.65);
+  color: rgba(195, 232, 252, 0.84);
   font-weight: 600;
 }
  
@@ -308,7 +307,7 @@
 .stack-roadmap__highlight-meta {
   margin: 0;
   font-size: 0.9rem;
-  color: rgba(160, 210, 240, 0.60);
+  color: rgba(175, 220, 248, 0.80);
 }
  
 /* =========================
@@ -527,8 +526,8 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(100, 190, 255, 0.15);
-  color: rgba(140, 200, 240, 0.60);
+  border: 1px solid rgba(100, 190, 255, 0.20);
+  color: rgba(160, 215, 248, 0.82);
 }
  
 .stack-roadmap__badge--now {
@@ -567,14 +566,14 @@
  
 .stack-roadmap__step-desc {
   margin: 0;
-  color: rgba(160, 210, 240, 0.60);
+  color: rgba(175, 220, 248, 0.80);
 }
  
 /* Duration pill */
 .stack-roadmap__step-duration {
   font-size: 0.72rem;
   font-weight: 600;
-  color: rgba(120, 180, 220, 0.55);
+  color: rgba(160, 210, 245, 0.78);
   background: rgba(255, 255, 255, 0.05);
   border: 1px dashed rgba(100, 190, 255, 0.18);
   border-radius: 999px;
@@ -698,7 +697,7 @@
   padding-left: 1.2rem;
   display: grid;
   gap: 0.45rem;
-  color: rgba(160, 210, 240, 0.60);
+  color: rgba(175, 220, 248, 0.80);
 }
  
 .stack-roadmap__projects-title {
@@ -716,7 +715,7 @@
 .stack-roadmap__progress-updated {
   margin: 0;
   font-size: 0.75rem;
-  color: rgba(120, 180, 220, 0.50);
+  color: rgba(155, 210, 242, 0.72);
   display: flex;
   align-items: center;
   gap: 0.35rem;

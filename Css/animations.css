@@ -15,23 +15,53 @@
 
 /* Pulsa o botão CTA — escala e opacidade ritmadas */
 @keyframes btnPulse {
-  0%   { transform: scale(0.9);  opacity: 0.5; }
-  50%  { transform: scale(1.05); opacity: 0.7; }
-  100% { transform: scale(0.9);  opacity: 0.5; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
 }
 
 /* Halo pulsante — expande e volta, como um coração luminoso */
 @keyframes haloPulse {
-  0%   { transform: scale(1);    opacity: 0.75; }
-  50%  { transform: scale(1.12); opacity: 1;    }
-  100% { transform: scale(1);    opacity: 0.75; }
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
 }
 
 /* Glow pulsante de caixa — anel de luz que expande e encolhe */
 @keyframes pulseGlow {
-  0%   { box-shadow: 0 0 0 6px  color-mix(in srgb, var(--accent) 38%, transparent); }
-  50%  { box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 50%, transparent); }
-  100% { box-shadow: 0 0 0 6px  color-mix(in srgb, var(--accent) 38%, transparent); }
+  0% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 38%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+
+  100% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 38%, transparent);
+  }
 }
 
 /* =========================
@@ -41,20 +71,46 @@
    A micro variação no 55% evita o efeito de pêndulo.
    ========================= */
 @keyframes blob {
-  0%, 100% { border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%; }
-  25%       { border-radius: 54% 46% 44% 56% / 52% 62% 38% 48%; }
-  55%       { border-radius: 48% 52% 60% 40% / 44% 52% 58% 46%; }
-  80%       { border-radius: 52% 48% 46% 54% / 50% 58% 42% 50%; }
+
+  0%,
+  100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+
+  25% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+
+  55% {
+    border-radius: 30% 70% 70% 30% / 50% 60% 30% 60%;
+  }
+
+  80% {
+    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+  }
 }
 
 /* Mesmos valores do blob, mas via clip-path: inset()
    Roda no compositor GPU sem antialiasing contra fundo branco —
    solução para o "fringing" (borda branca) em imagens clipadas. */
 @keyframes blobClip {
-  0%, 100% { clip-path: inset(0% round 46% 54% 52% 48% / 55% 48% 52% 45%); }
-  25%       { clip-path: inset(0% round 54% 46% 44% 56% / 52% 62% 38% 48%); }
-  55%       { clip-path: inset(0% round 48% 52% 60% 40% / 44% 52% 58% 46%); }
-  80%       { clip-path: inset(0% round 52% 48% 46% 54% / 50% 58% 42% 50%); }
+
+  0%,
+  100% {
+    clip-path: inset(0% round 46% 54% 52% 48% / 55% 48% 52% 45%);
+  }
+
+  25% {
+    clip-path: inset(0% round 54% 46% 44% 56% / 52% 62% 38% 48%);
+  }
+
+  55% {
+    clip-path: inset(0% round 48% 52% 60% 40% / 44% 52% 58% 46%);
+  }
+
+  80% {
+    clip-path: inset(0% round 52% 48% 46% 54% / 50% 58% 42% 50%);
+  }
 }
 
 /* =========================
@@ -63,20 +119,23 @@
    uma criatura bioluminescente pulsando na escuridão.
    ========================= */
 @keyframes wrapGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow:
-      0 0 0 1px  color-mix(in srgb, var(--mint)            20%, transparent),
-      0 0 32px   color-mix(in srgb, var(--accent)          22%, transparent),
-      0 0 72px   color-mix(in srgb, var(--deep-blue)       18%, transparent),
-      0 24px 64px color-mix(in srgb, var(--midnight-blue)  40%, transparent);
+      0 0 0 1px color-mix(in srgb, var(--mint) 20%, transparent),
+      0 0 32px color-mix(in srgb, var(--accent) 22%, transparent),
+      0 0 72px color-mix(in srgb, var(--deep-blue) 18%, transparent),
+      0 24px 64px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
   }
+
   50% {
     /* No pico: glow 60% mais intenso — "respiração" bioluminescente */
     box-shadow:
-      0 0 0 1px  color-mix(in srgb, var(--mint)            44%, transparent),
-      0 0 52px   color-mix(in srgb, var(--accent)          40%, transparent),
-      0 0 108px  color-mix(in srgb, var(--deep-blue)       28%, transparent),
-      0 24px 64px color-mix(in srgb, var(--midnight-blue)  40%, transparent);
+      0 0 0 1px color-mix(in srgb, var(--mint) 44%, transparent),
+      0 0 52px color-mix(in srgb, var(--accent) 40%, transparent),
+      0 0 108px color-mix(in srgb, var(--deep-blue) 28%, transparent),
+      0 24px 64px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
   }
 }
 
@@ -87,25 +146,55 @@
    simular a deformação ótica da água em movimento.
    ========================= */
 @keyframes tideFlow {
-  0%   { transform: translate3d(-6%,  2%, 0) scale(1.02); }
-  50%  { transform: translate3d( 6%, -3%, 0) scale(1.07); }
-  100% { transform: translate3d(-6%,  2%, 0) scale(1.02); }
+  0% {
+    transform: translate3d(-6%, 2%, 0) scale(1.02);
+  }
+
+  50% {
+    transform: translate3d(6%, -3%, 0) scale(1.07);
+  }
+
+  100% {
+    transform: translate3d(-6%, 2%, 0) scale(1.02);
+  }
 }
 
 /* FIX 7: renomeado de waveSweep → wavePendulum.
    Deixa claro que é um pêndulo (vai e volta),
    diferente de waveFlow que é unidirecional (só vai →). */
 @keyframes wavePendulum {
-  0%   { transform: translateX(-18%) rotate(2.2deg);  opacity: 0.35; }
-  50%  { transform: translateX( 18%) rotate(-2.2deg); opacity: 0.85; }
-  100% { transform: translateX(-18%) rotate(2.2deg);  opacity: 0.35; }
+  0% {
+    transform: translateX(-18%) rotate(2.2deg);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translateX(18%) rotate(-2.2deg);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: translateX(-18%) rotate(2.2deg);
+    opacity: 0.35;
+  }
 }
 
 /* HERO: micro-correnteza (camada 3) — dá "vida" sem gritar */
 @keyframes microDrift {
-  0%   { transform: translate3d(0, 0, 0);          opacity: 0.38; }
-  50%  { transform: translate3d(-1.5%, 1%, 0);     opacity: 0.60; }
-  100% { transform: translate3d(0, 0, 0);          opacity: 0.38; }
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.38;
+  }
+
+  50% {
+    transform: translate3d(-1.5%, 1%, 0);
+    opacity: 0.60;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.38;
+  }
 }
 
 /* =========================
@@ -118,16 +207,38 @@
    que o botão pulse de forma independente do blob.
    ========================= */
 @keyframes seaGlow {
-  0%   { transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);          opacity: 0.30; }
-  50%  { transform: translate3d(2.8%, -2.2%, 0) scale(1.10) rotate(3deg);   opacity: 0.66; }
-  100% { transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);          opacity: 0.30; }
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
+    opacity: 0.30;
+  }
+
+  50% {
+    transform: translate3d(2.8%, -2.2%, 0) scale(1.10) rotate(3deg);
+    opacity: 0.66;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
+    opacity: 0.30;
+  }
 }
 
 /* Glow do botão pulsando com micro deslocamento */
 @keyframes seaGlowBtn {
-  0%   { transform: translate3d(0, 0, 0) scale(1.01);              opacity: 0.45; }
-  50%  { transform: translate3d(-2.8%, 1.8%, 0) scale(1.06);       opacity: 0.86; }
-  100% { transform: translate3d(0, 0, 0) scale(1.01);              opacity: 0.45; }
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.01);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translate3d(-2.8%, 1.8%, 0) scale(1.06);
+    opacity: 0.86;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.01);
+    opacity: 0.45;
+  }
 }
 
 /* =========================
@@ -136,9 +247,23 @@
    a oscilação de raios de luz passando pela superfície ondulada.
    ========================= */
 @keyframes waterShimmer {
-  0%   { transform: translate3d( 2%, -1%, 0); filter: blur(.15px); opacity: 0.42; }
-  50%  { transform: translate3d(-4%,  3%, 0); filter: blur(.55px); opacity: 0.78; }
-  100% { transform: translate3d( 2%, -1%, 0); filter: blur(.15px); opacity: 0.42; }
+  0% {
+    transform: translate3d(2%, -1%, 0);
+    filter: blur(.15px);
+    opacity: 0.42;
+  }
+
+  50% {
+    transform: translate3d(-4%, 3%, 0);
+    filter: blur(.55px);
+    opacity: 0.78;
+  }
+
+  100% {
+    transform: translate3d(2%, -1%, 0);
+    filter: blur(.15px);
+    opacity: 0.42;
+  }
 }
 
 /* =========================
@@ -147,9 +272,17 @@
    --float-distance é definido em tokens.css.
    ========================= */
 @keyframes floatPulse {
-  0%   { transform: translate3d(0, 10px, 0); }
-  50%  { transform: translate3d(-6px, calc(var(--float-distance) * -1.35), 0); }
-  100% { transform: translate3d(0, 10px, 0); }
+  0% {
+    transform: translate3d(0, 15px, 0);
+  }
+
+  50% {
+    transform: translate3d(-10px, calc(var(--float-distance) * -1.5), 0);
+  }
+
+  100% {
+    transform: translate3d(0, 15px, 0);
+  }
 }
 
 /* =========================
@@ -158,22 +291,49 @@
 
 /* Onda varrendo o botão sempre (correnteza constante) */
 @keyframes seaWave {
-  0%   { transform: translateX(-85%) rotate(12deg); opacity: 0.32; }
-  50%  { transform: translateX( 85%) rotate(12deg); opacity: 0.85; }
-  100% { transform: translateX(-85%) rotate(12deg); opacity: 0.32; }
+  0% {
+    transform: translateX(-85%) rotate(12deg);
+    opacity: 0.32;
+  }
+
+  50% {
+    transform: translateX(85%) rotate(12deg);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: translateX(-85%) rotate(12deg);
+    opacity: 0.32;
+  }
 }
 
 /* Brilho de card derivando como reflexo na correnteza */
 @keyframes shimmerDrift {
-  0%   { transform: translateX(-70%) scale(1.01); opacity: 0.15; }
-  50%  { transform: translateX( 45%) scale(1.05); opacity: 0.45; }
-  100% { transform: translateX(-70%) scale(1.01); opacity: 0.15; }
+  0% {
+    transform: translateX(-70%) scale(1.01);
+    opacity: 0.15;
+  }
+
+  50% {
+    transform: translateX(45%) scale(1.05);
+    opacity: 0.45;
+  }
+
+  100% {
+    transform: translateX(-70%) scale(1.01);
+    opacity: 0.15;
+  }
 }
 
 /* Portfolio: faixa contínua — onda passando de ponta a ponta */
 @keyframes glideWave {
-  0%   { transform: translateX(-110%) rotate(12deg); }
-  100% { transform: translateX( 110%) rotate(12deg); }
+  0% {
+    transform: translateX(-110%) rotate(12deg);
+  }
+
+  100% {
+    transform: translateX(110%) rotate(12deg);
+  }
 }
 
 /* =========================
@@ -182,17 +342,39 @@
 
 /* Glow oscilando lentamente — como ver o sol filtrar pela água */
 @keyframes oceanGlow {
-  0%   { transform: translate3d( 2%, -1%, 0) scale(1.03); opacity: 0.30; }
-  50%  { transform: translate3d(-5%,  3%, 0) scale(1.10); opacity: 0.78; }
-  100% { transform: translate3d( 2%, -1%, 0) scale(1.03); opacity: 0.30; }
+  0% {
+    transform: translate3d(2%, -1%, 0) scale(1.03);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translate3d(-5%, 3%, 0) scale(1.15);
+    opacity: 0.95;
+  }
+
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1.03);
+    opacity: 0.45;
+  }
 }
 
 /* FIX 7: renomeado de oceanWave → oceanPendulum.
    Par de wavePendulum — deixa claro que é pêndulo (vai e volta). */
 @keyframes oceanPendulum {
-  0%   { transform: translateX(-90%) rotate(12deg); opacity: 0.14; }
-  50%  { transform: translateX( 90%) rotate(12deg); opacity: 0.34; }
-  100% { transform: translateX(-90%) rotate(12deg); opacity: 0.14; }
+  0% {
+    transform: translateX(-90%) rotate(12deg);
+    opacity: 0.14;
+  }
+
+  50% {
+    transform: translateX(90%) rotate(12deg);
+    opacity: 0.34;
+  }
+
+  100% {
+    transform: translateX(-90%) rotate(12deg);
+    opacity: 0.14;
+  }
 }
 
 /* =========================
@@ -201,16 +383,38 @@
 
 /* Ripple de maré — badge pulsa suavemente */
 @keyframes ripplePulse {
-  0%   { transform: translate3d(0, 1px, 0) scale(0.98);   opacity: 0.8; }
-  50%  { transform: translate3d(-2px, -2px, 0) scale(1.02); opacity: 1;   }
-  100% { transform: translate3d(0, 1px, 0) scale(0.98);   opacity: 0.8; }
+  0% {
+    transform: translate3d(0, 1px, 0) scale(0.98);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translate3d(-2px, -2px, 0) scale(1.02);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(0, 1px, 0) scale(0.98);
+    opacity: 0.8;
+  }
 }
 
 /* Bolha ascendendo levemente — sobe 8px e volta */
 @keyframes bubbleRise {
-  0%   { transform: translate3d(0, 0, 0) scale(0.95);      opacity: 0.72; }
-  40%  { transform: translate3d(-2px, -3px, 0) scale(1.05); opacity: 1;    }
-  100% { transform: translate3d(0, -8px, 0) scale(0.96);   opacity: 0.65; }
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.95);
+    opacity: 0.72;
+  }
+
+  40% {
+    transform: translate3d(-2px, -3px, 0) scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(0, -8px, 0) scale(0.96);
+    opacity: 0.65;
+  }
 }
 
 /* =========================
@@ -219,24 +423,61 @@
 
 /* Reflexo de luz na água — brilho movendo-se diagonalmente */
 @keyframes oceanSheen {
-  0%   { transform: translateX(-34%) translateY(7%);  opacity: 0.65; }
-  45%  { transform: translateX(10%)  translateY(-2%); opacity: 0.92; }
-  100% { transform: translateX(-34%) translateY(7%);  opacity: 0.65; }
+  0% {
+    transform: translateX(-34%) translateY(7%);
+    opacity: 0.65;
+  }
+
+  45% {
+    transform: translateX(10%) translateY(-2%);
+    opacity: 0.92;
+  }
+
+  100% {
+    transform: translateX(-34%) translateY(7%);
+    opacity: 0.65;
+  }
 }
 
 /* Bolha derivando — trajetória não-linear (como bolhas reais) */
 @keyframes bubbleDrift {
-  0%   { transform: translate3d(0, 0, 0) scale(.92);       opacity: 0.60; }
-  35%  { transform: translate3d(-3px, -4px, 0) scale(1.02); opacity: 0.95; }
-  70%  { transform: translate3d(2px, -8px, 0) scale(.98);  opacity: 0.78; }
-  100% { transform: translate3d(0, -10px, 0) scale(.92);   opacity: 0.55; }
+  0% {
+    transform: translate3d(0, 0, 0) scale(.92);
+    opacity: 0.60;
+  }
+
+  35% {
+    transform: translate3d(-3px, -4px, 0) scale(1.02);
+    opacity: 0.95;
+  }
+
+  70% {
+    transform: translate3d(2px, -8px, 0) scale(.98);
+    opacity: 0.78;
+  }
+
+  100% {
+    transform: translate3d(0, -10px, 0) scale(.92);
+    opacity: 0.55;
+  }
 }
 
 /* Textura de água profunda — deriva muito suave, quase imperceptível */
 @keyframes deepWaterDrift {
-  0%   { transform: translate3d(0, 0, 0);          opacity: 0.14; }
-  50%  { transform: translate3d(-10px, 6px, 0);    opacity: 0.22; }
-  100% { transform: translate3d(0, 0, 0);          opacity: 0.14; }
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.14;
+  }
+
+  50% {
+    transform: translate3d(-10px, 6px, 0);
+    opacity: 0.22;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.14;
+  }
 }
 
 /* =========================
@@ -247,23 +488,56 @@
 
 /* "Luz da superfície" respirando — glow bem mais visível no footer */
 @keyframes footerSurfaceGlow {
-  0%   { transform: translate3d(0, 0, 0) scale(1.03);           opacity: 0.62; }
-  50%  { transform: translate3d(3.2%, -2%, 0) scale(1.12);      opacity: 0.92; }
-  100% { transform: translate3d(0, 0, 0) scale(1.03);           opacity: 0.62; }
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.03);
+    opacity: 0.62;
+  }
+
+  50% {
+    transform: translate3d(3.2%, -2%, 0) scale(1.12);
+    opacity: 0.92;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.03);
+    opacity: 0.62;
+  }
 }
 
 /* Caústicas do footer — luz tremendo no fundo mais marcada */
 @keyframes footerCaustics {
-  0%   { transform: translate3d(-2.2%, 1.8%, 0) scale(1.03);    opacity: 0.22; }
-  50%  { transform: translate3d( 3.4%, -2.4%, 0) scale(1.10);   opacity: 0.42; }
-  100% { transform: translate3d(-2.2%, 1.8%, 0) scale(1.03);    opacity: 0.22; }
+  0% {
+    transform: translate3d(-2.2%, 1.8%, 0) scale(1.03);
+    opacity: 0.22;
+  }
+
+  50% {
+    transform: translate3d(3.4%, -2.4%, 0) scale(1.10);
+    opacity: 0.42;
+  }
+
+  100% {
+    transform: translate3d(-2.2%, 1.8%, 0) scale(1.03);
+    opacity: 0.22;
+  }
 }
 
 /* Sweep profundo — correnteza diagonal mais presente */
 @keyframes footerDeepSweep {
-  0%   { transform: translateX(-28%) rotate(10deg); opacity: 0.14; }
-  45%  { transform: translateX( 20%) rotate(10deg); opacity: 0.34; }
-  100% { transform: translateX(-28%) rotate(10deg); opacity: 0.14; }
+  0% {
+    transform: translateX(-28%) rotate(10deg);
+    opacity: 0.14;
+  }
+
+  45% {
+    transform: translateX(20%) rotate(10deg);
+    opacity: 0.34;
+  }
+
+  100% {
+    transform: translateX(-28%) rotate(10deg);
+    opacity: 0.14;
+  }
 }
 
 /* FIX 6: btnWaveSweep REMOVIDO — código morto confirmado via grep.
@@ -276,10 +550,23 @@
    Usada pelo .btn::before.
    ─────────────────────────────────────────────────────────────── */
 @keyframes btnCaustic {
-  0%   { transform: translateX(-112%) rotate(8deg); opacity: 0;    }
-  12%  { opacity: 0.72; }
-  80%  { opacity: 0.40; }
-  100% { transform: translateX( 112%) rotate(8deg); opacity: 0;    }
+  0% {
+    transform: translateX(-112%) rotate(8deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.72;
+  }
+
+  80% {
+    opacity: 0.40;
+  }
+
+  100% {
+    transform: translateX(112%) rotate(8deg);
+    opacity: 0;
+  }
 }
 
 /* ── Bioluminescência orgânica ────────────────────────────────────
@@ -289,28 +576,68 @@
    A escala oscila em 2% — apenas o suficiente para parecer vivo.
    ─────────────────────────────────────────────────────────────── */
 @keyframes bioBreath {
-  0%,  100% { opacity: 0.14; transform: scale(1.00); }
-  35%        { opacity: 0.24; transform: scale(1.01); }
-  65%        { opacity: 0.30; transform: scale(1.02); }
+
+  0%,
+  100% {
+    opacity: 0.14;
+    transform: scale(1.00);
+  }
+
+  35% {
+    opacity: 0.24;
+    transform: scale(1.01);
+  }
+
+  65% {
+    opacity: 0.30;
+    transform: scale(1.02);
+  }
 }
 
 /* Plâncton bioluminescente — pontos derivando quase imperceptivelmente */
 @keyframes footerPlankton {
-  0%   { transform: translate3d(0, 0, 0);          opacity: 0.14; }
-  50%  { transform: translate3d(-12px, 9px, 0);    opacity: 0.26; }
-  100% { transform: translate3d(0, 0, 0);          opacity: 0.14; }
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.14;
+  }
+
+  50% {
+    transform: translate3d(-12px, 9px, 0);
+    opacity: 0.26;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.14;
+  }
 }
 
 /* Superfície oceânica — ondulação sutil horizontal */
 @keyframes oceanSurface {
-  0%, 100% { transform: translate3d(0, 0, 0);          opacity: 0.35; }
-  50%       { transform: translate3d(10px, -6px, 0);   opacity: 0.42; }
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translate3d(10px, -6px, 0);
+    opacity: 0.42;
+  }
 }
 
 /* Caustics genérico — deriva X/Y sem variação de opacidade */
 @keyframes causticsDrift {
-  0%, 100% { transform: translate3d(-10px, 6px, 0); }
-  50%       { transform: translate3d(10px, -6px, 0); }
+
+  0%,
+  100% {
+    transform: translate3d(-10px, 6px, 0);
+  }
+
+  50% {
+    transform: translate3d(10px, -6px, 0);
+  }
 }
 
 /* =========================
@@ -320,20 +647,55 @@
    opacity: 0 no início e fim = entra e sai suavemente.
    ========================= */
 @keyframes waveFlow {
-  0%   { transform: translateX(-110%) rotate(1.5deg); opacity: 0.00; }
-  8%   { opacity: 0.55; }  /* fade in rápido */
-  40%  { opacity: 0.75; }  /* pico de visibilidade */
-  85%  { opacity: 0.40; }  /* fade out gradual */
-  100% { transform: translateX(110%) rotate(1.5deg); opacity: 0.00; }
+  0% {
+    transform: translateX(-110%) rotate(1.5deg);
+    opacity: 0.00;
+  }
+
+  8% {
+    opacity: 0.55;
+  }
+
+  /* fade in rápido */
+  40% {
+    opacity: 0.75;
+  }
+
+  /* pico de visibilidade */
+  85% {
+    opacity: 0.40;
+  }
+
+  /* fade out gradual */
+  100% {
+    transform: translateX(110%) rotate(1.5deg);
+    opacity: 0.00;
+  }
 }
 
 /* FIX 7: oceanFlow — versão global do fluxo unidirecional (renomeado de oceanWaveFlow) */
 @keyframes oceanFlow {
-  0%   { transform: translateX(-110%) rotate(10deg); opacity: 0.00; }
-  10%  { opacity: 0.28; }
-  50%  { opacity: 0.38; }
-  90%  { opacity: 0.18; }
-  100% { transform: translateX(110%) rotate(10deg); opacity: 0.00; }
+  0% {
+    transform: translateX(-110%) rotate(10deg);
+    opacity: 0.00;
+  }
+
+  10% {
+    opacity: 0.28;
+  }
+
+  50% {
+    opacity: 0.38;
+  }
+
+  90% {
+    opacity: 0.18;
+  }
+
+  100% {
+    transform: translateX(110%) rotate(10deg);
+    opacity: 0.00;
+  }
 }
 
 /* =========================
@@ -344,27 +706,60 @@
 
 /* Painel 1: deriva diagonal leve (-3px, -6px no pico) */
 @keyframes panelDrift1 {
-  0%   { transform: translate3d(0, 0px, 0);    }
-  35%  { transform: translate3d(-3px, -6px, 0); }
-  70%  { transform: translate3d(2px, -2px, 0);  }
-  100% { transform: translate3d(0, 0px, 0);    }
+  0% {
+    transform: translate3d(0, 0px, 0);
+  }
+
+  35% {
+    transform: translate3d(-3px, -6px, 0);
+  }
+
+  70% {
+    transform: translate3d(2px, -2px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0px, 0);
+  }
 }
 
 /* Painel 2: deriva mais intensa (4px, -8px) — fase diferente do 1 */
 @keyframes panelDrift2 {
-  0%   { transform: translate3d(0, 0px, 0);    }
-  40%  { transform: translate3d(4px, -8px, 0);  }
-  75%  { transform: translate3d(-2px, -3px, 0); }
-  100% { transform: translate3d(0, 0px, 0);    }
+  0% {
+    transform: translate3d(0, 0px, 0);
+  }
+
+  40% {
+    transform: translate3d(4px, -8px, 0);
+  }
+
+  75% {
+    transform: translate3d(-2px, -3px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0px, 0);
+  }
 }
 
 /* FIX 9: floatDrift simplificado — translateX(-50%) absorvido no translate3d
    via calc(), eliminando a repetição em cada keyframe. */
 @keyframes floatDrift {
-  0%   { transform: translate3d(-50%, 0px, 0);               }
-  40%  { transform: translate3d(calc(-50% + 4px), -8px, 0);  }
-  75%  { transform: translate3d(calc(-50% - 2px), -3px, 0);  }
-  100% { transform: translate3d(-50%, 0px, 0);               }
+  0% {
+    transform: translate3d(-50%, 0px, 0);
+  }
+
+  40% {
+    transform: translate3d(calc(-50% + 4px), -8px, 0);
+  }
+
+  75% {
+    transform: translate3d(calc(-50% - 2px), -3px, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0px, 0);
+  }
 }
 
 /* =========================
@@ -380,24 +775,32 @@
     opacity: 0;
     animation-timing-function: ease-out;
   }
-  6%  { opacity: 1; }
+
+  6% {
+    opacity: 1;
+  }
+
   25% {
-    /* FIX 1: fallback alterado de 10px → 0px (neutro) */
-    transform: translateY(-22vh) translateX(var(--bubble-drift, 0px)) scale(0.95);
+    transform: translateY(-22vh) translateX(var(--bubble-drift)) scale(0.95);
     animation-timing-function: ease-in-out;
   }
+
   50% {
-    /* FIX 1: fallback alterado de -6px → 0px (neutro) */
-    transform: translateY(-50vh) translateX(var(--bubble-drift-2, 0px)) scale(1.05);
+    transform: translateY(-50vh) translateX(var(--bubble-drift-2)) scale(1.05);
     animation-timing-function: ease-in-out;
   }
+
   75% {
-    transform: translateY(-76vh) translateX(var(--bubble-drift, 0px)) scale(1.08);
+    transform: translateY(-76vh) translateX(var(--bubble-drift)) scale(1.08);
     animation-timing-function: ease-in;
   }
-  88% { opacity: 0.5; }
+
+  88% {
+    opacity: 0.5;
+  }
+
   100% {
-    transform: translateY(-108vh) translateX(var(--bubble-drift-2, 0px)) scale(1.0);
+    transform: translateY(-108vh) translateX(var(--bubble-drift-2)) scale(1.0);
     opacity: 0;
   }
 }
@@ -408,10 +811,25 @@
    que parece genuinamente subaquática.
    ========================= */
 @keyframes portfolioCaustic {
-  0%   { transform: translate3d(-8%, 4%, 0) scale(1.02) rotate(0deg);    opacity: 0.14; }
-  40%  { transform: translate3d( 6%, -3%, 0) scale(1.08) rotate(1.5deg); opacity: 0.28; }
-  75%  { transform: translate3d(-4%, -1%, 0) scale(1.04) rotate(-1deg);  opacity: 0.20; }
-  100% { transform: translate3d(-8%, 4%, 0) scale(1.02) rotate(0deg);    opacity: 0.14; }
+  0% {
+    transform: translate3d(-8%, 4%, 0) scale(1.02) rotate(0deg);
+    opacity: 0.14;
+  }
+
+  40% {
+    transform: translate3d(6%, -3%, 0) scale(1.08) rotate(1.5deg);
+    opacity: 0.28;
+  }
+
+  75% {
+    transform: translate3d(-4%, -1%, 0) scale(1.04) rotate(-1deg);
+    opacity: 0.20;
+  }
+
+  100% {
+    transform: translate3d(-8%, 4%, 0) scale(1.02) rotate(0deg);
+    opacity: 0.14;
+  }
 }
 
 /* =========================
@@ -422,16 +840,36 @@
    ========================= */
 @media (max-width: 1023px) {
   @keyframes surfaceEntry {
-    0%   { opacity: 0; transform: translateY(45px) scale(0.97); }
-    100% { opacity: 1; transform: translateY(0) scale(1);       }
+    0% {
+      opacity: 0;
+      transform: translateY(45px) scale(0.97);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 }
 
 @media (min-width: 1024px) {
   @keyframes surfaceEntry {
-    0%   { opacity: 0; transform: translateY(45px) scale(0.97); filter: blur(4px); }
-    55%  { filter: blur(1px); } /* o desfoque some antes do movimento terminar */
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px);       }
+    0% {
+      opacity: 0;
+      transform: translateY(45px) scale(0.97);
+      filter: blur(4px);
+    }
+
+    55% {
+      filter: blur(1px);
+    }
+
+    /* o desfoque some antes do movimento terminar */
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
+    }
   }
 }
 
@@ -450,10 +888,25 @@
    "respira" — deixa de ser uma barra estática e vira ambiente.
    ========================= */
 @keyframes headerCausticFloat {
-  0%   { transform: translate3d(0,     0,     0) scale(1.00); opacity: 0.40; }
-  38%  { transform: translate3d(4%,   -1.5%,  0) scale(1.05); opacity: 0.56; }
-  68%  { transform: translate3d(-2%,   1%,    0) scale(1.02); opacity: 0.44; }
-  100% { transform: translate3d(0,     0,     0) scale(1.00); opacity: 0.40; }
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.00);
+    opacity: 0.40;
+  }
+
+  38% {
+    transform: translate3d(4%, -1.5%, 0) scale(1.05);
+    opacity: 0.56;
+  }
+
+  68% {
+    transform: translate3d(-2%, 1%, 0) scale(1.02);
+    opacity: 0.44;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.00);
+    opacity: 0.40;
+  }
 }
 
 /* =========================
@@ -462,18 +915,21 @@
    sinalizando posição no escuro da profundidade.
    ========================= */
 @keyframes biolumDot {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(-50%) scale(1);
     box-shadow:
-      0 0 4px  color-mix(in srgb, var(--accent) 80%, transparent),
+      0 0 4px color-mix(in srgb, var(--accent) 80%, transparent),
       0 0 10px color-mix(in srgb, var(--accent) 50%, transparent);
   }
+
   50% {
     transform: translateX(-50%) scale(1.45);
     box-shadow:
-      0 0 7px  color-mix(in srgb, var(--accent) 100%, transparent),
-      0 0 18px color-mix(in srgb, var(--accent)  70%, transparent),
-      0 0 32px color-mix(in srgb, var(--accent)  35%, transparent);
+      0 0 7px color-mix(in srgb, var(--accent) 100%, transparent),
+      0 0 18px color-mix(in srgb, var(--accent) 70%, transparent),
+      0 0 32px color-mix(in srgb, var(--accent) 35%, transparent);
   }
 }
 
@@ -483,16 +939,19 @@
    sinalizando presença no escuro do oceano.
    ========================= */
 @keyframes pillDotBiolum {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--mint)   32%, transparent),
-      0 0 8px   color-mix(in srgb, var(--accent)  20%, transparent);
+      0 0 0 3px color-mix(in srgb, var(--mint) 32%, transparent),
+      0 0 8px color-mix(in srgb, var(--accent) 20%, transparent);
   }
+
   50% {
     box-shadow:
-      0 0 0 5px color-mix(in srgb, var(--mint)   54%, transparent),
-      0 0 16px  color-mix(in srgb, var(--accent)  40%, transparent),
-      0 0 28px  color-mix(in srgb, var(--mint)    22%, transparent);
+      0 0 0 5px color-mix(in srgb, var(--mint) 54%, transparent),
+      0 0 16px color-mix(in srgb, var(--accent) 40%, transparent),
+      0 0 28px color-mix(in srgb, var(--mint) 22%, transparent);
   }
 }
 
@@ -503,9 +962,12 @@
    bloco cobre tudo que o JS não controla (pulsações, glows, etc).
    ========================= */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration:        0.01ms !important;
-    animation-iteration-count: 1      !important;
-    transition-duration:       0.01ms !important;
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

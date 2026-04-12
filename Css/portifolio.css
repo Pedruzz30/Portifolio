@@ -23,7 +23,7 @@
  *   7. card content          — z-index: 1, acima de tudo
  * ═══════════════════════════════════════════════════════════
  */
- 
+
 /* =========================
    PORTFOLIO — Zona de Pressão
    ========================= */
@@ -32,35 +32,22 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
- 
+
   /* Zona de pressão: azul mais escuro que o roadmap,
      pressão aumentando, menos luz chegando de cima. */
   background: linear-gradient(180deg,
-    #1a5a8a  0%,
-    #0f3f6e 30%,
-    #082d55 65%,
-    #041c3a 100%
-  );
+      rgba(8, 45, 73, 0.10) 0%,
+      rgba(4, 28, 50, 0.20) 46%,
+      rgba(2, 14, 27, 0.34) 100%);
 }
- 
+
 /* Caustics da zona de pressão — luz vinda de muito longe,
    muito mais fraca e dispersa que nas seções anteriores */
 .portfolio::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.09;
-  background:
-    radial-gradient(ellipse 30% 15% at 25% 30%, rgba(80, 190, 255, 1) 0%, transparent 100%),
-    radial-gradient(ellipse 20% 10% at 70% 55%, rgba(60, 170, 240, 1) 0%, transparent 100%),
-    radial-gradient(ellipse 25% 12% at 50% 15%, rgba(100, 210, 255, 1) 0%, transparent 100%),
-    radial-gradient(ellipse 15% 7%  at 85% 35%, rgba(80, 180, 230, 1) 0%, transparent 100%);
-  animation: portfolioCaustic calc(var(--wave-slow) * 1.05) ease-in-out infinite;
-  will-change: transform, opacity;
+  display: none;
+  /* Nenhuma caústica no abismo */
 }
- 
+
 /* Gradiente de profundidade — escurece progressivamente o rodapé,
    sinalizando a aproximação do abismo (footer) */
 .portfolio::after {
@@ -70,13 +57,12 @@
   pointer-events: none;
   z-index: 0;
   background: linear-gradient(180deg,
-    transparent  0%,
-    transparent 50%,
-    rgba(4, 15, 40, 0.30)  80%,
-    rgba(2, 10, 28, 0.55) 100%
-  );
+      transparent 0%,
+      transparent 60%,
+      rgba(4, 15, 40, 0.12) 84%,
+      rgba(2, 10, 28, 0.24) 100%);
 }
- 
+
 .portfolio-shell {
   position: relative;
   z-index: 1;
@@ -84,7 +70,7 @@
   margin: 0 auto;
   padding: 0 clamp(1.2rem, 5vw, 3rem);
 }
- 
+
 /* =========================
    HEADER
    ========================= */
@@ -94,15 +80,15 @@
   flex-direction: column;
   gap: 0.75rem;
 }
- 
+
 .portfolio-header .section-eyebrow {
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(100, 200, 255, 0.60);
+  color: rgba(120, 210, 255, 0.82);
 }
- 
+
 .portfolio-header h2 {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 900;
@@ -110,14 +96,14 @@
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
- 
+
 .portfolio-header p {
   font-size: 1.05rem;
-  color: rgba(160, 210, 240, 0.55);
+  color: rgba(180, 225, 248, 0.82);
   max-width: 560px;
   line-height: 1.65;
 }
- 
+
 /* =========================
    GRID
    ========================= */
@@ -126,7 +112,7 @@
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: clamp(1.25rem, 3vw, 2rem);
 }
- 
+
 /* =========================
    PROJECT CARD — objeto submerso com bioluminescência
    ========================= */
@@ -136,23 +122,22 @@
   position: relative;
   display: flex;
   flex-direction: column;
- 
+
   /* Vidro abissal — mais escuro e denso que os cards do roadmap */
   background: linear-gradient(145deg,
-    rgba(30, 80, 140, 0.60),
-    rgba(15, 45, 90, 0.80)
-  );
+      rgba(30, 80, 140, 0.60),
+      rgba(15, 45, 90, 0.80));
   border: 1px solid rgba(80, 180, 255, 0.12);
   box-shadow:
     0 12px 36px rgba(2, 10, 30, 0.50),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
- 
+
   transition:
-    transform      350ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow     350ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color   350ms ease;
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 350ms ease;
 }
- 
+
 /* Hover: sobe como objeto levado por corrente ascendente */
 .project-card:hover {
   transform: translateY(-8px) scale(1.01);
@@ -163,77 +148,78 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.10);
   border-color: rgba(80, 180, 255, 0.28);
 }
- 
+
 /* =========================
    CAMADAS INTERATIVAS DO CARD
    ========================= */
- 
+
 /* Glow bioluminescente — acende no hover como criatura abissal
    perturbada. Fica no topo do card, apagado por padrão. */
 .project-card__glow {
   position: absolute;
   inset: -30px;
   background: radial-gradient(ellipse at 50% 0%,
-    rgba(80, 190, 255, 0.22),
-    transparent 65%
-  );
+      rgba(80, 190, 255, 0.22),
+      transparent 65%);
   pointer-events: none;
   opacity: 0;
   border-radius: inherit;
   z-index: 0;
   transition: opacity 400ms ease;
 }
- 
-.project-card:hover .project-card__glow { opacity: 1; }
- 
+
+.project-card:hover .project-card__glow {
+  opacity: 1;
+}
+
 /* Caustic de luz — reflexo subaquático via mix-blend-mode: screen.
    Só ilumina, nunca escurece. */
 .project-card__caustic {
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse 65% 45% at 30% 20%,
-    rgba(100, 210, 255, 0.10),
-    transparent 70%
-  );
+      rgba(100, 210, 255, 0.10),
+      transparent 70%);
   mix-blend-mode: screen;
   pointer-events: none;
-  opacity: 0;
+  opacity: 0.4;
+  /* Sempre um pouco visível, como luz refratada estática */
   z-index: 0;
   transition: opacity 350ms ease;
 }
- 
-.project-card:hover .project-card__caustic { opacity: 1; }
- 
+
+.project-card:hover .project-card__caustic {
+  opacity: 1;
+}
+
 /* Sweep de onda — faixa diagonal de luz que atravessa o card
    no hover, como uma corrente passando pelo objeto submerso.
    Usa transform para animar via compositor GPU (sem reflow). */
 .project-card__sweep {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent                       0%,
-    transparent                      35%,
-    rgba(255, 255, 255, 0.05)        43%,
-    rgba(180, 230, 255, 0.09)        50%,
-    rgba(255, 255, 255, 0.04)        57%,
-    transparent                      65%,
-    transparent                     100%
-  );
+  background: linear-gradient(105deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(255, 255, 255, 0.05) 43%,
+      rgba(180, 230, 255, 0.09) 50%,
+      rgba(255, 255, 255, 0.04) 57%,
+      transparent 65%,
+      transparent 100%);
   pointer-events: none;
   opacity: 0;
   z-index: 0;
   transform: translateX(-110%);
   transition:
-    opacity   0.15s ease,
+    opacity 0.15s ease,
     transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
- 
+
 .project-card:hover .project-card__sweep {
   opacity: 1;
   transform: translateX(110%);
 }
- 
+
 /* =========================
    CONTEÚDO — acima de todas as camadas
    ========================= */
@@ -243,7 +229,7 @@
   position: relative;
   z-index: 1;
 }
- 
+
 .project-card__head {
   padding: 1.5rem 1.5rem 0;
   display: flex;
@@ -251,7 +237,7 @@
   justify-content: space-between;
   gap: 1rem;
 }
- 
+
 .project-card__icon {
   width: 46px;
   height: 46px;
@@ -265,13 +251,13 @@
   flex-shrink: 0;
   transition: background 350ms ease, box-shadow 350ms ease;
 }
- 
+
 /* Ícone acende no hover — bioluminescência do objeto */
 .project-card:hover .project-card__icon {
   background: rgba(80, 190, 255, 0.15);
   box-shadow: 0 0 16px rgba(80, 190, 255, 0.22);
 }
- 
+
 .project-card__status {
   font-size: 0.72rem;
   font-weight: 700;
@@ -281,19 +267,19 @@
   border-radius: 99px;
   border: 1px solid;
 }
- 
+
 .project-card__status--done {
   color: rgba(45, 226, 168, 0.90);
   border-color: rgba(45, 226, 168, 0.28);
   background: rgba(45, 226, 168, 0.10);
 }
- 
+
 .project-card__status--progress {
   color: rgba(80, 190, 255, 0.90);
   border-color: rgba(80, 190, 255, 0.28);
   background: rgba(80, 190, 255, 0.10);
 }
- 
+
 .project-card__body {
   padding: 1.25rem 1.5rem;
   flex: 1;
@@ -301,7 +287,7 @@
   flex-direction: column;
   gap: 0.65rem;
 }
- 
+
 .project-card__title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -309,43 +295,43 @@
   line-height: 1.3;
   transition: color 300ms ease;
 }
- 
+
 /* Título clareia no hover — como luz incidindo */
 .project-card:hover .project-card__title {
   color: rgba(200, 235, 255, 0.98);
 }
- 
+
 .project-card__desc {
   font-size: 0.93rem;
-  color: rgba(160, 210, 240, 0.55);
+  color: rgba(180, 225, 248, 0.80);
   line-height: 1.6;
   flex: 1;
 }
- 
+
 .project-card__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.5rem;
 }
- 
+
 .project-tag {
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.25em 0.65em;
   border-radius: 99px;
-  background: rgba(80, 180, 255, 0.10);
-  color: rgba(120, 200, 255, 0.75);
-  border: 1px solid rgba(80, 180, 255, 0.18);
+  background: rgba(80, 180, 255, 0.12);
+  color: rgba(150, 215, 255, 0.90);
+  border: 1px solid rgba(80, 180, 255, 0.24);
   transition: background 250ms ease, color 250ms ease;
 }
- 
+
 /* Tags ficam mais visíveis no hover */
 .project-card:hover .project-tag {
   background: rgba(80, 180, 255, 0.17);
   color: rgba(160, 220, 255, 0.90);
 }
- 
+
 .project-card__footer {
   padding: 1rem 1.5rem 1.5rem;
   display: flex;
@@ -353,7 +339,7 @@
   gap: 0.75rem;
   border-top: 1px solid rgba(80, 180, 255, 0.08);
 }
- 
+
 .project-card__link {
   display: inline-flex;
   align-items: center;
@@ -364,19 +350,19 @@
   text-decoration: none;
   transition: color 250ms ease, gap 250ms ease;
 }
- 
+
 .project-card__link:hover {
   color: rgba(160, 225, 255, 0.95);
   gap: 0.65rem;
 }
- 
+
 .project-card__link svg {
   width: 15px;
   height: 15px;
   fill: currentColor;
   flex-shrink: 0;
 }
- 
+
 /* Seta animada do link — desliza no hover como sendo arrastada */
 .project-card__link-arrow {
   width: 10px;
@@ -388,22 +374,25 @@
   flex-shrink: 0;
   transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
- 
+
 .project-card__link:hover .project-card__link-arrow {
   transform: rotate(45deg) translate(3px, -3px);
 }
- 
+
 /* =========================
    BIOLUMINESCÊNCIA PULSANTE
    Cards "Em progresso" — criaturas ativas sinalizando vida no escuro
    ========================= */
 @keyframes cardBiolum {
-  0%, 100% {
+
+  0%,
+  100% {
     border-color: rgba(80, 180, 255, 0.12);
     box-shadow:
       0 12px 36px rgba(2, 10, 30, 0.50),
       inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
+
   50% {
     border-color: rgba(80, 180, 255, 0.32);
     box-shadow:
@@ -412,13 +401,13 @@
       0 0 18px rgba(80, 180, 255, 0.10);
   }
 }
- 
+
 @media (prefers-reduced-motion: no-preference) {
   .project-card[data-status="progress"] {
     animation: cardBiolum 4s ease-in-out infinite;
   }
 }
- 
+
 /* =========================
    REDUCED MOTION
    ========================= */
@@ -426,11 +415,11 @@
   .project-card {
     transition: none;
   }
- 
+
   .project-card:hover {
     transform: none;
   }
- 
+
   .project-card__glow,
   .project-card__caustic,
   .project-card__sweep,
@@ -440,12 +429,12 @@
   .project-card__link {
     transition: none;
   }
- 
+
   .project-card__sweep {
     display: none;
   }
 }
- 
+
 /* =========================
    RESPONSIVO
    ========================= */
