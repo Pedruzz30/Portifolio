@@ -15,7 +15,7 @@ h3,
  ========================================================= */
 .project-card.project-card--premium {
   position: relative;
-  background: color-mix(in srgb, #062540 80%, rgba(255, 255, 255, 0.03));
+  background: color-mix(in srgb, #062540 88%, rgba(255, 255, 255, 0.03));
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px;
   padding: 2.2rem;
@@ -28,7 +28,7 @@ h3,
     border-color 0.4s ease,
     box-shadow 0.4s ease,
     transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
   z-index: 1;
   text-align: left;
 }

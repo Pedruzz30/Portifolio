@@ -36,7 +36,7 @@ export function initGsapEffects({ reduceMotion = false, isMobile = false } = {})
     cleanups.push(initPortfolioHover(gsap));
     cleanups.push(initHeroParallax(gsap, ScrollTrigger));
     cleanups.push(initMagneticButtons(gsap));
-    cleanups.push(initCursorGlow(gsap));
+
   }
 
   return {
@@ -138,7 +138,7 @@ function initLoaderMerge(gsap) {
     ring.style.zIndex = "2";
   }
 
-  const tl = gsap.timeline({ delay: 0.8 });
+  const tl = gsap.timeline({ delay: 0.5 });
 
   tl.to(water, {
     height: "100%",
@@ -232,7 +232,9 @@ function initHeroTextReveal(gsap) {
   const stats = document.querySelector(".hero-stats");
   const logo = document.querySelector(".logo");
   const navList = document.querySelector(".nav__list");
-  const heroVisual = document.querySelector(".hero-visual");
+  const heroVisual =
+    document.querySelector(".hero-visual__inner") ||
+    document.querySelector(".hero-visual");
 
   gsap.set(words, { y: "105%", opacity: 0 });
   if (subtitle) gsap.set(subtitle, { opacity: 0, y: 18 });
@@ -241,9 +243,9 @@ function initHeroTextReveal(gsap) {
   if (stats) gsap.set(stats, { opacity: 0, y: 14 });
   if (logo) gsap.set(logo, { opacity: 0, y: -15 });
   if (navList) gsap.set(navList, { opacity: 0, y: -15 });
-  if (heroVisual) gsap.set(heroVisual, { opacity: 0, scale: 0.96, x: 18 });
+  if (heroVisual) gsap.set(heroVisual, { opacity: 0, scale: 0.97, x: 14 });
 
-  const tl = gsap.timeline({ delay: 1.65, defaults: { overwrite: "auto" } });
+  const tl = gsap.timeline({ delay: 1.3, defaults: { overwrite: "auto" } });
 
   tl.to(words, {
     y: "0%",
@@ -285,10 +287,11 @@ function initHeroTextReveal(gsap) {
         opacity: 1,
         scale: 1,
         x: 0,
-        duration: 0.85,
+        duration: 0.82,
         ease: "power2.out",
+        clearProps: "opacity,transform",
       },
-      "-=0.70",
+      "-=0.68",
     );
   }
 
@@ -339,60 +342,52 @@ function initHeroParallax(gsap, ScrollTrigger) {
   const hero = document.querySelector(".hero");
   if (!hero) return () => {};
 
-  const cleanups = [];
-  const tweens = [];
-
-  const heroImage = document.querySelector(".hero-image-wrap");
-  if (heroImage) {
-    const tween = gsap.to(heroImage, {
-      y: 90,
-      ease: "none",
-      scrollTrigger: {
-        trigger: hero,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.2,
-      },
-    });
-    tweens.push(tween);
-    cleanups.push(() => tween.scrollTrigger?.kill());
-  }
-
+  const heroVisual = document.querySelector(".hero-visual");
   const heroContent = document.querySelector(".hero-content");
-  if (heroContent) {
-    const tween = gsap.to(heroContent, {
-      y: 55,
-      ease: "none",
-      scrollTrigger: {
-        trigger: hero,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.5,
-      },
-    });
-    tweens.push(tween);
-    cleanups.push(() => tween.scrollTrigger?.kill());
+  const scrollIndicator = document.querySelector(".scroll-indicator");
+
+  if (!heroVisual && !heroContent && !scrollIndicator) return () => {};
+
+  const tl = gsap.timeline({
+    defaults: { ease: "none", overwrite: "auto" },
+    scrollTrigger: {
+      trigger: hero,
+      start: "top top",
+      end: "bottom top",
+      scrub: 0.45,
+      invalidateOnRefresh: true,
+      fastScrollEnd: true,
+    },
+  });
+
+  if (heroVisual) {
+    tl.to(heroVisual, { yPercent: 12 }, 0);
   }
 
-  const scrollIndicator = document.querySelector(".scroll-indicator");
+  if (heroContent) {
+    tl.to(heroContent, { yPercent: 6 }, 0);
+  }
+
   if (scrollIndicator) {
-    const tween = gsap.to(scrollIndicator, {
-      opacity: 0,
-      ease: "none",
-      scrollTrigger: {
-        trigger: hero,
-        start: "top top",
-        end: "20% top",
-        scrub: true,
+    tl.to(
+      scrollIndicator,
+      {
+        opacity: 0,
+        yPercent: 35,
+        duration: 0.32,
       },
-    });
-    tweens.push(tween);
-    cleanups.push(() => tween.scrollTrigger?.kill());
+      0,
+    );
   }
 
   return () => {
-    cleanups.forEach((fn) => fn());
-    tweens.forEach((tween) => tween.kill());
+    tl.scrollTrigger?.kill();
+    tl.kill();
+    if (heroVisual) gsap.set(heroVisual, { clearProps: "transform" });
+    if (heroContent) gsap.set(heroContent, { clearProps: "transform" });
+    if (scrollIndicator) {
+      gsap.set(scrollIndicator, { clearProps: "opacity,transform" });
+    }
   };
 }
 
@@ -467,45 +462,118 @@ function initMagneticButtons(gsap) {
   const hasHover = window.matchMedia("(hover: hover)").matches;
   if (!hasHover) return () => {};
 
-  const buttons = document.querySelectorAll(
-    ".btn--depth, .btn--surface, .btn--bio, .btn--ghost, .btn--hero-primary, .btn--hero-secondary",
+  const buttons = Array.from(
+    document.querySelectorAll(
+      ".btn--depth, .btn--surface, .btn--bio, .btn--ghost, .btn--hero-primary, .btn--hero-secondary",
+    ),
   );
-  const handlers = [];
+  if (!buttons.length) return () => {};
 
-  buttons.forEach((btn) => {
-    const xTo = gsap.quickTo(btn, "x", { duration: 0.35, ease: "power2.out" });
-    const yTo = gsap.quickTo(btn, "y", { duration: 0.35, ease: "power2.out" });
+  const clamp = (value, limit) => Math.max(-limit, Math.min(limit, value));
+  const tracked = [];
+
+  const ensureMotionWrapper = (button) => {
+    const existing = Array.from(button.children).find((child) =>
+      child.classList?.contains("btn__motion"),
+    );
+    if (existing) return existing;
+
+    const motion = document.createElement("span");
+    motion.className = "btn__motion";
+
+    Array.from(button.childNodes).forEach((node) => {
+      motion.appendChild(node);
+    });
+
+    button.appendChild(motion);
+    return motion;
+  };
+
+  const refreshActiveRects = () => {
+    tracked.forEach((entry) => {
+      if (!entry.active) return;
+      entry.rect = entry.button.getBoundingClientRect();
+    });
+  };
+
+  buttons.forEach((button) => {
+    const motionTarget = ensureMotionWrapper(button);
+    const entry = {
+      button,
+      motionTarget,
+      rect: null,
+      active: false,
+    };
+
+    const xTo = gsap.quickTo(motionTarget, "x", {
+      duration: 0.28,
+      ease: "power3.out",
+    });
+    const yTo = gsap.quickTo(motionTarget, "y", {
+      duration: 0.28,
+      ease: "power3.out",
+    });
+
+    const updateRect = () => {
+      entry.rect = button.getBoundingClientRect();
+    };
+
+    const onEnter = () => {
+      entry.active = true;
+      updateRect();
+    };
 
     const onMove = (event) => {
-      const rect = btn.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = (event.clientX - centerX) * 0.28;
-      const dy = (event.clientY - centerY) * 0.28;
+      if (!entry.rect) updateRect();
+
+      const { left, top, width, height } = entry.rect;
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+      const maxX = width * 0.16;
+      const maxY = height * 0.22;
+      const dx = clamp((event.clientX - centerX) * 0.18, maxX);
+      const dy = clamp((event.clientY - centerY) * 0.18, maxY);
+
       xTo(dx);
       yTo(dy);
     };
 
     const onLeave = () => {
-      gsap.to(btn, {
+      entry.active = false;
+      entry.rect = null;
+      gsap.to(motionTarget, {
         x: 0,
         y: 0,
-        duration: 0.65,
-        ease: "elastic.out(1, 0.45)",
+        duration: 0.6,
+        ease: "elastic.out(1, 0.5)",
         overwrite: "auto",
       });
     };
 
-    btn.addEventListener("mousemove", onMove);
-    btn.addEventListener("mouseleave", onLeave);
-    handlers.push({ btn, onMove, onLeave });
+    button.addEventListener("pointerenter", onEnter);
+    button.addEventListener("pointermove", onMove);
+    button.addEventListener("pointerleave", onLeave);
+
+    tracked.push({
+      ...entry,
+      onEnter,
+      onMove,
+      onLeave,
+    });
   });
 
+  window.addEventListener("resize", refreshActiveRects, { passive: true });
+  window.addEventListener("scroll", refreshActiveRects, { passive: true });
+
   return () => {
-    handlers.forEach(({ btn, onMove, onLeave }) => {
-      btn.removeEventListener("mousemove", onMove);
-      btn.removeEventListener("mouseleave", onLeave);
-      gsap.set(btn, { x: 0, y: 0 });
+    window.removeEventListener("resize", refreshActiveRects);
+    window.removeEventListener("scroll", refreshActiveRects);
+
+    tracked.forEach(({ button, motionTarget, onEnter, onMove, onLeave }) => {
+      button.removeEventListener("pointerenter", onEnter);
+      button.removeEventListener("pointermove", onMove);
+      button.removeEventListener("pointerleave", onLeave);
+      gsap.set(motionTarget, { clearProps: "transform" });
     });
   };
 }
@@ -581,7 +649,9 @@ function initStaggerCards(gsap, ScrollTrigger) {
 function initLazyTilt() {
   const hasHover = window.matchMedia("(hover: hover)").matches;
   const items = Array.from(
-    document.querySelectorAll(".project-card, .stack-roadmap__card"),
+    document.querySelectorAll(
+      ".project-card__plane, .stack-roadmap__card-plane",
+    ),
   );
 
   if (!window.VanillaTilt || !items.length || !hasHover) {
@@ -597,10 +667,10 @@ function initLazyTilt() {
       idleHandles.delete(element);
       if (element.vanillaTilt) return;
       window.VanillaTilt.init(element, {
-        max: 8,
-        speed: 600,
+        max: 7,
+        speed: 560,
         glare: true,
-        "max-glare": 0.12,
+        "max-glare": 0.1,
       });
     };
 
@@ -706,6 +776,10 @@ function initCursorGlow(gsap) {
   const glow = document.createElement("div");
   glow.className = "cursor-glow";
   glow.setAttribute("aria-hidden", "true");
+  // position: fixed removes the element from document flow so GSAP transforms
+  // (translate X/Y to cursor position) don't inflate scrollHeight and cause
+  // extra scroll at the bottom of the page.
+  glow.style.cssText = "position:fixed;top:0;left:0;pointer-events:none;z-index:9999;";
   document.body.appendChild(glow);
 
   const xTo = gsap.quickTo(glow, "x", { duration: 0.2, ease: "power3.out" });

@@ -115,28 +115,19 @@
 
 /* =========================
    GLOW DO WRAP — respira com o ritmo do oceano
-   box-shadow expande (50%) e encolhe (0/100%), simulando
-   uma criatura bioluminescente pulsando na escuridão.
+   ANTES: animava box-shadow (repaint full-frame em elemento grande = jank).
+   AGORA: anima apenas opacity no .hero-visual::before — GPU composited,
+   zero repaint. O box-shadow estático fica no .hero-image-wrap.
    ========================= */
+@keyframes wrapGlowPulse {
+  0%, 100% { opacity: 0.38; }
+  50%       { opacity: 0.90; }
+}
+
+/* Mantido como alias vazio para não quebrar referências legadas */
 @keyframes wrapGlow {
-
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--mint) 20%, transparent),
-      0 0 32px color-mix(in srgb, var(--accent) 22%, transparent),
-      0 0 72px color-mix(in srgb, var(--deep-blue) 18%, transparent),
-      0 24px 64px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
-  }
-
-  50% {
-    /* No pico: glow 60% mais intenso — "respiração" bioluminescente */
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--mint) 44%, transparent),
-      0 0 52px color-mix(in srgb, var(--accent) 40%, transparent),
-      0 0 108px color-mix(in srgb, var(--deep-blue) 28%, transparent),
-      0 24px 64px color-mix(in srgb, var(--midnight-blue) 40%, transparent);
-  }
+  0%, 100% { opacity: 0.38; }
+  50%       { opacity: 0.90; }
 }
 
 /* =========================
@@ -243,25 +234,23 @@
 
 /* =========================
    CAUSTICS — luz refratada sob a água
-   O blur varia levemente (0.15px → 0.55px) para simular
-   a oscilação de raios de luz passando pela superfície ondulada.
+   ANTES: animava filter:blur(.15px→.55px) — GPU sampler rodava toda frame.
+   AGORA: blur estático no elemento (.35px em sections.css); aqui só
+   transform + opacity — ambos composited, zero repaint.
    ========================= */
 @keyframes waterShimmer {
   0% {
     transform: translate3d(2%, -1%, 0);
-    filter: blur(.15px);
     opacity: 0.42;
   }
 
   50% {
     transform: translate3d(-4%, 3%, 0);
-    filter: blur(.55px);
     opacity: 0.78;
   }
 
   100% {
     transform: translate3d(2%, -1%, 0);
-    filter: blur(.15px);
     opacity: 0.42;
   }
 }
@@ -911,47 +900,43 @@
 
 /* =========================
    NAV LINK — ponto bioluminescente (indicador de seção ativa)
-   Escala e glow pulsam juntos, como uma criatura marinha
-   sinalizando posição no escuro da profundidade.
+   ANTES: animava transform + box-shadow (box-shadow = repaint).
+   AGORA: box-shadow estático no elemento; keyframe só usa
+   transform (translateX precisa ser mantido para o posicionamento)
+   + opacity — ambos GPU composited.
    ========================= */
 @keyframes biolumDot {
 
   0%,
   100% {
     transform: translateX(-50%) scale(1);
-    box-shadow:
-      0 0 4px color-mix(in srgb, var(--accent) 80%, transparent),
-      0 0 10px color-mix(in srgb, var(--accent) 50%, transparent);
+    opacity: 0.80;
   }
 
   50% {
     transform: translateX(-50%) scale(1.45);
-    box-shadow:
-      0 0 7px color-mix(in srgb, var(--accent) 100%, transparent),
-      0 0 18px color-mix(in srgb, var(--accent) 70%, transparent),
-      0 0 32px color-mix(in srgb, var(--accent) 35%, transparent);
+    opacity: 1;
   }
 }
 
 /* =========================
    PILL DOT — bioluminescência do indicador "disponível"
-   O halo de glow mint respira lentamente — como um peixe abissal
-   sinalizando presença no escuro do oceano.
+   ANTES: animava apenas box-shadow — zero GPU path, rodava
+   inteiramente na main thread causando jank no scroll.
+   AGORA: transform:scale + opacity — composited, leve.
+   box-shadow fica estático no elemento.
    ========================= */
 @keyframes pillDotBiolum {
 
   0%,
   100% {
-    box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--mint) 32%, transparent),
-      0 0 8px color-mix(in srgb, var(--accent) 20%, transparent);
+    transform: scale(1);
+    opacity: 0.72;
   }
 
   50% {
-    box-shadow:
-      0 0 0 5px color-mix(in srgb, var(--mint) 54%, transparent),
-      0 0 16px color-mix(in srgb, var(--accent) 40%, transparent),
-      0 0 28px color-mix(in srgb, var(--mint) 22%, transparent);
+    transform: scale(1.18);
+    opacity: 1;
   }
 }
 

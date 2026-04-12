@@ -21,6 +21,11 @@
    evitando layout shift vs browsers com overlay scrollbar (Opera GX). */
 html {
   scrollbar-gutter: stable;
+  /* Impede rebote/scroll chaining no fim da pagina:
+     ao chegar no footer, a rolagem para ali. */
+  overscroll-behavior-y: none;
+  /* Evita que pequenos layout shifts animados puxem a pagina para cima. */
+  overflow-anchor: none;
 }
 
 /* =========================
@@ -48,8 +53,14 @@ body {
   background-image: var(--ocean-continuum);
   background-repeat: no-repeat;
   color: var(--text);
-  overflow-x: hidden;
-  /* Evita vazamento de texto longo (URLs, termos técnicos) */
+  /* overflow-x: clip não cria scroll container (ao contrário de hidden),
+     mantendo o html como scroll container principal e deixando
+     overscroll-behavior-y: none no html funcionar corretamente. */
+  overflow-x: clip;
+  /* Alguns browsers usam o body como scroll container principal. */
+  overscroll-behavior-y: none;
+  overflow-anchor: none;
+  /* Evita vazamento de texto longo (URLs, termos tecnicos) */
   overflow-wrap: break-word;
   word-break: break-word;
 }

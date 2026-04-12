@@ -94,11 +94,13 @@
 
 /* Transição suave ao trocar tema — restrita às propriedades de cor para
    evitar que TODAS as propriedades do documento transicionem ao mesmo tempo
-   (o que causaria lentidão visível). */
+   (o que causaria lentidão visível). border-color incluída para que bordas
+   de cards e separadores também façam a transição sem piscar. */
 html {
   transition:
     background-color 320ms var(--ease-out),
-    color 320ms var(--ease-out);
+    color 320ms var(--ease-out),
+    border-color 320ms var(--ease-out);
 }
 
 /* Usuários que pedem menos movimento: troca de tema é instantânea */
@@ -251,4 +253,449 @@ html {
 [data-theme="dark"] .skills2-mText,
 [data-theme="dark"] .skills2-metaLabel {
   color: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================
+   EYEBROW BADGE — correção crítica
+   No modo claro o texto usa color-mix(--midnight-blue 90%, white) = azul
+   quase-preto, correto sobre fundo claro. No dark mode esse mesmo azul
+   escuro fica invisível sobre os fundos negros. Trocamos pelo accent ciano.
+   ========================= */
+[data-theme="dark"] .eyebrow-badge {
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  border-color: color-mix(in srgb, var(--mint) 28%, transparent);
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--mint) 12%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* =========================
+   MAR GLOBAL — versão Night Dive
+   No modo claro: glow azul quente (luz solar na superfície).
+   No modo escuro: glow ciano-mint frio (bioluminescência abissal).
+   Opacidade reduzida para não competir com os fundos já escuros.
+   ========================= */
+[data-theme="dark"] body::before {
+  background:
+    radial-gradient(120% 90% at 25% 15%,
+      color-mix(in srgb, var(--mint) 20%, transparent),
+      transparent 60%),
+    radial-gradient(110% 80% at 70% 35%,
+      color-mix(in srgb, var(--accent-strong) 14%, transparent),
+      transparent 62%);
+  opacity: 0.28;
+}
+
+/* =========================
+   HERO — Night Dive mais dramático
+   Aumenta levemente a opacidade dos raios de luz (cônicos) para que o
+   hero não fique completamente morto no modo escuro.
+   ========================= */
+[data-theme="dark"] .hero::before {
+  opacity: 0.12;
+}
+
+/* Caustics também levemente mais vivos */
+[data-theme="dark"] .hero::after {
+  opacity: 0.06;
+}
+
+/* =========================
+   ABOUT — apaga correntes de luz
+   As faixas diagonais brancas/azuis do ::before foram desenhadas para
+   um fundo claro (zona de corrente). No dark mode o fundo é quase-preto
+   e elas ficam visualmente estranhas. Suprimimos em dark mode.
+   ========================= */
+[data-theme="dark"] .about::before,
+[data-theme="dark"] .about-shell::before {
+  opacity: 0;
+}
+
+/* Adiciona um glow bioluminescente sutil no lugar das correntes */
+[data-theme="dark"] .about {
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 20%,
+      color-mix(in srgb, var(--accent) 6%, transparent),
+      transparent 65%),
+    radial-gradient(ellipse 50% 40% at 75% 70%,
+      color-mix(in srgb, var(--mint) 4%, transparent),
+      transparent 70%),
+    linear-gradient(180deg, #010a12 0%, #01050a 100%);
+}
+
+/* =========================
+   PORTFOLIO — substitui #000000 plano por abismo com vida
+   ========================= */
+[data-theme="dark"] .portfolio {
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 25%,
+      color-mix(in srgb, var(--mint) 5%, transparent),
+      transparent 65%),
+    radial-gradient(ellipse 50% 35% at 85% 75%,
+      color-mix(in srgb, var(--accent) 4%, transparent),
+      transparent 60%),
+    linear-gradient(180deg, #01050a 0%, #000000 100%);
+}
+
+/* =========================
+   CONTACT — abismo com bioluminescência pontual
+   ========================= */
+[data-theme="dark"] .contact {
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 55%,
+      color-mix(in srgb, var(--accent-strong) 4%, transparent),
+      transparent 70%),
+    radial-gradient(ellipse 40% 30% at 10% 30%,
+      color-mix(in srgb, var(--mint) 3%, transparent),
+      transparent 65%),
+    linear-gradient(180deg, #000000 0%, #010308 100%);
+}
+
+/* =========================
+   FOOTER — abismo mais atmosférico (em vez de preto plano)
+   O glow vem de baixo para cima (radial em 100%) — como se a
+   bioluminescência do chão iluminasse levemente o fundo.
+   ========================= */
+[data-theme="dark"] .site-footer {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 110%,
+      color-mix(in srgb, var(--mint) 7%, transparent),
+      transparent 65%),
+    radial-gradient(ellipse 40% 30% at 18% 60%,
+      color-mix(in srgb, var(--accent) 3%, transparent),
+      transparent 60%),
+    linear-gradient(180deg, #010308 0%, #000000 100%);
+}
+
+/* =========================
+   SCROLL PROGRESS — trilho mais visível em dark mode
+   A barra usa var(--accent) = mint, mas o trilho branco-leitoso
+   não se destaca em fundo escuro. Trocamos por um trilho ciano-escuro.
+   ========================= */
+[data-theme="dark"] .scroll-progress {
+  background:
+    linear-gradient(180deg,
+      rgba(0, 230, 255, 0.09),
+      rgba(0, 200, 240, 0.03)
+    );
+  border-top-color: color-mix(in srgb, var(--mint) 18%, transparent);
+}
+
+/* =========================
+   NAV PILL — vidro levemente mais escuro em dark mode
+   O fundo rgba(255,255,255,0.08) do modo claro fica quase invisível
+   em dark mode. Reforçamos um pouco o glass.
+   ========================= */
+[data-theme="dark"] .nav__list {
+  background: color-mix(in srgb, var(--surface) 14%, rgba(0, 30, 60, 0.3));
+  border-color: color-mix(in srgb, var(--mint) 16%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 12px color-mix(in srgb, var(--mint) 6%, transparent);
+}
+
+
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  BIOLUMINESCÊNCIA — Night Dive                          ║
+   ║  Camada de visibilidade e profundidade para dark mode.  ║
+   ║  Conceito: sem o sol, TUDO que brilha é a vida itself.  ║
+   ╚══════════════════════════════════════════════════════════╝ */
+
+/* =========================
+   KEYFRAME: biolumBreath
+   Pulse lento para os glows de seção "respirarem".
+   Diferente do pulseGlow (box-shadow) — este altera opacity
+   e scale do background radial, criando uma fonte de luz viva.
+   ========================= */
+@keyframes biolumBreath {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+/* =========================
+   HEADER — faixa mint no scroll
+   Quando scrollado, o header ganha uma borda inferior mint
+   e um glow interno que o identifica como "superfície iluminada"
+   acima do abismo escuro.
+   ========================= */
+[data-theme="dark"] .header.scrolled {
+  border-bottom-color: color-mix(in srgb, var(--mint) 22%, transparent);
+  box-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.7),
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    0 0 0 1px color-mix(in srgb, var(--mint) 10%, transparent) inset,
+    0 0 24px color-mix(in srgb, var(--mint) 5%, transparent);
+}
+
+/* =========================
+   HERO CHIPS — badges de tecnologia
+   No modo claro: texto navy sobre fundo branco (legível, clean).
+   No dark mode: texto ciano claro sobre fundo quase-preto com
+   borda mint neon — como teclas de bioluminescência.
+   ========================= */
+[data-theme="dark"] .hero-chip {
+  color: rgba(180, 245, 255, 0.92);
+  background: rgba(0, 200, 230, 0.06);
+  border-color: color-mix(in srgb, var(--mint) 32%, transparent);
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--mint) 12%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* =========================
+   STAT CARDS — números de destaque
+   Fundo glass com toque ciano + valor em neon mint pulsante.
+   ========================= */
+[data-theme="dark"] .stat {
+  background: rgba(0, 200, 240, 0.05);
+  border-color: color-mix(in srgb, var(--mint) 20%, transparent);
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--mint) 8%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .stat__value {
+  color: var(--accent-strong);
+  text-shadow:
+    0 0 12px color-mix(in srgb, var(--mint) 50%, transparent),
+    0 0 28px color-mix(in srgb, var(--mint) 22%, transparent);
+}
+
+/* =========================
+   HERO BADGE DOT — ponto "disponível"
+   No modo escuro amplifica o halo bioluminescente —
+   sinaliza presença como um peixe abissal no escuro.
+   ========================= */
+[data-theme="dark"] .hero-badge__dot {
+  box-shadow:
+    0 0 6px var(--mint),
+    0 0 18px color-mix(in srgb, var(--mint) 65%, transparent),
+    0 0 36px color-mix(in srgb, var(--mint) 30%, transparent);
+}
+
+/* =========================
+   PILL DOT — indicador "disponível para vagas"
+   Já tem pillDotBiolum animado. No dark mode reforçamos o
+   glow base (entre os frames da animação).
+   ========================= */
+[data-theme="dark"] .pill-dot {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--mint) 40%, transparent),
+    0 0 10px color-mix(in srgb, var(--mint) 30%, transparent),
+    0 0 22px color-mix(in srgb, var(--mint) 15%, transparent);
+}
+
+/* =========================
+   ABOUT — cards com hover bioluminescente
+   O hover passa de "branco genérico" para mint específico —
+   cada card parece uma criatura que responde ao toque.
+   ========================= */
+[data-theme="dark"] .about-value-item:hover,
+[data-theme="dark"] .tech-item:hover {
+  background: rgba(45, 226, 230, 0.07);
+  border-color: color-mix(in srgb, var(--mint) 40%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--mint) 18%, transparent),
+    0 0 18px color-mix(in srgb, var(--mint) 14%, transparent),
+    0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .edu-card:hover {
+  background: rgba(45, 226, 230, 0.06);
+  border-color: color-mix(in srgb, var(--mint) 38%, transparent);
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--mint) 12%, transparent),
+    0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Ícone do edu card: fundo mint sutil */
+[data-theme="dark"] .edu-card__icon {
+  background: rgba(45, 226, 230, 0.08);
+  border-color: color-mix(in srgb, var(--mint) 22%, transparent);
+}
+
+/* =========================
+   TÍTULOS DE SEÇÃO — text-glow mint
+   Aplica text-shadow apenas nos h2 que não usam
+   -webkit-text-fill-color:transparent (gradient clip-path),
+   pois nesse caso text-shadow não é visível.
+   ========================= */
+[data-theme="dark"] .about-header h2,
+[data-theme="dark"] .contact-header h2 {
+  text-shadow:
+    0 0 32px color-mix(in srgb, var(--mint) 18%, transparent),
+    0 0 64px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* =========================
+   ROADMAP — rail, nodes e cards amplificados
+   ========================= */
+
+/* Rail: linha de luz mais brilhante no dark mode */
+[data-theme="dark"] .stack-roadmap__timeline::before {
+  background: linear-gradient(180deg,
+    rgba(45, 226, 230, 0.90),
+    rgba(80, 190, 255, 0.60) 40%,
+    rgba(45, 226, 230, 0.30) 75%,
+    rgba(80, 190, 255, 0.06));
+  box-shadow: 0 0 12px rgba(45, 226, 230, 0.28);
+}
+
+/* Node "now": super bioluminescente — distância dupla de glow */
+[data-theme="dark"] .stack-roadmap__step[data-status="now"]::before {
+  box-shadow:
+    0 0 0 6px rgba(45, 226, 230, 0.30),
+    0 0 18px rgba(45, 226, 230, 0.70),
+    0 0 40px rgba(45, 226, 230, 0.30);
+}
+
+/* Node "progress": glow azul amplificado */
+[data-theme="dark"] .stack-roadmap__step[data-status="progress"]::before {
+  box-shadow:
+    0 0 0 5px rgba(80, 190, 255, 0.25),
+    0 0 14px rgba(80, 190, 255, 0.55);
+}
+
+/* Card: hover com borda mint + glow externo */
+[data-theme="dark"] .stack-roadmap__card:hover {
+  border-color: color-mix(in srgb, var(--mint) 40%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--mint) 16%, transparent),
+    0 0 28px color-mix(in srgb, var(--mint) 14%, transparent),
+    0 20px 56px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+/* Highlight cards: borda mint */
+[data-theme="dark"] .stack-roadmap__highlight {
+  border-color: rgba(45, 226, 230, 0.16);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    0 0 14px color-mix(in srgb, var(--mint) 5%, transparent);
+}
+
+[data-theme="dark"] .stack-roadmap__highlight:hover {
+  border-color: color-mix(in srgb, var(--mint) 35%, transparent);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.5),
+    0 0 20px color-mix(in srgb, var(--mint) 12%, transparent);
+}
+
+/* Progress fill: glow mint na barra de progresso */
+[data-theme="dark"] .stack-roadmap__progress-fill {
+  background: linear-gradient(90deg,
+    rgba(45, 226, 230, 0.95),
+    rgba(64, 249, 255, 0.85));
+  box-shadow:
+    0 0 14px rgba(45, 226, 230, 0.60),
+    0 0 28px rgba(45, 226, 230, 0.25);
+}
+
+/* Step ativo: glow mint no badge */
+[data-theme="dark"] .stack-roadmap__progress-step.is-active {
+  background: rgba(45, 226, 230, 0.12);
+  border-color: rgba(45, 226, 230, 0.45);
+  color: rgba(200, 250, 255, 0.95);
+  box-shadow: 0 0 14px rgba(45, 226, 230, 0.20);
+}
+
+/* =========================
+   PORTFOLIO CARDS — glow bioluminescente no hover
+   ========================= */
+[data-theme="dark"] .project-card:hover {
+  border-color: color-mix(in srgb, var(--mint) 35%, transparent);
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.7),
+    0 0 0 1px color-mix(in srgb, var(--mint) 14%, transparent),
+    0 0 36px color-mix(in srgb, var(--mint) 12%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+[data-theme="dark"] .project-card:hover .project-card__glow {
+  opacity: 1;
+  background: radial-gradient(ellipse at 50% 0%,
+    rgba(45, 226, 230, 0.22),
+    transparent 65%);
+}
+
+/* =========================
+   PANEL-CARD — hover mint (usado em cards genéricos)
+   ========================= */
+[data-theme="dark"] .panel-card {
+  border-color: rgba(0, 180, 220, 0.10);
+}
+
+[data-theme="dark"] .panel-card:hover {
+  border-color: color-mix(in srgb, var(--mint) 28%, transparent);
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--mint) 10%, transparent),
+    var(--shadow-lg);
+}
+
+/* =========================
+   CONTACT — chips e inputs com neon
+   ========================= */
+
+/* Chips: border mint + glow no hover */
+[data-theme="dark"] .contact-chip {
+  border-color: rgba(45, 226, 230, 0.14);
+}
+
+[data-theme="dark"] .contact-chip:hover {
+  border-color: color-mix(in srgb, var(--mint) 50%, transparent);
+  background: rgba(45, 226, 230, 0.07);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--mint) 18%, transparent),
+    0 0 20px color-mix(in srgb, var(--mint) 16%, transparent),
+    0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Inputs: borda mint neon no focus */
+[data-theme="dark"] .contact-form__input:focus {
+  border-color: color-mix(in srgb, var(--mint) 65%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--mint) 14%, transparent),
+    0 0 18px color-mix(in srgb, var(--mint) 8%, transparent);
+}
+
+/* Validação positiva: verde-mint mais vibrante */
+[data-theme="dark"] .contact-form__input:valid:not(:placeholder-shown) {
+  border-color: rgba(45, 226, 200, 0.55);
+  box-shadow: 0 0 10px rgba(45, 226, 200, 0.12);
+}
+
+/* =========================
+   BOTÕES — halos bioluminescentes
+   ========================= */
+
+/* Botão primário (hero CTA): halo mint expandido */
+[data-theme="dark"] .btn--hero-primary {
+  box-shadow:
+    0 8px 24px color-mix(in srgb, var(--mint) 48%, transparent),
+    0 0 48px color-mix(in srgb, var(--mint) 18%, transparent);
+}
+
+[data-theme="dark"] .btn--hero-primary:hover {
+  box-shadow:
+    0 14px 36px color-mix(in srgb, var(--mint) 62%, transparent),
+    0 0 72px color-mix(in srgb, var(--mint) 28%, transparent);
+}
+
+/* Theme toggle: glow mais forte em dark mode */
+[data-theme="dark"] .theme-toggle {
+  border-color: color-mix(in srgb, var(--mint) 24%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--mint) 10%, transparent);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--mint) 45%, transparent),
+    0 0 40px color-mix(in srgb, var(--mint) 18%, transparent);
 }

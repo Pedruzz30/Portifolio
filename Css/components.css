@@ -719,6 +719,20 @@
 }
 
 .btn__label { position: relative; z-index: 2; pointer-events: none; }
+
+.btn__motion {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(0);
+  will-change: transform;
+  pointer-events: none;
+}
 .btn--pill  { border-radius: 999px; }
 .btn--icon  { width: 44px; height: 44px; padding: 0; font-size: 1.1rem; }
 

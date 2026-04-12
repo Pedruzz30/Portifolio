@@ -40,7 +40,9 @@ export function initOceanLife({
   if (header) cleanups.push(initSurfaceTension(header, hasHover));
   if (about) cleanups.push(initCurrentStreams(about, hasHover));
   if (roadmap) cleanups.push(initRoadmapLife(roadmap));
-  if (footer) cleanups.push(initAbyssBreath(footer));
+  if (footer && typeof initAbyssBreath === "function") {
+    cleanups.push(initAbyssBreath(footer));
+  }
 
   return {
     destroy: () => cleanups.forEach((fn) => fn()),

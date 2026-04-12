@@ -3,11 +3,13 @@
    ========================= */
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   padding: clamp(100px, 12vh, 160px) clamp(1.5rem, 6vw, 5rem) clamp(60px, 10vh, 100px);
+  padding: clamp(100px, 12svh, 160px) clamp(1.5rem, 6vw, 5rem) clamp(60px, 10svh, 100px);
   position: relative;
   overflow: hidden;
   gap: clamp(2rem, 5vw, 4rem);
@@ -163,22 +165,31 @@
   width: auto;
   min-width: min(100%, 480px);
   z-index: 10;
-  transform: translateY(20px);
   opacity: 0;
-  transition: transform 1s ease, opacity 1s ease;
+  transition: opacity 0.95s ease;
+  isolation: isolate;
+  will-change: transform, opacity;
+}
+
+.hero-content__inner {
+  width: 100%;
   display: grid;
   gap: 1rem;
+  transform: translateY(20px);
+  transition: transform 1s ease;
   animation: floatPulse calc(var(--wave-medium) * 0.95) ease-in-out infinite;
   animation-play-state: paused;
-  isolation: isolate;
+  will-change: transform;
 }
 
 .hero-content.visible {
-  transform: translateY(0);
   opacity: 1;
-  animation-play-state: running;
 }
 
+.hero-content.visible .hero-content__inner {
+  transform: translateY(0);
+  animation-play-state: running;
+}
 .hero-content::before {
   content: "";
   position: absolute;
@@ -203,6 +214,7 @@
   min-width: min(100%, 320px);
   max-width: min(100%, 460px);
   height: clamp(340px, 65vh, 680px);
+  height: clamp(340px, 65svh, 680px);
   display: grid;
   place-items: center;
   isolation: isolate;
@@ -211,6 +223,16 @@
   transform: translateZ(0);
 }
 
+.hero-visual__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
 .hero-image {
   position: relative;
   width: 100%;
@@ -382,10 +404,10 @@
   isolation: isolate;
   overflow: hidden;
   border-radius: var(--blob-radius, 46% 54% 52% 48% / 55% 48% 52% 45%);
-  animation:
-    blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
-    wrapGlow calc(var(--wave-slow) * 0.85) ease-in-out infinite;
-  will-change: border-radius, box-shadow;
+  /* wrapGlow removido daqui — box-shadow animation causava repaint full-frame.
+     O glow agora pulsa via opacity no .hero-visual::before (GPU composited). */
+  animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
+  will-change: border-radius;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   border: 4px solid color-mix(in srgb, var(--accent) 26%, rgba(255, 255, 255, 0.35));
@@ -528,7 +550,14 @@
   .hero-image::before,
   .hero-image-wrap,
   .hero-image-wrap::before,
-  .hero-image-wrap::after {
+  .hero-image-wrap::after,
+  .hero-content__inner,
+  .hero-badge__dot {
     animation: none;
   }
-}
+
+  .hero-content,
+  .hero-content__inner,
+  .hero-visual__inner {
+    transition: none;
+  }}

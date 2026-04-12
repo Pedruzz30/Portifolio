@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ═══════════════════════════════════════════════════════════
  *  components/scroll.js — UI de Scroll
  *
@@ -17,7 +17,7 @@
  *  Isso evita layout thrashing (reflow duplo por frame).
  * ═══════════════════════════════════════════════════════════
  */
-
+ 
 /**
  * Inicializa toda a UI relacionada ao scroll.
  *
@@ -35,62 +35,62 @@ export function setupScrollUI({
   prefersReducedMotion,
   navLinks,
 }) {
-  let rafId = null; // ID do requestAnimationFrame pendente
+  let rafId          = null; // ID do requestAnimationFrame pendente
   let resizeObserver = null;
   let sectionObserver = null;
-  let headerObserver = null;
-  let headerSentinel = null;
+ 
+
 
   // Estados memoizados: evitam writes redundantes no DOM
   let lastHeaderOffset = null;
-  let lastProgress = null;
-  let activeLink = null;
-  let lenis = null;
-  let lenisScrollTriggerUpdate = null;
-  let gsapTickerCallback = null;
+  let lastScrolled     = null;
+  let lastProgress     = null;
+  let activeLink       = null;
+ 
+
 
   // Cache dos nav targets — não mudam após inicialização
   // FIX 5: calculado uma única vez, não a cada resize
-  let navTargetsCache = null;
-
+  let navTargetsCache  = null;
+ 
   const root = document.documentElement;
-
+ 
   const reduceMotion =
     typeof prefersReducedMotion === "boolean"
       ? prefersReducedMotion
-      : (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ??
-        false);
+      : window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+ 
 
   // FIX 2: transformOrigin definido uma única vez na inicialização,
   // não a cada frame dentro de updateScrollProgress
   if (scrollProgress) {
     scrollProgress.style.transformOrigin = "left";
   }
+ 
 
-  // ── Inicialização do Lenis (Smooth Scroll) ─────────────
-  if (window.Lenis && !reduceMotion) {
-    lenis = new window.Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva suave (easeOutExpo)
-      smoothWheel: true,
-    });
 
-    // Sincroniza com GSAP ScrollTrigger
-    if (window.ScrollTrigger) {
-      lenisScrollTriggerUpdate = () => window.ScrollTrigger.update();
-      lenis.on("scroll", lenisScrollTriggerUpdate);
-    }
 
-    // Sincroniza com GSAP Ticker para máxima performance
-    if (window.gsap) {
-      gsapTickerCallback = (time) => {
-        lenis?.raf(time * 1000);
-      };
-      window.gsap.ticker.add(gsapTickerCallback);
-      // Otimiza cálculos se houver perda de frame
-      window.gsap.ticker.lagSmoothing(0);
-    }
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /**
    * Lê --header-offset do CSS (source of truth).
@@ -102,29 +102,29 @@ export function setupScrollUI({
     if (Number.isFinite(fromCss)) return fromCss;
     return header?.getBoundingClientRect().height ?? 0;
   };
-
+ 
   /**
    * Scroll com offset: compensa o header fixo para que a seção
    * não fique escondida atrás dele ao navegar por âncoras.
    */
   const scrollWithOffset = (target) => {
     if (!target) return;
-
-    const offset = getHeaderOffset();
+ 
+    const offset    = getHeaderOffset();
     // FIX 3: window.scrollY no lugar do depreciado window.pageYOffset
-    if (lenis) {
-      lenis.scrollTo(target, { offset: -offset });
-    } else {
-      const targetTop =
-        target.getBoundingClientRect().top + window.scrollY - offset;
+    const targetTop = target.getBoundingClientRect().top + window.scrollY - offset;
+ 
+    window.scrollTo({
+      top:      Math.max(targetTop, 0),
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
 
-      window.scrollTo({
-        top: Math.max(targetTop, 0),
-        behavior: reduceMotion ? "auto" : "smooth",
-      });
-    }
+
+
+
+
   };
-
+ 
   /**
    * Marca o link de navegação ativo com aria-current="page".
    * Remove o atributo do link anterior antes de marcar o novo.
@@ -135,7 +135,7 @@ export function setupScrollUI({
     link.setAttribute("aria-current", "page");
     activeLink = link;
   };
-
+ 
   /**
    * Mapeia os navLinks para seus targets no DOM.
    * FIX 5: resultado cacheado — targets não mudam após init.
@@ -144,7 +144,7 @@ export function setupScrollUI({
   const getNavTargets = () => {
     if (navTargetsCache) return navTargetsCache;
     if (!navLinks?.length) return [];
-
+ 
     navTargetsCache = navLinks
       .map((link) => {
         if (!link) return null;
@@ -155,10 +155,10 @@ export function setupScrollUI({
         return { link, target };
       })
       .filter(Boolean);
-
+ 
     return navTargetsCache;
   };
-
+ 
   /**
    * Cria/recria o IntersectionObserver que atualiza o link ativo.
    * rootMargin negativo no topo (-headerOffset) garante que a seção
@@ -167,15 +167,15 @@ export function setupScrollUI({
    */
   const refreshSectionObserver = () => {
     if (!("IntersectionObserver" in window)) return;
-
+ 
     const targets = getNavTargets();
     if (!targets.length) return;
-
+ 
     sectionObserver?.disconnect();
     sectionObserver = null;
-
+ 
     const offset = getHeaderOffset();
-
+ 
     sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -186,13 +186,13 @@ export function setupScrollUI({
       },
       {
         rootMargin: `-${Math.round(offset)}px 0px -55% 0px`,
-        threshold: 0.1,
-      },
+        threshold:  0.1,
+      }
     );
-
+ 
     targets.forEach((item) => sectionObserver.observe(item.target));
   };
-
+ 
   /**
    * FIX 1: rAF com leituras separadas das escritas.
    *
@@ -207,16 +207,17 @@ export function setupScrollUI({
     if (rafId) return; // já tem um frame agendado
     rafId = window.requestAnimationFrame(() => {
       rafId = null;
-
+ 
       // ── FASE 1: todas as leituras de layout ──────────────
-      const headerHeight = header
-        ? header.getBoundingClientRect().height || header.offsetHeight || 0
+      const headerHeight  = header
+        ? (header.getBoundingClientRect().height || header.offsetHeight || 0)
         : 0;
-      const scrollTop = window.scrollY;
-      const docHeight = root.scrollHeight - window.innerHeight;
-
+      const isScrolled    = window.scrollY > 50;
+      const scrollTop     = window.scrollY;
+      const docHeight     = root.scrollHeight - window.innerHeight;
+ 
       // ── FASE 2: todas as escritas no DOM ─────────────────
-
+ 
       // -- header offset --
       if (header) {
         const offsetValue = Math.round(headerHeight + 12);
@@ -226,13 +227,19 @@ export function setupScrollUI({
           refreshSectionObserver();
         }
       }
-
+ 
+      // -- classe scrolled --
+      if (header && isScrolled !== lastScrolled) {
+        lastScrolled = isScrolled;
+        header.classList.toggle("scrolled", isScrolled);
+      }
+ 
       // -- barra de progresso --
       if (scrollProgress) {
         const rawProgress = docHeight > 0 ? scrollTop / docHeight : 0;
-        const clamped = Math.max(0, Math.min(rawProgress, 1));
+        const clamped     = Math.max(0, Math.min(rawProgress, 1));
         // FIX 7: quantização a 2 casas — suficiente para barra de progresso visual
-        const quantized = Math.round(clamped * 100) / 100;
+        const quantized   = Math.round(clamped * 100) / 100;
         if (quantized !== lastProgress) {
           lastProgress = quantized;
           scrollProgress.style.transform = `scaleX(${quantized})`;
@@ -240,7 +247,7 @@ export function setupScrollUI({
       }
     });
   };
-
+ 
   /**
    * Handler dos botões [data-scroll="#target"].
    * Lê o seletor do atributo e faz scroll com offset.
@@ -248,96 +255,96 @@ export function setupScrollUI({
   const handleScrollTo = (event) => {
     const btn = event.currentTarget;
     if (!btn) return;
-
+ 
     const targetSelector = btn.getAttribute("data-scroll");
     if (!targetSelector) return;
-
+ 
     const target = document.querySelector(targetSelector);
     if (!target) return;
-
+ 
     scrollWithOffset(target);
   };
-
+ 
   // ── Registra listeners ──────────────────────────────────
-
+ 
   scrollButtons?.forEach((button) => {
     button?.addEventListener("click", handleScrollTo);
   });
+ 
 
-  // ── Header Observer (Sentinel) ─────────────────────────
-  // Injeta um elemento invisível de 50px no topo da página para vigiar o scroll
-  if (header && "IntersectionObserver" in window) {
-    headerSentinel = document.createElement("div");
-    headerSentinel.style.cssText =
-      "position: absolute; top: 0; left: 0; width: 100%; height: 50px; pointer-events: none; visibility: hidden; z-index: -1;";
-    document.body.prepend(headerSentinel);
 
-    headerObserver = new IntersectionObserver(
-      ([entry]) => {
-        header.classList.toggle("scrolled", !entry.isIntersecting);
-      },
-      { threshold: 0 },
-    );
-    headerObserver.observe(headerSentinel);
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   if (header && "ResizeObserver" in window) {
     resizeObserver = new ResizeObserver(() => scheduleUpdate());
     resizeObserver.observe(header);
   }
-
+ 
   window.addEventListener("scroll", scheduleUpdate, { passive: true });
   // FIX 4: passive: true no resize — não bloqueia o thread principal em mobile
   window.addEventListener("resize", scheduleUpdate, { passive: true });
-
+ 
   // Estado inicial: roda imediatamente ao inicializar
   scheduleUpdate();
   refreshSectionObserver();
-
+ 
   // ── Cleanup ─────────────────────────────────────────────
   const destroy = () => {
     scrollButtons?.forEach((button) => {
       button?.removeEventListener("click", handleScrollTo);
     });
-
+ 
     window.removeEventListener("scroll", scheduleUpdate);
     window.removeEventListener("resize", scheduleUpdate);
-
+ 
     resizeObserver?.disconnect();
     resizeObserver = null;
-
+ 
     sectionObserver?.disconnect();
     sectionObserver = null;
+ 
 
-    headerObserver?.disconnect();
-    headerObserver = null;
-    headerSentinel?.remove();
-    headerSentinel = null;
+
+
+
 
     if (rafId) {
       window.cancelAnimationFrame(rafId);
       rafId = null;
     }
-
+ 
     // Limpa o cache de targets ao destruir
     navTargetsCache = null;
 
-    if (lenis && lenisScrollTriggerUpdate && typeof lenis.off === "function") {
-      lenis.off("scroll", lenisScrollTriggerUpdate);
-    }
-    lenisScrollTriggerUpdate = null;
-    if (gsapTickerCallback && window.gsap?.ticker) {
-      window.gsap.ticker.remove(gsapTickerCallback);
-    }
-    gsapTickerCallback = null;
-    if (lenis) {
-      lenis.destroy();
-      lenis = null;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
   };
-
+ 
   return { destroy };
-
+ 
   // FIX 6: try/catch externo removido — erros de inicialização agora
   // sobem naturalmente para o caller (main.js), onde devem ser tratados.
   // Um catch que retorna null silenciosamente é mais perigoso do que

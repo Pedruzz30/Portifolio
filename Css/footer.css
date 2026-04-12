@@ -158,8 +158,9 @@
   gap: 0.55rem;
 }
  
-/* Links com ponto bioluminescente à esquerda */
-.site-footer a {
+/* Links textuais do footer ganham o ponto bioluminescente.
+   Botoes (.btn) ficam fora para nao disputar o mesmo ::before. */
+.site-footer a:not(.btn) {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -172,7 +173,7 @@
 }
  
 /* Ponto bioluminescente — pulsa levemente no estado normal */
-.site-footer a::before {
+.site-footer a:not(.btn)::before {
   content: "";
   width: 4px;
   height: 4px;
@@ -182,12 +183,12 @@
   transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
 }
  
-.site-footer a:hover {
+.site-footer a:not(.btn):hover {
   color: rgba(180, 235, 255, 0.95);
 }
  
 /* No hover: ponto acende como bioluminescência real */
-.site-footer a:hover::before {
+.site-footer a:not(.btn):hover::before {
   background: rgba(80, 190, 255, 0.95);
   transform: scale(2);
   box-shadow:
@@ -195,7 +196,7 @@
     0 0 14px rgba(80, 190, 255, 0.3);
 }
  
-.site-footer a:focus-visible {
+.site-footer a:not(.btn):focus-visible {
   outline: 2px solid rgba(80, 190, 255, 0.5);
   outline-offset: 4px;
   border-radius: 4px;

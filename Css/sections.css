@@ -3,6 +3,7 @@
    ========================= */
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   padding: 120px 8% 80px;
@@ -65,6 +66,7 @@
   width: 38%;
   min-width: 320px;
   height: 65vh;
+  height: 65svh;
   display: grid;
   place-items: center;
   isolation: isolate;
