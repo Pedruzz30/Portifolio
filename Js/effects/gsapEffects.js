@@ -267,6 +267,18 @@ function initHeroTextReveal(gsap) {
     "-=0.30",
   );
 
+  if (subtitle) {
+    tl.to(
+      subtitle,
+      {
+        clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)",
+        duration: 0.9,
+        ease: "power3.inOut",
+      },
+      "<",
+    );
+  }
+
   tl.to(
     [logo, navList].filter(Boolean),
     {

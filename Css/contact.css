@@ -144,7 +144,7 @@
   border-radius: 0.65rem;
   padding: 0.75rem 1rem;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.82);
   transition: border-color 250ms ease, box-shadow 250ms ease;
   outline: none;
