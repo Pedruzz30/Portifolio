@@ -8,7 +8,6 @@
  *  são removidos de uma vez, sem precisar rastrear cada um.
  * ═══════════════════════════════════════════════════════════
  */
-
 import { finalizeLoader, safeGetComputedStyle } from "./utils/dom.js";
 import { setupMenu } from "./components/menu.js";
 import { setupScrollUI } from "./components/scroll.js";
@@ -17,7 +16,7 @@ import { setupRoadmap } from "./components/roadmap.js";
 import { setupTheme } from "./components/theme.js";
 import { initFooterParticles } from "./effects/footerParticles.js";
 import { initHeroParticles } from "./effects/heroParticles.js";
-import { initOceanLife } from "./effects/oceanLife.js";
+import { initOceanLife } from "./effects/ocean-life.js";
 import { initGsapEffects } from "./effects/gsapEffects.js";
 
 function bootstrap() {
@@ -348,3 +347,4 @@ if (document.readyState === "loading") {
 } else {
   start();
 }
+

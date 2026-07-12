@@ -32,8 +32,6 @@ export function initGsapEffects({ reduceMotion = false, isMobile = false } = {})
   cleanups.push(initStaggerCards(gsap, ScrollTrigger));
 
   if (!isMobile) {
-    cleanups.push(initLazyTilt());
-    cleanups.push(initPortfolioHover(gsap));
     cleanups.push(initHeroParallax(gsap, ScrollTrigger));
     cleanups.push(initMagneticButtons(gsap));
 
@@ -102,7 +100,9 @@ function revealStaticState() {
   const progressFill = document.querySelector(".stack-roadmap__progress-fill");
   if (progressFill) {
     progressFill.style.transformOrigin = "left";
-    progressFill.style.transform = "scaleX(1)";
+    if (!progressFill.style.transform) {
+      progressFill.style.transform = "scaleX(1)";
+    }
   }
 }
 
@@ -584,34 +584,6 @@ function initStaggerCards(gsap, ScrollTrigger) {
   const triggers = [];
   const tweens = [];
 
-  const portfolioGrid = document.querySelector(".portfolio-grid");
-  if (portfolioGrid) {
-    const cards = portfolioGrid.querySelectorAll(".project-card");
-    gsap.set(cards, { opacity: 0, y: 40, scale: 0.97 });
-
-    triggers.push(
-      ScrollTrigger.create({
-        trigger: portfolioGrid,
-        start: "top 82%",
-        once: true,
-        onEnter: () => {
-          const tween = gsap.to(cards, {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.65,
-            ease: "power3.out",
-            stagger: {
-              each: 0.12,
-              from: "start",
-            },
-          });
-          tweens.push(tween);
-        },
-      }),
-    );
-  }
-
   const techGrid = document.querySelector(".tech-grid");
   if (techGrid) {
     const items = techGrid.querySelectorAll(".tech-item");
@@ -643,174 +615,6 @@ function initStaggerCards(gsap, ScrollTrigger) {
   return () => {
     triggers.forEach((trigger) => trigger.kill());
     tweens.forEach((tween) => tween.kill());
-  };
-}
-
-function initLazyTilt() {
-  const hasHover = window.matchMedia("(hover: hover)").matches;
-  const items = Array.from(
-    document.querySelectorAll(
-      ".project-card__plane, .stack-roadmap__card-plane",
-    ),
-  );
-
-  if (!window.VanillaTilt || !items.length || !hasHover) {
-    return () => {};
-  }
-
-  const idleHandles = new WeakMap();
-
-  const scheduleTilt = (element) => {
-    if (element.vanillaTilt) return;
-
-    const init = () => {
-      idleHandles.delete(element);
-      if (element.vanillaTilt) return;
-      window.VanillaTilt.init(element, {
-        max: 7,
-        speed: 560,
-        glare: true,
-        "max-glare": 0.1,
-      });
-    };
-
-    if ("requestIdleCallback" in window) {
-      const id = window.requestIdleCallback(init, { timeout: 350 });
-      idleHandles.set(element, { type: "idle", id });
-      return;
-    }
-
-    const id = window.setTimeout(init, 0);
-    idleHandles.set(element, { type: "timeout", id });
-  };
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const element = entry.target;
-        if (!entry.isIntersecting || element.vanillaTilt) return;
-        scheduleTilt(element);
-        observer.unobserve(element);
-      });
-    },
-    { threshold: 0.25 },
-  );
-
-  items.forEach((item) => observer.observe(item));
-
-  return () => {
-    observer.disconnect();
-    items.forEach((item) => {
-      const handle = idleHandles.get(item);
-      if (!handle) return;
-      if (handle.type === "idle" && "cancelIdleCallback" in window) {
-        window.cancelIdleCallback(handle.id);
-      } else {
-        window.clearTimeout(handle.id);
-      }
-      idleHandles.delete(item);
-    });
-    items.forEach((item) => {
-      try {
-        item.vanillaTilt?.destroy();
-      } catch {}
-    });
-  };
-}
-
-function initPortfolioHover(gsap) {
-  const canHover = window.matchMedia("(hover: hover)").matches;
-  const cards = Array.from(document.querySelectorAll(".project-card"));
-  if (!cards.length || !canHover) return () => {};
-
-  const cleanups = [];
-
-  cards.forEach((card) => {
-    const glow = card.querySelector(".project-card__glow");
-    const status = card.querySelector(".project-card__status");
-    const tags = card.querySelectorAll(".project-tag");
-    const targets = [glow, status, ...tags].filter(Boolean);
-
-    gsap.set(targets, { clearProps: "all" });
-
-    const tl = gsap.timeline({ paused: true, defaults: { overwrite: "auto" } });
-
-    if (glow) {
-      tl.to(glow, { opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
-    }
-    if (status) {
-      tl.to(status, { y: -4, duration: 0.35, ease: "power2.out" }, 0);
-    }
-    if (tags.length) {
-      tl.to(
-        tags,
-        { y: -2, stagger: 0.04, duration: 0.35, ease: "power2.out" },
-        0,
-      );
-    }
-
-    const onEnter = () => tl.play();
-    const onLeave = () => tl.reverse();
-
-    card.addEventListener("pointerenter", onEnter);
-    card.addEventListener("pointerleave", onLeave);
-
-    cleanups.push(() => {
-      card.removeEventListener("pointerenter", onEnter);
-      card.removeEventListener("pointerleave", onLeave);
-      tl.kill();
-    });
-  });
-
-  return () => cleanups.forEach((fn) => fn());
-}
-
-function initCursorGlow(gsap) {
-  const hasHover = window.matchMedia("(hover: hover)").matches;
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-
-  if (!hasHover || prefersReducedMotion) return () => {};
-
-  const glow = document.createElement("div");
-  glow.className = "cursor-glow";
-  glow.setAttribute("aria-hidden", "true");
-  // position: fixed removes the element from document flow so GSAP transforms
-  // (translate X/Y to cursor position) don't inflate scrollHeight and cause
-  // extra scroll at the bottom of the page.
-  glow.style.cssText = "position:fixed;top:0;left:0;pointer-events:none;z-index:9999;";
-  document.body.appendChild(glow);
-
-  const xTo = gsap.quickTo(glow, "x", { duration: 0.2, ease: "power3.out" });
-  const yTo = gsap.quickTo(glow, "y", { duration: 0.2, ease: "power3.out" });
-
-  const onMove = (event) => {
-    xTo(event.clientX - 20);
-    yTo(event.clientY - 20);
-  };
-
-  const interactives = document.querySelectorAll(
-    "a, button, .btn, .theme-toggle, input, textarea, .contact-chip, .project-card, .stack-roadmap__card, .tech-item",
-  );
-
-  const onHover = () => glow.classList.add("is-hovering");
-  const onLeave = () => glow.classList.remove("is-hovering");
-
-  interactives.forEach((element) => {
-    element.addEventListener("mouseenter", onHover);
-    element.addEventListener("mouseleave", onLeave);
-  });
-
-  window.addEventListener("mousemove", onMove);
-
-  return () => {
-    window.removeEventListener("mousemove", onMove);
-    interactives.forEach((element) => {
-      element.removeEventListener("mouseenter", onHover);
-      element.removeEventListener("mouseleave", onLeave);
-    });
-    glow.remove();
   };
 }
 
@@ -941,61 +745,6 @@ function initScrollReveal(gsap, ScrollTrigger) {
         }),
       );
     }
-  }
-
-  const roadmap = document.querySelector(".stack-roadmap");
-  if (roadmap) {
-    revealSectionHeader(roadmap.querySelector(".stack-roadmap__heading"));
-
-    const progressFill = roadmap.querySelector(".stack-roadmap__progress-fill");
-    if (progressFill) {
-      gsap.set(progressFill, { scaleX: 0, transformOrigin: "left" });
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: progressFill,
-          start: "top 88%",
-          once: true,
-          onEnter: () => {
-            animations.push(
-              gsap.to(progressFill, {
-                scaleX: 1,
-                duration: 1.2,
-                ease: "power2.out",
-                delay: 0.3,
-              }),
-            );
-          },
-        }),
-      );
-    }
-
-    const highlights = roadmap.querySelectorAll(".stack-roadmap__highlight");
-    if (highlights.length) {
-      gsap.set(highlights, { opacity: 0, y: 20 });
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: highlights[0],
-          start: "top 86%",
-          once: true,
-          onEnter: () => {
-            animations.push(
-              gsap.to(highlights, {
-                opacity: 1,
-                y: 0,
-                duration: 0.55,
-                ease: "power2.out",
-                stagger: 0.1,
-              }),
-            );
-          },
-        }),
-      );
-    }
-  }
-
-  const portfolio = document.querySelector(".portfolio");
-  if (portfolio) {
-    revealSectionHeader(portfolio.querySelector(".portfolio-header"));
   }
 
   const contact = document.querySelector(".contact");

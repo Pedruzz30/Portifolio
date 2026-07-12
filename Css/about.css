@@ -483,57 +483,6 @@
   margin-top: 0.15rem;
 }
 
-
-/* =========================
-   FAB — Voltar ao topo
-   ========================= */
-.fab-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, var(--deep-blue), var(--bright-blue));
-  color: #fff;
-  font-size: 1.2rem;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: var(--z-overlay);
-  box-shadow: 0 8px 28px color-mix(in srgb, var(--deep-blue) 38%, transparent);
-  opacity: 0;
-  transform: translateY(12px) scale(0.9);
-  pointer-events: none;
-  transition:
-    opacity 280ms var(--ease-out),
-    transform 280ms var(--ease-out),
-    box-shadow 220ms ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fab-top.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-
-.fab-top:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 14px 38px color-mix(in srgb, var(--deep-blue) 48%, transparent);
-}
-
-.fab-top:focus-visible {
-  outline: none;
-  box-shadow: var(--focus);
-}
-
-.fab-top:active {
-  transform: scale(0.97);
-}
-
 /* =========================
    RESPONSIVO
    ========================= */
@@ -545,13 +494,6 @@
 
   .tech-grid {
     grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
-  }
-
-  .fab-top {
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 44px;
-    height: 44px;
   }
 }
 
