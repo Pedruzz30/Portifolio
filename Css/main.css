@@ -23,6 +23,9 @@
  *   utilities.css → classes utilitárias (.hidden, [data-scroll])
  *   animations.css → @keyframes (sem regras de estilo)
  *   responsive.css → media queries (deve sobrescrever tudo)
+ *   compat.css    → modo de compatibilidade p/ html.is-in-app-browser
+ *                   (WebViews/navegadores internos — vem por último,
+ *                   vence a cascata inteira)
  * ═══════════════════════════════════════════════════════════
  */
 
@@ -42,3 +45,4 @@
 @import "./utilities.css";
 @import "./animations.css";
 @import "./responsive.css";
+@import "./compat.css";

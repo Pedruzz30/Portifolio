@@ -4,6 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!--
+    Detecção de navegador interno (Instagram, Facebook, WebViews, etc).
+    Roda de forma síncrona e o mais cedo possível — antes do CSS ser
+    aplicado — para que html.is-in-app-browser já exista quando as
+    regras de Css/compat.css forem avaliadas, evitando flash/glitch
+    antes do fallback entrar em vigor.
+
+    Teste manual (sem precisar do app): adicione ?liteMode=1 na URL
+    para forçar o modo, ou ?liteMode=0 para forçar o modo completo.
+  -->
+  <script>
+    (function () {
+      var html = document.documentElement;
+      var forced = new URLSearchParams(location.search).get("liteMode");
+
+      if (forced === "1") {
+        html.classList.add("is-in-app-browser");
+        return;
+      }
+      if (forced === "0") return;
+
+      var ua = navigator.userAgent || navigator.vendor || "";
+      var isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line\/|MicroMessenger|TikTok|BytedanceWebview|LinkedInApp/i.test(ua);
+
+      var supportsBackdropFilter = !!(
+        window.CSS &&
+        CSS.supports &&
+        (CSS.supports("backdrop-filter", "blur(1px)") ||
+          CSS.supports("-webkit-backdrop-filter", "blur(1px)"))
+      );
+
+      if (isInAppBrowser || !supportsBackdropFilter) {
+        html.classList.add("is-in-app-browser");
+      }
+    })();
+  </script>
+
   <title>Pedro Henrique | Desenvolvedor Back-end Java</title>
   <meta name="description" content="Portfólio de Pedro Henrique, estudante de Engenharia de Software com foco em back-end Java, Spring Boot, APIs REST e MongoDB.">
   <meta name="author" content="Pedro Henrique">

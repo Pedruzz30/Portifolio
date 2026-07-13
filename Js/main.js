@@ -46,9 +46,21 @@ function bootstrap() {
     roadmapProgressSteps: Array.from(document.querySelectorAll(".stack-roadmap__progress-step")),
   };
 
+  // html.is-in-app-browser é adicionado o mais cedo possível por um
+  // script síncrono no <head> (ver index.html) — navegadores internos
+  // de apps (Instagram, Facebook, WebViews) entram no mesmo caminho de
+  // "reduzir movimento" usado para prefers-reduced-motion: isso desliga
+  // GSAP/ScrollTrigger, canvases de partículas e parallax de uma vez,
+  // reaproveitando toda a lógica de fallback que já existe para
+  // acessibilidade (revealStaticState em gsapEffects.js, early-returns
+  // em heroParticles/footerParticles/ocean-life).
+  const isInAppBrowser = document.documentElement.classList.contains(
+    "is-in-app-browser",
+  );
   const prefersReducedMotion =
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    isInAppBrowser ||
+    (window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   const isMobile =
     window.matchMedia &&
     window.matchMedia("(max-width: 768px)").matches;

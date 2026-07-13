@@ -48,7 +48,6 @@
   left: 50%;
   right: auto;
   bottom: auto;
-  transform: translateX(-50%);
   width: 140%;
   height: 65%;
   pointer-events: none;
@@ -58,8 +57,12 @@
   filter: none;
   mix-blend-mode: screen;
   will-change: transform, opacity;
-  transform: translateZ(0);
-  /* Força criação de nova camada na GPU */
+  /* translate3d combina a centralização horizontal (translateX -50%)
+     com a promoção de camada GPU (Z=0) numa única declaração —
+     duas declarações de "transform" na mesma regra faziam a segunda
+     descartar a primeira, perdendo a centralização quando a
+     animação para (prefers-reduced-motion ou modo de compatibilidade). */
+  transform: translate3d(-50%, 0, 0);
   background: conic-gradient(from 260deg at 50% 0%,
       transparent 0deg,
       rgba(255, 255, 255, 0.07) 4deg,

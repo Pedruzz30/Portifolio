@@ -17,7 +17,7 @@
  * @param {object} options
  * @param {Element} options.footer       - Elemento .site-footer
  * @param {number}  options.count        - Quantidade de partículas
- * @param {boolean} options.reduceMotion - Desabilita animação se true
+ * @param {boolean} options.reduceMotion - Se true, o canvas nem é criado
  * @returns {{ destroy: () => void }}
  */
 export function initFooterParticles({
@@ -25,8 +25,9 @@ export function initFooterParticles({
   count = 65,
   reduceMotion = false,
 }) {
-  // Mais plâncton
-  if (!footer || typeof window === "undefined") return { destroy: () => {} };
+  if (!footer || typeof window === "undefined" || reduceMotion) {
+    return { destroy: () => {} };
+  }
 
   // Cria o canvas e injeta no footer
   const canvas = document.createElement("canvas");
@@ -36,7 +37,6 @@ export function initFooterParticles({
   const ctx = canvas.getContext("2d");
   if (!ctx) return { destroy: () => canvas.remove() };
 
-  // Se reduceMotion estiver ativo, usa um estado estático (sem animação)
   let rafId = null;
   let particles = [];
   let running = true;
@@ -74,7 +74,7 @@ export function initFooterParticles({
   const observer = new IntersectionObserver(
     (entries) => {
       isVisible = entries[0].isIntersecting;
-      if (isVisible && running && !reduceMotion && !rafId) {
+      if (isVisible && running && !rafId) {
         rafId = requestAnimationFrame(draw);
       }
     },
@@ -83,7 +83,7 @@ export function initFooterParticles({
   observer.observe(footer);
 
   // Desenha um frame
-  const draw = (timestamp) => {
+  const draw = () => {
     if (!running || !isVisible) {
       rafId = null;
       return;
@@ -124,37 +124,10 @@ export function initFooterParticles({
     rafId = requestAnimationFrame(draw);
   };
 
-  // Estado estático para reduceMotion: apenas renderiza uma vez
-  const drawStatic = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (const p of particles) {
-      const glowRadius = p.r * 4;
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
-      grad.addColorStop(
-        0,
-        `hsla(${p.hue}, 100%, 80%, ${Math.min(p.opBase * 0.8, 1)})`,
-      );
-      grad.addColorStop(1, `hsla(${p.hue}, 80%, 40%, 0)`);
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-    }
-  };
-
-  const resizeObserver = new ResizeObserver(() => {
-    resize();
-    if (reduceMotion) drawStatic();
-  });
+  const resizeObserver = new ResizeObserver(resize);
 
   init();
-
-  if (reduceMotion) {
-    drawStatic();
-  } else {
-    rafId = requestAnimationFrame(draw);
-  }
-
+  rafId = requestAnimationFrame(draw);
   resizeObserver.observe(footer);
 
   return {

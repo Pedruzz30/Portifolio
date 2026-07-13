@@ -1,0 +1,106 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  compat.css — Modo de Compatibilidade (WebViews / navegadores
+ *  internos de apps)
+ *
+ *  Ativado via html.is-in-app-browser — classe adicionada por um
+ *  script síncrono no <head> do index.html (detecção por user-agent
+ *  + CSS.supports("backdrop-filter")) e reforçado no Js/main.js, que
+ *  também trata esse modo como prefers-reduced-motion para desligar
+ *  GSAP/ScrollTrigger, canvases de partículas e parallax.
+ *
+ *  Por quê: navegadores internos (Instagram, Facebook, WebViews
+ *  Android em geral) costumam ter orçamento de composição gráfica
+ *  bem menor que um Chrome padrão. As combinações mais pesadas do
+ *  site — position:fixed + backdrop-filter + mix-blend-mode +
+ *  animação infinita, tudo empilhado — são as que mais aparecem
+ *  como "glitch" (piscar, recorte, camada redesenhada errado)
+ *  nesses ambientes.
+ *
+ *  Este arquivo NÃO redesenha o site: remove seletivamente o blur,
+ *  o blend e as animações infinitas das camadas decorativas fixas,
+ *  e garante um fundo sólido nos elementos fixed (header, menu
+ *  mobile) que dependiam do backdrop-filter para não ficarem
+ *  transparentes demais sem ele.
+ *
+ *  Deve ser importado por ÚLTIMO em main.css para vencer a cascata.
+ * ═══════════════════════════════════════════════════════════
+ */
+
+/* ─────────────────────────────────────────────────────────────
+   1) Blur e blend globais
+   backdrop-filter + mix-blend-mode são os dois efeitos com maior
+   custo de composição do site (dezenas de ocorrências, incluindo
+   cards estáticos). Uma única regra de baixo custo neutraliza
+   todos de uma vez, sem precisar reescrever fundo por fundo —
+   os elementos mantêm cor, borda e sombra, só perdem o blur/blend.
+   ───────────────────────────────────────────────────────────── */
+html.is-in-app-browser * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+  /* Sem as animações infinitas destas camadas (abaixo), a maioria
+     dos will-change permanentes deixa de ter função — remover
+     libera camadas de composição que WebViews com pouca memória
+     gráfica não têm de sobra. */
+  will-change: auto !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2) "Mar global" do body
+   position:fixed + inset:-20% + mix-blend-mode + animação infinita,
+   presente em toda página, por trás de tudo. É recomposto a cada
+   frame de scroll — o candidato mais provável ao glitch descrito.
+   ───────────────────────────────────────────────────────────── */
+html.is-in-app-browser body::before,
+html.is-in-app-browser body::after {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3) Header (fixed + backdrop-filter + camada animada)
+   Sem blur, um fundo semitransparente deixaria o conteúdo que
+   rola por trás visível através do header — por isso o fallback
+   troca para uma cor sólida da própria paleta da marca, e não só
+   remove o blur.
+   ───────────────────────────────────────────────────────────── */
+html.is-in-app-browser .header {
+  background: var(--midnight-blue, #032a40);
+}
+
+html.is-in-app-browser .header::before {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4) Menu mobile (fullscreen, fixed + backdrop-filter)
+   Mesmo raciocínio do header: fundo sólido no lugar do vidro fosco.
+   ───────────────────────────────────────────────────────────── */
+html.is-in-app-browser .nav {
+  background: var(--midnight-blue, #032a40);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5) Hero — raios de luz e caustics
+   .hero::before (raios) e .hero::after (caustics) somam
+   mix-blend-mode + filter + animação infinita sobre uma camada
+   absolute cobrindo o hero inteiro. Removê-las não afeta o
+   conteúdo (texto, foto, botões), só a decoração de fundo.
+   ───────────────────────────────────────────────────────────── */
+html.is-in-app-browser .hero::before,
+html.is-in-app-browser .hero::after {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6) Foto do hero — blob orgânico
+   A animação do .hero-image-wrap muda border-radius continuamente;
+   isso não é acelerado por GPU e força repaint completo do
+   elemento a cada frame. Mantém o formato final, só para de animar.
+   (Já existe um fallback equivalente para telas ≤768px em
+   responsive.css — esta regra cobre também o caso de um in-app
+   browser aberto numa largura maior, ex.: tablet/desktop.)
+   ───────────────────────────────────────────────────────────── */
+html.is-in-app-browser .hero-image-wrap {
+  animation: none;
+}
