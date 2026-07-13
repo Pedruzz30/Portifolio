@@ -46,19 +46,25 @@ function bootstrap() {
     roadmapProgressSteps: Array.from(document.querySelectorAll(".stack-roadmap__progress-step")),
   };
 
-  // html.is-in-app-browser é adicionado o mais cedo possível por um
-  // script síncrono no <head> (ver index.html) — navegadores internos
-  // de apps (Instagram, Facebook, WebViews) entram no mesmo caminho de
-  // "reduzir movimento" usado para prefers-reduced-motion: isso desliga
-  // GSAP/ScrollTrigger, canvases de partículas e parallax de uma vez,
-  // reaproveitando toda a lógica de fallback que já existe para
-  // acessibilidade (revealStaticState em gsapEffects.js, early-returns
-  // em heroParticles/footerParticles/ocean-life).
-  const isInAppBrowser = document.documentElement.classList.contains(
-    "is-in-app-browser",
-  );
-  const prefersReducedMotion =
+  // O script síncrono no <head> calcula window.__portfolioCompat antes
+  // do CSS carregar. Aqui apenas consolidamos a decisão para o runtime:
+  // html.is-lite-mode desliga GSAP/ScrollTrigger, canvases, parallax e
+  // efeitos de mouse, preservando a página estática e navegável.
+  const root = document.documentElement;
+  const compat = window.__portfolioCompat || {};
+  const isInAppBrowser =
+    root.classList.contains("is-in-app-browser") ||
+    Boolean(compat.isInAppBrowser);
+  const isLiteMode =
+    root.classList.contains("is-lite-mode") ||
     isInAppBrowser ||
+    Boolean(compat.isLiteMode);
+
+  if (isInAppBrowser) root.classList.add("is-in-app-browser");
+  if (isLiteMode) root.classList.add("is-lite-mode");
+
+  const prefersReducedMotion =
+    isLiteMode ||
     (window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   const isMobile =
@@ -359,4 +365,3 @@ if (document.readyState === "loading") {
 } else {
   start();
 }
-

@@ -9,7 +9,12 @@ export function initHeroParticles(
     reduceMotion = false,
   } = {},
 ) {
-  if (!hero || reduceMotion) return { destroy: () => {} };
+  const isLiteMode = document.documentElement.classList.contains("is-lite-mode");
+
+  if (!hero || reduceMotion || isLiteMode) {
+    hero?.querySelector("#heroParticleCanvas")?.remove();
+    return { destroy: () => {} };
+  }
 
   const canvas = document.createElement("canvas");
   canvas.id = "heroParticleCanvas";

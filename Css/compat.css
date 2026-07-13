@@ -1,106 +1,247 @@
 /*
  * ═══════════════════════════════════════════════════════════
- *  compat.css — Modo de Compatibilidade (WebViews / navegadores
- *  internos de apps)
+ *  compat.css — Modo leve para WebViews / navegadores internos
  *
- *  Ativado via html.is-in-app-browser — classe adicionada por um
- *  script síncrono no <head> do index.html (detecção por user-agent
- *  + CSS.supports("backdrop-filter")) e reforçado no Js/main.js, que
- *  também trata esse modo como prefers-reduced-motion para desligar
- *  GSAP/ScrollTrigger, canvases de partículas e parallax.
+ *  Ativado por html.is-lite-mode, classe adicionada no <head>
+ *  antes do CSS. html.is-in-app-browser também é mantida como
+ *  sinal semântico para Instagram/Facebook/WebViews.
  *
- *  Por quê: navegadores internos (Instagram, Facebook, WebViews
- *  Android em geral) costumam ter orçamento de composição gráfica
- *  bem menor que um Chrome padrão. As combinações mais pesadas do
- *  site — position:fixed + backdrop-filter + mix-blend-mode +
- *  animação infinita, tudo empilhado — são as que mais aparecem
- *  como "glitch" (piscar, recorte, camada redesenhada errado)
- *  nesses ambientes.
+ *  Objetivo: preservar conteúdo, identidade visual, menu e tema,
+ *  removendo apenas as combinações que mais quebram composição em
+ *  WebViews: fixed + blur/backdrop-filter + mix-blend-mode +
+ *  filtros grandes + animações infinitas + will-change permanente.
  *
- *  Este arquivo NÃO redesenha o site: remove seletivamente o blur,
- *  o blend e as animações infinitas das camadas decorativas fixas,
- *  e garante um fundo sólido nos elementos fixed (header, menu
- *  mobile) que dependiam do backdrop-filter para não ficarem
- *  transparentes demais sem ele.
- *
- *  Deve ser importado por ÚLTIMO em main.css para vencer a cascata.
+ *  Este arquivo deve ser importado por último em main.css.
  * ═══════════════════════════════════════════════════════════
  */
 
-/* ─────────────────────────────────────────────────────────────
-   1) Blur e blend globais
-   backdrop-filter + mix-blend-mode são os dois efeitos com maior
-   custo de composição do site (dezenas de ocorrências, incluindo
-   cards estáticos). Uma única regra de baixo custo neutraliza
-   todos de uma vez, sem precisar reescrever fundo por fundo —
-   os elementos mantêm cor, borda e sombra, só perdem o blur/blend.
-   ───────────────────────────────────────────────────────────── */
-html.is-in-app-browser * {
-  backdrop-filter: none !important;
+html.is-lite-mode,
+html.is-in-app-browser {
+  scroll-behavior: auto;
+}
+
+html.is-lite-mode *,
+html.is-lite-mode *::before,
+html.is-lite-mode *::after,
+html.is-in-app-browser *,
+html.is-in-app-browser *::before,
+html.is-in-app-browser *::after {
   -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   mix-blend-mode: normal !important;
-  /* Sem as animações infinitas destas camadas (abaixo), a maioria
-     dos will-change permanentes deixa de ter função — remover
-     libera camadas de composição que WebViews com pouca memória
-     gráfica não têm de sobra. */
   will-change: auto !important;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   2) "Mar global" do body
-   position:fixed + inset:-20% + mix-blend-mode + animação infinita,
-   presente em toda página, por trás de tudo. É recomposto a cada
-   frame de scroll — o candidato mais provável ao glitch descrito.
-   ───────────────────────────────────────────────────────────── */
+/* Camadas globais fixed: maior suspeito de recorte/piscada em WebView. */
+html.is-lite-mode body::before,
+html.is-lite-mode body::after,
 html.is-in-app-browser body::before,
 html.is-in-app-browser body::after {
-  display: none;
+  display: none !important;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   3) Header (fixed + backdrop-filter + camada animada)
-   Sem blur, um fundo semitransparente deixaria o conteúdo que
-   rola por trás visível através do header — por isso o fallback
-   troca para uma cor sólida da própria paleta da marca, e não só
-   remove o blur.
-   ───────────────────────────────────────────────────────────── */
-html.is-in-app-browser .header {
-  background: var(--midnight-blue, #032a40);
+/* Header e menu: trocam vidro translúcido por superfície sólida. */
+html.is-lite-mode .header,
+html.is-lite-mode .header.scrolled,
+html.is-in-app-browser .header,
+html.is-in-app-browser .header.scrolled {
+  background: #032a40;
+  border-bottom-color: rgba(120, 210, 255, 0.22);
+  box-shadow: 0 10px 28px rgba(1, 14, 30, 0.32);
+  transition: none;
 }
 
+html[data-theme="dark"].is-lite-mode .header,
+html[data-theme="dark"].is-lite-mode .header.scrolled,
+html[data-theme="dark"].is-in-app-browser .header,
+html[data-theme="dark"].is-in-app-browser .header.scrolled {
+  background: #020d1a;
+}
+
+html.is-lite-mode .header::before,
 html.is-in-app-browser .header::before {
-  display: none;
+  display: none !important;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   4) Menu mobile (fullscreen, fixed + backdrop-filter)
-   Mesmo raciocínio do header: fundo sólido no lugar do vidro fosco.
-   ───────────────────────────────────────────────────────────── */
+html.is-lite-mode .nav,
 html.is-in-app-browser .nav {
-  background: var(--midnight-blue, #032a40);
+  background: #032a40;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   5) Hero — raios de luz e caustics
-   .hero::before (raios) e .hero::after (caustics) somam
-   mix-blend-mode + filter + animação infinita sobre uma camada
-   absolute cobrindo o hero inteiro. Removê-las não afeta o
-   conteúdo (texto, foto, botões), só a decoração de fundo.
-   ───────────────────────────────────────────────────────────── */
+html.is-lite-mode .nav__list,
+html.is-in-app-browser .nav__list {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html.is-lite-mode .nav-overlay,
+html.is-in-app-browser .nav-overlay {
+  transition: none;
+}
+
+/* Hero: conteúdo visível mesmo sem GSAP/ScrollTrigger. */
+html.is-lite-mode .hero::before,
+html.is-lite-mode .hero::after,
 html.is-in-app-browser .hero::before,
-html.is-in-app-browser .hero::after {
-  display: none;
+html.is-in-app-browser .hero::after,
+html.is-lite-mode .hero-content::before,
+html.is-in-app-browser .hero-content::before,
+html.is-lite-mode .hero-visual::before,
+html.is-in-app-browser .hero-visual::before {
+  display: none !important;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   6) Foto do hero — blob orgânico
-   A animação do .hero-image-wrap muda border-radius continuamente;
-   isso não é acelerado por GPU e força repaint completo do
-   elemento a cada frame. Mantém o formato final, só para de animar.
-   (Já existe um fallback equivalente para telas ≤768px em
-   responsive.css — esta regra cobre também o caso de um in-app
-   browser aberto numa largura maior, ex.: tablet/desktop.)
-   ───────────────────────────────────────────────────────────── */
+html.is-lite-mode .hero-content,
+html.is-lite-mode .hero-content__inner,
+html.is-lite-mode .hero-visual,
+html.is-lite-mode .hero-visual__inner,
+html.is-in-app-browser .hero-content,
+html.is-in-app-browser .hero-content__inner,
+html.is-in-app-browser .hero-visual,
+html.is-in-app-browser .hero-visual__inner {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+html.is-lite-mode .text-reveal span,
+html.is-in-app-browser .text-reveal span {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: none !important;
+}
+
+html.is-lite-mode .text-mask,
+html.is-in-app-browser .text-mask {
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+html.is-lite-mode .hero-image-wrap,
 html.is-in-app-browser .hero-image-wrap {
-  animation: none;
+  animation: none !important;
+}
+
+html.is-lite-mode .hero-bubbles,
+html.is-lite-mode #heroParticleCanvas,
+html.is-lite-mode #footerParticleCanvas,
+html.is-lite-mode .ocean-life-canvas,
+html.is-lite-mode .rail-particle,
+html.is-in-app-browser .hero-bubbles,
+html.is-in-app-browser #heroParticleCanvas,
+html.is-in-app-browser #footerParticleCanvas,
+html.is-in-app-browser .ocean-life-canvas,
+html.is-in-app-browser .rail-particle {
+  display: none !important;
+}
+
+/* Animações decorativas infinitas que continuam existindo sem GSAP. */
+html.is-lite-mode .scroll-indicator,
+html.is-lite-mode .scroll-progress__bar::after,
+html.is-lite-mode .pill-dot,
+html.is-lite-mode .hero-badge__dot,
+html.is-lite-mode .footer-depth-dot,
+html.is-lite-mode .nav__link[aria-current="page"]::before,
+html.is-lite-mode .btn::before,
+html.is-lite-mode .btn--bio::after,
+html.is-lite-mode .about::before,
+html.is-lite-mode .about-shell::before,
+html.is-lite-mode .stack-roadmap::before,
+html.is-lite-mode .stack-roadmap::after,
+html.is-lite-mode .stack-roadmap__step[data-status="now"]::before,
+html.is-lite-mode .stack-roadmap__step[data-status="now"] .stack-roadmap__card,
+html.is-lite-mode .site-footer::before,
+html.is-lite-mode .site-footer::after,
+html.is-in-app-browser .scroll-indicator,
+html.is-in-app-browser .scroll-progress__bar::after,
+html.is-in-app-browser .pill-dot,
+html.is-in-app-browser .hero-badge__dot,
+html.is-in-app-browser .footer-depth-dot,
+html.is-in-app-browser .nav__link[aria-current="page"]::before,
+html.is-in-app-browser .btn::before,
+html.is-in-app-browser .btn--bio::after,
+html.is-in-app-browser .about::before,
+html.is-in-app-browser .about-shell::before,
+html.is-in-app-browser .stack-roadmap::before,
+html.is-in-app-browser .stack-roadmap::after,
+html.is-in-app-browser .stack-roadmap__step[data-status="now"]::before,
+html.is-in-app-browser .stack-roadmap__step[data-status="now"] .stack-roadmap__card,
+html.is-in-app-browser .site-footer::before,
+html.is-in-app-browser .site-footer::after {
+  animation: none !important;
+}
+
+/* Filtros grandes em camadas de fundo: removidos, conteúdo preservado. */
+html.is-lite-mode .scroll-progress::after,
+html.is-lite-mode .stack-roadmap__shell::before,
+html.is-lite-mode .skills2-card::after,
+html.is-in-app-browser .scroll-progress::after,
+html.is-in-app-browser .stack-roadmap__shell::before,
+html.is-in-app-browser .skills2-card::after {
+  filter: none !important;
+}
+
+/* Estados que dependem de reveal por JS ficam estáticos e visíveis. */
+html.is-lite-mode .js-reveal,
+html.is-lite-mode .stack-roadmap__step,
+html.is-in-app-browser .js-reveal,
+html.is-in-app-browser .stack-roadmap__step {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+html.is-lite-mode .stack-roadmap__progress-fill,
+html.is-lite-mode .stack-roadmap__summary,
+html.is-lite-mode .stack-roadmap__content,
+html.is-lite-mode .project-card,
+html.is-lite-mode .project-tag,
+html.is-lite-mode .project-card__link,
+html.is-in-app-browser .stack-roadmap__progress-fill,
+html.is-in-app-browser .stack-roadmap__summary,
+html.is-in-app-browser .stack-roadmap__content,
+html.is-in-app-browser .project-card,
+html.is-in-app-browser .project-tag,
+html.is-in-app-browser .project-card__link {
+  transition: none !important;
+}
+
+html.is-lite-mode .project-card:hover,
+html.is-lite-mode .stack-roadmap__card:hover,
+html.is-in-app-browser .project-card:hover,
+html.is-in-app-browser .stack-roadmap__card:hover {
+  transform: none !important;
+}
+
+html.is-lite-mode .stack-roadmap__step:hover::before,
+html.is-lite-mode .stack-roadmap__step:focus-within::before,
+html.is-in-app-browser .stack-roadmap__step:hover::before,
+html.is-in-app-browser .stack-roadmap__step:focus-within::before {
+  box-shadow:
+    0 0 0 5px var(--node-glow),
+    0 0 14px var(--node-color) !important;
+}
+
+html.is-lite-mode .stack-roadmap__step:hover::after,
+html.is-lite-mode .stack-roadmap__step:focus-within::after,
+html.is-in-app-browser .stack-roadmap__step:hover::after,
+html.is-in-app-browser .stack-roadmap__step:focus-within::after {
+  opacity: 0.7 !important;
+}
+
+html.is-lite-mode .stack-roadmap__card::after,
+html.is-lite-mode .stack-roadmap__card:hover::after,
+html.is-in-app-browser .stack-roadmap__card::after,
+html.is-in-app-browser .stack-roadmap__card:hover::after {
+  opacity: 0 !important;
+}
+
+html.is-lite-mode .stack-roadmap__summary:hover,
+html.is-in-app-browser .stack-roadmap__summary:hover {
+  transform: none !important;
+  background: rgba(80, 190, 255, 0.10) !important;
+  box-shadow: none !important;
 }

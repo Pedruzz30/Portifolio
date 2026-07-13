@@ -53,45 +53,58 @@ export function initGsapEffects({ reduceMotion = false, isMobile = false } = {})
 function revealStaticState() {
   document.querySelector(".hero-content")?.classList.add("visible");
 
-  const heroMask = document.querySelector(".text-mask");
-  if (heroMask) {
-    heroMask.style.clipPath = "polygon(0 0,100% 0,100% 100%,0 100%)";
-    heroMask.style.opacity = "1";
-    heroMask.style.transform = "none";
-  }
+  document.querySelectorAll(".text-mask").forEach((mask) => {
+    mask.style.clipPath = "polygon(0 0,100% 0,100% 100%,0 100%)";
+    mask.style.webkitClipPath = "polygon(0 0,100% 0,100% 100%,0 100%)";
+    mask.style.opacity = "1";
+    mask.style.transform = "none";
+  });
 
-  document.querySelectorAll("#hero-title span").forEach((span) => {
-    if (span.dataset.heroRevealWrapper === "true") return;
+  document.querySelectorAll("#hero-title span, .text-reveal span").forEach((span) => {
     span.style.opacity = "1";
     span.style.transform = "translateY(0)";
   });
 
-  document
-    .querySelectorAll(
-      [
-        ".hero-badges",
-        ".hero-actions",
-        ".hero-stats",
-        ".hero-visual",
-        ".logo",
-        ".nav__list",
-        ".about-text",
-        ".about-skills-side",
-        ".about-value-item",
-        ".stack-roadmap__highlight",
-        ".contact-form",
-        ".contact-chip",
-        ".project-card",
-        ".tech-item",
-        ".js-reveal",
-        ".stat__value",
-      ].join(", "),
-    )
-    .forEach((el) => {
-      el.style.opacity = "1";
-      el.style.transform = "none";
-      el.style.filter = "none";
-    });
+  const staticSelectors = [
+    ".hero-content",
+    ".hero-content__inner",
+    ".hero-badges",
+    ".hero-actions",
+    ".hero-stats",
+    ".hero-visual",
+    ".hero-visual__inner",
+    ".scroll-indicator",
+    ".logo",
+    ".nav__list",
+    ".about-header .section-eyebrow",
+    ".about-header h2",
+    ".about-text",
+    ".about-skills-side",
+    ".about-value-item",
+    ".tech-item",
+    ".stack-roadmap__eyebrow",
+    ".stack-roadmap__heading h2",
+    ".stack-roadmap__subtitle",
+    ".stack-roadmap__highlight",
+    ".stack-roadmap__step",
+    ".contact-header .contact-eyebrow",
+    ".contact-header h2",
+    ".contact-header .contact-subtitle",
+    ".contact-form",
+    ".contact-chip",
+    ".portfolio-header .section-eyebrow",
+    ".portfolio-header h2",
+    ".portfolio-header p",
+    ".project-card",
+    ".js-reveal",
+    ".stat__value",
+  ];
+
+  document.querySelectorAll(staticSelectors.join(", ")).forEach((el) => {
+    el.style.opacity = "1";
+    el.style.transform = "none";
+    el.style.filter = "none";
+  });
 
   document.querySelectorAll(".stack-roadmap__step").forEach((step) => {
     step.classList.add("is-visible");

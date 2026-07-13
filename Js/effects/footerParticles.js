@@ -25,7 +25,12 @@ export function initFooterParticles({
   count = 65,
   reduceMotion = false,
 }) {
-  if (!footer || typeof window === "undefined" || reduceMotion) {
+  const isLiteMode =
+    typeof document !== "undefined" &&
+    document.documentElement.classList.contains("is-lite-mode");
+
+  if (!footer || typeof window === "undefined" || reduceMotion || isLiteMode) {
+    footer?.querySelector("#footerParticleCanvas")?.remove();
     return { destroy: () => {} };
   }
 

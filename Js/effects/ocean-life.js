@@ -31,7 +31,14 @@ export function initOceanLife({
   reduceMotion = false,
   isMobile = false,
 } = {}) {
-  if (reduceMotion) return { destroy: () => {} };
+  const isLiteMode = document.documentElement.classList.contains("is-lite-mode");
+
+  if (reduceMotion || isLiteMode) {
+    document
+      .querySelectorAll(".ocean-life-canvas, .rail-particle")
+      .forEach((element) => element.remove());
+    return { destroy: () => {} };
+  }
   if (isMobile) return { destroy: () => {} };
 
   const cleanups = [];
@@ -54,6 +61,7 @@ export function initOceanLife({
    ═══════════════════════════════════════════════════════════ */
 function createCanvas(parent, zIndex) {
   const canvas = document.createElement("canvas");
+  canvas.className = "ocean-life-canvas";
   canvas.setAttribute("aria-hidden", "true");
   canvas.style.cssText = `
     position: absolute;
