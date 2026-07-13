@@ -221,6 +221,7 @@
   }
  
   .hero-visual        { height: clamp(280px, 48vh, 360px); height: clamp(280px, 48svh, 360px); min-height: 0; max-width: min(100%, 420px); }
+  .hero-image-wrap    { animation: none; will-change: auto; }
   .text-reveal        { font-size: 3.1rem; }
   .floating-panels    { position: relative; right: auto; bottom: auto; width: 100%; }
   .hero-badge,
