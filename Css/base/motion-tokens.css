@@ -1,0 +1,12 @@
+/*
+ * Motion tokens
+ * Durações e curvas usadas pelas animações do oceano visual.
+ */
+
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 220ms var(--ease-out);
+  --wave-slow: 16s;
+  --wave-medium: 11s;
+  --float-distance: 14px;
+}

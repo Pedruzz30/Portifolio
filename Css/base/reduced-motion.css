@@ -1,0 +1,116 @@
+/*
+ * Reduced motion
+ * Centraliza os fallbacks para usuarios com sensibilidade a movimento.
+ * Deve ser importado depois dos modulos visuais e antes do lite-mode.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    transition: none;
+  }
+
+  .js-reveal,
+  .stack-roadmap__step {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .header,
+  .logo::after,
+  .nav__link::after,
+  .nav__cta,
+  .scroll-progress__bar,
+  .about-value-item,
+  .tech-item,
+  .edu-card,
+  .contact-chip,
+  .contact-form__input,
+  .stack-roadmap__progress-fill,
+  .stack-roadmap__summary,
+  .stack-roadmap__content,
+  .site-footer a,
+  .footer-btn,
+  .back-to-top,
+  .skills2-chip {
+    transition: none;
+  }
+
+  .scroll-progress {
+    backdrop-filter: none;
+  }
+
+  .hero::before,
+  .hero::after,
+  .hero-visual::before,
+  .hero-visual::after,
+  .hero-image::before,
+  .hero-image,
+  .hero-image-wrap,
+  .hero-image-wrap::before,
+  .hero-image-wrap::after,
+  .hero-content__inner,
+  .hero-badge__dot,
+  .scroll-indicator,
+  .nav__link[aria-current="page"]::before,
+  .pill-dot,
+  .scroll-progress__bar::after,
+  .btn,
+  .btn::before,
+  .btn--ripple::after,
+  .btn--bio::after,
+  .btn__pulse,
+  .btn-hover-effect::before,
+  .btn-hover-effect::after,
+  .about::before,
+  .about::after,
+  .about-shell::before,
+  .contact::before,
+  .skills2-card::after,
+  .skills2-dot,
+  .skills2-spark,
+  .skills2-ribbonDot,
+  .site-footer::before,
+  .site-footer::after,
+  .footer-inner::after,
+  .footer-bottom::before,
+  .service-card::after,
+  .portfolio-item::before,
+  .badge::before,
+  .badge::after,
+  body::before,
+  body::after {
+    animation: none !important;
+    animation-play-state: paused !important;
+  }
+
+  .hero-content,
+  .hero-content__inner,
+  .hero-visual__inner {
+    transition: none;
+  }
+
+  .btn:hover,
+  .about-value-item:hover,
+  .tech-item:hover,
+  .edu-card:hover,
+  .contact-chip:hover,
+  .skills2-chip:hover,
+  .footer-btn:hover,
+  .back-to-top:hover,
+  .site-footer a:hover {
+    transform: none;
+  }
+
+  .contact-chip::before {
+    display: none;
+  }
+}

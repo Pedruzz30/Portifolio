@@ -1,0 +1,79 @@
+/*
+ * Ocean background
+ * Camadas globais do <body> que dão continuidade visual ao site.
+ */
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform, opacity;
+}
+
+body::before {
+  background:
+    radial-gradient(120% 90% at 25% 15%,
+      color-mix(in srgb, var(--accent) 22%, transparent),
+      transparent 60%),
+    radial-gradient(110% 80% at 70% 35%,
+      color-mix(in srgb, var(--bright-blue) 16%, transparent),
+      transparent 62%);
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  animation: ocean-background-glow calc(var(--wave-medium) * 0.78) ease-in-out infinite;
+}
+
+body::after {
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.12) 25%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0) 75%);
+  opacity: 0.3;
+  filter: blur(0.3px);
+  animation: ocean-background-flow calc(var(--wave-slow) * 0.90) linear infinite;
+}
+
+@keyframes ocean-background-glow {
+  0% {
+    transform: translate3d(2%, -1%, 0) scale(1.03);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translate3d(-5%, 3%, 0) scale(1.15);
+    opacity: 0.95;
+  }
+
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1.03);
+    opacity: 0.45;
+  }
+}
+
+@keyframes ocean-background-flow {
+  0% {
+    transform: translateX(-110%) rotate(10deg);
+    opacity: 0.00;
+  }
+
+  10% {
+    opacity: 0.28;
+  }
+
+  50% {
+    opacity: 0.38;
+  }
+
+  90% {
+    opacity: 0.18;
+  }
+
+  100% {
+    transform: translateX(110%) rotate(10deg);
+    opacity: 0.00;
+  }
+}

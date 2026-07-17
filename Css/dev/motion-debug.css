@@ -1,0 +1,28 @@
+/*
+ * Motion debug
+ * Nao e importado em main.css. Use temporariamente no DevTools:
+ * html[data-motion-debug="paused"|"off"|"highlight"|"slow"]
+ */
+
+html[data-motion-debug="paused"] *,
+html[data-motion-debug="paused"] *::before,
+html[data-motion-debug="paused"] *::after {
+  animation-play-state: paused !important;
+}
+
+html[data-motion-debug="off"] *,
+html[data-motion-debug="off"] *::before,
+html[data-motion-debug="off"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html[data-motion-debug="highlight"] * {
+  outline: 1px solid color-mix(in srgb, #ff4d8d 72%, transparent) !important;
+}
+
+html[data-motion-debug="slow"] {
+  --wave-slow: calc(16s * 4);
+  --wave-medium: calc(11s * 4);
+  --transition-base: calc(220ms * 4) var(--ease-out);
+}
