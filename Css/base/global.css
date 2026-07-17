@@ -132,57 +132,6 @@ a:focus-visible,
   user-select: none;
 }
 
-/* =========================
-   MAR GLOBAL — efeito contínuo
-   Duas camadas pseudo-element no <body> criam o "oceano vivo"
-   que permeia todo o site, sutilmente animado.
-
-   ::before — glow radial (reflexo de luz na água)
-     mix-blend-mode: soft-light → integra com qualquer cor de seção
-
-   ::after — onda de brilho varrendo da esquerda p/ direita
-     animation: oceanFlow → fluxo unidirecional (corrente, não pêndulo)
-     opacity baixa para que não distraia do conteúdo
-   ========================= */
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  /* fixed: segue o scroll, "colado" à viewport */
-  inset: -20%;
-  /* maior que a tela para cobrir bordas ao animar */
-  pointer-events: none;
-  z-index: 0;
-  /* atrás de todo o conteúdo */
-  will-change: transform, opacity;
-  /* otimiza para GPU */
-}
-
-body::before {
-  background:
-    radial-gradient(120% 90% at 25% 15%,
-      color-mix(in srgb, var(--accent) 22%, transparent),
-      transparent 60%),
-    radial-gradient(110% 80% at 70% 35%,
-      color-mix(in srgb, var(--bright-blue) 16%, transparent),
-      transparent 62%);
-  mix-blend-mode: soft-light;
-  opacity: 0.55;
-  animation: oceanGlow calc(var(--wave-medium) * 0.78) ease-in-out infinite;
-}
-
-body::after {
-  background: linear-gradient(90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.12) 25%,
-      rgba(255, 255, 255, 0.05) 50%,
-      rgba(255, 255, 255, 0) 75%);
-  opacity: 0.3;
-  filter: blur(0.3px);
-  /* fluxo unidirecional — corrente global, não pendulum */
-  animation: oceanFlow calc(var(--wave-slow) * 0.90) linear infinite;
-}
-
 /* Header, main e footer sobem acima do mar global (z-index: 1)
    para garantir que o conteúdo fique visível sobre os pseudo-elements. */
 header,

@@ -9,7 +9,7 @@
 /* =========================
    LOADER — Tela de carregamento inicial
    Cobre toda a viewport com position:fixed até finalizeLoader() ser chamado.
-   O anel giratório (.loader-ring) usa @keyframes loading.
+   O anel giratório (.loader-ring) usa @keyframes loader-ring-spin.
    O JS em dom.js faz a transição opacity:0 → display:none.
    ========================= */
 .loader {
@@ -55,7 +55,13 @@
   border: 3px solid transparent;
   border-top-color: var(--accent);
   border-right-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  animation: spin 1s ease infinite;
+  animation: loader-ring-spin 1s ease infinite;
+}
+
+@keyframes loader-ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* =========================
@@ -115,7 +121,7 @@
   opacity: 0.45;
   pointer-events: none;
   z-index: -1;
-  animation: headerCausticFloat 22s ease-in-out infinite;
+  animation: header-caustic-float 22s ease-in-out infinite;
   will-change: transform, opacity;
 }
 
@@ -186,37 +192,6 @@
 
   .header-shell {
     max-width: 1320px;
-  }
-}
-
-/* ── Acessibilidade: reduz motion ────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .header {
-    transition: none;
-  }
-
-  .header::before {
-    animation: none;
-  }
-
-  .logo::after {
-    transition: none;
-  }
-
-  .nav__link::after {
-    transition: none;
-  }
-
-  .nav__link[aria-current="page"]::before {
-    animation: none;
-  }
-
-  .pill-dot {
-    animation: none;
-  }
-
-  .nav__cta {
-    transition: none;
   }
 }
 
@@ -378,7 +353,7 @@
 
 .nav__link[aria-current="page"]::before {
   transform: translateX(-50%) scale(1);
-  animation: biolumDot 2.8s ease-in-out infinite;
+  animation: nav-biolum-dot-pulse 2.8s ease-in-out infinite;
 }
 
 .nav__link[aria-current="page"]::after {
@@ -437,7 +412,7 @@
   flex-shrink: 0;
   background: var(--pure-white);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mint) 35%, transparent);
-  animation: pillDotBiolum 2.4s ease-in-out infinite;
+  animation: status-biolum-dot-pulse 2.4s ease-in-out infinite;
 }
 
 .header-actions {
@@ -640,7 +615,7 @@
 
   opacity: .22;
   transform: translateX(-60%);
-  animation: scrollShimmer 1.35s ease-in-out infinite;
+  animation: scroll-progress-shimmer 1.35s ease-in-out infinite;
 }
 
 /* shimmer só fica bonito quando tem algum progresso */
@@ -650,21 +625,108 @@
 }
 
 /* animação do brilho */
-@keyframes scrollShimmer{
+@keyframes scroll-progress-shimmer{
   0%   { transform: translateX(-70%); }
   100% { transform: translateX(120%); }
 }
 
-/* reduz movimento */
-@media (prefers-reduced-motion: reduce){
-  .scroll-progress{
-    backdrop-filter: none;
+@keyframes header-caustic-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.00);
+    opacity: 0.40;
   }
-  .scroll-progress__bar{
-    transition: none;
+
+  38% {
+    transform: translate3d(4%, -1.5%, 0) scale(1.05);
+    opacity: 0.56;
   }
-  .scroll-progress__bar::after{
-    animation: none;
+
+  68% {
+    transform: translate3d(-2%, 1%, 0) scale(1.02);
+    opacity: 0.44;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.00);
+    opacity: 0.40;
+  }
+}
+
+@keyframes nav-biolum-dot-pulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.80;
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.45);
+    opacity: 1;
+  }
+}
+
+@keyframes button-caustic-sweep {
+  0% {
+    transform: translateX(-112%) rotate(8deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.72;
+  }
+
+  80% {
+    opacity: 0.40;
+  }
+
+  100% {
+    transform: translateX(112%) rotate(8deg);
+    opacity: 0;
+  }
+}
+
+@keyframes button-biolum-breath {
+  0%,
+  100% {
+    opacity: 0.14;
+    transform: scale(1.00);
+  }
+
+  35% {
+    opacity: 0.24;
+    transform: scale(1.01);
+  }
+
+  65% {
+    opacity: 0.30;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes card-shimmer-drift {
+  0% {
+    transform: translateX(-70%) scale(1.01);
+    opacity: 0.15;
+  }
+
+  50% {
+    transform: translateX(45%) scale(1.05);
+    opacity: 0.45;
+  }
+
+  100% {
+    transform: translateX(-70%) scale(1.01);
+    opacity: 0.15;
+  }
+}
+
+@keyframes portfolio-card-glide-wave {
+  0% {
+    transform: translateX(-110%) rotate(12deg);
+  }
+
+  100% {
+    transform: translateX(110%) rotate(12deg);
   }
 }
 
@@ -687,7 +749,7 @@
    — Nenhum glow de raio acima de 24px (oceano, não néon)
    — Opacidade de efeitos: max 0.32 em repouso, 0.48 no hover
    — Ripple: branco-azulado translúcido, não mint
-   — Animação "bioBreath": 7s, suave como um peixe abissal
+   — Animação "button-biolum-breath": 7s, suave como um peixe abissal
    — Caustic sweep: uma faixa fina, 11% de opacidade máxima
    ═══════════════════════════════════════════════════════════ */
 
@@ -760,7 +822,7 @@
 }
 
 .btn:hover::before {
-  animation: btnCaustic 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: button-caustic-sweep 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* ── Hover base: flutuação mínima — objeto na coluna d'água ── */
@@ -926,7 +988,7 @@
   z-index: 0;
   opacity: 0.18;
   pointer-events: none;
-  animation: bioBreath 7s ease-in-out infinite;
+  animation: button-biolum-breath 7s ease-in-out infinite;
 }
 
 .btn--bio:hover {
@@ -969,11 +1031,11 @@
 
 /* ── Animações de cards (mantidas) ── */
 .service-card::after {
-  animation: shimmerDrift calc(var(--wave-medium) * 0.85) ease-in-out infinite;
+  animation: card-shimmer-drift calc(var(--wave-medium) * 0.85) ease-in-out infinite;
 }
 
 .portfolio-item::before {
-  animation: glideWave calc(var(--wave-slow) * 0.65) linear infinite;
+  animation: portfolio-card-glide-wave calc(var(--wave-slow) * 0.65) linear infinite;
 }
 
 /* ── CTA do Header — .nav__cta ────────────────────────────
@@ -1002,14 +1064,3 @@
     0 8px 22px    color-mix(in srgb, var(--midnight-blue) 24%, transparent);
 }
 
-/* ── prefers-reduced-motion ── */
-@media (prefers-reduced-motion: reduce) {
-  .btn,
-  .btn::before,
-  .btn--ripple::after,
-  .btn--bio::after {
-    animation: none !important;
-    transition-duration: 50ms !important;
-  }
-  .btn:hover { transform: none; }
-}

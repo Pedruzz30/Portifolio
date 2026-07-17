@@ -358,16 +358,16 @@ function initRoadmapLife(roadmap) {
   // ── Inject stylesheet for pulse + rail particle ──────────
   const style = document.createElement("style");
   style.textContent = `
-    @keyframes oceanNodePulse {
+    @keyframes roadmap-node-pulse {
       0%, 100% { transform: translate(-50%, -50%) scale(1); }
       50% { transform: translate(-50%, -50%) scale(calc(1 + var(--pulse-intensity, 0.08))); }
     }
 
     .is-pulsing::before {
-      animation: oceanNodePulse var(--pulse-duration, 3s) ease-in-out infinite !important;
+      animation: roadmap-node-pulse var(--pulse-duration, 3s) ease-in-out infinite !important;
     }
 
-    @keyframes railParticleTravel {
+    @keyframes roadmap-rail-particle-travel {
       0% { top: 0%; }
       100% { top: 100%; }
     }
@@ -380,19 +380,19 @@ function initRoadmapLife(roadmap) {
       border-radius: 50%;
       background: rgba(80, 190, 255, 0.90);
       box-shadow: 0 0 8px rgba(80, 190, 255, 0.80), 0 0 16px rgba(80, 190, 255, 0.40);
-      animation: railParticleTravel 3s linear infinite;
+      animation: roadmap-rail-particle-travel 3s linear infinite;
       pointer-events: none;
       z-index: 2;
     }
 
-    @keyframes oceanNodeWave {
+    @keyframes roadmap-node-wave {
       0% { box-shadow: 0 0 0 5px var(--node-glow), 0 0 14px var(--node-color); }
       50% { box-shadow: 0 0 0 14px var(--node-glow), 0 0 22px var(--node-color); }
       100% { box-shadow: 0 0 0 5px var(--node-glow), 0 0 14px var(--node-color); }
     }
 
     .node-wave::before {
-      animation: oceanNodeWave 400ms ease-out forwards !important;
+      animation: roadmap-node-wave 400ms ease-out forwards !important;
     }
   `;
   document.head.appendChild(style);
@@ -464,4 +464,3 @@ function initRoadmapLife(roadmap) {
 
   return () => cleanups.forEach((fn) => fn());
 }
-

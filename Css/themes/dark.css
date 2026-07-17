@@ -103,13 +103,6 @@ html {
     border-color 320ms var(--ease-out);
 }
 
-/* Usuários que pedem menos movimento: troca de tema é instantânea */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    transition: none;
-  }
-}
-
 /* =========================
    BOTÃO DE TOGGLE — Sol/Lua
    Pequeno botão circular no header para alternar o tema.
@@ -403,23 +396,6 @@ html {
    ╚══════════════════════════════════════════════════════════╝ */
 
 /* =========================
-   KEYFRAME: biolumBreath
-   Pulse lento para os glows de seção "respirarem".
-   Diferente do pulseGlow (box-shadow) — este altera opacity
-   e scale do background radial, criando uma fonte de luz viva.
-   ========================= */
-@keyframes biolumBreath {
-  0%, 100% {
-    opacity: 0.55;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-
-/* =========================
    HEADER — faixa mint no scroll
    Quando scrollado, o header ganha uma borda inferior mint
    e um glow interno que o identifica como "superfície iluminada"
@@ -482,7 +458,7 @@ html {
 
 /* =========================
    PILL DOT — indicador "disponível para vagas"
-   Já tem pillDotBiolum animado. No dark mode reforçamos o
+   Já tem status-biolum-dot-pulse animado. No dark mode reforçamos o
    glow base (entre os frames da animação).
    ========================= */
 [data-theme="dark"] .pill-dot {

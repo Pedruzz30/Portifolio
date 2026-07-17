@@ -221,9 +221,15 @@
   border: 2px solid rgba(255, 255, 255, 0.30);
   border-top-color: rgba(255, 255, 255, 0.90);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: contact-submit-spin 0.7s linear infinite;
   margin-left: 0.5rem;
   vertical-align: middle;
+}
+
+@keyframes contact-submit-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* =========================
@@ -238,10 +244,10 @@
   font-size: 0.9rem;
   font-weight: 600;
   backdrop-filter: blur(12px);
-  animation: feedbackSlideIn 320ms var(--ease-out);
+  animation: contact-feedback-slide-in 320ms var(--ease-out);
 }
 
-@keyframes feedbackSlideIn {
+@keyframes contact-feedback-slide-in {
   from {
     opacity: 0;
     transform: translateY(-6px);
@@ -516,31 +522,6 @@
 .contact-chip:hover::after {
   background: rgba(80, 190, 255, 0.85);
   box-shadow: 0 0 8px rgba(80, 190, 255, 0.60);
-}
-
-/* =========================
-   REDUCED MOTION
-   ========================= */
-@media (prefers-reduced-motion: reduce) {
-  .contact::before {
-    animation: none;
-  }
-
-  .contact-chip {
-    transition: none;
-  }
-
-  .contact-chip:hover {
-    transform: none;
-  }
-
-  .contact-chip::before {
-    display: none;
-  }
-
-  .contact-form__input {
-    transition: none;
-  }
 }
 
 /* =========================

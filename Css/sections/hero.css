@@ -80,10 +80,10 @@
       rgba(255, 255, 255, 0.08) 60deg,
       transparent 64deg,
       transparent 180deg);
-  animation: raysShift calc(var(--wave-slow, 12s) * 0.75) ease-in-out infinite;
+  animation: hero-rays-shift calc(var(--wave-slow, 12s) * 0.75) ease-in-out infinite;
 }
 
-@keyframes raysShift {
+@keyframes hero-rays-shift {
 
   0%,
   100% {
@@ -127,28 +127,7 @@
     radial-gradient(ellipse 8% 3% at 12% 55%, rgba(255, 255, 255, 0.30) 0%, transparent 100%);
 
   /* Caustics quase extintos */
-  animation: causticsFloat calc(var(--wave-medium, 8s) * 0.88) ease-in-out infinite;
-}
-
-
-
-@keyframes causticsFloat {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.08;
-  }
-
-  30% {
-    transform: translate(1.5%, 0.8%) scale(1.05);
-    opacity: 0.10;
-  }
-
-  65% {
-    transform: translate(-1%, -0.5%) scale(0.96);
-    opacity: 0.04;
-  }
+  animation: section-caustics-float calc(var(--wave-medium, 8s) * 0.88) ease-in-out infinite;
 }
 
 /* Canvas de partículas bioluminescentes (injetado pelo heroParticles.js) */
@@ -180,7 +159,7 @@
   gap: 1rem;
   transform: translateY(20px);
   transition: transform 1s ease;
-  animation: floatPulse calc(var(--wave-medium) * 0.95) ease-in-out infinite;
+  animation: hero-content-float calc(var(--wave-medium) * 0.95) ease-in-out infinite;
   animation-play-state: paused;
   will-change: transform;
 }
@@ -193,6 +172,21 @@
   transform: translateY(0);
   animation-play-state: running;
 }
+
+@keyframes hero-content-float {
+  0% {
+    transform: translate3d(0, 15px, 0);
+  }
+
+  50% {
+    transform: translate3d(-10px, calc(var(--float-distance) * -1.5), 0);
+  }
+
+  100% {
+    transform: translate3d(0, 15px, 0);
+  }
+}
+
 .hero-content::before {
   content: "";
   position: absolute;
@@ -279,11 +273,11 @@
       rgba(79, 191, 255, 0.45));
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  animation: heroBubbleRise linear infinite;
+  animation: hero-bubble-rise linear infinite;
   will-change: transform, opacity;
 }
 
-@keyframes heroBubbleRise {
+@keyframes hero-bubble-rise {
   0% {
     transform: translate(0, 0) scale(1);
     opacity: 0;
@@ -409,7 +403,7 @@
   border-radius: var(--blob-radius, 46% 54% 52% 48% / 55% 48% 52% 45%);
   /* wrapGlow removido daqui — box-shadow animation causava repaint full-frame.
      O glow agora pulsa via opacity no .hero-visual::before (GPU composited). */
-  animation: blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
+  animation: hero-image-blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
   will-change: border-radius;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
@@ -418,6 +412,25 @@
   box-shadow:
     0 8px 32px color-mix(in srgb, var(--midnight-blue) 40%, transparent),
     0 0 0 1px color-mix(in srgb, var(--mint) 20%, transparent);
+}
+
+@keyframes hero-image-blob {
+  0%,
+  100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+
+  25% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+
+  55% {
+    border-radius: 30% 70% 70% 30% / 50% 60% 30% 60%;
+  }
+
+  80% {
+    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+  }
 }
 
 /* =========================
@@ -460,7 +473,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--mint);
-  animation: badgePulse 2.4s ease-in-out infinite;
+  animation: hero-badge-pulse 2.4s ease-in-out infinite;
 }
 
 .hero-panel__text {
@@ -470,7 +483,7 @@
   color: rgba(255, 255, 255, 0.80);
 }
 
-@keyframes badgePulse {
+@keyframes hero-badge-pulse {
 
   0%,
   100% {
@@ -501,7 +514,7 @@
   z-index: 10;
   cursor: pointer;
   text-decoration: none;
-  animation: scrollIndicatorBounce 2.4s ease-in-out infinite;
+  animation: hero-scroll-indicator-bounce 2.4s ease-in-out infinite;
 }
 
 .scroll-indicator__label {
@@ -527,7 +540,7 @@
   opacity: 0.35;
 }
 
-@keyframes scrollIndicatorBounce {
+@keyframes hero-scroll-indicator-bounce {
 
   0%,
   100% {
@@ -541,26 +554,120 @@
   }
 }
 
-/* =========================
-   REDUCED MOTION
-   ========================= */
-@media (prefers-reduced-motion: reduce) {
-
-  .hero::before,
-  .hero::after,
-  .hero-visual::before,
-  .hero-visual::after,
-  .hero-image::before,
-  .hero-image-wrap,
-  .hero-image-wrap::before,
-  .hero-image-wrap::after,
-  .hero-content__inner,
-  .hero-badge__dot {
-    animation: none;
+@keyframes hero-tide-flow {
+  0% {
+    transform: translate3d(-6%, 2%, 0) scale(1.02);
   }
 
-  .hero-content,
-  .hero-content__inner,
-  .hero-visual__inner {
-    transition: none;
-  }}
+  50% {
+    transform: translate3d(6%, -3%, 0) scale(1.07);
+  }
+
+  100% {
+    transform: translate3d(-6%, 2%, 0) scale(1.02);
+  }
+}
+
+@keyframes hero-wave-pendulum {
+  0% {
+    transform: translateX(-18%) rotate(2.2deg);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translateX(18%) rotate(-2.2deg);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: translateX(-18%) rotate(2.2deg);
+    opacity: 0.35;
+  }
+}
+
+@keyframes hero-micro-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.38;
+  }
+
+  50% {
+    transform: translate3d(-1.5%, 1%, 0);
+    opacity: 0.60;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.38;
+  }
+}
+
+@keyframes hero-image-sea-glow {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
+    opacity: 0.30;
+  }
+
+  50% {
+    transform: translate3d(2.8%, -2.2%, 0) scale(1.10) rotate(3deg);
+    opacity: 0.66;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.03) rotate(0deg);
+    opacity: 0.30;
+  }
+}
+
+@keyframes hero-water-shimmer {
+  0% {
+    transform: translate3d(2%, -1%, 0);
+    opacity: 0.42;
+  }
+
+  50% {
+    transform: translate3d(-4%, 3%, 0);
+    opacity: 0.78;
+  }
+
+  100% {
+    transform: translate3d(2%, -1%, 0);
+    opacity: 0.42;
+  }
+}
+
+@keyframes hero-panel-drift-primary {
+  0% {
+    transform: translate3d(0, 0px, 0);
+  }
+
+  35% {
+    transform: translate3d(-3px, -6px, 0);
+  }
+
+  70% {
+    transform: translate3d(2px, -2px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0px, 0);
+  }
+}
+
+@keyframes hero-panel-drift-secondary {
+  0% {
+    transform: translate3d(0, 0px, 0);
+  }
+
+  40% {
+    transform: translate3d(4px, -8px, 0);
+  }
+
+  75% {
+    transform: translate3d(-2px, -3px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0px, 0);
+  }
+}

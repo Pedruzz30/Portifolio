@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ═══════════════════════════════════════════════════════════
  *  tokens.css — O Oceano em Variáveis
  *  Toda a personalidade visual do portfólio vive aqui.
@@ -188,17 +188,6 @@
    --z-loader: 9999;
 
    /* ===== Shapes =====
-     Border-radius "blob" — forma orgânica que imita uma criatura marinha.
-     Os valores são animados pelo keyframe `blob` em animations.css. */
+     Border-radius organico usado pelo keyframe `hero-image-blob`. */
    --blob-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
-
-   /* ===== Motion =====
-     Durações centralizadas para animações coerentes em todo o site.
-     --wave-slow (16s) e --wave-medium (11s) são as "marés" do design.
-     --float-distance é a distância máxima que elementos flutuam. */
-   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-   --transition-base: 220ms var(--ease-out);
-   --wave-slow: 16s;
-   --wave-medium: 11s;
-   --float-distance: 14px;
 }

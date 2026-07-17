@@ -4,25 +4,32 @@
  *
  *  Este arquivo apenas importa todos os módulos CSS em ordem.
  *  A ORDEM IMPORTA: tokens devem vir antes de tudo,
- *  animations deve vir por último (pode sobrescrever).
+ *  reduced-motion e lite-mode devem vir por último para preservar acessibilidade.
  *
  *  Estrutura:
- *   base/variables.css          → variáveis CSS
+ *   base/variables.css           → variáveis CSS
+ *   base/motion-tokens.css       → tokens de duração/easing
  *   components/premium-cards.css → estilos premium de cards
  *   base/global.css             → reset, links e base global
+ *   layout/ocean-background.css  → mar global do body
+ *   shared/shared-motion.css     → keyframes compartilhados
  *   layout/containers.css       → estrutura reutilizável
  *   sections/shared.css         → efeitos compartilhados de seções
  *   components/ui.css           → loader, header, nav, botões e progress
  *   themes/dark.css             → tema escuro
  *   sections/*.css              → estilos de cada seção relevante
- *   utilities/*.css             → helpers, animações e responsividade
+ *   utilities/*.css             → helpers e responsividade
+ *   base/reduced-motion.css     → redução global de movimento
  *   compat/lite-mode.css        → fallback leve, sempre por último
  * ═══════════════════════════════════════════════════════════
  */
 
 @import "./base/variables.css";
+@import "./base/motion-tokens.css";
 @import "./components/premium-cards.css";
 @import "./base/global.css";
+@import "./layout/ocean-background.css";
+@import "./shared/shared-motion.css";
 @import "./layout/containers.css";
 @import "./sections/shared.css";
 @import "./components/ui.css";
@@ -34,6 +41,6 @@
 @import "./layout/footer.css";
 @import "./sections/portfolio.css";
 @import "./utilities/helpers.css";
-@import "./utilities/animations.css";
 @import "./utilities/responsive.css";
+@import "./base/reduced-motion.css";
 @import "./compat/lite-mode.css";

@@ -55,11 +55,3 @@
   white-space: pre-wrap;
 }
  
-/* FIX 3: desativa a transição para usuários com sensibilidade a movimento */
-@media (prefers-reduced-motion: reduce) {
-  .js-reveal {
-    transition: none;
-    transform: none;
-    opacity: 1;
-  }
-}

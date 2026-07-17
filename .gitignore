@@ -3,3 +3,4 @@ chrome-dom.txt
 debug-scroll.html
 debug-scroll.png
 playwright-scroll.spec.js
+.claude/

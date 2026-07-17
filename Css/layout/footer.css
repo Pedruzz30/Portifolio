@@ -47,7 +47,7 @@
     radial-gradient(ellipse 35% 18% at 25% 30%,  rgba(100, 210, 255, 1) 0%, transparent 100%),
     radial-gradient(ellipse 22% 12% at 72% 55%,  rgba(80,  190, 240, 1) 0%, transparent 100%),
     radial-gradient(ellipse 28% 14% at 50% 18%,  rgba(120, 220, 255, 1) 0%, transparent 100%);
-  animation: footerCaustics calc(var(--wave-medium, 8s) * 0.95) ease-in-out infinite;
+  animation: footer-caustics-drift calc(var(--wave-medium, 8s) * 0.95) ease-in-out infinite;
   animation-play-state: paused;
 }
  
@@ -69,7 +69,7 @@
       rgba(255, 255, 255, 0.02) 20px,
       rgba(255, 255, 255, 0.02) 36px
     );
-  animation: deepWaterDrift calc(var(--wave-slow, 12s) * 0.70) ease-in-out infinite;
+  animation: section-deep-water-drift calc(var(--wave-slow, 12s) * 0.70) ease-in-out infinite;
   animation-play-state: paused;
 }
 
@@ -77,6 +77,23 @@
 .site-footer.is-in-view::before,
 .site-footer.is-in-view::after {
   animation-play-state: running;
+}
+
+@keyframes footer-caustics-drift {
+  0% {
+    transform: translate3d(-2.2%, 1.8%, 0) scale(1.03);
+    opacity: 0.22;
+  }
+
+  50% {
+    transform: translate3d(3.4%, -2.4%, 0) scale(1.10);
+    opacity: 0.42;
+  }
+
+  100% {
+    transform: translate3d(-2.2%, 1.8%, 0) scale(1.03);
+    opacity: 0.22;
+  }
 }
  
 /* Canvas das partículas bioluminescentes (injetado pelo JS).
@@ -249,7 +266,7 @@
   height: 5px;
   border-radius: 50%;
   background: rgba(80, 190, 255, 0.5);
-  animation: pillDotBiolum 3s ease-in-out infinite;
+  animation: status-biolum-dot-pulse 3s ease-in-out infinite;
 }
  
 /* =========================
@@ -268,3 +285,4 @@
     gap: 0.5rem;
   }
 }
+

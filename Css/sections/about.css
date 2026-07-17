@@ -64,7 +64,7 @@
       rgba(160, 220, 255, 0.11) 67%,
       rgba(255, 255, 255, 0.06) 71%,
       transparent 77%);
-  animation: currentDrift1 14s ease-in-out infinite;
+  animation: about-current-drift-primary 14s ease-in-out infinite;
   will-change: transform;
 }
 
@@ -101,7 +101,7 @@
       rgba(255, 255, 255, 0.07) 76%,
       rgba(120, 200, 255, 0.09) 80%,
       transparent 85%);
-  animation: currentDrift2 19s ease-in-out infinite 2.5s;
+  animation: about-current-drift-secondary 19s ease-in-out infinite 2.5s;
   will-change: transform;
 }
 
@@ -121,7 +121,7 @@
 
 /* Keyframes das correntes — movimento translacional + leve rotação
    simula a ondulação real de uma corrente submarina */
-@keyframes currentDrift1 {
+@keyframes about-current-drift-primary {
   0% {
     transform: translateX(-8%) skewY(-0.8deg) scaleX(1);
     opacity: 0.8;
@@ -143,7 +143,7 @@
   }
 }
 
-@keyframes currentDrift2 {
+@keyframes about-current-drift-secondary {
   0% {
     transform: translateX(5%) skewY(0.6deg) scaleX(1);
     opacity: 0.7;
@@ -503,32 +503,3 @@
   }
 }
 
-/* =========================
-   REDUCED MOTION
-   ========================= */
-@media (prefers-reduced-motion: reduce) {
-
-  .about::before,
-  .about::after,
-  .about-shell::before {
-    animation: none;
-  }
-
-  .about-value-item {
-    transition: none;
-  }
-
-  .about-value-item:hover {
-    transform: none;
-  }
-
-  .tech-item,
-  .edu-card {
-    transition: none;
-  }
-
-  .tech-item:hover,
-  .edu-card:hover {
-    transform: none;
-  }
-}

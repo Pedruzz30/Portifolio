@@ -95,7 +95,7 @@ h3,
 
 
 
-@keyframes statusBreathe {
+@keyframes project-status-breathe {
   0%,
   100% {
     opacity: 1;
@@ -111,7 +111,7 @@ h3,
 .project-card--premium[data-status="progress"] .status-dot {
   background-color: #f5a623;
   color: #f5a623;
-  animation: statusBreathe 3s ease-in-out infinite;
+  animation: project-status-breathe 3s ease-in-out infinite;
 }
 
 .project-card--premium[data-status="done"] .status-dot {
@@ -241,4 +241,5 @@ h3,
 .roadmap-card--premium[data-status="done"] .status-dot { background-color: #50beff; box-shadow: 0 0 8px #50beff; }
 .roadmap-card--premium[data-status="next"] .status-dot { background-color: #b8eaf4; box-shadow: 0 0 8px rgba(184, 234, 244, 0.6); }
 .roadmap-card--premium[data-status="future"] .status-dot { background-color: rgba(255, 255, 255, 0.3); box-shadow: none; }
+
 

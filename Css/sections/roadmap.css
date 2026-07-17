@@ -61,7 +61,7 @@
     radial-gradient(ellipse 18% 8%  at 65% 38%, rgba(80,190,240,1)  0%, transparent 100%),
     radial-gradient(ellipse 22% 10% at 85% 15%, rgba(120,220,255,1) 0%, transparent 100%),
     radial-gradient(ellipse 12% 5%  at 42% 55%, rgba(80,180,230,1)  0%, transparent 100%);
-  animation: causticsFloat calc(var(--wave-medium) * 1.20) ease-in-out infinite;
+  animation: section-caustics-float calc(var(--wave-medium) * 1.20) ease-in-out infinite;
 }
  
 /* Textura de água profunda — corrente fria passando */
@@ -81,7 +81,7 @@
       rgba(100,200,255,0.01) 20px,
       rgba(100,200,255,0.01) 36px
     );
-  animation: deepWaterDrift calc(var(--wave-slow) * 0.80) ease-in-out infinite;
+  animation: section-deep-water-drift calc(var(--wave-slow) * 0.80) ease-in-out infinite;
 }
  
 .stack-roadmap__shell {
@@ -440,7 +440,7 @@
 /* Pulso bioluminescente — só no node "now" */
 @media (prefers-reduced-motion: no-preference) {
   .stack-roadmap__step[data-status="now"]::before {
-    animation: pulseGlow 3.4s ease-in-out infinite;
+    animation: status-pulse-glow 3.4s ease-in-out infinite;
   }
 }
  
@@ -737,7 +737,7 @@
    FIX 2: box-shadow incluído em 0%/100% para evitar
    que o card perca a sombra base nos extremos do ciclo.
    ========================= */
-@keyframes cardPulse {
+@keyframes roadmap-card-pulse {
   0%, 100% {
     border-color: rgba(45, 226, 230, 0.18);
     box-shadow:
@@ -755,25 +755,7 @@
  
 @media (prefers-reduced-motion: no-preference) {
   .stack-roadmap__step[data-status="now"] .stack-roadmap__card {
-    animation: cardPulse 4s ease-in-out infinite;
+    animation: roadmap-card-pulse 4s ease-in-out infinite;
   }
 }
  
-/* =========================
-   REDUCED MOTION
-   FIX 3: opacity: 1 e transform: none adicionados para que
-   os steps apareçam imediatamente sem depender do JS
-   ========================= */
-@media (prefers-reduced-motion: reduce) {
-  .stack-roadmap__step {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
- 
-  .stack-roadmap__progress-fill,
-  .stack-roadmap__summary,
-  .stack-roadmap__content {
-    transition: none;
-  }
-}
