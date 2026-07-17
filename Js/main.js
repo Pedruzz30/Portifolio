@@ -18,6 +18,8 @@ import { initFooterParticles } from "./effects/footerParticles.js";
 import { initHeroParticles } from "./effects/heroParticles.js";
 import { initOceanLife } from "./effects/ocean-life.js";
 import { initGsapEffects } from "./effects/gsapEffects.js";
+import { setupContactForm } from "./modules/contact-form.js";
+import { setupFloatingAction } from "./modules/floating-action.js";
 
 function bootstrap() {
   const controller = new AbortController();
@@ -44,6 +46,8 @@ function bootstrap() {
     roadmapProgressValue: document.querySelector("[data-roadmap-value]"),
     roadmapProgressCaption: document.querySelector("[data-roadmap-caption]"),
     roadmapProgressSteps: Array.from(document.querySelectorAll(".stack-roadmap__progress-step")),
+    fabTop: document.getElementById("fab-top"),
+    contactForm: document.getElementById("contact-form"),
   };
 
   // O script síncrono no <head> calcula window.__portfolioCompat antes
@@ -218,96 +222,17 @@ function bootstrap() {
     elements.year.textContent = String(new Date().getFullYear());
   }
 
-  const fabTop = document.getElementById("fab-top");
-  if (fabTop) {
-    const toggleFab = () => {
-      if (window.scrollY > 400) {
-        fabTop.classList.add("is-visible");
-      } else {
-        fabTop.classList.remove("is-visible");
-      }
-    };
+  safelyInit(
+    setupFloatingAction,
+    { button: elements.fabTop, signal },
+    (error) => console.warn("FAB de topo desabilitado:", error)
+  );
 
-    window.addEventListener("scroll", toggleFab, { passive: true, signal });
-    fabTop.addEventListener(
-      "click",
-      () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      },
-      { signal }
-    );
-    toggleFab();
-  }
-
-  const contactForm = document.getElementById("contact-form");
-  if (contactForm) {
-    const textarea = contactForm.querySelector("#contact-message");
-    const counter = contactForm.querySelector(".contact-form__counter");
-    const submitBtn = contactForm.querySelector(".contact-form__submit");
-    const label = submitBtn?.querySelector(".btn__label");
-    const MAX = 500;
-
-    if (textarea && counter) {
-      const updateCounter = () => {
-        const len = textarea.value.length;
-        counter.textContent = `${len} / ${MAX}`;
-        counter.classList.toggle("is-near-limit", len >= MAX * 0.8 && len < MAX);
-        counter.classList.toggle("is-at-limit", len >= MAX);
-      };
-      textarea.addEventListener("input", updateCounter, { signal });
-      updateCounter();
-    }
-
-    contactForm.addEventListener(
-      "submit",
-      async (e) => {
-        e.preventDefault();
-        contactForm.classList.remove("show-success", "show-error");
-
-        if (!contactForm.checkValidity()) {
-          contactForm.reportValidity();
-          return;
-        }
-
-        const originalLabel = label ? label.textContent : "Enviar mensagem";
-
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.classList.add("is-loading");
-          if (label) label.textContent = "Abrindo e-mail…";
-        }
-
-        try {
-          await new Promise((r) => setTimeout(r, 800));
-
-          const nome = contactForm.querySelector("#contact-name")?.value || "";
-          const email = contactForm.querySelector("#contact-email")?.value || "";
-          const mensagem = textarea?.value || "";
-
-          const subject = encodeURIComponent(`Contato do portfólio — ${nome}`);
-          const body = encodeURIComponent(
-            `Nome: ${nome}\nEmail: ${email}\n\nMensagem:\n${mensagem}`
-          );
-
-          contactForm.classList.add("show-success");
-          window.location.href =
-            `mailto:pedrohhenriquepimenta224@gmail.com?subject=${subject}&body=${body}`;
-        } catch {
-          contactForm.classList.add("show-error");
-        } finally {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.classList.remove("is-loading");
-            if (label) label.textContent = originalLabel;
-          }
-          setTimeout(() => {
-            contactForm.classList.remove("show-success", "show-error");
-          }, 5000);
-        }
-      },
-      { signal }
-    );
-  }
+  safelyInit(
+    setupContactForm,
+    { form: elements.contactForm, signal },
+    (error) => console.warn("Formulário de contato desabilitado:", error)
+  );
 
   loaderFallbackTimeoutId = window.setTimeout(() => {
     console.warn("[boot] fallback timeout fired — loader may be stuck");

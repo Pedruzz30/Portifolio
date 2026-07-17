@@ -41,6 +41,19 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+.scroll-debug-panel {
+  position: fixed;
+  inset: auto 12px 12px;
+  max-height: 40vh;
+  overflow: auto;
+  z-index: 999999;
+  padding: 12px;
+  background: #000;
+  color: #0f0;
+  font: 12px/1.4 monospace;
+  white-space: pre-wrap;
+}
  
 /* FIX 3: desativa a transição para usuários com sensibilidade a movimento */
 @media (prefers-reduced-motion: reduce) {

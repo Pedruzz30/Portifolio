@@ -1,110 +1,98 @@
-# Pedro Henrique | Portfólio
+# Pedro Henrique | Portfolio
 
-Portfólio pessoal de Pedro Henrique, estudante de Engenharia de Software com foco em desenvolvimento back-end Java. A página apresenta minha trajetória, stack de estudos, projetos práticos, canais de contato e um roadmap de evolução para atuar como desenvolvedor Java Júnior.
-
-## Acesse
-
-Deploy previsto via GitHub Pages:
-
-```text
-https://pedruzz30.github.io/Portifolio/
-```
-
-## Sobre o projeto
-
-Este portfólio foi construído como uma página estática, com foco em performance, responsividade e uma experiência visual própria. O conteúdo destaca minha base em Java, Spring Boot, APIs REST, JPA/Hibernate, MongoDB, SQL, Git/GitHub e boas práticas de código.
-
-## Funcionalidades
-
-- Hero com apresentação profissional e foto.
-- Seção "Sobre mim" com foco em back-end Java.
-- Roadmap de estudos em Java com progresso visual.
-- Cards de projetos com links para repositórios.
-- Formulário de contato via `mailto:`.
-- Atalhos para GitHub, LinkedIn, email e WhatsApp.
-- Tema claro/escuro.
-- Animações com GSAP e efeitos visuais em canvas.
-- Layout responsivo para desktop, tablet e mobile.
-- Metatags de SEO, Open Graph, Twitter Card e dados estruturados.
-
-## Tecnologias
-
-- HTML5
-- CSS3 modular
-- JavaScript ES Modules
-- GSAP
-- ScrollTrigger
-- Canvas API
-- GitHub Pages
+Portfolio pessoal de Pedro Henrique, estudante de Engenharia de Software com foco em back-end Java. O projeto e uma pagina estatica sem etapa de build, organizada para manter HTML, CSS, JavaScript e assets em responsabilidades separadas.
 
 ## Estrutura
 
 ```text
 .
 ├── index.html
-├── Css/
+├── assets/
+│   ├── images/
+│   │   └── minhaFoto.jpeg
+│   └── icons/
+│       ├── social/
+│       └── technologies/
+├── css/
 │   ├── main.css
-│   ├── tokens.css
-│   ├── hero.css
-│   ├── about.css
-│   ├── roadmap.css
-│   ├── portifolio.css
-│   └── ...
-├── Js/
-│   ├── main.js
+│   ├── base/
+│   ├── layout/
 │   ├── components/
-│   ├── effects/
-│   └── utils/
-└── assets/
-    ├── minhaFoto.jpeg
-    ├── SVG/
-    └── SVG-Linguagens/
+│   ├── sections/
+│   ├── themes/
+│   ├── utilities/
+│   └── compat/
+└── js/
+    ├── main.js
+    ├── compat/
+    ├── components/
+    ├── effects/
+    ├── modules/
+    └── utils/
 ```
 
-## Como rodar localmente
+## Responsabilidades
 
-Por usar módulos JavaScript, o ideal é abrir o projeto por um servidor local.
+- `index.html`: estrutura semantica, metadados, textos, links e imports.
+- `assets/images`: imagens de conteudo.
+- `assets/icons/social`: icones de canais sociais.
+- `assets/icons/technologies`: icones de tecnologias.
+- `css/main.css`: orquestra os imports CSS na ordem correta.
+- `css/base`: variaveis e base global.
+- `css/layout`: containers e estruturas compartilhadas.
+- `css/components`: componentes reutilizaveis.
+- `css/sections`: estilos de secoes como hero, about, roadmap, portfolio e contact.
+- `css/themes`: tema escuro.
+- `css/utilities`: helpers, keyframes e responsividade.
+- `css/compat`: fallback de modo leve para WebViews/reduced motion.
+- `js/main.js`: inicializa e coordena os modulos.
+- `js/compat`: scripts que precisam rodar antes do CSS.
+- `js/components`: comportamento de componentes reutilizaveis.
+- `js/effects`: animacoes, GSAP e efeitos canvas.
+- `js/modules`: funcionalidades de pagina, como formulario e FAB.
+- `js/utils`: funcoes utilitarias.
 
-Com Python:
+## Como rodar
+
+Por usar JavaScript ES Modules, abra o projeto por um servidor local:
 
 ```bash
 python -m http.server 4173 --bind 127.0.0.1
 ```
 
-Depois acesse:
+Acesse:
 
 ```text
 http://127.0.0.1:4173/index.html
 ```
 
-Também é possível usar uma extensão como Live Server no VS Code.
+## Bibliotecas
 
-## Publicação
+- GSAP 3.11.4 via CDN.
+- ScrollTrigger 3.11.4 via CDN.
+- Canvas API nativa.
+- JavaScript ES Modules nativo do navegador.
 
-Este projeto pode ser publicado diretamente pelo GitHub Pages, sem etapa de build.
+Nao ha Vite, Webpack, Parcel, npm ou processo de build. O deploy pode ser feito diretamente no GitHub Pages a partir da raiz do projeto.
 
-Passos básicos:
+## Como criar uma nova secao
 
-```bash
-git add -A
-git commit -m "Publish portfolio"
-git push
+1. Adicione a estrutura semantica da secao em `index.html`.
+2. Crie um arquivo CSS em `css/sections/nome-da-secao.css`.
+3. Importe esse arquivo em `css/main.css` na posicao correta da cascata.
+4. Se a secao precisar de comportamento, crie um modulo em `js/modules/`.
+5. Inicialize o modulo em `js/main.js`.
+
+## Cuidados com caminhos
+
+Use caminhos relativos a partir do HTML:
+
+```text
+./css/main.css
+./js/main.js
+./assets/images/minhaFoto.jpeg
+./assets/icons/social/SVG-email.png
+./assets/icons/technologies/JAVA-SVG.png
 ```
 
-Depois, ative o GitHub Pages nas configurações do repositório, usando a branch principal e a raiz do projeto.
-
-## Próximas melhorias
-
-- Adicionar currículo em PDF.
-- Destacar um projeto Spring Boot completo como projeto principal.
-- Adicionar links de demonstração para projetos publicados.
-- Melhorar os READMEs dos repositórios linkados.
-- Integrar formulário com envio real usando Formspree, EmailJS ou backend próprio.
-- Rodar Lighthouse após o deploy e ajustar performance, SEO e acessibilidade.
-
-## Contato
-
-- GitHub: [Pedruzz30](https://github.com/Pedruzz30)
-- LinkedIn: [Pedro Henrique](https://www.linkedin.com/in/pedro-henrique-1a883634a)
-- Email: [pedrohhenriquepimenta224@gmail.com](mailto:pedrohhenriquepimenta224@gmail.com)
-- WhatsApp: [Enviar mensagem](https://wa.me/5524999423102)
+O GitHub Pages diferencia maiusculas e minusculas, entao mantenha `css`, `js` e `assets` em minusculo.

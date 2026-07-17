@@ -7,42 +7,33 @@
  *  animations deve vir por último (pode sobrescrever).
  *
  *  Estrutura:
- *   tokens.css    → variáveis CSS (cores, tamanhos, durations)
- *   premium.css   → estilos premium extraídos do index (cards e roadmap)
- *   base.css      → reset, links, efeito oceano global
- *   layout.css    → estrutura de seção (shells, grids)
- *   sections.css  → hero base + skills + floating panels (hero detalhado em hero.css)
- *   components.css → loader, header, nav, botões, scroll progress
- *   darkmode.css  → override de tokens para data-theme="dark"
- *   hero.css      → seção hero detalhada (foto, panels, badge)
- *   about.css     → seção sobre mim
- *   roadmap.css   → timeline de aprendizado
- *   contact.css   → formulário e canais de contato
- *   footer.css    → rodapé "fundo do oceano"
- *   portifolio.css → cards de projetos
- *   utilities.css → classes utilitárias (.hidden, [data-scroll])
- *   animations.css → @keyframes (sem regras de estilo)
- *   responsive.css → media queries (deve sobrescrever tudo)
- *   compat.css    → modo leve p/ html.is-lite-mode / is-in-app-browser
- *                   (WebViews, reduced-motion — vem por último,
- *                   vence a cascata inteira)
+ *   base/variables.css          → variáveis CSS
+ *   components/premium-cards.css → estilos premium de cards
+ *   base/global.css             → reset, links e base global
+ *   layout/containers.css       → estrutura reutilizável
+ *   sections/shared.css         → efeitos compartilhados de seções
+ *   components/ui.css           → loader, header, nav, botões e progress
+ *   themes/dark.css             → tema escuro
+ *   sections/*.css              → estilos de cada seção relevante
+ *   utilities/*.css             → helpers, animações e responsividade
+ *   compat/lite-mode.css        → fallback leve, sempre por último
  * ═══════════════════════════════════════════════════════════
  */
 
-@import "./tokens.css";
-@import "./premium.css";
-@import "./base.css";
-@import "./layout.css";
-@import "./sections.css";
-@import "./components.css";
-@import "./darkmode.css";
-@import "./hero.css";
-@import "./about.css";
-@import "./roadmap.css";
-@import "./contact.css";
-@import "./footer.css";
-@import "./portifolio.css";
-@import "./utilities.css";
-@import "./animations.css";
-@import "./responsive.css";
-@import "./compat.css";
+@import "./base/variables.css";
+@import "./components/premium-cards.css";
+@import "./base/global.css";
+@import "./layout/containers.css";
+@import "./sections/shared.css";
+@import "./components/ui.css";
+@import "./themes/dark.css";
+@import "./sections/hero.css";
+@import "./sections/about.css";
+@import "./sections/roadmap.css";
+@import "./sections/contact.css";
+@import "./layout/footer.css";
+@import "./sections/portfolio.css";
+@import "./utilities/helpers.css";
+@import "./utilities/animations.css";
+@import "./utilities/responsive.css";
+@import "./compat/lite-mode.css";
