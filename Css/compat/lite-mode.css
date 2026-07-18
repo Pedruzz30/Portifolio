@@ -147,8 +147,12 @@ html.is-lite-mode .footer-depth-dot,
 html.is-lite-mode .nav__link[aria-current="page"]::before,
 html.is-lite-mode .btn::before,
 html.is-lite-mode .btn--bio::after,
+html.is-lite-mode .ocean-depth-light,
+html.is-lite-mode .ocean-depth-light::before,
+html.is-lite-mode .ocean-depth-light::after,
 html.is-lite-mode .about::before,
 html.is-lite-mode .about-shell::before,
+html.is-lite-mode .about-turbulence,
 html.is-lite-mode .stack-roadmap::before,
 html.is-lite-mode .stack-roadmap::after,
 html.is-lite-mode .stack-roadmap__step[data-status="now"]::before,
@@ -163,8 +167,12 @@ html.is-in-app-browser .footer-depth-dot,
 html.is-in-app-browser .nav__link[aria-current="page"]::before,
 html.is-in-app-browser .btn::before,
 html.is-in-app-browser .btn--bio::after,
+html.is-in-app-browser .ocean-depth-light,
+html.is-in-app-browser .ocean-depth-light::before,
+html.is-in-app-browser .ocean-depth-light::after,
 html.is-in-app-browser .about::before,
 html.is-in-app-browser .about-shell::before,
+html.is-in-app-browser .about-turbulence,
 html.is-in-app-browser .stack-roadmap::before,
 html.is-in-app-browser .stack-roadmap::after,
 html.is-in-app-browser .stack-roadmap__step[data-status="now"]::before,
@@ -244,4 +252,10 @@ html.is-in-app-browser .stack-roadmap__summary:hover {
   transform: none !important;
   background: rgba(80, 190, 255, 0.10) !important;
   box-shadow: none !important;
+}
+
+html.is-lite-mode .ocean-depth-stage--about-roadmap,
+html.is-in-app-browser .ocean-depth-stage--about-roadmap {
+  --ocean-depth-light-opacity: 0.34;
+  --ocean-depth-light-blur: 0;
 }

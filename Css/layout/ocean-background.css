@@ -37,6 +37,134 @@ body::after {
   animation: ocean-background-flow calc(var(--wave-slow) * 0.90) linear infinite;
 }
 
+/* Palco compartilhado About -> Roadmap.
+   O feixe nasce visualmente na About e atravessa o limite entre seções
+   sem reiniciar fase ou ser cortado por overflow local. */
+.ocean-depth-stage--about-roadmap {
+  --ocean-depth-light-ease: cubic-bezier(0.37, 0.16, 0.24, 0.94);
+  --ocean-depth-light-opacity: 1;
+  --ocean-depth-light-blur: 0;
+  --section-seam-size: clamp(5rem, 10vw, 9rem);
+  --roadmap-portfolio-seam-mid: rgba(6, 34, 58, 0.12);
+  --roadmap-portfolio-seam-end: rgba(8, 45, 73, 0.18);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 34% at 50% 48%,
+      color-mix(in srgb, var(--sky-blue) 22%, transparent),
+      transparent 65%),
+    radial-gradient(ellipse 70% 32% at 15% 76%,
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 70%),
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(182, 228, 240, 0.075) 20%,
+      rgba(105, 191, 219, 0.07) 38%,
+      rgba(28, 100, 144, 0.10) 55%,
+      rgba(10, 47, 76, 0.16) 76%,
+      rgba(4, 25, 45, 0.26) 100%);
+}
+
+.ocean-depth-stage--about-roadmap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--section-seam-size);
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--roadmap-portfolio-seam-mid) 58%,
+    var(--roadmap-portfolio-seam-end) 100%
+  );
+}
+
+.ocean-depth-stage--about-roadmap > .about,
+.ocean-depth-stage--about-roadmap > .stack-roadmap {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+.ocean-depth-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--ocean-depth-light-opacity);
+  filter: blur(var(--ocean-depth-light-blur));
+  overflow: hidden;
+  background: transparent;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 48%,
+      rgba(0, 0, 0, 0.82) 62%,
+      rgba(0, 0, 0, 0.42) 78%,
+      transparent 98%
+    );
+  mask-image:
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 48%,
+      rgba(0, 0, 0, 0.82) 62%,
+      rgba(0, 0, 0, 0.42) 78%,
+      transparent 98%
+    );
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+.ocean-depth-light::before,
+.ocean-depth-light::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.ocean-depth-light::before {
+  inset: -10% -20%;
+  background:
+    linear-gradient(108deg,
+      transparent 0%,
+      transparent 22%,
+      rgba(255, 255, 255, 0.10) 28%,
+      rgba(180, 230, 255, 0.14) 32%,
+      rgba(255, 255, 255, 0.08) 36%,
+      transparent 42%,
+      transparent 58%,
+      rgba(255, 255, 255, 0.07) 63%,
+      rgba(160, 220, 255, 0.11) 67%,
+      rgba(255, 255, 255, 0.06) 71%,
+      transparent 77%);
+  animation: about-current-drift-primary 14s ease-in-out infinite;
+}
+
+.ocean-depth-light::after {
+  inset: -15% -25%;
+  background:
+    linear-gradient(95deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(255, 255, 255, 0.06) 40%,
+      rgba(140, 210, 255, 0.10) 44%,
+      rgba(255, 255, 255, 0.05) 48%,
+      transparent 54%,
+      transparent 72%,
+      rgba(255, 255, 255, 0.07) 76%,
+      rgba(120, 200, 255, 0.09) 80%,
+      transparent 85%);
+  animation: about-current-drift-secondary 19s ease-in-out infinite 2.5s;
+}
+
 @keyframes ocean-background-glow {
   0% {
     transform: translate3d(2%, -1%, 0) scale(1.03);
@@ -75,5 +203,49 @@ body::after {
   100% {
     transform: translateX(110%) rotate(10deg);
     opacity: 0.00;
+  }
+}
+
+@keyframes about-current-drift-primary {
+  0% {
+    transform: translateX(-8%) skewY(-0.8deg) scaleX(1);
+    opacity: 0.8;
+  }
+
+  35% {
+    transform: translateX(2%) skewY(0.4deg) scaleX(1.02);
+    opacity: 1;
+  }
+
+  65% {
+    transform: translateX(8%) skewY(-0.5deg) scaleX(0.98);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateX(-8%) skewY(-0.8deg) scaleX(1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes about-current-drift-secondary {
+  0% {
+    transform: translateX(5%) skewY(0.6deg) scaleX(1);
+    opacity: 0.7;
+  }
+
+  40% {
+    transform: translateX(-6%) skewY(-0.3deg) scaleX(1.03);
+    opacity: 1;
+  }
+
+  70% {
+    transform: translateX(-10%) skewY(0.5deg) scaleX(0.97);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateX(5%) skewY(0.6deg) scaleX(1);
+    opacity: 0.7;
   }
 }

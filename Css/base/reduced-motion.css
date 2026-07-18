@@ -48,6 +48,12 @@
     backdrop-filter: none;
   }
 
+  .ocean-depth-stage--about-roadmap,
+  [data-theme="dark"] .ocean-depth-stage--about-roadmap {
+    --ocean-depth-light-opacity: 0.62;
+    --ocean-depth-light-blur: 0;
+  }
+
   .hero::before,
   .hero::after,
   .hero-visual::before,
@@ -70,9 +76,13 @@
   .btn__pulse,
   .btn-hover-effect::before,
   .btn-hover-effect::after,
+  .ocean-depth-light,
+  .ocean-depth-light::before,
+  .ocean-depth-light::after,
   .about::before,
   .about::after,
   .about-shell::before,
+  .about-turbulence,
   .contact::before,
   .skills2-card::after,
   .skills2-dot,

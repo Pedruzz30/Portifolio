@@ -2,12 +2,11 @@
  * ═══════════════════════════════════════════════════════════
  *  effects/ocean-life.js — Vida Oceânica
  *
- *  Quatro efeitos complementares à narrativa de profundidade:
+ *  Tres efeitos complementares à narrativa de profundidade:
  *
  *  1. Header  — Tensão Superficial (ripples no cursor)
  *  2. About   — Correnteza com Corpo (fios de corrente bezier)
  *  3. Roadmap — Nodes com Vida Própria (DOM: pulso + partícula + onda)
- *  4. Footer  — Abismo que Respira (medusas + respiração radial)
  *
  *  Cada efeito:
  *  - Tem seu próprio canvas/DOM injetado na seção
@@ -16,18 +15,15 @@
  *  - Retorna função de cleanup
  *
  *  API pública:
- *    initOceanLife({ header, hero, about, roadmap, footer, projectCards, reduceMotion })
+ *    initOceanLife({ header, about, roadmap, reduceMotion, isMobile })
  *    → { destroy }
  * ═══════════════════════════════════════════════════════════
  */
 
 export function initOceanLife({
   header,
-  hero,
   about,
   roadmap,
-  footer,
-  projectCards = [],
   reduceMotion = false,
   isMobile = false,
 } = {}) {
@@ -47,9 +43,6 @@ export function initOceanLife({
   if (header) cleanups.push(initSurfaceTension(header, hasHover));
   if (about) cleanups.push(initCurrentStreams(about, hasHover));
   if (roadmap) cleanups.push(initRoadmapLife(roadmap));
-  if (footer && typeof initAbyssBreath === "function") {
-    cleanups.push(initAbyssBreath(footer));
-  }
 
   return {
     destroy: () => cleanups.forEach((fn) => fn()),

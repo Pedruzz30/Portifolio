@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -68,7 +68,7 @@
     </div>
   </div>
 
-  <header class="header">
+  <header class="header" data-ocean-zone="surface">
     <div class="header-shell">
       <div class="logo" aria-label="Logo">Pedruzz.dev</div>
       <nav class="nav" aria-label="Navegação principal">
@@ -109,7 +109,7 @@
   <div class="nav-overlay" aria-hidden="true"></div>
 
   <main>
-    <section class="hero" aria-labelledby="hero-title" data-section>
+    <section class="hero" aria-labelledby="hero-title" data-section data-ocean-zone="mesopelagic">
       <div class="hero-content">
         <div class="hero-content__inner">
           <h1 id="hero-title" class="text-reveal">
@@ -189,9 +189,13 @@
       </a>
     </section>
 
-    <!-- ==================== SOBRE MIM ==================== -->
-    <section class="about" aria-labelledby="about-title" data-section>
-      <div class="about-depth-gradient"></div>
+    <!-- ==================== SOBRE MIM + ROADMAP ==================== -->
+    <div class="ocean-depth-stage ocean-depth-stage--about-roadmap" data-ocean-zone="transition-twilight">
+      <div class="ocean-depth-light" aria-hidden="true"></div>
+
+    <section class="about" aria-labelledby="about-title" data-section data-ocean-zone="transition">
+      <div class="about-turbulence" aria-hidden="true"></div>
+      <div class="about-depth-gradient" aria-hidden="true"></div>
       <div class="about-shell">
         <header class="about-header">
           <p class="section-eyebrow">Sobre mim</p>
@@ -298,7 +302,7 @@
       </div>
     </section>
 
-     <section class="stack-roadmap" aria-labelledby="skills2-title" data-section>
+     <section class="stack-roadmap" aria-labelledby="skills2-title" data-section data-ocean-zone="twilight">
      <div class="stack-roadmap__shell">
        <header class="stack-roadmap__header">
          <div class="stack-roadmap__heading">
@@ -579,10 +583,11 @@
          </article>
        </div>
      </div>
-   </section>
+    </section>
+    </div>
 
-    <!-- ==================== PROJETOS ==================== -->
-    <section class="portfolio" aria-labelledby="portfolio-title" data-section>
+     <!-- ==================== PROJETOS ==================== -->
+    <section class="portfolio" aria-labelledby="portfolio-title" data-section data-ocean-zone="bathypelagic">
       <div class="portfolio-shell">
         <header class="portfolio-header">
           <p class="section-eyebrow">GitHub & Projetos</p>
@@ -710,7 +715,7 @@
       </div>
     </section>
 
-    <section class="contact" aria-labelledby="contact-title" data-section>
+    <section class="contact" aria-labelledby="contact-title" data-section data-ocean-zone="abyssal">
       <div class="contact-shell">
         <header class="contact-header">
           <p class="contact-eyebrow">Vamos conversar</p>
@@ -808,7 +813,7 @@
     </section>
   </main>
 
-  <footer class="site-footer" aria-labelledby="footer-title">
+  <footer class="site-footer" aria-labelledby="footer-title" data-ocean-zone="floor">
     <div class="footer-inner">
       <div class="footer-brand">
         <h2 id="footer-title" class="footer-title">Pedruzz.dev</h2>

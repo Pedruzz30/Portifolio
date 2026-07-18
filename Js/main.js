@@ -35,7 +35,6 @@ function bootstrap() {
     menuSpans: Array.from(document.querySelectorAll(".menu-toggle span")),
     hero: document.querySelector(".hero"),
     footer: document.querySelector(".site-footer"),
-    projectCards: Array.from(document.querySelectorAll(".project-card")),
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
@@ -204,14 +203,17 @@ function bootstrap() {
   );
 
   safelyInit(
+    setupInViewClass,
+    { element: elements.footer, className: "is-in-view" },
+    (error) => console.warn("Estado in-view do footer desabilitado:", error)
+  );
+
+  safelyInit(
     initOceanLife,
     {
       header: elements.header,
-      hero: elements.hero,
       about: document.querySelector(".about"),
       roadmap: elements.roadmapSection,
-      footer: elements.footer,
-      projectCards: elements.projectCards,
       reduceMotion: prefersReducedMotion,
       isMobile,
     },
@@ -270,6 +272,33 @@ function bootstrap() {
       controller.abort();
       for (const destroy of cleanups) destroy();
       finalizeOnce();
+    },
+  };
+}
+
+function setupInViewClass({ element, className = "is-in-view" } = {}) {
+  if (!element) return { destroy: () => {} };
+
+  if (!("IntersectionObserver" in window)) {
+    element.classList.add(className);
+    return {
+      destroy: () => element.classList.remove(className),
+    };
+  }
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      element.classList.toggle(className, entry?.isIntersecting ?? false);
+    },
+    { threshold: 0 },
+  );
+
+  observer.observe(element);
+
+  return {
+    destroy: () => {
+      observer.disconnect();
+      element.classList.remove(className);
     },
   };
 }

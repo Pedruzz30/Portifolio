@@ -321,6 +321,25 @@
   transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.9rem;
+  font-weight: 700;
+  color: var(--navy-blue);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--midnight-blue) 18%, transparent);
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;

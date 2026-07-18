@@ -31,16 +31,23 @@
   /* Zona abissal: quase sem luz, azul escuro denso.
      Mais escuro que o portfólio, preparando o abismo do footer. */
   background: linear-gradient(180deg,
-      rgba(3, 20, 35, 0.12) 0%,
-      rgba(2, 11, 20, 0.24) 50%,
-      rgba(1, 7, 13, 0.40) 100%);
+      rgba(2, 14, 27, 0.30) 0%,
+      rgba(3, 20, 35, 0.22) 20%,
+      rgba(2, 11, 20, 0.30) 56%,
+      rgba(1, 7, 13, 0.44) 100%);
 }
 
-/* Caustics residuais — luz chegando de muito longe.
-   Opacidade mínima (0.07) — quase não existe luz aqui. */
+/* Véu de entrada: recebe a pressão do Portfólio sem uma faixa seca. */
 .contact::before {
-  display: none;
-  /* Nada de luz aqui */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(180deg,
+      rgba(2, 14, 27, 0.24) 0%,
+      rgba(4, 24, 45, 0.10) 36%,
+      transparent 68%);
 }
 
 /* Gradiente de profundidade — escurece o rodapé,
@@ -53,9 +60,9 @@
   z-index: 0;
   background: linear-gradient(180deg,
       transparent 0%,
-      transparent 62%,
-      rgba(2, 8, 20, 0.16) 86%,
-      rgba(1, 5, 15, 0.28) 100%);
+      transparent 50%,
+      rgba(2, 8, 20, 0.18) 78%,
+      rgba(4, 17, 31, 0.24) 100%);
 }
 
 .contact-shell {

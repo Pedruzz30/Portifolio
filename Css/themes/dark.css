@@ -63,8 +63,8 @@
 /* =========================
    SOBRESCRITAS DE ZONA OCEÂNICA (NIGHT DIVE)
    Como hardcodamos as cores das seções para a metáfora do oceano,
-   precisamos apagar as luzes aqui quando o dark mode ativa.
-   A superfície vira breu, iluminada apenas pelo brilho das UI.
+   o dark mode troca o brilho de superfície por luz fria e difusa.
+   O abismo ainda respira, só com menos intensidade.
    ========================= */
 [data-theme="dark"] .hero {
   background:
@@ -75,14 +75,6 @@
 [data-theme="dark"] .hero::before {
   opacity: 0.04;
   /* Luz do luar em vez de luz do sol */
-}
-
-[data-theme="dark"] .about {
-  background: linear-gradient(180deg, #010a12 0%, #01050a 100%);
-}
-
-[data-theme="dark"] .stack-roadmap {
-  background: linear-gradient(180deg, #01050a 0%, #000000 100%);
 }
 
 [data-theme="dark"] .portfolio,
@@ -106,10 +98,10 @@ html {
 /* =========================
    BOTÃO DE TOGGLE — Sol/Lua
    Pequeno botão circular no header para alternar o tema.
-   O ícone muda: 🌙 (modo claro) ↔ ☀️ (modo escuro)
+   O ícone muda: (modo claro) ↔ (modo escuro)
    ========================= */
 .theme-toggle {
-  display: flex;
+  display: grid;
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -120,7 +112,12 @@ html {
   backdrop-filter: blur(8px);
   color: color-mix(in srgb, var(--text-muted) 80%, var(--pure-white));
   cursor: pointer;
-  transition: all 400ms var(--ease-out);
+  transition:
+    background 400ms var(--ease-out),
+    border-color 300ms var(--ease-out),
+    color 300ms var(--ease-out),
+    transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 400ms var(--ease-out);
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -295,18 +292,16 @@ html {
 }
 
 /* =========================
-   ABOUT — apaga correntes de luz
-   As faixas diagonais brancas/azuis do ::before foram desenhadas para
-   um fundo claro (zona de corrente). No dark mode o fundo é quase-preto
-   e elas ficam visualmente estranhas. Suprimimos em dark mode.
+   ABOUT -> ROADMAP — luz oceânica contínua
+   No Night Dive o feixe não some; ele fica mais fraco e frio,
+   atravessando o início da zona crepuscular sem criar uma costura.
    ========================= */
-[data-theme="dark"] .about::before,
-[data-theme="dark"] .about-shell::before {
-  opacity: 0;
-}
+[data-theme="dark"] .ocean-depth-stage--about-roadmap {
+  --ocean-depth-light-opacity: 1;
+  --ocean-depth-light-blur: 0;
+  --roadmap-portfolio-seam-mid: rgba(0, 0, 0, 0.18);
+  --roadmap-portfolio-seam-end: rgba(1, 5, 10, 0.46);
 
-/* Adiciona um glow bioluminescente sutil no lugar das correntes */
-[data-theme="dark"] .about {
   background:
     radial-gradient(ellipse 70% 50% at 30% 20%,
       color-mix(in srgb, var(--accent) 6%, transparent),
@@ -314,13 +309,25 @@ html {
     radial-gradient(ellipse 50% 40% at 75% 70%,
       color-mix(in srgb, var(--mint) 4%, transparent),
       transparent 70%),
-    linear-gradient(180deg, #010a12 0%, #01050a 100%);
+    linear-gradient(180deg,
+      rgba(1, 10, 18, 0.88) 0%,
+      rgba(1, 8, 14, 0.90) 34%,
+      rgba(1, 5, 10, 0.94) 66%,
+      rgba(0, 0, 0, 0.98) 100%);
+}
+
+[data-theme="dark"] .ocean-depth-stage--about-roadmap > .about,
+[data-theme="dark"] .ocean-depth-stage--about-roadmap > .stack-roadmap {
+  background: transparent;
 }
 
 /* =========================
    PORTFOLIO — substitui #000000 plano por abismo com vida
    ========================= */
 [data-theme="dark"] .portfolio {
+  --portfolio-contact-seam-mid: rgba(0, 0, 0, 0.26);
+  --portfolio-contact-seam-end: rgba(0, 0, 0, 0.58);
+
   background:
     radial-gradient(ellipse 60% 40% at 15% 25%,
       color-mix(in srgb, var(--mint) 5%, transparent),
@@ -328,7 +335,19 @@ html {
     radial-gradient(ellipse 50% 35% at 85% 75%,
       color-mix(in srgb, var(--accent) 4%, transparent),
       transparent 60%),
-    linear-gradient(180deg, #01050a 0%, #000000 100%);
+    linear-gradient(180deg, #01050a 0%, #000000 72%, #000000 100%);
+}
+
+[data-theme="dark"] .portfolio::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.58) 0%,
+      rgba(1, 5, 10, 0.28) 38%,
+      transparent 72%
+    ),
+    radial-gradient(circle at 14% 18%, rgba(45, 226, 230, 0.08), transparent 24%),
+    radial-gradient(circle at 84% 12%, rgba(64, 249, 255, 0.05), transparent 26%);
 }
 
 /* =========================
@@ -342,7 +361,26 @@ html {
     radial-gradient(ellipse 40% 30% at 10% 30%,
       color-mix(in srgb, var(--mint) 3%, transparent),
       transparent 65%),
-    linear-gradient(180deg, #000000 0%, #010308 100%);
+    linear-gradient(180deg, #000000 0%, #010308 58%, #010308 100%);
+}
+
+[data-theme="dark"] .contact::before {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.70) 0%,
+    rgba(1, 3, 8, 0.38) 40%,
+    transparent 74%
+  );
+}
+
+[data-theme="dark"] .contact::after {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(1, 3, 8, 0.26) 78%,
+    rgba(1, 3, 8, 0.42) 100%
+  );
 }
 
 /* =========================
@@ -358,7 +396,7 @@ html {
     radial-gradient(ellipse 40% 30% at 18% 60%,
       color-mix(in srgb, var(--accent) 3%, transparent),
       transparent 60%),
-    linear-gradient(180deg, #010308 0%, #000000 100%);
+    linear-gradient(180deg, #010308 0%, #000000 72%, #000000 100%);
 }
 
 /* =========================
@@ -513,6 +551,29 @@ html {
 /* =========================
    ROADMAP — rail, nodes e cards amplificados
    ========================= */
+
+[data-theme="dark"] .stack-roadmap::before {
+  opacity: 0.045;
+}
+
+[data-theme="dark"] .stack-roadmap::after {
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.10) 28%,
+      rgba(0, 0, 0, 0.32) 72%,
+      rgba(0, 0, 0, 0.54) 100%
+    ),
+    repeating-linear-gradient(
+      135deg,
+      rgba(120, 240, 255, 0.018) 0px,
+      rgba(120, 240, 255, 0.018) 10px,
+      transparent 22px,
+      transparent 42px
+    );
+  opacity: 0.95;
+}
 
 /* Rail: linha de luz mais brilhante no dark mode */
 [data-theme="dark"] .stack-roadmap__timeline::before {

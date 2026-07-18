@@ -43,7 +43,7 @@ Portfolio pessoal de Pedro Henrique, estudante de Engenharia de Software com foc
 - `css/components`: componentes reutilizaveis.
 - `css/sections`: estilos de secoes como hero, about, roadmap, portfolio e contact.
 - `css/themes`: tema escuro.
-- `css/utilities`: helpers, keyframes e responsividade.
+- `css/utilities`: helpers e responsividade.
 - `css/compat`: fallback de modo leve para WebViews/reduced motion.
 - `js/main.js`: inicializa e coordena os modulos.
 - `js/compat`: scripts que precisam rodar antes do CSS.

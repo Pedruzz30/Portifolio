@@ -27,24 +27,16 @@
    ========================= */
 .stack-roadmap {
   position: relative;
-  padding: clamp(3.5rem, 6.5vw, 6rem) 1.25rem;
+  padding:
+    clamp(2.75rem, 5vw, 4.75rem)
+    1.25rem
+    clamp(3.75rem, 6.5vw, 6rem);
   overflow: hidden;
   isolation: isolate;
  
-  /* Zona crepuscular: azul médio-escuro com gradiente de profundidade.
-     Mais escuro que o hero (superfície) mas mais claro que o footer (abismo). */
-  background:
-    radial-gradient(ellipse 90% 60% at 50% 0%,
-      color-mix(in srgb, var(--sky-blue) 22%, transparent),
-      transparent 65%),
-    radial-gradient(ellipse 70% 50% at 15% 80%,
-      color-mix(in srgb, var(--accent) 12%, transparent),
-      transparent 70%),
-    linear-gradient(180deg,
-      rgba(18, 71, 104, 0.08) 0%,
-      rgba(10, 47, 76, 0.16) 52%,
-      rgba(4, 25, 45, 0.26) 100%
-    );
+  /* O gradiente crepuscular base foi movido para o palco
+     About→Roadmap; fundos locais ficavam entre a luz e o conteúdo. */
+  background: transparent;
 }
  
 /* Caustics da zona crepuscular — luz solar chegando de longe,
@@ -63,27 +55,34 @@
     radial-gradient(ellipse 12% 5%  at 42% 55%, rgba(80,180,230,1)  0%, transparent 100%);
   animation: section-caustics-float calc(var(--wave-medium) * 1.20) ease-in-out infinite;
 }
- 
-/* Textura de água profunda — corrente fria passando */
+
+/* Véu local da Roadmap: mantém a continuidade com o palco About→Roadmap,
+   mas dá profundidade própria antes da descida para o Portfólio. */
 .stack-roadmap::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.06;
-  mix-blend-mode: screen;
   background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(4, 25, 54, 0.08) 72%,
+      rgba(2, 14, 35, 0.18) 100%
+    ),
     repeating-linear-gradient(
       135deg,
-      rgba(100,200,255,0.05)  0px,
-      rgba(100,200,255,0.05) 10px,
-      rgba(100,200,255,0.01) 20px,
-      rgba(100,200,255,0.01) 36px
+      rgba(160, 225, 255, 0.035) 0px,
+      rgba(160, 225, 255, 0.035) 10px,
+      transparent 22px,
+      transparent 42px
     );
-  animation: section-deep-water-drift calc(var(--wave-slow) * 0.80) ease-in-out infinite;
+  opacity: 0.82;
+  animation: section-deep-water-drift calc(var(--wave-slow) * 0.92) ease-in-out infinite;
 }
- 
+
 .stack-roadmap__shell {
   max-width: 1100px;
   margin: 0 auto;
@@ -116,12 +115,16 @@
    ========================= */
 .stack-roadmap__header {
   display: grid;
-  gap: 1.5rem;
+  gap: clamp(1.25rem, 2.8vw, 2.2rem);
+  grid-template-areas:
+    "heading"
+    "progress"
+    "highlights";
 }
- 
 .stack-roadmap__heading {
   display: grid;
   gap: 0.5rem;
+  grid-area: heading;
 }
  
 .stack-roadmap__eyebrow {
@@ -161,6 +164,8 @@
    CARD DE PROGRESSO — Profundômetro
    ========================= */
 .stack-roadmap__progress {
+  grid-area: progress;
+  align-self: start;
   border-radius: 1.25rem;
   padding: clamp(1rem, 2.5vw, 1.5rem);
   /* Vidro submerso: fundo escuro translúcido */
@@ -260,6 +265,7 @@
 }
  
 .stack-roadmap__highlights {
+  grid-area: highlights;
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -320,6 +326,7 @@
   --connector-length: 1.35rem;
   display: grid;
   gap: clamp(1.1rem, 2vw, 1.6rem);
+  margin-top: clamp(0.25rem, 1vw, 0.9rem);
   position: relative;
   isolation: isolate;
 }
@@ -756,6 +763,19 @@
 @media (prefers-reduced-motion: no-preference) {
   .stack-roadmap__step[data-status="now"] .stack-roadmap__card {
     animation: roadmap-card-pulse 4s ease-in-out infinite;
+  }
+}
+
+@media (min-width: 980px) {
+  .stack-roadmap .stack-roadmap__header {
+    grid-template-areas:
+      "heading progress"
+      "highlights highlights";
+    align-items: start;
+  }
+
+  .stack-roadmap .stack-roadmap__highlights {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
  
