@@ -71,7 +71,7 @@
 .skills2-heading h2 {
   margin: 0;
   font-size: clamp(1.55rem, 2.6vw, 2.2rem);
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   color: var(--midnight-blue);
   background: linear-gradient(120deg, var(--java-orange), var(--accent-strong), var(--deep-blue));
   -webkit-background-clip: text;
@@ -225,7 +225,7 @@
 .skills2-cardTitle {
   margin: 0;
   font-size: 1.05rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: var(--midnight-blue);
 }
  
@@ -447,7 +447,7 @@
   /* FIX 4: 820 → 800 */
   font-weight: 800;
   color: var(--midnight-blue);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
  
 .skills2-level {
@@ -663,7 +663,7 @@
   margin: 0;
   font-weight: 800;
   color: var(--midnight-blue);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
  
 .skills2-meterValue {

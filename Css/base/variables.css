@@ -89,6 +89,23 @@
    --text-muted: var(--dark-gray);
    --text-subtle: color-mix(in srgb, var(--dark-gray) 70%, var(--blue-gray) 30%);
 
+   /* ===== Tipografia =====
+      Satoshi assume identidade/interface; Gambetta assume textos narrativos. */
+   --font-ui: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+   --font-body: "Gambetta", Georgia, "Times New Roman", serif;
+   --font-heading: var(--font-ui);
+   --font-display: var(--font-ui);
+   --font-narrative: var(--font-body);
+   --font-family-body: var(--font-body);
+   --font-family-headings: var(--font-heading);
+   --font-family-ui: var(--font-ui);
+   --font-weight-ui: 500;
+   --font-weight-ui-strong: 700;
+   --font-weight-heading: 800;
+   --font-weight-narrative: 400;
+   --font-leading-ui: 1.25;
+   --font-leading-narrative: 1.68;
+
    /* ===== Marca / Ação =====
      --primary é a cor de ação principal — botões, links, destaques.
      --primary-soft é o fundo suave nos estados hover/focus. */

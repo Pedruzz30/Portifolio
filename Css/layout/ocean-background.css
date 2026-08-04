@@ -44,13 +44,15 @@ body::after {
   --ocean-depth-light-ease: cubic-bezier(0.37, 0.16, 0.24, 0.94);
   --ocean-depth-light-opacity: 1;
   --ocean-depth-light-blur: 0;
-  --section-seam-size: clamp(5rem, 10vw, 9rem);
-  --roadmap-portfolio-seam-mid: rgba(6, 34, 58, 0.12);
-  --roadmap-portfolio-seam-end: rgba(8, 45, 73, 0.18);
+  --section-seam-size: clamp(7rem, 12vw, 12rem);
+  --roadmap-portfolio-seam-mid: rgba(6, 34, 58, 0.08);
+  --roadmap-portfolio-seam-end: rgba(4, 25, 45, 0.14);
 
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
+  overflow-x: clip;
+  z-index: 1;
   background:
     radial-gradient(ellipse 90% 34% at 50% 48%,
       color-mix(in srgb, var(--sky-blue) 22%, transparent),
@@ -63,8 +65,9 @@ body::after {
       rgba(182, 228, 240, 0.075) 20%,
       rgba(105, 191, 219, 0.07) 38%,
       rgba(28, 100, 144, 0.10) 55%,
-      rgba(10, 47, 76, 0.16) 76%,
-      rgba(4, 25, 45, 0.26) 100%);
+      rgba(10, 47, 76, 0.14) 76%,
+      rgba(4, 25, 45, 0.20) 90%,
+      rgba(4, 25, 45, 0.04) 100%);
 }
 
 .ocean-depth-stage--about-roadmap::after {
@@ -72,23 +75,33 @@ body::after {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: var(--section-seam-size);
+  bottom: calc(var(--section-seam-size) * -0.46);
+  height: calc(var(--section-seam-size) * 1.46);
   pointer-events: none;
   z-index: 1;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    var(--roadmap-portfolio-seam-mid) 58%,
-    var(--roadmap-portfolio-seam-end) 100%
+    transparent 22%,
+    var(--roadmap-portfolio-seam-mid) 56%,
+    var(--roadmap-portfolio-seam-end) 70%,
+    var(--roadmap-portfolio-seam-mid) 86%,
+    transparent 100%
   );
 }
 
 .ocean-depth-stage--about-roadmap > .about,
 .ocean-depth-stage--about-roadmap > .stack-roadmap {
   position: relative;
-  z-index: 2;
   background: transparent;
+}
+
+.ocean-depth-stage--about-roadmap > .about {
+  z-index: 3;
+}
+
+.ocean-depth-stage--about-roadmap > .stack-roadmap {
+  z-index: 2;
 }
 
 .ocean-depth-light {

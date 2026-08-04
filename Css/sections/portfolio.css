@@ -11,15 +11,32 @@
    PORTFOLIO
    ========================= */
 .portfolio {
+  --portfolio-roadmap-overlap: clamp(8rem, 14vw, 14rem);
+  --portfolio-padding-top: clamp(4rem, 8vw, 7rem);
+  --portfolio-padding-bottom: clamp(4rem, 8vw, 7rem);
+
   position: relative;
   isolation: isolate;
+  z-index: 0;
   overflow: hidden;
-  padding: clamp(4rem, 8vw, 7rem) 0;
+  margin-top: calc(var(--portfolio-roadmap-overlap) * -1);
+  padding:
+    calc(var(--portfolio-padding-top) + var(--portfolio-roadmap-overlap))
+    0
+    var(--portfolio-padding-bottom);
+  /* Veu de entrada: o topo real da secao fica escondido pelo overlap
+     negativo, entao o veu so comeca a agir DEPOIS da borda do palco.
+     Stops em comprimento (nao em %) para nao depender da altura da secao. */
+  --portfolio-entry-veil-start: rgba(1, 10, 20, 0.52);
+  --portfolio-entry-veil-mid: rgba(1, 10, 20, 0.26);
+  --portfolio-entry-veil-fade-in: calc(var(--portfolio-roadmap-overlap) + 10rem);
+  --portfolio-entry-veil-peak: calc(var(--portfolio-roadmap-overlap) + 26rem);
   --portfolio-contact-seam-mid: rgba(3, 20, 35, 0.12);
   --portfolio-contact-seam-end: rgba(3, 20, 35, 0.22);
   background: linear-gradient(
     180deg,
-    rgba(4, 25, 45, 0.24) 0%,
+    rgba(4, 25, 45, 0) 0,
+    rgba(4, 25, 45, 0.18) var(--portfolio-roadmap-overlap),
     rgba(6, 36, 64, 0.20) 24%,
     rgba(4, 28, 50, 0.26) 58%,
     rgba(2, 14, 27, 0.36) 100%
@@ -38,9 +55,11 @@
   background:
     linear-gradient(
       180deg,
-      rgba(4, 25, 45, 0.28) 0%,
-      rgba(6, 42, 76, 0.12) 36%,
-      transparent 68%
+      transparent 0,
+      transparent var(--portfolio-roadmap-overlap),
+      var(--portfolio-entry-veil-mid) var(--portfolio-entry-veil-fade-in),
+      var(--portfolio-entry-veil-start) var(--portfolio-entry-veil-peak),
+      transparent 78%
     ),
     radial-gradient(circle at 14% 18%, rgba(100, 210, 255, 0.08), transparent 24%),
     radial-gradient(circle at 84% 12%, rgba(80, 180, 255, 0.06), transparent 26%);
@@ -86,16 +105,16 @@
 
 .portfolio-header h2 {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 900;
+  font-weight: var(--font-weight-heading);
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: rgba(255, 255, 255, 0.92);
 }
 
 .portfolio-header p {
   max-width: 560px;
   font-size: 1.05rem;
-  line-height: 1.65;
+  line-height: var(--font-leading-narrative);
   color: rgba(180, 225, 248, 0.82);
 }
 
@@ -247,15 +266,15 @@
 
 .project-card__title {
   font-size: clamp(1.1rem, 2vw, 1.45rem);
-  font-weight: 800;
+  font-weight: var(--font-weight-ui-strong);
   line-height: 1.3;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   color: rgba(255, 255, 255, 0.92);
 }
 
 .project-card__desc {
   font-size: 0.95rem;
-  line-height: 1.65;
+  line-height: var(--font-leading-narrative);
   color: rgba(180, 225, 248, 0.8);
 }
 

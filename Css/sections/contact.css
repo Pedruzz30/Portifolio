@@ -95,8 +95,8 @@
 .contact-header h2 {
   margin: 0;
   font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: 0;
   color: rgba(255, 255, 255, 0.92);
 }
 
@@ -104,7 +104,7 @@
   margin: 0 auto;
   max-width: 560px;
   color: rgba(180, 225, 248, 0.78);
-  line-height: 1.6;
+  line-height: var(--font-leading-narrative);
 }
 
 /* =========================
@@ -150,7 +150,7 @@
   border: 1px solid rgba(80, 180, 255, 0.08);
   border-radius: 0.65rem;
   padding: 0.75rem 1rem;
-  font-family: inherit;
+  font-family: var(--font-ui);
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.82);
   transition: border-color 250ms ease, box-shadow 250ms ease;
@@ -322,14 +322,14 @@
 .contact-highlight__title {
   margin: 0;
   font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-ui-strong);
+  letter-spacing: 0;
   color: rgba(255, 255, 255, 0.92);
 }
 
 .contact-highlight__text {
   margin: 0;
-  line-height: 1.6;
+  line-height: var(--font-leading-narrative);
   color: rgba(180, 225, 248, 0.85);
 }
 
@@ -376,16 +376,16 @@
 
 .contact-channels__title {
   margin: 0;
-  font-weight: 700;
+  font-weight: var(--font-weight-ui-strong);
   font-size: 1.1rem;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   color: rgba(255, 255, 255, 0.85);
 }
 
 .contact-channels__text {
   margin: 0;
   color: rgba(165, 210, 240, 0.76);
-  line-height: 1.55;
+  line-height: var(--font-leading-narrative);
   font-size: 0.9rem;
 }
 
@@ -495,8 +495,8 @@
 }
 
 .contact-chip__body strong {
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-ui-strong);
+  letter-spacing: 0;
   color: rgba(200, 230, 255, 0.82);
   font-size: 0.9rem;
   transition: color 250ms ease;

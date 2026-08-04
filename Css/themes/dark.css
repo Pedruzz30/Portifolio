@@ -299,8 +299,8 @@ html {
 [data-theme="dark"] .ocean-depth-stage--about-roadmap {
   --ocean-depth-light-opacity: 1;
   --ocean-depth-light-blur: 0;
-  --roadmap-portfolio-seam-mid: rgba(0, 0, 0, 0.18);
-  --roadmap-portfolio-seam-end: rgba(1, 5, 10, 0.46);
+  --roadmap-portfolio-seam-mid: rgba(3, 18, 32, 0.16);
+  --roadmap-portfolio-seam-end: rgba(1, 8, 14, 0.34);
 
   background:
     radial-gradient(ellipse 70% 50% at 30% 20%,
@@ -313,7 +313,8 @@ html {
       rgba(1, 10, 18, 0.88) 0%,
       rgba(1, 8, 14, 0.90) 34%,
       rgba(1, 5, 10, 0.94) 66%,
-      rgba(0, 0, 0, 0.98) 100%);
+      rgba(1, 8, 14, 0.96) 90%,
+      rgba(1, 8, 14, 0.70) 100%);
 }
 
 [data-theme="dark"] .ocean-depth-stage--about-roadmap > .about,
@@ -321,10 +322,22 @@ html {
   background: transparent;
 }
 
+[data-theme="dark"] .about::after {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(120, 220, 255, 0.030) 34%,
+    rgba(45, 226, 230, 0.016) 60%,
+    transparent 100%
+  );
+}
+
 /* =========================
    PORTFOLIO — substitui #000000 plano por abismo com vida
    ========================= */
 [data-theme="dark"] .portfolio {
+  --portfolio-entry-veil-start: rgba(0, 0, 0, 0.30);
+  --portfolio-entry-veil-mid: rgba(0, 3, 7, 0.18);
   --portfolio-contact-seam-mid: rgba(0, 0, 0, 0.26);
   --portfolio-contact-seam-end: rgba(0, 0, 0, 0.58);
 
@@ -335,16 +348,23 @@ html {
     radial-gradient(ellipse 50% 35% at 85% 75%,
       color-mix(in srgb, var(--accent) 4%, transparent),
       transparent 60%),
-    linear-gradient(180deg, #01050a 0%, #000000 72%, #000000 100%);
+    linear-gradient(180deg,
+      rgba(1, 8, 14, 0) 0,
+      #01080e var(--portfolio-roadmap-overlap),
+      #01050a 32%,
+      #000000 82%,
+      #000000 100%);
 }
 
 [data-theme="dark"] .portfolio::before {
   background:
     linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.58) 0%,
-      rgba(1, 5, 10, 0.28) 38%,
-      transparent 72%
+      transparent 0,
+      transparent var(--portfolio-roadmap-overlap),
+      var(--portfolio-entry-veil-mid) var(--portfolio-entry-veil-fade-in),
+      var(--portfolio-entry-veil-start) var(--portfolio-entry-veil-peak),
+      transparent 80%
     ),
     radial-gradient(circle at 14% 18%, rgba(45, 226, 230, 0.08), transparent 24%),
     radial-gradient(circle at 84% 12%, rgba(64, 249, 255, 0.05), transparent 26%);
@@ -553,26 +573,34 @@ html {
    ========================= */
 
 [data-theme="dark"] .stack-roadmap::before {
-  opacity: 0.045;
+  opacity: 0.03;
 }
 
 [data-theme="dark"] .stack-roadmap::after {
   background:
+    radial-gradient(ellipse 78% 42% at 50% 18%,
+      rgba(45, 226, 230, 0.035),
+      transparent 72%),
     linear-gradient(
       180deg,
       transparent 0%,
-      rgba(0, 0, 0, 0.10) 28%,
-      rgba(0, 0, 0, 0.32) 72%,
-      rgba(0, 0, 0, 0.54) 100%
+      rgba(3, 18, 32, 0.12) 30%,
+      rgba(1, 8, 14, 0.24) 56%,
+      rgba(1, 8, 14, 0.16) 78%,
+      transparent 100%
     ),
     repeating-linear-gradient(
       135deg,
-      rgba(120, 240, 255, 0.018) 0px,
-      rgba(120, 240, 255, 0.018) 10px,
+      rgba(120, 240, 255, 0.010) 0px,
+      rgba(120, 240, 255, 0.010) 10px,
       transparent 22px,
       transparent 42px
     );
-  opacity: 0.95;
+  opacity: 0.72;
+}
+
+[data-theme="dark"] .stack-roadmap__shell::before {
+  opacity: 0.10;
 }
 
 /* Rail: linha de luz mais brilhante no dark mode */

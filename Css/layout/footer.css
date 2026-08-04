@@ -131,8 +131,8 @@
 .footer-title {
   margin: 0 0 0.55rem;
   font-size: clamp(1.25rem, 2.2vw, 1.65rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-weight: var(--font-weight-ui-strong);
+  letter-spacing: 0;
   color: rgba(255, 255, 255, 0.92);
 }
  
@@ -140,7 +140,7 @@
   margin: 0 0 1.25rem;
   max-width: 44ch;
   font-size: 0.9rem;
-  line-height: 1.65;
+  line-height: var(--font-leading-narrative);
   color: rgba(185, 228, 250, 0.88);
 }
  

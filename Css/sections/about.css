@@ -29,9 +29,14 @@
    ABOUT — A Correnteza
    ========================= */
 .about {
-  padding: clamp(4rem, 8vw, 7rem) 0;
+  --about-roadmap-bridge-size: clamp(7rem, 12vw, 12rem);
+
+  padding:
+    clamp(4rem, 8vw, 7rem)
+    0
+    clamp(3.25rem, 6vw, 5rem);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
 
   /* O fundo base vive no palco compartilhado para não cobrir
@@ -43,12 +48,32 @@
    Ela agora vive em .ocean-depth-light, dentro do palco compartilhado
    About→Roadmap, para não ser cortada no limite entre seções. */
 
+/* Ponte About→Roadmap: um véu fora da caixa da About que atravessa
+   o começo da Roadmap e impede a leitura de "nova seção". */
+.about::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--about-roadmap-bridge-size) * -0.72);
+  height: calc(var(--about-roadmap-bridge-size) * 1.72);
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(120, 210, 255, 0.018) 34%,
+    rgba(7, 45, 85, 0.026) 58%,
+    transparent 100%
+  );
+}
+
 /* Camada 3: micro-turbulência — amplitude minúscula,
    período curto. Não se enxerga sozinha; se sente.
    É o ruído que impede o olho de prever o próximo frame. */
 .about-turbulence {
   position: absolute;
-  inset: -5% -10%;
+  inset: -5% 0;
   pointer-events: none;
   z-index: 0;
   background:
@@ -59,6 +84,20 @@
       rgba(170, 225, 255, 0.04) 0%,
       transparent 65%);
   animation: about-current-turbulence 11s ease-in-out infinite;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 62%,
+    rgba(0, 0, 0, 0.48) 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 62%,
+    rgba(0, 0, 0, 0.48) 82%,
+    transparent 100%
+  );
   will-change: transform;
 }
 
@@ -71,9 +110,10 @@
   z-index: 1;
   background: linear-gradient(180deg,
       transparent 0%,
-      transparent 70%,
-      rgba(8, 40, 85, 0.03) 88%,
-      rgba(5, 25, 60, 0.06) 100%);
+      transparent 64%,
+      rgba(8, 40, 85, 0.026) 82%,
+      rgba(5, 25, 60, 0.032) 92%,
+      transparent 100%);
 }
 
 /* ── Camada terciária: micro-turbulência ──────────────────────
@@ -120,9 +160,9 @@
 .about-header h2 {
   margin: 0;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 900;
+  font-weight: var(--font-weight-heading);
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: rgba(5, 25, 65, 0.92);
 }
 
@@ -147,7 +187,7 @@
 
 .about-desc {
   font-size: 1.05rem;
-  line-height: 1.75;
+  line-height: var(--font-leading-narrative);
   margin: 0;
   color: rgba(5, 22, 65, 0.90);
 }
@@ -285,7 +325,7 @@
   border-radius: 6px;
   font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   flex-shrink: 0;
 }
 

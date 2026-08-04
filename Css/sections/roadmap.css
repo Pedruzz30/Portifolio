@@ -26,12 +26,14 @@
    STACK ROADMAP — Zona Crepuscular
    ========================= */
 .stack-roadmap {
+  --roadmap-portfolio-bridge-size: clamp(8rem, 14vw, 14rem);
+
   position: relative;
   padding:
-    clamp(2.75rem, 5vw, 4.75rem)
+    clamp(1.9rem, 3.8vw, 3.6rem)
     1.25rem
     clamp(3.75rem, 6.5vw, 6rem);
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
  
   /* O gradiente crepuscular base foi movido para o palco
@@ -47,47 +49,59 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.06;
+  opacity: 0.045;
   background:
     radial-gradient(ellipse 25% 12% at 20% 22%, rgba(100,210,255,1) 0%, transparent 100%),
     radial-gradient(ellipse 18% 8%  at 65% 38%, rgba(80,190,240,1)  0%, transparent 100%),
     radial-gradient(ellipse 22% 10% at 85% 15%, rgba(120,220,255,1) 0%, transparent 100%),
     radial-gradient(ellipse 12% 5%  at 42% 55%, rgba(80,180,230,1)  0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 18%,
+    rgba(0, 0, 0, 0.42) 38%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 18%,
+    rgba(0, 0, 0, 0.42) 38%,
+    #000 100%
+  );
   animation: section-caustics-float calc(var(--wave-medium) * 1.20) ease-in-out infinite;
 }
 
-/* Véu local da Roadmap: mantém a continuidade com o palco About→Roadmap,
-   mas dá profundidade própria antes da descida para o Portfólio. */
+/* Ponte Roadmap→Portfolio: continua a profundidade sem criar uma faixa
+   quando o palco compartilhado termina e o Portfolio começa. */
 .stack-roadmap::after {
   content: "";
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--roadmap-portfolio-bridge-size) * -0.46);
+  height: var(--roadmap-portfolio-bridge-size);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   background:
+    radial-gradient(ellipse 78% 42% at 50% 18%,
+      rgba(100, 210, 255, 0.05),
+      transparent 72%),
     linear-gradient(
       180deg,
       transparent 0%,
-      transparent 42%,
-      rgba(4, 25, 54, 0.08) 72%,
-      rgba(2, 14, 35, 0.18) 100%
-    ),
-    repeating-linear-gradient(
-      135deg,
-      rgba(160, 225, 255, 0.035) 0px,
-      rgba(160, 225, 255, 0.035) 10px,
-      transparent 22px,
-      transparent 42px
+      rgba(6, 34, 58, 0.055) 28%,
+      rgba(4, 25, 45, 0.105) 52%,
+      rgba(4, 25, 45, 0.070) 76%,
+      transparent 100%
     );
-  opacity: 0.82;
-  animation: section-deep-water-drift calc(var(--wave-slow) * 0.92) ease-in-out infinite;
 }
 
 .stack-roadmap__shell {
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: grid;
   gap: clamp(1.5rem, 3vw, 2.4rem);
 }
@@ -96,8 +110,8 @@
 .stack-roadmap__shell::before {
   content: "";
   position: absolute;
-  inset: -15% -5% auto;
-  height: 260px;
+  inset: 5% -5% auto;
+  height: 220px;
   background:
     radial-gradient(ellipse 60% 50% at 40% 20%,
       color-mix(in srgb, var(--sky-blue) 18%, transparent),
@@ -105,8 +119,8 @@
     radial-gradient(ellipse 50% 40% at 75% 30%,
       color-mix(in srgb, var(--accent) 14%, transparent),
       transparent 75%);
-  opacity: 0.30;
-  filter: blur(18px);
+  opacity: 0.16;
+  filter: blur(22px);
   pointer-events: none;
 }
  
@@ -140,7 +154,8 @@
 .stack-roadmap__heading h2 {
   margin: 0;
   font-size: clamp(1.65rem, 3vw, 2.35rem);
-  letter-spacing: -0.03em;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: 0;
   /* Texto claro sobre fundo escuro */
   color: rgba(255, 255, 255, 0.92);
   background: linear-gradient(120deg,
@@ -156,7 +171,7 @@
 .stack-roadmap__subtitle {
   margin: 0;
   max-width: 68ch;
-  line-height: 1.65;
+  line-height: var(--font-leading-narrative);
   color: rgba(190, 228, 250, 0.84);
 }
  
@@ -306,13 +321,14 @@
 .stack-roadmap__highlight-value {
   margin: 0.35rem 0 0.2rem;
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-ui-strong);
   color: rgba(255, 255, 255, 0.90);
 }
  
 .stack-roadmap__highlight-meta {
   margin: 0;
   font-size: 0.9rem;
+  line-height: 1.55;
   color: rgba(175, 220, 248, 0.80);
 }
  
@@ -567,12 +583,13 @@
   margin: 0;
   font-size: 1.15rem;
   /* FIX 1: 750 → 700 — font-weight válido */
-  font-weight: 700;
+  font-weight: var(--font-weight-ui-strong);
   color: rgba(255, 255, 255, 0.90);
 }
  
 .stack-roadmap__step-desc {
   margin: 0;
+  line-height: var(--font-leading-narrative);
   color: rgba(175, 220, 248, 0.80);
 }
  

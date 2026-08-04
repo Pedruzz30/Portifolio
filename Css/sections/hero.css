@@ -4,15 +4,17 @@
 .hero {
   min-height: 100vh;
   min-height: 100svh;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.82fr);
+  grid-template-areas: "content visual";
   align-items: center;
-  justify-content: space-between;
+  justify-items: stretch;
   padding: clamp(100px, 12vh, 160px) clamp(1.5rem, 6vw, 5rem) clamp(60px, 10vh, 100px);
   padding: clamp(100px, 12svh, 160px) clamp(1.5rem, 6vw, 5rem) clamp(60px, 10svh, 100px);
   position: relative;
   overflow: hidden;
-  gap: clamp(2rem, 5vw, 4rem);
+  column-gap: clamp(2rem, 6vw, 5.5rem);
+  row-gap: clamp(2rem, 5vw, 4rem);
   color: var(--pure-white);
   isolation: isolate;
 
@@ -142,10 +144,11 @@
    HERO CONTENT
    ========================= */
 .hero-content {
+  grid-area: content;
   position: relative;
-  flex: 1 1 50%;
-  width: auto;
-  min-width: min(100%, 480px);
+  width: min(100%, 44rem);
+  min-width: 0;
+  justify-self: start;
   z-index: 10;
   opacity: 0;
   transition: opacity 0.95s ease;
@@ -205,13 +208,12 @@
 }
 
 .hero-visual {
+  grid-area: visual;
   position: relative;
-  flex: 1 1 38%;
-  width: auto;
-  min-width: min(100%, 320px);
-  max-width: min(100%, 460px);
-  height: clamp(340px, 65vh, 680px);
-  height: clamp(340px, 65svh, 680px);
+  width: min(100%, clamp(18rem, 32vw, 31rem));
+  min-width: 0;
+  aspect-ratio: 4 / 5;
+  justify-self: end;
   display: grid;
   place-items: center;
   isolation: isolate;
@@ -300,14 +302,15 @@
 
 .text-reveal {
   font-size: clamp(2.8rem, 6vw, 5.5rem);
-  font-weight: 900;
-  line-height: 1.1;
+  font-weight: var(--font-weight-heading);
+  line-height: 1.05;
+  letter-spacing: 0;
   margin-bottom: 1rem;
   overflow: hidden;
   text-shadow: 0 16px 48px rgba(0, 15, 35, 0.7);
 }
 
-.text-reveal span {
+.text-reveal span:not([data-hero-reveal-wrapper="true"]) {
   display: inline-block;
   transform: translateY(100%);
   transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
@@ -315,6 +318,9 @@
 
 .text-mask {
   font-size: 1.12rem;
+  font-weight: var(--font-weight-narrative);
+  line-height: var(--font-leading-narrative);
+  max-width: 60ch;
   color: rgba(255, 255, 255, 0.80);
   margin-bottom: 1.6rem;
   clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
@@ -325,6 +331,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
+  max-width: 46rem;
 }
 
 .hero-chip {
@@ -352,7 +359,7 @@
   background-color: var(--mint);
   color: var(--navy-blue);
   padding: 0.8rem 1.8rem;
-  font-weight: 800;
+  font-weight: var(--font-weight-ui-strong);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--mint) 40%, transparent);
   border: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
@@ -384,6 +391,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 0.75rem;
+  width: min(100%, 42rem);
   margin-top: 0.5rem;
 }
 
@@ -399,8 +407,8 @@
 .stat__value {
   margin: 0;
   font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: var(--font-weight-ui-strong);
+  letter-spacing: 0;
 }
 
 .stat__label {

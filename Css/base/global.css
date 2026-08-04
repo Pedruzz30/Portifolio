@@ -21,6 +21,7 @@
    evitando layout shift vs browsers com overlay scrollbar (Opera GX). */
 html {
   scrollbar-gutter: stable;
+  overflow-x: clip;
   /* Impede rebote/scroll chaining no fim da pagina:
      ao chegar no footer, a rolagem para ali. */
   overscroll-behavior-y: none;
@@ -44,11 +45,15 @@ html.lenis body {
 
 body {
   position: relative;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-ui);
+  line-height: 1.5;
   /* Otimização de renderização: essencial para textos claros em fundo escuro,
      evitando que a fonte pareça "gorda" ou borrada (Halation). */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  font-synthesis-weight: none;
   background-color: #03111d;
   background-image: var(--ocean-continuum);
   background-repeat: no-repeat;
@@ -63,6 +68,93 @@ body {
   /* Evita vazamento de texto longo (URLs, termos tecnicos) */
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+:where(
+  blockquote,
+  .text-mask,
+  .about-desc,
+  .stack-roadmap__subtitle,
+  .stack-roadmap__step-desc,
+  .stack-roadmap__highlight-meta,
+  .stack-roadmap__list li,
+  .stack-roadmap__projects-list li,
+  .project-card__desc,
+  .portfolio-header p,
+  .contact-subtitle,
+  .contact-highlight__text,
+  .contact-highlight__list li,
+  .contact-channels__text,
+  .contact-chip__body small,
+  .footer-tagline,
+  .footer-mini
+) {
+  font-family: var(--font-narrative);
+  font-weight: var(--font-weight-narrative);
+  line-height: var(--font-leading-narrative);
+  letter-spacing: 0;
+}
+
+:where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  nav,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  summary,
+  .logo,
+  .loader-brand,
+  .btn,
+  .btn__label,
+  .nav__pill,
+  .hero-chip,
+  .hero-badge,
+  .scroll-indicator__label,
+  .stat,
+  .stat__value,
+  .stat__label,
+  .section-eyebrow,
+  .about-skills__label,
+  .about-value-item,
+  .tech-item,
+  .tech-item__icon-text,
+  .edu-card__degree,
+  .edu-card__institution,
+  .edu-card__badge,
+  .stack-roadmap__eyebrow,
+  .stack-roadmap__progress,
+  .stack-roadmap__progress-step,
+  .stack-roadmap__badge,
+  .stack-roadmap__step-duration,
+  .stack-roadmap__step-title,
+  .stack-roadmap__summary,
+  .stack-roadmap__projects-title,
+  .stack-roadmap__tag,
+  .stack-roadmap__highlight-label,
+  .stack-roadmap__highlight-value,
+  .project-card__title,
+  .project-card__eyebrow,
+  .project-card__status,
+  .project-tag,
+  .project-card__link,
+  .link-text,
+  .contact-eyebrow,
+  .contact-form__label,
+  .contact-form__counter,
+  .contact-form__feedback,
+  .contact-channels__eyebrow,
+  .contact-channels__title,
+  .contact-chip__body strong,
+  .footer-title
+) {
+  font-family: var(--font-ui);
 }
 
 img {
