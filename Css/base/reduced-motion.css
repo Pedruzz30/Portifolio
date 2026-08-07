@@ -123,4 +123,12 @@
   .contact-chip::before {
     display: none;
   }
+
+  /* Sem o mergulho animado, as setas ficam estáticas e visíveis */
+  .scroll-indicator__arrow {
+    animation: none !important;
+    opacity: 0.6;
+    filter: none;
+    transform: translateY(0) rotate(45deg);
+  }
 }

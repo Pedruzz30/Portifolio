@@ -33,6 +33,7 @@
 @import "./layout/containers.css";
 @import "./sections/shared.css";
 @import "./components/ui.css";
+@import "./components/depth-gauge.css";
 @import "./themes/dark.css";
 @import "./sections/hero.css";
 @import "./sections/about.css";

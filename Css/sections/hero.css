@@ -430,8 +430,13 @@
   border-radius: var(--blob-radius, 46% 54% 52% 48% / 55% 48% 52% 45%);
   /* wrapGlow removido daqui — box-shadow animation causava repaint full-frame.
      O glow agora pulsa via opacity no .hero-visual::before (GPU composited). */
-  animation: hero-image-blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite;
-  will-change: border-radius;
+  /* blob anima border-radius; float anima transform — propriedades
+     diferentes, então compõem sem conflito. O float mora aqui (e não
+     em .hero-visual__inner) pra não brigar com o transform do GSAP. */
+  animation:
+    hero-image-blob calc(var(--wave-slow) * 1.35) cubic-bezier(.37, 0, .63, 1) infinite,
+    hero-visual-float calc(var(--wave-medium) * 1.1) ease-in-out infinite;
+  will-change: border-radius, transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   border: 4px solid color-mix(in srgb, var(--accent) 26%, rgba(255, 255, 255, 0.35));
@@ -460,6 +465,18 @@
   }
 }
 
+/* Flutuação: a foto boia e balança de leve, como suspensa na corrente. */
+@keyframes hero-visual-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(0, calc(var(--float-distance) * -0.7), 0) rotate(-1.2deg);
+  }
+}
+
 /* =========================
    HERO DEPTH SYSTEM (subtle glow)
    ========================= */
@@ -469,8 +486,11 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--mint) 12%, transparent) 0%, transparent 65%);
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--mint) 18%, transparent) 0%, transparent 65%);
   filter: blur(32px);
+  will-change: transform, opacity;
+  /* Halo que "respira" — keyframe já existia, só não estava aplicado. */
+  animation: hero-image-sea-glow calc(var(--wave-slow) * 0.7) ease-in-out infinite;
 }
 
 
@@ -556,15 +576,27 @@
 .scroll-indicator__arrow {
   width: 10px;
   height: 10px;
-  border-right: 2px solid rgba(255, 255, 255, 0.5);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-  transform: rotate(45deg);
+  border-right: 2px solid rgba(150, 225, 255, 0.6);
+  border-bottom: 2px solid rgba(150, 225, 255, 0.6);
+  /* translateY ANTES de rotate: move na vertical visual, não na diagonal */
+  transform: translateY(0) rotate(45deg);
   display: block;
+  /* Mergulho: cada chevron acende, desce e some em loop */
+  animation: hero-scroll-arrow-dive 1.8s ease-in-out infinite;
 }
 
 .scroll-indicator__arrow+.scroll-indicator__arrow {
   margin-top: -6px;
-  opacity: 0.35;
+}
+
+/* Cascata: label é nth-child(1); as setas são 2, 3 e 4.
+   O atraso crescente faz o brilho fluir de cima para baixo. */
+.scroll-indicator__arrow:nth-child(3) {
+  animation-delay: 0.18s;
+}
+
+.scroll-indicator__arrow:nth-child(4) {
+  animation-delay: 0.36s;
 }
 
 @keyframes hero-scroll-indicator-bounce {
@@ -578,6 +610,151 @@
   50% {
     transform: translateX(-50%) translateY(7px);
     opacity: 1;
+  }
+}
+
+/* Mergulho: o chevron surge no topo, brilha e desce afundando até sumir.
+   Com os atrasos por seta, os três formam uma corrente descendo. */
+@keyframes hero-scroll-arrow-dive {
+  0% {
+    opacity: 0.15;
+    transform: translateY(-3px) rotate(45deg);
+    filter: drop-shadow(0 0 0 rgba(120, 210, 255, 0));
+  }
+
+  45% {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(120, 210, 255, 0.7));
+  }
+
+  100% {
+    opacity: 0.15;
+    transform: translateY(7px) rotate(45deg);
+    filter: drop-shadow(0 0 0 rgba(120, 210, 255, 0));
+  }
+}
+
+/* =========================
+   DIVE TRANSITION (clique)
+   Gatilhos [data-dive] despencam, soltam um splash e a tela "submerge".
+   Estados adicionados via JS (modules/dive-transition.js).
+   ========================= */
+.scroll-indicator.is-diving {
+  animation: scroll-indicator-plunge 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+  pointer-events: none;
+}
+
+/* As setas aceleram pra baixo junto com o mergulho (mantêm o stagger) */
+.scroll-indicator.is-diving .scroll-indicator__arrow {
+  animation: scroll-arrow-shoot 0.42s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+
+/* Botão: afunda no lugar e some — "mergulha" rumo à seção alvo */
+.btn.is-diving {
+  animation: btn-dive-plunge 0.5s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+  pointer-events: none;
+}
+
+/* Splash: anel expandido no ponto do clique. Elemento .dive-splash
+   criado pelo JS e posicionado (fixed) sobre o gatilho. */
+.dive-splash {
+  position: fixed;
+  z-index: 10000;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  border: 2px solid rgba(150, 225, 255, 0.85);
+  pointer-events: none;
+  animation: dive-splash 0.7s ease-out forwards;
+}
+
+@keyframes btn-dive-plunge {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(26px) scale(0.92);
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-indicator-plunge {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(120px);
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-arrow-shoot {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(45deg);
+    filter: drop-shadow(0 0 6px rgba(120, 210, 255, 0.8));
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(30px) rotate(45deg);
+    filter: drop-shadow(0 0 0 rgba(120, 210, 255, 0));
+  }
+}
+
+@keyframes dive-splash {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.3);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(6);
+  }
+}
+
+/* Véu de submersão: gradiente de água funda varre a tela e clareia.
+   position:fixed cobrindo a viewport, sem bloquear cliques. */
+.dive-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity, transform;
+  background:
+    radial-gradient(140% 70% at 50% -10%, rgba(90, 190, 255, 0.10), transparent 60%),
+    linear-gradient(
+      180deg,
+      rgba(2, 18, 42, 0) 0%,
+      rgba(2, 18, 42, 0.5) 55%,
+      rgba(1, 10, 26, 0.72) 100%
+    );
+}
+
+.dive-veil.is-active {
+  animation: dive-veil-wash 1s ease-out forwards;
+}
+
+@keyframes dive-veil-wash {
+  0% {
+    opacity: 0;
+    transform: translateY(-8%);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(0);
   }
 }
 

@@ -108,8 +108,20 @@
   </header>
   <div class="nav-overlay" aria-hidden="true"></div>
 
+  <!-- Medidor de profundidade: atualizado pelo scroll em js/effects/depth-gauge.js -->
+  <aside class="depth-gauge" aria-hidden="true" data-zone="mesopelagic">
+    <div class="depth-gauge__readout">
+      <span class="depth-gauge__value">0 m</span>
+      <span class="depth-gauge__zone">Superfície</span>
+    </div>
+    <div class="depth-gauge__track">
+      <span class="depth-gauge__fill"></span>
+      <span class="depth-gauge__marker"></span>
+    </div>
+  </aside>
+
   <main>
-    <section class="hero" aria-labelledby="hero-title" data-section data-ocean-zone="mesopelagic">
+    <section class="hero" aria-labelledby="hero-title" data-section data-ocean-zone="mesopelagic" data-depth="200">
       <div class="hero-content">
         <div class="hero-content__inner">
           <h1 id="hero-title" class="text-reveal">
@@ -131,7 +143,7 @@
           <span class="hero-chip">Git & GitHub</span>
         </div>
         <div class="hero-actions">
-          <a class="btn btn--hero-primary btn--pill btn--ripple" href="#portfolio-title">
+          <a class="btn btn--hero-primary btn--pill btn--ripple" href="#portfolio-title" data-dive>
             <span class="btn__label">Ver projetos</span>
           </a>
           <button class="btn btn--hero-secondary btn--pill btn--ripple" type="button" data-scroll="#contact-title">
@@ -178,7 +190,7 @@
       </div>
       </div>
 
-      <a class="scroll-indicator" href="#about-title" aria-label="Rolar para baixo">
+      <a class="scroll-indicator" href="#about-title" aria-label="Rolar para baixo" data-dive>
         <span class="scroll-indicator__label">Mergulhar</span>
         <span class="scroll-indicator__arrow"></span>
         <span class="scroll-indicator__arrow"></span>
@@ -190,7 +202,7 @@
     <div class="ocean-depth-stage ocean-depth-stage--about-roadmap" data-ocean-zone="transition-twilight">
       <div class="ocean-depth-light" aria-hidden="true"></div>
 
-    <section class="about" aria-labelledby="about-title" data-section data-ocean-zone="transition">
+    <section class="about" aria-labelledby="about-title" data-section data-ocean-zone="transition" data-depth="500">
       <div class="about-turbulence" aria-hidden="true"></div>
       <div class="about-depth-gradient" aria-hidden="true"></div>
       <div class="about-shell">
@@ -298,7 +310,7 @@
       </div>
     </section>
 
-     <section class="stack-roadmap" aria-labelledby="skills2-title" data-section data-ocean-zone="twilight">
+     <section class="stack-roadmap" aria-labelledby="skills2-title" data-section data-ocean-zone="twilight" data-depth="1000">
      <div class="stack-roadmap__shell">
        <header class="stack-roadmap__header">
          <div class="stack-roadmap__heading">
@@ -584,7 +596,7 @@
     </div>
 
      <!-- ==================== PROJETOS ==================== -->
-    <section class="portfolio" aria-labelledby="portfolio-title" data-section data-ocean-zone="bathypelagic">
+    <section class="portfolio" aria-labelledby="portfolio-title" data-section data-ocean-zone="bathypelagic" data-depth="2500">
       <div class="portfolio-shell">
         <header class="portfolio-header">
           <p class="section-eyebrow">GitHub e projetos</p>
@@ -712,7 +724,7 @@
       </div>
     </section>
 
-    <section class="contact" aria-labelledby="contact-title" data-section data-ocean-zone="abyssal">
+    <section class="contact" aria-labelledby="contact-title" data-section data-ocean-zone="abyssal" data-depth="4000">
       <div class="contact-shell">
         <header class="contact-header">
           <p class="contact-eyebrow">Vamos conversar</p>
@@ -810,7 +822,7 @@
     </section>
   </main>
 
-  <footer class="site-footer" aria-labelledby="footer-title" data-ocean-zone="floor">
+  <footer class="site-footer" aria-labelledby="footer-title" data-ocean-zone="floor" data-depth="6000">
     <div class="footer-inner">
       <div class="footer-brand">
         <h2 id="footer-title" class="footer-title">Pedruzz.dev</h2>
@@ -855,9 +867,6 @@
 
     <div class="footer-bottom">
       <p>© <span id="year"></span> Pedro Henrique. Feito com carinho, calma e muita música.</p>
-      <a class="btn btn--icon btn--ghost btn--ripple" href="#hero-title" aria-label="Voltar ao topo" title="Voltar ao topo">
-        ↑
-      </a>
       <div class="footer-depth-label">
         <div class="footer-depth-dot"></div>
         fundo do oceano

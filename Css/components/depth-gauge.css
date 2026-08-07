@@ -1,0 +1,160 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  components/depth-gauge.css — Marcadores de profundidade
+ *
+ *  1. .depth-gauge  → medidor lateral fixo (metros + zona + marcador)
+ *  2. .depth-tag    → etiqueta injetada acima do título de cada seção
+ *
+ *  A cor de destaque (--gauge-accent) muda por zona via [data-zone],
+ *  ficando mais fria/violeta conforme se desce — reforça o mergulho.
+ *  Estados dinâmicos são escritos pelo JS (effects/depth-gauge.js).
+ * ═══════════════════════════════════════════════════════════
+ */
+
+/* =========================
+   MEDIDOR LATERAL FIXO
+   ========================= */
+.depth-gauge {
+  --gauge-accent: rgba(120, 210, 255, 0.9);
+
+  position: fixed;
+  top: 50%;
+  right: clamp(0.75rem, 2vw, 1.6rem);
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+.depth-gauge[data-zone="mesopelagic"] { --gauge-accent: rgba(120, 210, 255, 0.9); }
+.depth-gauge[data-zone="transition"]  { --gauge-accent: rgba(95, 190, 255, 0.9); }
+.depth-gauge[data-zone="twilight"]    { --gauge-accent: rgba(90, 155, 240, 0.9); }
+.depth-gauge[data-zone="bathypelagic"]{ --gauge-accent: rgba(110, 125, 235, 0.9); }
+.depth-gauge[data-zone="abyssal"]     { --gauge-accent: rgba(140, 110, 230, 0.9); }
+.depth-gauge[data-zone="floor"]       { --gauge-accent: rgba(165, 120, 220, 0.9); }
+
+.depth-gauge__readout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  line-height: 1.1;
+}
+
+.depth-gauge__value {
+  font-size: 0.95rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--gauge-accent);
+  transition: color 500ms var(--ease-out);
+}
+
+.depth-gauge__zone {
+  margin-top: 0.15rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(180, 220, 245, 0.6);
+  white-space: nowrap;
+}
+
+.depth-gauge__track {
+  position: relative;
+  width: 3px;
+  height: clamp(120px, 22vh, 210px);
+  border-radius: 999px;
+  background: rgba(120, 200, 255, 0.16);
+}
+
+.depth-gauge__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  transform-origin: top center;
+  transform: scaleY(0);
+  background: linear-gradient(
+    180deg,
+    var(--gauge-accent),
+    color-mix(in srgb, var(--gauge-accent) 45%, transparent)
+  );
+  transition: transform 180ms linear, background 500ms var(--ease-out);
+}
+
+.depth-gauge__marker {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--gauge-accent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--gauge-accent) 22%, transparent),
+    0 0 12px var(--gauge-accent);
+  transform: translate(-50%, -50%);
+  transition: top 180ms linear, background 500ms var(--ease-out);
+}
+
+/* =========================
+   ETIQUETA POR SEÇÃO
+   Injetada pelo JS logo antes do eyebrow de cada seção.
+   Fica no fluxo normal — não sobrepõe conteúdo.
+   ========================= */
+.depth-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(120, 210, 255, 0.72);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 600ms var(--ease-out);
+}
+
+.depth-tag.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.depth-tag::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, currentColor);
+}
+
+.depth-tag__value {
+  color: rgba(160, 228, 255, 0.95);
+  font-variant-numeric: tabular-nums;
+}
+
+.depth-tag__sep {
+  opacity: 0.5;
+}
+
+/* =========================
+   RESPONSIVO / FALLBACKS
+   ========================= */
+@media (max-width: 960px) {
+  .depth-gauge {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .depth-tag {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

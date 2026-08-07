@@ -18,8 +18,10 @@ import { initFooterParticles } from "./effects/footerParticles.js";
 import { initHeroParticles } from "./effects/heroParticles.js";
 import { initOceanLife } from "./effects/ocean-life.js";
 import { initGsapEffects } from "./effects/gsapEffects.js";
+import { setupDepthGauge } from "./effects/depth-gauge.js";
 import { setupContactForm } from "./modules/contact-form.js";
 import { setupFloatingAction } from "./modules/floating-action.js";
+import { setupDiveTransition } from "./modules/dive-transition.js";
 
 function bootstrap() {
   const controller = new AbortController();
@@ -35,6 +37,8 @@ function bootstrap() {
     menuSpans: Array.from(document.querySelectorAll(".menu-toggle span")),
     hero: document.querySelector(".hero"),
     footer: document.querySelector(".site-footer"),
+    depthGauge: document.querySelector(".depth-gauge"),
+    depthSections: Array.from(document.querySelectorAll("[data-depth]")),
     rippleButtons: Array.from(document.querySelectorAll(".btn--ripple")),
     scrollButtons: Array.from(document.querySelectorAll("[data-scroll]")),
     year: document.getElementById("year"),
@@ -234,6 +238,28 @@ function bootstrap() {
     setupContactForm,
     { form: elements.contactForm, signal },
     (error) => console.warn("Formulário de contato desabilitado:", error)
+  );
+
+  safelyInit(
+    setupDepthGauge,
+    {
+      gauge: elements.depthGauge,
+      sections: elements.depthSections,
+      prefersReducedMotion,
+      signal,
+    },
+    (error) => console.warn("Medidor de profundidade desabilitado:", error)
+  );
+
+  safelyInit(
+    setupDiveTransition,
+    {
+      triggers: Array.from(document.querySelectorAll("[data-dive]")),
+      header: elements.header,
+      prefersReducedMotion,
+      signal,
+    },
+    (error) => console.warn("Transição de mergulho desabilitada:", error)
   );
 
   loaderFallbackTimeoutId = window.setTimeout(() => {

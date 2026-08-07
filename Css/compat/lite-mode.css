@@ -130,11 +130,13 @@ html.is-lite-mode #heroParticleCanvas,
 html.is-lite-mode #footerParticleCanvas,
 html.is-lite-mode .ocean-life-canvas,
 html.is-lite-mode .rail-particle,
+html.is-lite-mode .depth-gauge,
 html.is-in-app-browser .hero-bubbles,
 html.is-in-app-browser #heroParticleCanvas,
 html.is-in-app-browser #footerParticleCanvas,
 html.is-in-app-browser .ocean-life-canvas,
-html.is-in-app-browser .rail-particle {
+html.is-in-app-browser .rail-particle,
+html.is-in-app-browser .depth-gauge {
   display: none !important;
 }
 
