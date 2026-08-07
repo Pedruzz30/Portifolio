@@ -7,7 +7,8 @@
  *  - atualiza barra, texto e pills
  *  - sincroniza aria-expanded dos details
  *
- *  As animações decorativas e reveals por scroll foram removidos.
+ *  - revela os steps em cascata conforme entram na viewport
+ *    (fallback: mostra todos de uma vez sem IO ou com reduced-motion)
  * ═══════════════════════════════════════════════════════════
  */
 
@@ -29,6 +30,7 @@ export function setupRoadmap({
   progressValue,
   progressCaption,
   progressSteps = [],
+  prefersReducedMotion = false,
 }) {
   if (!section || !steps.length) {
     return { destroy: () => {} };
@@ -76,8 +78,6 @@ export function setupRoadmap({
   const detailHandlers = [];
 
   steps.forEach((step) => {
-    step.classList.add("is-visible");
-
     const details = step.querySelector(".stack-roadmap__details");
     const summary = step.querySelector(".stack-roadmap__summary");
     if (!details || !summary) return;
@@ -90,8 +90,31 @@ export function setupRoadmap({
     detailHandlers.push(update);
   });
 
+  // Reveal em cascata: cada step ganha .is-visible ao entrar na viewport.
+  // O transition de opacity/transform mora no CSS (.stack-roadmap__step).
+  // Fallback (sem IO ou reduced-motion): revela todos imediatamente.
+  let stepObserver = null;
+  const canObserve = !prefersReducedMotion && "IntersectionObserver" in window;
+
+  if (!canObserve) {
+    steps.forEach((step) => step.classList.add("is-visible"));
+  } else {
+    stepObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.15 },
+    );
+    steps.forEach((step) => stepObserver.observe(step));
+  }
+
   return {
     destroy: () => {
+      stepObserver?.disconnect();
       detailSummaries.forEach((details, index) => {
         details.removeEventListener("toggle", detailHandlers[index]);
       });

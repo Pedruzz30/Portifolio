@@ -600,6 +600,31 @@ function initStaggerCards(gsap, ScrollTrigger) {
     );
   }
 
+  const portfolioGrid = document.querySelector(".portfolio-grid");
+  if (portfolioGrid) {
+    const cards = portfolioGrid.querySelectorAll(".project-card");
+    gsap.set(cards, { opacity: 0, y: 28 });
+
+    triggers.push(
+      ScrollTrigger.create({
+        trigger: portfolioGrid,
+        start: "top 82%",
+        once: true,
+        onEnter: () => {
+          const tween = gsap.to(cards, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+            stagger: 0.1,
+            clearProps: "opacity,transform",
+          });
+          tweens.push(tween);
+        },
+      }),
+    );
+  }
+
   return () => {
     triggers.forEach((trigger) => trigger.kill());
     tweens.forEach((tween) => tween.kill());
@@ -783,6 +808,11 @@ function initScrollReveal(gsap, ScrollTrigger) {
         }),
       );
     }
+  }
+
+  const portfolio = document.querySelector(".portfolio");
+  if (portfolio) {
+    revealSectionHeader(portfolio.querySelector(".portfolio-header"));
   }
 
   document.querySelectorAll(".js-reveal").forEach((element) => {

@@ -2,8 +2,10 @@
  * ===========================================================
  * portifolio.css - secao de projetos
  *
- * Versao simplificada: remove animacoes decorativas da secao
- * de portfolio e preserva apenas a apresentacao estatica.
+ * Micro-interacoes ativas: hover levanta o card e acende o glow,
+ * a seta do link desliza e o status "em progresso" pulsa.
+ * A entrada em stagger no scroll fica em gsapEffects.js.
+ * Todos os efeitos sao neutralizados via prefers-reduced-motion.
  * ===========================================================
  */
 
@@ -148,7 +150,10 @@
   box-shadow:
     0 12px 36px rgba(2, 10, 30, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition: none;
+  transition:
+    transform 420ms var(--ease-out),
+    box-shadow 420ms var(--ease-out),
+    border-color 420ms var(--ease-out);
 }
 
 .project-card::before,
@@ -175,19 +180,35 @@
 }
 
 .project-card:hover {
-  transform: none;
-  border-color: rgba(80, 180, 255, 0.12);
+  transform: translateY(-6px);
+  border-color: rgba(120, 210, 255, 0.35);
   box-shadow:
-    0 12px 36px rgba(2, 10, 30, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 22px 54px rgba(2, 10, 30, 0.6),
+    0 0 0 1px rgba(120, 210, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .project-card:hover::before {
-  opacity: 0.35;
+  opacity: 0.6;
 }
 
+/* Glow que acende no hover: gradiente radial preso ao topo do card */
 .project-card__glow {
-  display: none;
+  position: absolute;
+  z-index: 0;
+  inset: -1px;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    120% 80% at 50% 0%,
+    rgba(120, 210, 255, 0.22),
+    transparent 60%
+  );
+  transition: opacity 420ms var(--ease-out);
+}
+
+.project-card:hover .project-card__glow {
+  opacity: 1;
 }
 
 .project-card__plane {
@@ -292,7 +313,10 @@
   background: rgba(80, 180, 255, 0.12);
   border: 1px solid rgba(80, 180, 255, 0.24);
   color: rgba(150, 215, 255, 0.9);
-  transition: none;
+  transition:
+    color 320ms var(--ease-out),
+    background-color 320ms var(--ease-out),
+    border-color 320ms var(--ease-out);
 }
 
 .project-card:hover .project-tag {
@@ -307,11 +331,11 @@
   gap: 0.6rem;
   color: rgba(255, 255, 255, 0.92);
   text-decoration: none;
-  transition: none;
+  transition: color 320ms var(--ease-out), gap 320ms var(--ease-out);
 }
 
 .project-card__link:hover {
-  gap: 0.6rem;
+  gap: 0.85rem;
   color: rgba(160, 225, 255, 0.95);
 }
 
@@ -319,63 +343,76 @@
   width: 1rem;
   height: 1rem;
   flex: 0 0 auto;
-  transition: none;
+  transition: transform 320ms var(--ease-out);
 }
 
 .project-card__link:hover .link-icon {
-  transform: none;
+  transform: translateX(4px);
 }
 
-.project-card[data-status="progress"],
+/* Pulso bioluminescente no status "em progresso" */
+.project-card[data-status="progress"] .status-dot,
 .project-card.project-card--premium[data-status="progress"] .status-dot {
-  animation: none;
+  animation: status-biolum-dot-pulse 2.4s var(--ease-out) infinite;
 }
 
 /* =========================
    PREMIUM OVERRIDES
    ========================= */
 .project-card.project-card--premium {
-  transition: none;
+  transition:
+    transform 420ms var(--ease-out),
+    box-shadow 420ms var(--ease-out),
+    border-color 420ms var(--ease-out);
 }
 
 .project-card.project-card--premium:hover {
-  transform: none;
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 32px rgba(0, 20, 50, 0.4);
+  transform: translateY(-6px);
+  border-color: rgba(120, 210, 255, 0.35);
+  box-shadow:
+    0 22px 54px rgba(2, 10, 30, 0.6),
+    0 0 0 1px rgba(120, 210, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.project-card.project-card--premium .project-card__glow,
+.project-card.project-card--premium .project-card__glow {
+  transition: opacity 420ms var(--ease-out);
+}
+
 .project-card.project-card--premium .project-tag,
 .project-card.project-card--premium .project-card__link,
 .project-card.project-card--premium .link-icon {
-  transition: none;
+  transition:
+    color 320ms var(--ease-out),
+    transform 320ms var(--ease-out),
+    gap 320ms var(--ease-out),
+    background-color 320ms var(--ease-out),
+    border-color 320ms var(--ease-out);
 }
 
 .project-card.project-card--premium:hover .project-tag {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(80, 180, 255, 0.18);
+  border-color: rgba(120, 210, 255, 0.4);
+  color: rgba(190, 235, 255, 0.95);
 }
 
 .project-card.project-card--premium:hover .link-icon {
-  transform: none;
-}
-
-.project-card.project-card--premium[data-status="progress"] .status-dot {
-  animation: none;
+  transform: translateX(4px);
 }
 
 [data-theme="dark"] .project-card:hover,
 [data-theme="dark"] .project-card.project-card--premium:hover {
-  transform: none;
-  border-color: rgba(80, 180, 255, 0.12);
+  transform: translateY(-6px);
+  border-color: rgba(120, 210, 255, 0.35);
   box-shadow:
-    0 12px 36px rgba(2, 10, 30, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 22px 54px rgba(2, 10, 30, 0.6),
+    0 0 0 1px rgba(120, 210, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="dark"] .project-card:hover .project-card__glow,
 [data-theme="dark"] .project-card.project-card--premium:hover .project-card__glow {
-  opacity: 0;
+  opacity: 1;
 }
 
 /* =========================
