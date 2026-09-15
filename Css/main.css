@@ -36,6 +36,7 @@
 @import "./components/depth-gauge.css";
 @import "./themes/dark.css";
 @import "./sections/hero.css";
+@import "./sections/hero-v2.css";
 @import "./sections/about.css";
 @import "./sections/roadmap.css";
 @import "./sections/contact.css";
