@@ -1,0 +1,117 @@
+/* =========================================================
+   HERO V2 — integration fix
+   Corrige a duplicação visual causada pelos wrappers criados
+   por initHeroTextReveal() sem desligar a animação GSAP.
+   ========================================================= */
+
+/* O JS transforma cada linha do H1 em:
+   wrapper > word. O V2 original aplicava ::before tanto no wrapper
+   quanto no word, por isso BACK-END aparecia repetido. */
+.text-reveal span::before {
+  content: none !important;
+}
+
+#hero-title > br {
+  display: none;
+}
+
+#hero-title > span[data-hero-reveal-wrapper="true"] {
+  display: block !important;
+  overflow: hidden !important;
+  width: max-content;
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
+#hero-title > span[data-hero-reveal-wrapper="true"] > span[data-hero-reveal-word="true"] {
+  display: block !important;
+  font-size: 0 !important;
+  line-height: 0.82 !important;
+  transform-origin: 0 100%;
+}
+
+#hero-title > span[data-hero-reveal-wrapper="true"]:first-of-type > span[data-hero-reveal-word="true"]::before {
+  content: "BACK-END" !important;
+  display: block;
+  font-family: "Satoshi", system-ui, sans-serif;
+  font-size: clamp(4.9rem, 8.8vw, 9rem);
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.085em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(222, 249, 255, 0.76);
+  text-shadow: 0 0 30px rgba(72, 230, 255, 0.08);
+}
+
+#hero-title > span[data-hero-reveal-wrapper="true"]:nth-of-type(2) > span[data-hero-reveal-word="true"]::before {
+  content: "JAVA" !important;
+  display: block;
+  font-family: "Satoshi", system-ui, sans-serif;
+  font-size: clamp(5.2rem, 9.2vw, 9.5rem);
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.09em;
+  color: #f7fcff;
+}
+
+/* Fallback antes do GSAP montar os wrappers e para reduced-motion. */
+#hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span {
+  display: block !important;
+  font-size: 0 !important;
+  line-height: 0.82 !important;
+}
+
+#hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:first-of-type::before {
+  content: "BACK-END" !important;
+  display: block;
+  font-family: "Satoshi", system-ui, sans-serif;
+  font-size: clamp(4.9rem, 8.8vw, 9rem);
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.085em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(222, 249, 255, 0.76);
+}
+
+#hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:nth-of-type(2)::before {
+  content: "JAVA" !important;
+  display: block;
+  font-family: "Satoshi", system-ui, sans-serif;
+  font-size: clamp(5.2rem, 9.2vw, 9.5rem);
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.09em;
+  color: #f7fcff;
+}
+
+/* Com o título corrigido, o conteúdo volta a caber inteiro no primeiro fold. */
+.hero-content__inner {
+  align-content: center;
+}
+
+@media (max-width: 1120px) {
+  #hero-title > span[data-hero-reveal-wrapper="true"]:first-of-type > span[data-hero-reveal-word="true"]::before,
+  #hero-title > span[data-hero-reveal-wrapper="true"]:nth-of-type(2) > span[data-hero-reveal-word="true"]::before,
+  #hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:first-of-type::before,
+  #hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:nth-of-type(2)::before {
+    font-size: clamp(4.3rem, 8.6vw, 7rem);
+  }
+}
+
+@media (max-width: 900px) {
+  #hero-title > span[data-hero-reveal-wrapper="true"]:first-of-type > span[data-hero-reveal-word="true"]::before,
+  #hero-title > span[data-hero-reveal-wrapper="true"]:nth-of-type(2) > span[data-hero-reveal-word="true"]::before,
+  #hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:first-of-type::before,
+  #hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:nth-of-type(2)::before {
+    font-size: clamp(4.6rem, 16vw, 7.4rem);
+  }
+}
+
+@media (max-width: 640px) {
+  #hero-title > span[data-hero-reveal-wrapper="true"]:first-of-type > span[data-hero-reveal-word="true"]::before,
+  #hero-title > span[data-hero-reveal-wrapper="true"]:nth-of-type(2) > span[data-hero-reveal-word="true"]::before,
+  #hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:first-of-type::before,
+  #hero-title:not(:has(> span[data-hero-reveal-wrapper="true"])) > span:nth-of-type(2)::before {
+    font-size: clamp(3.65rem, 19vw, 5.8rem);
+  }
+}
